@@ -1,0 +1,27 @@
+{
+  "name": "react-colors-picker",
+  "main": "index.js",
+  "description": "color-picker ui component for react",
+  "version": "1.0.0",
+  "homepage": "https://github.com/noyobo/react-colors-picker",
+  "authors": [
+    "noyobo <noyobo@gmail.com>"
+  ],
+  "keywords": [
+    "react",
+    "react-component",
+    "react-color-picker",
+    "color-picker"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lesshat": "~3.0.2"
+  }
+}

@@ -1,30 +1,9 @@
 # react-colors-picker
 ---
 
-color-picker ui component for react
+colors picker ui component for react
 
-[![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
-[![gemnasium deps][gemnasium-image]][gemnasium-url]
-[![node version][node-image]][node-url]
-[![npm download][download-image]][download-url]
-[![Sauce Test Status](https://saucelabs.com/buildstatus/react-colors-picker)](https://saucelabs.com/u/react-colors-picker)
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/react-colors-picker.svg)](https://saucelabs.com/u/react-colors-picker)
-
-[npm-image]: http://img.shields.io/npm/v/react-colors-picker.svg?style=flat-square
-[npm-url]: http://npmjs.org/package/react-colors-picker
-[travis-image]: https://img.shields.io/travis/noyobo/color-picker.svg?style=flat-square
-[travis-url]: https://travis-ci.org/noyobo/color-picker
-[coveralls-image]: https://img.shields.io/coveralls/noyobo/color-picker.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/noyobo/color-picker?branch=master
-[gemnasium-image]: http://img.shields.io/gemnasium/noyobo/color-picker.svg?style=flat-square
-[gemnasium-url]: https://gemnasium.com/noyobo/color-picker
-[node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
-[node-url]: http://nodejs.org/download/
-[download-image]: https://img.shields.io/npm/dm/react-colors-picker.svg?style=flat-square
-[download-url]: https://npmjs.org/package/react-colors-picker
+[![npm version](http://img.shields.io/npm/v/react-colors-picker.svg)](https://www.npmjs.org/package/react-colors-picker) [![npm download](http://img.shields.io/npm/dm/react-colors-picker.svg)](https://www.npmjs.org/package/react-colors-picker) [![npm engines](http://img.shields.io/node/v/react-colors-picker.svg)](https://www.npmjs.org/package/react-colors-picker) [![build status](http://img.shields.io/travis/noyobo/react-colors-picker.svg)](https://travis-ci.org/noyobo/react-colors-picker) [![Coverage Status](https://img.shields.io/coveralls/noyobo/react-colors-picker.svg)](https://coveralls.io/r/noyobo/react-colors-picker) [![npm dependencise](https://david-dm.org/noyobo/react-colors-picker.svg)](https://david-dm.org/noyobo/react-colors-picker)
 
 ## Browser Support
 

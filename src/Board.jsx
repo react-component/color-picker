@@ -179,7 +179,7 @@ class Board extends React.Component {
 
   _updateBackgroundColor(hue) {
     this._rendderHueColor(hue);
-    let hsv = {h:hue, s:this.HSV.s, v:this.HSV.v};
+    let hsv = {h: hue, s: this.HSV.s, v: this.HSV.v};
     let colorObject = this.getColorsFromHsv(hsv);
     this.HSV = colorObject.hsv;
     if (this.props.onChange) {

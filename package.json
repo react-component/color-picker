@@ -10,6 +10,9 @@
     "react-colors-picker",
     "color-picker"
   ],
+  "engines": {
+    "node": ">=0.10"
+  },
   "homepage": "http://github.com/noyobo/react-colors-picker",
   "author": "noyobo <noyobo@gmail.com>",
   "repository": {
@@ -28,7 +31,7 @@
   },
   "scripts": {
     "build": "gulp build",
-    "start": "node --harmony node_modules/.bin/rc-server",
+    "start": "gulp build && node --harmony node_modules/.bin/rc-server",
     "depoly": "gulp build && gh-pages -d site"
   },
   "license": "MIT",

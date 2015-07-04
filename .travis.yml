@@ -1,0 +1,15 @@
+language: node_js
+
+notifications:
+  email:
+  - noyobo@gmail.com
+
+node_js:
+- 0.12
+
+before_script:
+  - npm -v
+  - npm install eslint babel-eslint eslint-plugin-react
+
+script:
+  - node_modules/.bin/eslint -c .eslintrc src --ext .js,.jsx

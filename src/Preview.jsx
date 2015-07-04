@@ -40,7 +40,7 @@ class Preview extends React.Component{
   render() {
     return (
       <div className={this.props.prefixCls}>
-        <span style={{backgroundColor:this.state.defaultColor, opacity: this.state.alpha / 100}}></span>
+        <span style={{backgroundColor: this.state.defaultColor, opacity: this.state.alpha / 100}}></span>
       </div>
     );
   }

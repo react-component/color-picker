@@ -169,7 +169,7 @@ class Params extends React.Component{
     let hex = event.target.value;
     let keycode = event.charCode;
 
-    if (hex.length > 2 && keycode === 13  && validationHex(hex)) {
+    if (hex.length > 2 && keycode === 13 && validationHex(hex)) {
       this.props.onHexChange('#' + hex);
       this._chagneColorsFromHex('#' + hex);
     }

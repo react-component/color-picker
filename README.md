@@ -26,6 +26,12 @@ color-picker ui component for react
 [download-image]: https://img.shields.io/npm/dm/react-colors-picker.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-colors-picker
 
+## Browser Support
+
+|![IE](https://raw.github.com/alrra/browser-logos/master/internet-explorer/internet-explorer_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/safari/safari_48x48.png)|
+| --- | --- | --- | --- | --- |
+| IE 10+ ✔ | Chrome 31.0+ ✔ | Firefox 31.0+ ✔ | Opera 30.0+ ✔ | Safari 7.0+ ✔ |
+
 ## Screenshots
 
 <img src=https://cloud.githubusercontent.com/assets/1292082/8275606/8608e8f8-18db-11e5-8d10-703253db2a4f.png width=238 />
@@ -39,7 +45,7 @@ npm start
 
 ## Example
 
-online example: http://noyobo.github.io/color-picker/
+online example: http://noyobo.com/react-colors-picker/
 
 ## Feature
 
@@ -59,7 +65,7 @@ React.render(<ColorsPicker />, container);
 
 ## API
 
-### ColorPicker
+### ColorPicker.props
 
 name|type|default|description
 ---|---|---|---
@@ -78,14 +84,6 @@ style | Object | {} | root node CSS style
 onChange|Function| | when select color trigger
 onFocus|Function| | when picker visiable trigger
 onBlur|Function| | when picker loose focus
-
-## Test Case
-
-http://localhost:8000/tests/runner.html?coverage
-
-## Coverage
-
-http://localhost:8000/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8000/tests/runner.html?coverage
 
 ## License
 

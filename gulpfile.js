@@ -58,7 +58,7 @@ gulp.task('examples', ['clean:site', 'jsx'], function() {
     .pipe(gulp.dest('site/examples/'))
 })
 
-gulp.task('webpack', ['clean:site'], function() {
+gulp.task('webpack', ['clean:site', 'jsx'], function() {
   return gulp.src(['examples/*.js'])
     .pipe(named())
     .pipe(webpack({

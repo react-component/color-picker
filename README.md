@@ -66,6 +66,7 @@ name|type|default|description
 defaultColor|String|#ff0000|color board default background color
 visible| Boolean | false | Picker default is invisible, contrary
 align| [left/right] | right | Picker positon base for trigger
+onChange| Function | noop | when select color
 
 ### ColorPicker.Picker.props
 

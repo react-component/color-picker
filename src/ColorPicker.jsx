@@ -74,6 +74,7 @@ class ColorPicker extends React.Component{
     this.setState({
       defaultColor: colors.hex
     });
+    this.props.onChange(colors);
   }
 
   handlerBlur() {
@@ -105,14 +106,16 @@ ColorPicker.propTypes = {
   rootPrefixCls: React.PropTypes.string,
   visible: React.PropTypes.bool,
   defaultColor: React.PropTypes.string,
-  align: React.PropTypes.string
+  align: React.PropTypes.string,
+  onChange: React.PropTypes.func
 };
 
 ColorPicker.defaultProps = {
   rootPrefixCls: 'react-colors-picker',
   visible: false,
   defaultColor: '#F00',
-  align: 'right'
+  align: 'right',
+  onChange() {}
 };
 
 module.exports = ColorPicker;

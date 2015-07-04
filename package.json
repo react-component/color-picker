@@ -29,7 +29,7 @@
   "scripts": {
     "build": "gulp build",
     "start": "node --harmony node_modules/.bin/rc-server",
-    "depoly": "gh-pages -d site",
+    "depoly": "gulp build && gh-pages -d site"
   },
   "license": "MIT",
   "devDependencies": {

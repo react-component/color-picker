@@ -1927,9 +1927,119 @@
 
 /***/ },
 /* 16 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+	
+	var _createClass = (function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	})();
+	
+	var _get = function get(_x, _x2, _x3) {
+	  var _again = true;_function: while (_again) {
+	    var object = _x,
+	        property = _x2,
+	        receiver = _x3;desc = parent = getter = undefined;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+	      var parent = Object.getPrototypeOf(object);if (parent === null) {
+	        return undefined;
+	      } else {
+	        _x = parent;_x2 = property;_x3 = receiver;_again = true;continue _function;
+	      }
+	    } else if ('value' in desc) {
+	      return desc.value;
+	    } else {
+	      var getter = desc.get;if (getter === undefined) {
+	        return undefined;
+	      }return getter.call(receiver);
+	    }
+	  }
+	};
+	
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError('Cannot call a class as a function');
+	  }
+	}
+	
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== 'function' && superClass !== null) {
+	    throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
+	}
+	
+	var React = __webpack_require__(6);
+	var prefixClsFn = __webpack_require__(10);
+	
+	var Preview = (function (_React$Component) {
+	  function Preview(props) {
+	    _classCallCheck(this, Preview);
+	
+	    _get(Object.getPrototypeOf(Preview.prototype), 'constructor', this).call(this, props);
+	
+	    this.state = {
+	      prefixCls: props.prefixCls,
+	      alpha: props.alpha,
+	      defaultColor: props.defaultColor,
+	      customColor: props.customColor
+	    };
+	
+	    this.prefixClsFn = prefixClsFn.bind(this);
+	  }
+	
+	  _inherits(Preview, _React$Component);
+	
+	  _createClass(Preview, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.defaultColor !== this.props.defaultColor) {
+	        this.setState({
+	          defaultColor: nextProps.defaultColor,
+	          customColor: nextProps.defaultColor
+	        });
+	      }
+	      if (nextProps.customColor !== this.props.customColor) {
+	        this.setState({
+	          defaultColor: nextProps.customColor,
+	          customColor: nextProps.customColor
+	        });
+	      }
+	      if (nextProps.alpha !== this.props.alpha) {
+	        this.setState({
+	          alpha: nextProps.alpha
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return React.createElement('div', { className: this.props.prefixCls }, React.createElement('span', { style: { backgroundColor: this.state.defaultColor, opacity: this.state.alpha / 100 } }));
+	    }
+	  }]);
+	
+	  return Preview;
+	})(React.Component);
+	
+	Preview.propTypes = {
+	  prefixCls: React.PropTypes.string,
+	  alpha: React.PropTypes.number,
+	  defaultColor: React.PropTypes.string,
+	  customColor: React.PropTypes.string
+	};
+	
+	Preview.defaultProps = {
+	  prefixCls: 'react-colors-picker-preview',
+	  alpha: 100,
+	  defaultColor: '#f00', // 背景颜色 响应来自  board 面板的选取颜色
+	  customColor: '#f00' // 背景颜色  响应来自用户的输入颜色
+	};
+	
+	module.exports = Preview;
 
 /***/ },
 /* 17 */

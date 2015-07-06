@@ -1,15 +1,16 @@
 language: node_js
-
+env:
+  global:
+  - secure: k5H57PYq7L1lvoKb5VSk7p5lKBDzJNAwn2n6EYr3+GDoh2Eglifqwd+PjeMYwXEwIP2tpp19tqUaSxSnQYZSd/yobt7/6IzODS/wFuoJrqeVt4bBM3Lss+geGvPeHBjFgzFJeQHlZLyGuVHfzLIfQAqhTn7jrpGnRFlfN5Zr54bOSxvwUyN4F1IetMV5NRdFsd4r2imDBg9mt2dyrqKTj7J30Stxn5OpxfmUY5OC3vRQ8zYBTeaVEfcGcHDOG2Cz7faodOqqcfv/YyXYqm+Zg7XXNji5q3qg41XdPhPnIaJybxNKonG3Y2ivnkPm0xXzxVt00A4wXDc+CYEwyKh0YD8QspN9HliHiewUF4B5tgkyTJzb+P+YhshyTV+BVtVMCbSl3flR95N8bLjjnJCwA6ecVFRwV5FAkfcNIoUzp2BEiHJUWhsb8MXslZs9bktvdg3oxBlNXFCDp/ljsSlMTGLdttHgeRaJrmrVpG+EchAtjlQbp/1Z+UxfwSWF/RJUVbzljujfR/iz31LOXVtzmQIu5wMrhSkMYQEzm/6JIq0cxwnEOPtXrI874pWwk9F1JSVteGiw+Y3ZSGM8HiHkxq5zlk5JxYvQ1JucjH8oiKqiGjT2kAwMzYOzpbp9ga+P7jtFMBkwaldlk17hBucp2HBsgPBCCNjzOP8pUsjHyqo=
+  - secure: W8LGTBNiMuXUI6qCOWZMzwYAo2m/Pm1XQ4O7T6zLkgZg8TQc74+r8qYuxx1p0H+eioayquTu9U7z7sluEgVzHiHWEED6dART9FtRRcBy+F5kBoVqgZgy0VHQ2XvGv6KZ8Nkrmch/3vSjaCUbAOhI1xCVOhK3FVmnxW8eZ9jHgv7jqeNZlOf11f24fFlZeyMfSPgD85CoedOpu17H3Em+RZ7sMOThfy+cuwN1+r+dMghWCQmvoRiC4h5WtwxtuWBAN1oGfKxzv4IA9+E8VnFi8tNdPhs/I4WMB0hu4W0cyhLDHoqACDavxqo7JqseeHSZImkEqpv2/eI9C9+2o1TwlUVMpvI+xKrxDh6bHTqLbTybAxI69ZTxFOg4pWgXBgvGjnx4L4X5MbWrvN8gDc90VT8WHQ1PRrqKz6Rul6bnNBYyxnKp/ukwsfax2/YOgEf+Akz/NdCgIpD3meyVvb36n1+pef0xjfvrBGDGYyehZuY8CRCVf3PxynPnAppwn5AJfqVXT7WPOENhmI6jAS1teTUx4qdYdVi4XzzCpSJnzuIu9eYNPZzLxB30Qdyly1OVTJpx7wgzKMYAagbaPphOc2MvlVoRmzf04MnKKBqbk4Dbp7whSWS1f0Ia2jHQ5PGQKh9nq4jXkBmhqV9rluv/UIINyXt+egqEWjw8cw+Oyps=
 notifications:
   email:
   - noyobo@gmail.com
-
 node_js:
 - 0.12
-
 before_script:
-  - npm -v
-  - npm install eslint babel-eslint eslint-plugin-react
-
+- npm install eslint babel-eslint eslint-plugin-react
 script:
-  - node_modules/.bin/eslint -c .eslintrc src --ext .js,.jsx
+- node_modules/.bin/eslint -c .eslintrc src --ext .js,.jsx
+addons:
+  sauce_connect: true

@@ -1,9 +1,9 @@
 'use strict';
 
-const React = require('react');
-let prefixClsFn = require('./utils/prefixClsFn');
+import React from 'react';
+import prefixClsFn from './utils/prefixClsFn';
 
-class Preview extends React.Component{
+export default class Preview extends React.Component{
   constructor(props) {
     super(props);
 
@@ -59,5 +59,3 @@ Preview.defaultProps = {
   defaultColor: '#f00', // 背景颜色 响应来自  board 面板的选取颜色
   customColor: '#f00' // 背景颜色  响应来自用户的输入颜色
 };
-
-module.exports = Preview;

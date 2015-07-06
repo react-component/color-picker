@@ -1,13 +1,13 @@
 'use strict';
 
-const React = require('react');
-const Colr = require('colr');
-const event = require('eventlistener');
-let prefixClsFn = require('./utils/prefixClsFn');
+import React from 'react';
+import Colr from 'colr';
+import event from 'eventlistener';
+import prefixClsFn from './utils/prefixClsFn';
 
 let colr = new Colr();
 
-class Ribbon extends React.Component{
+export default class Ribbon extends React.Component{
   constructor(props) {
     super(props);
     this.state = {

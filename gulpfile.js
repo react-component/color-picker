@@ -24,7 +24,7 @@ function getResolve() {
   return resolve
 }
 
-gulp.task('jsx', ['clean:site'], function() {
+gulp.task('jsx', ['clean:lib'], function() {
   return gulp.src(['src/**/*.jsx', 'src/**/*.js'])
     .pipe(react({
       es6module: true

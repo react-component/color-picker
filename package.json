@@ -31,7 +31,7 @@
   },
   "scripts": {
     "build": "gulp build",
-    "start": "gulp build && node --harmony node_modules/.bin/rc-server",
+    "start": "node --harmony node_modules/.bin/rc-server",
     "depoly": "gulp build && gh-pages -d site"
   },
   "license": "MIT",

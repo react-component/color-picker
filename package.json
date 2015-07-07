@@ -1,6 +1,6 @@
 {
   "name": "react-colors-picker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "color-picker ui component for react",
   "main": "lib/index.js",
   "keywords": [
@@ -31,8 +31,8 @@
   },
   "scripts": {
     "build": "gulp build",
-    "start": "gulp build && node --harmony node_modules/.bin/rc-server",
-    "depoly": "gulp build && gh-pages -d site"
+    "start": "node --harmony node_modules/.bin/rc-server",
+    "deploy": "gulp build && gh-pages -d site"
   },
   "license": "MIT",
   "devDependencies": {

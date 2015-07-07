@@ -1,9 +1,9 @@
 'use strict';
 
-const React = require('react');
-let prefixClsFn = require('./utils/prefixClsFn');
+import React from 'react';
+import prefixClsFn from './utils/prefixClsFn';
 
-class Trigger extends React.Component{
+export default class Trigger extends React.Component{
   constructor(props) {
     super(props);
 
@@ -46,5 +46,3 @@ Trigger.defaultProps = {
   defaultColor: '#f00',
   onToggle() {}
 };
-
-module.exports = Trigger;

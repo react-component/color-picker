@@ -1,11 +1,10 @@
 'use strict';
 
-const React = require('react');
-const Trigger = require('./Trigger');
-const Picker = require('./Picker');
-const DOM = require('./utils/dom');
-
-let prefixClsFn = require('./utils/prefixClsFn');
+import React from 'react';
+import Trigger from './Trigger';
+import Picker from './Picker';
+import DOM from './utils/dom';
+import prefixClsFn from './utils/prefixClsFn';
 
 const extend = function (target, source) {
   for (let i in source) {
@@ -16,7 +15,7 @@ const extend = function (target, source) {
   return target;
 };
 
-class ColorPicker extends React.Component{
+export default class ColorPicker extends React.Component{
   constructor(props) {
     super(props);
 
@@ -117,5 +116,3 @@ ColorPicker.defaultProps = {
   align: 'right',
   onChange() {}
 };
-
-module.exports = ColorPicker;

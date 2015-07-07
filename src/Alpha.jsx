@@ -1,9 +1,9 @@
 'use strict';
 
-const React = require('react');
-const Colr = require('colr');
-const event = require('eventlistener');
-const prefixClsFn = require('./utils/prefixClsFn');
+import React from 'react';
+import Colr from 'colr';
+import event from 'eventlistener';
+import prefixClsFn from './utils/prefixClsFn';
 
 const colr = new Colr();
 
@@ -11,7 +11,7 @@ function rgbaColor(r, g, b, a) {
     return 'rgba(' + [r, g, b, a / 100].join(',') + ')';
   }
 
-class Alpha extends React.Component{
+export default class Alpha extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -132,5 +132,3 @@ Alpha.defaultProps = {
   customColor: '#f00',
   onAlphaChange: function() {}
 };
-
-module.exports = Alpha;

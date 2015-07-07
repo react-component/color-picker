@@ -1,5 +1,9 @@
-node_modules/
 lib/
+assets/index.css
+
 .sass-cache/
 bower_components/
+node_modules/
 site/
+*.log
+.idea

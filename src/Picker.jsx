@@ -1,16 +1,15 @@
 'use strict';
 
-let React = require('react');
+import React from 'react';
 // 色板
-let Board = require('./Board');
-let Preview = require('./Preview');
-let Ribbon = require('./Ribbon');
-let Alpha = require('./Alpha');
-let Params = require('./Params');
+import Board from './Board';
+import Preview from './Preview';
+import Ribbon from './Ribbon';
+import Alpha from './Alpha';
+import Params from './Params';
+import prefixClsFn from './utils/prefixClsFn';
 
-let prefixClsFn = require('./utils/prefixClsFn');
-
-class Picker extends React.Component {
+export default class Picker extends React.Component {
   constructor(props) {
     super(props);
 
@@ -201,5 +200,3 @@ Picker.defaultProps = {
   onFocus() {},
   onBlur() {}
 };
-
-module.exports = Picker;

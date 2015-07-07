@@ -1,10 +1,10 @@
 'use strict';
 
-const React = require('react');
-const Colr = require('colr');
-const store = require('store');
+import React from 'react';
+import Colr from 'colr';
+import store from 'store';
 
-let prefixClsFn = require('./utils/prefixClsFn');
+import prefixClsFn from './utils/prefixClsFn';
 
 let colr = new Colr();
 
@@ -48,7 +48,7 @@ function validationHex(hex) {
   return true;
 }
 
-class Params extends React.Component{
+export default class Params extends React.Component{
   constructor(props) {
     super(props);
     let index = store.get('react-colors-picker-index') || 0;
@@ -406,5 +406,3 @@ Params.defaultProps = {
   onAlphaChange() {},
   onHexChange() {}
 };
-
-module.exports = Params;

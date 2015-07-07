@@ -24,9 +24,11 @@ function getResolve() {
   return resolve
 }
 
-gulp.task('jsx', ['clean:site'], function() {
+gulp.task('jsx', ['clean:lib'], function() {
   return gulp.src(['src/**/*.jsx', 'src/**/*.js'])
-    .pipe(react())
+    .pipe(react({
+      es6module: true
+    }))
     .pipe(babel())
     .pipe(gulp.dest('lib'))
 })
@@ -53,7 +55,7 @@ gulp.task('clean:lib', function(done) {
 
 gulp.task('examples', ['clean:site', 'jsx'], function() {
   return gulp
-    .src(['./examples/*.*'])
+    .src(['./examples/*.jsx', './examples/*.js'])
     .pipe(jsx2example())
     .pipe(gulp.dest('site/examples/'))
 })

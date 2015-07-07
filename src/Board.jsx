@@ -1,15 +1,15 @@
 'use strict';
-const Colr = require('colr');
-const React = require('react');
-const event = require('eventlistener');
-let prefixClsFn = require('./utils/prefixClsFn');
+import Colr from 'colr';
+import React from 'react';
+import event from 'eventlistener';
+import prefixClsFn from './utils/prefixClsFn';
 
 let colr = new Colr();
 
 const width = 200;
 const height = 150;
 
-class Board extends React.Component {
+export default class Board extends React.Component {
   constructor(props) {
     super(props);
 
@@ -228,4 +228,3 @@ Board.defaultProps = {
   hue: 0,
   prefixCls: 'react-colors-picker-board'
 };
-module.exports = Board;

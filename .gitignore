@@ -6,3 +6,4 @@ bower_components/
 node_modules/
 site/
 *.log
+.idea

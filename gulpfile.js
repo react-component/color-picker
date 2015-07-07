@@ -55,7 +55,7 @@ gulp.task('clean:lib', function(done) {
 
 gulp.task('examples', ['clean:site', 'jsx'], function() {
   return gulp
-    .src(['./examples/*.*'])
+    .src(['./examples/*.jsx', './examples/*.js'])
     .pipe(jsx2example())
     .pipe(gulp.dest('site/examples/'))
 })

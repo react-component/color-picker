@@ -427,9 +427,7 @@
 	'use strict';
 	
 	module.exports = __webpack_require__(8);
-	
 	module.exports.Picker = __webpack_require__(11);
-	
 	module.exports.Trigger = __webpack_require__(9);
 
 /***/ },
@@ -437,6 +435,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -468,6 +470,10 @@
 	  }
 	};
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError('Cannot call a class as a function');
@@ -480,12 +486,25 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
 	}
 	
-	var React = __webpack_require__(6);
-	var Trigger = __webpack_require__(9);
-	var Picker = __webpack_require__(11);
-	var DOM = __webpack_require__(22);
+	var _react = __webpack_require__(6);
 	
-	var prefixClsFn = __webpack_require__(10);
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Trigger = __webpack_require__(9);
+	
+	var _Trigger2 = _interopRequireDefault(_Trigger);
+	
+	var _Picker = __webpack_require__(11);
+	
+	var _Picker2 = _interopRequireDefault(_Picker);
+	
+	var _utilsDom = __webpack_require__(22);
+	
+	var _utilsDom2 = _interopRequireDefault(_utilsDom);
+	
+	var _utilsPrefixClsFn = __webpack_require__(10);
+	
+	var _utilsPrefixClsFn2 = _interopRequireDefault(_utilsPrefixClsFn);
 	
 	var extend = function extend(target, source) {
 	  for (var i in source) {
@@ -514,7 +533,7 @@
 	      }
 	    };
 	
-	    this.prefixClsFn = prefixClsFn.bind(this);
+	    this.prefixClsFn = _utilsPrefixClsFn2['default'].bind(this);
 	    var events = ['triggerClickHandler', 'handlerChange', 'handlerBlur'];
 	
 	    events.forEach(function (e) {
@@ -528,7 +547,7 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      if (this.state.visible) {
-	        var offest = DOM.getAlign(React.findDOMNode(this.refs.picker), React.findDOMNode(this.refs.trigger), this.props.align, [5, 0]);
+	        var offest = _utilsDom2['default'].getAlign(_react2['default'].findDOMNode(this.refs.picker), _react2['default'].findDOMNode(this.refs.trigger), this.props.align, [5, 0]);
 	        var styleObj = extend(this.state.style, offest);
 	        this.setState({
 	          style: styleObj
@@ -538,7 +557,7 @@
 	  }, {
 	    key: 'triggerClickHandler',
 	    value: function triggerClickHandler() {
-	      var offest = DOM.getAlign(React.findDOMNode(this.refs.picker), React.findDOMNode(this.refs.trigger), this.props.align, [5, 0]);
+	      var offest = _utilsDom2['default'].getAlign(_react2['default'].findDOMNode(this.refs.picker), _react2['default'].findDOMNode(this.refs.trigger), this.props.align, [5, 0]);
 	
 	      extend(this.state.style, offest);
 	
@@ -560,10 +579,10 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return React.createElement('div', null, React.createElement(Trigger, {
+	      return _react2['default'].createElement('div', null, _react2['default'].createElement(_Trigger2['default'], {
 	        ref: 'trigger',
 	        defaultColor: this.state.defaultColor,
-	        onToggle: this.triggerClickHandler }), React.createElement(Picker, {
+	        onToggle: this.triggerClickHandler }), _react2['default'].createElement(_Picker2['default'], {
 	        ref: 'picker',
 	        defaultColor: this.state.defaultColor,
 	        style: this.state.style,
@@ -574,14 +593,16 @@
 	  }]);
 	
 	  return ColorPicker;
-	})(React.Component);
+	})(_react2['default'].Component);
+	
+	exports['default'] = ColorPicker;
 	
 	ColorPicker.propTypes = {
-	  rootPrefixCls: React.PropTypes.string,
-	  visible: React.PropTypes.bool,
-	  defaultColor: React.PropTypes.string,
-	  align: React.PropTypes.string,
-	  onChange: React.PropTypes.func
+	  rootPrefixCls: _react2['default'].PropTypes.string,
+	  visible: _react2['default'].PropTypes.bool,
+	  defaultColor: _react2['default'].PropTypes.string,
+	  align: _react2['default'].PropTypes.string,
+	  onChange: _react2['default'].PropTypes.func
 	};
 	
 	ColorPicker.defaultProps = {
@@ -591,14 +612,17 @@
 	  align: 'right',
 	  onChange: function onChange() {}
 	};
-	
-	module.exports = ColorPicker;
+	module.exports = exports['default'];
 
 /***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -630,6 +654,10 @@
 	  }
 	};
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError('Cannot call a class as a function');
@@ -642,8 +670,13 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
 	}
 	
-	var React = __webpack_require__(6);
-	var prefixClsFn = __webpack_require__(10);
+	var _react = __webpack_require__(6);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _utilsPrefixClsFn = __webpack_require__(10);
+	
+	var _utilsPrefixClsFn2 = _interopRequireDefault(_utilsPrefixClsFn);
 	
 	var Trigger = (function (_React$Component) {
 	  function Trigger(props) {
@@ -656,7 +689,7 @@
 	      defaultColor: props.defaultColor
 	    };
 	
-	    this.prefixClsFn = prefixClsFn.bind(this);
+	    this.prefixClsFn = _utilsPrefixClsFn2['default'].bind(this);
 	    this.handlerClick = this.handlerClick.bind(this);
 	  }
 	
@@ -677,17 +710,19 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return React.createElement('div', { className: this.props.prefixCls, onClick: this.handlerClick }, React.createElement('span', { style: { backgroundColor: this.state.defaultColor } }));
+	      return _react2['default'].createElement('div', { className: this.props.prefixCls, onClick: this.handlerClick }, _react2['default'].createElement('span', { style: { backgroundColor: this.state.defaultColor } }));
 	    }
 	  }]);
 	
 	  return Trigger;
-	})(React.Component);
+	})(_react2['default'].Component);
+	
+	exports['default'] = Trigger;
 	
 	Trigger.propTypes = {
-	  prefixCls: React.PropTypes.string,
-	  defaultColor: React.PropTypes.string,
-	  onToggle: React.PropTypes.func
+	  prefixCls: _react2['default'].PropTypes.string,
+	  defaultColor: _react2['default'].PropTypes.string,
+	  onToggle: _react2['default'].PropTypes.func
 	};
 	
 	Trigger.defaultProps = {
@@ -695,8 +730,7 @@
 	  defaultColor: '#f00',
 	  onToggle: function onToggle() {}
 	};
-	
-	module.exports = Trigger;
+	module.exports = exports['default'];
 
 /***/ },
 /* 10 */
@@ -718,6 +752,10 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -748,6 +786,10 @@
 	  }
 	};
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError('Cannot call a class as a function');
@@ -760,15 +802,35 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
 	}
 	
-	var React = __webpack_require__(6);
-	// 色板
-	var Board = __webpack_require__(12);
-	var Preview = __webpack_require__(16);
-	var Ribbon = __webpack_require__(17);
-	var Alpha = __webpack_require__(18);
-	var Params = __webpack_require__(19);
+	var _react = __webpack_require__(6);
 	
-	var prefixClsFn = __webpack_require__(10);
+	var _react2 = _interopRequireDefault(_react);
+	
+	// 色板
+	
+	var _Board = __webpack_require__(12);
+	
+	var _Board2 = _interopRequireDefault(_Board);
+	
+	var _Preview = __webpack_require__(16);
+	
+	var _Preview2 = _interopRequireDefault(_Preview);
+	
+	var _Ribbon = __webpack_require__(17);
+	
+	var _Ribbon2 = _interopRequireDefault(_Ribbon);
+	
+	var _Alpha = __webpack_require__(18);
+	
+	var _Alpha2 = _interopRequireDefault(_Alpha);
+	
+	var _Params = __webpack_require__(19);
+	
+	var _Params2 = _interopRequireDefault(_Params);
+	
+	var _utilsPrefixClsFn = __webpack_require__(10);
+	
+	var _utilsPrefixClsFn2 = _interopRequireDefault(_utilsPrefixClsFn);
 	
 	var Picker = (function (_React$Component) {
 	  function Picker(props) {
@@ -787,7 +849,7 @@
 	      style: props.style
 	    };
 	
-	    this.prefixClsFn = prefixClsFn.bind(this);
+	    this.prefixClsFn = _utilsPrefixClsFn2['default'].bind(this);
 	
 	    var events = ['toggleClassName', 'toggle', '_onChange', '_onHueChange', '_onHexChange', '_onAlphaChange', 'handleFocus', 'handlerBlur'];
 	    // bind methods
@@ -803,7 +865,7 @@
 	    value: function componentDidUpdate(prevProps, prevState) {
 	      if (!prevState.visible) {
 	        // 如果从 false 切换过来则聚焦
-	        React.findDOMNode(this).focus();
+	        _react2['default'].findDOMNode(this).focus();
 	      }
 	    }
 	  }, {
@@ -905,26 +967,26 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return React.createElement('div', {
+	      return _react2['default'].createElement('div', {
 	        className: this.props.prefixCls + ' ' + this.toggleClassName(),
 	        style: this.state.style,
 	        onFocus: this.handleFocus,
 	        onBlur: this.handlerBlur,
 	        tabIndex: '0'
-	      }, React.createElement('div', { className: this.prefixClsFn('panel') }, React.createElement(Board, {
+	      }, _react2['default'].createElement('div', { className: this.prefixClsFn('panel') }, _react2['default'].createElement(_Board2['default'], {
 	        alpha: this.state.alpha,
 	        hue: this.state.hue,
 	        defaultColor: this.state.defaultColor,
-	        onChange: this._onChange }), React.createElement('div', { className: this.prefixClsFn('wrap') }, React.createElement('div', { className: this.prefixClsFn('wrap-ribbon') }, React.createElement(Ribbon, {
+	        onChange: this._onChange }), _react2['default'].createElement('div', { className: this.prefixClsFn('wrap') }, _react2['default'].createElement('div', { className: this.prefixClsFn('wrap-ribbon') }, _react2['default'].createElement(_Ribbon2['default'], {
 	        defaultColor: this.state.defaultColor,
-	        onHexChange: this._onHueChange })), React.createElement('div', { className: this.prefixClsFn('wrap-alpha') }, React.createElement(Alpha, {
+	        onHexChange: this._onHueChange })), _react2['default'].createElement('div', { className: this.prefixClsFn('wrap-alpha') }, _react2['default'].createElement(_Alpha2['default'], {
 	        alpha: this.state.alpha,
 	        defaultColor: this.state.selectColor,
 	        customColor: this.state.customColor,
-	        onAlphaChange: this._onAlphaChange })), React.createElement('div', { className: this.prefixClsFn('wrap-preview') }, React.createElement(Preview, {
+	        onAlphaChange: this._onAlphaChange })), _react2['default'].createElement('div', { className: this.prefixClsFn('wrap-preview') }, _react2['default'].createElement(_Preview2['default'], {
 	        alpha: this.state.alpha,
 	        defaultColor: this.state.selectColor,
-	        customColor: this.state.customColor }))), React.createElement('div', { className: this.prefixClsFn('wrap'), style: { height: 40, marginTop: 6 } }, React.createElement(Params, {
+	        customColor: this.state.customColor }))), _react2['default'].createElement('div', { className: this.prefixClsFn('wrap'), style: { height: 40, marginTop: 6 } }, _react2['default'].createElement(_Params2['default'], {
 	        defaultColor: this.state.selectColor,
 	        alpha: this.state.alpha,
 	        onAlphaChange: this._onAlphaChange,
@@ -933,16 +995,18 @@
 	  }]);
 	
 	  return Picker;
-	})(React.Component);
+	})(_react2['default'].Component);
+	
+	exports['default'] = Picker;
 	
 	Picker.propTypes = {
-	  visible: React.PropTypes.bool,
-	  prefixCls: React.PropTypes.string,
-	  defaultColor: React.PropTypes.string,
-	  style: React.PropTypes.object,
-	  onChange: React.PropTypes.func,
-	  onFocus: React.PropTypes.func,
-	  onBlur: React.PropTypes.func
+	  visible: _react2['default'].PropTypes.bool,
+	  prefixCls: _react2['default'].PropTypes.string,
+	  defaultColor: _react2['default'].PropTypes.string,
+	  style: _react2['default'].PropTypes.object,
+	  onChange: _react2['default'].PropTypes.func,
+	  onFocus: _react2['default'].PropTypes.func,
+	  onBlur: _react2['default'].PropTypes.func
 	};
 	
 	Picker.defaultProps = {
@@ -954,14 +1018,16 @@
 	  onFocus: function onFocus() {},
 	  onBlur: function onBlur() {}
 	};
-	
-	module.exports = Picker;
+	module.exports = exports['default'];
 
 /***/ },
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -993,6 +1059,10 @@
 	  }
 	};
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError('Cannot call a class as a function');
@@ -1005,12 +1075,23 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
 	}
 	
-	var Colr = __webpack_require__(13);
-	var React = __webpack_require__(6);
-	var event = __webpack_require__(15);
-	var prefixClsFn = __webpack_require__(10);
+	var _colr = __webpack_require__(13);
 	
-	var colr = new Colr();
+	var _colr2 = _interopRequireDefault(_colr);
+	
+	var _react = __webpack_require__(6);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _eventlistener = __webpack_require__(15);
+	
+	var _eventlistener2 = _interopRequireDefault(_eventlistener);
+	
+	var _utilsPrefixClsFn = __webpack_require__(10);
+	
+	var _utilsPrefixClsFn2 = _interopRequireDefault(_utilsPrefixClsFn);
+	
+	var colr = new _colr2['default']();
 	
 	var width = 200;
 	var height = 150;
@@ -1043,7 +1124,7 @@
 	      prefixCls: props.prefixCls
 	    };
 	
-	    this.prefixClsFn = prefixClsFn.bind(this);
+	    this.prefixClsFn = _utilsPrefixClsFn2['default'].bind(this);
 	    var events = ['handleBoardMouseDown', 'handleBoardDrag', 'handleBoardDragEnd', 'pointMoveTo', '_updateBackgroundColor', '_onChange', '_drawBoard'];
 	    // bind methods
 	    events.forEach(function (m) {
@@ -1098,8 +1179,8 @@
 	      this.pointMoveTo({
 	        x: x, y: y
 	      });
-	      event.add(window, 'mousemove', this.handleBoardDrag);
-	      event.add(window, 'mouseup', this.handleBoardDragEnd);
+	      _eventlistener2['default'].add(window, 'mousemove', this.handleBoardDrag);
+	      _eventlistener2['default'].add(window, 'mouseup', this.handleBoardDragEnd);
 	    }
 	  }, {
 	    key: 'handleBoardDrag',
@@ -1118,8 +1199,8 @@
 	      this.pointMoveTo({
 	        x: x, y: y
 	      });
-	      event.remove(window, 'mousemove', this.handleBoardDrag);
-	      event.remove(window, 'mouseup', this.handleBoardDragEnd);
+	      _eventlistener2['default'].remove(window, 'mousemove', this.handleBoardDrag);
+	      _eventlistener2['default'].remove(window, 'mouseup', this.handleBoardDragEnd);
 	    }
 	  }, {
 	    key: 'pointMoveTo',
@@ -1130,7 +1211,7 @@
 	     * @return {undefined}
 	     */
 	    value: function pointMoveTo(pos) {
-	      var rect = React.findDOMNode(this).getBoundingClientRect();
+	      var rect = _react2['default'].findDOMNode(this).getBoundingClientRect();
 	      var left = pos.x - rect.left;
 	      var top = pos.y - rect.top;
 	
@@ -1221,20 +1302,22 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return React.createElement('div', { className: this.props.prefixCls }, React.createElement('div', { className: this.prefixClsFn('hsv'), style: { backgroundColor: this.state.hueColor } }, React.createElement('div', { className: this.prefixClsFn('saturation') }), React.createElement('div', { className: this.prefixClsFn('lightness') })), React.createElement('span', { ref: 'point', style: { 'left': this.state.x, 'top': this.state.y } }), React.createElement('div', {
+	      return _react2['default'].createElement('div', { className: this.props.prefixCls }, _react2['default'].createElement('div', { className: this.prefixClsFn('hsv'), style: { backgroundColor: this.state.hueColor } }, _react2['default'].createElement('div', { className: this.prefixClsFn('saturation') }), _react2['default'].createElement('div', { className: this.prefixClsFn('lightness') })), _react2['default'].createElement('span', { ref: 'point', style: { 'left': this.state.x, 'top': this.state.y } }), _react2['default'].createElement('div', {
 	        className: this.prefixClsFn('handler'),
 	        onMouseDown: this.handleBoardMouseDown }));
 	    }
 	  }]);
 	
 	  return Board;
-	})(React.Component);
+	})(_react2['default'].Component);
+	
+	exports['default'] = Board;
 	
 	Board.propTypes = {
-	  defaultColor: React.PropTypes.string,
-	  alpha: React.PropTypes.number,
-	  hue: React.PropTypes.number,
-	  prefixCls: React.PropTypes.string
+	  defaultColor: _react2['default'].PropTypes.string,
+	  alpha: _react2['default'].PropTypes.number,
+	  hue: _react2['default'].PropTypes.number,
+	  prefixCls: _react2['default'].PropTypes.string
 	};
 	
 	Board.defaultProps = {
@@ -1243,7 +1326,7 @@
 	  hue: 0,
 	  prefixCls: 'react-colors-picker-board'
 	};
-	module.exports = Board;
+	module.exports = exports['default'];
 
 /***/ },
 /* 13 */
@@ -1931,6 +2014,10 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -1961,6 +2048,10 @@
 	  }
 	};
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError('Cannot call a class as a function');
@@ -1973,8 +2064,13 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
 	}
 	
-	var React = __webpack_require__(6);
-	var prefixClsFn = __webpack_require__(10);
+	var _react = __webpack_require__(6);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _utilsPrefixClsFn = __webpack_require__(10);
+	
+	var _utilsPrefixClsFn2 = _interopRequireDefault(_utilsPrefixClsFn);
 	
 	var Preview = (function (_React$Component) {
 	  function Preview(props) {
@@ -1989,7 +2085,7 @@
 	      customColor: props.customColor
 	    };
 	
-	    this.prefixClsFn = prefixClsFn.bind(this);
+	    this.prefixClsFn = _utilsPrefixClsFn2['default'].bind(this);
 	  }
 	
 	  _inherits(Preview, _React$Component);
@@ -2018,18 +2114,20 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return React.createElement('div', { className: this.props.prefixCls }, React.createElement('span', { style: { backgroundColor: this.state.defaultColor, opacity: this.state.alpha / 100 } }));
+	      return _react2['default'].createElement('div', { className: this.props.prefixCls }, _react2['default'].createElement('span', { style: { backgroundColor: this.state.defaultColor, opacity: this.state.alpha / 100 } }));
 	    }
 	  }]);
 	
 	  return Preview;
-	})(React.Component);
+	})(_react2['default'].Component);
+	
+	exports['default'] = Preview;
 	
 	Preview.propTypes = {
-	  prefixCls: React.PropTypes.string,
-	  alpha: React.PropTypes.number,
-	  defaultColor: React.PropTypes.string,
-	  customColor: React.PropTypes.string
+	  prefixCls: _react2['default'].PropTypes.string,
+	  alpha: _react2['default'].PropTypes.number,
+	  defaultColor: _react2['default'].PropTypes.string,
+	  customColor: _react2['default'].PropTypes.string
 	};
 	
 	Preview.defaultProps = {
@@ -2038,14 +2136,17 @@
 	  defaultColor: '#f00', // 背景颜色 响应来自  board 面板的选取颜色
 	  customColor: '#f00' // 背景颜色  响应来自用户的输入颜色
 	};
-	
-	module.exports = Preview;
+	module.exports = exports['default'];
 
 /***/ },
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -2077,6 +2178,10 @@
 	  }
 	};
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError('Cannot call a class as a function');
@@ -2089,12 +2194,23 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
 	}
 	
-	var React = __webpack_require__(6);
-	var Colr = __webpack_require__(13);
-	var event = __webpack_require__(15);
-	var prefixClsFn = __webpack_require__(10);
+	var _react = __webpack_require__(6);
 	
-	var colr = new Colr();
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _colr = __webpack_require__(13);
+	
+	var _colr2 = _interopRequireDefault(_colr);
+	
+	var _eventlistener = __webpack_require__(15);
+	
+	var _eventlistener2 = _interopRequireDefault(_eventlistener);
+	
+	var _utilsPrefixClsFn = __webpack_require__(10);
+	
+	var _utilsPrefixClsFn2 = _interopRequireDefault(_utilsPrefixClsFn);
+	
+	var colr = new _colr2['default']();
 	
 	var Ribbon = (function (_React$Component) {
 	  function Ribbon(props) {
@@ -2108,7 +2224,7 @@
 	      defaultColor: props.defaultColor
 	    };
 	
-	    this.prefixClsFn = prefixClsFn.bind(this);
+	    this.prefixClsFn = _utilsPrefixClsFn2['default'].bind(this);
 	
 	    var events = ['handleMouseDown', 'handledDrag', 'handledDragEnd', 'pointMoveTo', '_setHuePosition'];
 	    events.forEach(function (e) {
@@ -2144,7 +2260,7 @@
 	  }, {
 	    key: 'pointMoveTo',
 	    value: function pointMoveTo(coords) {
-	      var rect = React.findDOMNode(this).getBoundingClientRect();
+	      var rect = _react2['default'].findDOMNode(this).getBoundingClientRect();
 	      var width = rect.width;
 	      var left = coords.x - rect.left;
 	
@@ -2172,8 +2288,8 @@
 	        x: x, y: y
 	      });
 	
-	      event.add(window, 'mousemove', this.handledDrag);
-	      event.add(window, 'mouseup', this.handledDragEnd);
+	      _eventlistener2['default'].add(window, 'mousemove', this.handledDrag);
+	      _eventlistener2['default'].add(window, 'mouseup', this.handledDragEnd);
 	    }
 	  }, {
 	    key: 'handledDrag',
@@ -2192,13 +2308,13 @@
 	      this.pointMoveTo({
 	        x: x, y: y
 	      });
-	      event.remove(window, 'mousemove', this.handledDrag);
-	      event.remove(window, 'mouseup', this.handledDragEnd);
+	      _eventlistener2['default'].remove(window, 'mousemove', this.handledDrag);
+	      _eventlistener2['default'].remove(window, 'mouseup', this.handledDragEnd);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return React.createElement('div', { className: this.props.prefixCls }, React.createElement('span', { ref: 'point', style: { left: this.state.huePercent + '%' } }), React.createElement('div', {
+	      return _react2['default'].createElement('div', { className: this.props.prefixCls }, _react2['default'].createElement('span', { ref: 'point', style: { left: this.state.huePercent + '%' } }), _react2['default'].createElement('div', {
 	        className: this.prefixClsFn('handler'),
 	        onMouseDown: this.handleMouseDown
 	      }));
@@ -2206,12 +2322,14 @@
 	  }]);
 	
 	  return Ribbon;
-	})(React.Component);
+	})(_react2['default'].Component);
+	
+	exports['default'] = Ribbon;
 	
 	Ribbon.propTypes = {
-	  prefixCls: React.PropTypes.string,
-	  defaultColor: React.PropTypes.string,
-	  onHexChange: React.PropTypes.func
+	  prefixCls: _react2['default'].PropTypes.string,
+	  defaultColor: _react2['default'].PropTypes.string,
+	  onHexChange: _react2['default'].PropTypes.func
 	};
 	
 	Ribbon.defaultProps = {
@@ -2221,12 +2339,17 @@
 	};
 	
 	module.exports = Ribbon;
+	module.exports = exports['default'];
 
 /***/ },
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -2258,6 +2381,10 @@
 	  }
 	};
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError('Cannot call a class as a function');
@@ -2270,12 +2397,23 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
 	}
 	
-	var React = __webpack_require__(6);
-	var Colr = __webpack_require__(13);
-	var event = __webpack_require__(15);
-	var prefixClsFn = __webpack_require__(10);
+	var _react = __webpack_require__(6);
 	
-	var colr = new Colr();
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _colr = __webpack_require__(13);
+	
+	var _colr2 = _interopRequireDefault(_colr);
+	
+	var _eventlistener = __webpack_require__(15);
+	
+	var _eventlistener2 = _interopRequireDefault(_eventlistener);
+	
+	var _utilsPrefixClsFn = __webpack_require__(10);
+	
+	var _utilsPrefixClsFn2 = _interopRequireDefault(_utilsPrefixClsFn);
+	
+	var colr = new _colr2['default']();
 	
 	function rgbaColor(r, g, b, a) {
 	  return 'rgba(' + [r, g, b, a / 100].join(',') + ')';
@@ -2295,7 +2433,7 @@
 	      customColor: props.defaultColor
 	    };
 	
-	    this.prefixClsFn = prefixClsFn.bind(this);
+	    this.prefixClsFn = _utilsPrefixClsFn2['default'].bind(this);
 	
 	    var events = ['handleMouseDown', 'handledDrag', 'handledDragEnd', 'pointMoveTo', 'getBackground'];
 	    events.forEach(function (e) {
@@ -2341,7 +2479,7 @@
 	  }, {
 	    key: 'pointMoveTo',
 	    value: function pointMoveTo(coords) {
-	      var rect = React.findDOMNode(this).getBoundingClientRect();
+	      var rect = _react2['default'].findDOMNode(this).getBoundingClientRect();
 	      var width = rect.width;
 	      var left = coords.x - rect.left;
 	
@@ -2366,8 +2504,8 @@
 	        x: x, y: y
 	      });
 	
-	      event.add(window, 'mousemove', this.handledDrag);
-	      event.add(window, 'mouseup', this.handledDragEnd);
+	      _eventlistener2['default'].add(window, 'mousemove', this.handledDrag);
+	      _eventlistener2['default'].add(window, 'mouseup', this.handledDragEnd);
 	    }
 	  }, {
 	    key: 'handledDrag',
@@ -2386,23 +2524,25 @@
 	      this.pointMoveTo({
 	        x: x, y: y
 	      });
-	      event.remove(window, 'mousemove', this.handledDrag);
-	      event.remove(window, 'mouseup', this.handledDragEnd);
+	      _eventlistener2['default'].remove(window, 'mousemove', this.handledDrag);
+	      _eventlistener2['default'].remove(window, 'mouseup', this.handledDragEnd);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return React.createElement('div', { className: this.props.prefixCls }, React.createElement('div', {
+	      return _react2['default'].createElement('div', { className: this.props.prefixCls }, _react2['default'].createElement('div', {
 	        ref: 'bg',
 	        className: this.prefixClsFn('bg'),
-	        style: { background: this.getBackground() } }), React.createElement('span', { ref: 'point', style: { left: this.state.alpha + '%' } }), React.createElement('div', {
+	        style: { background: this.getBackground() } }), _react2['default'].createElement('span', { ref: 'point', style: { left: this.state.alpha + '%' } }), _react2['default'].createElement('div', {
 	        className: this.prefixClsFn('handler'),
 	        onMouseDown: this.handleMouseDown }));
 	    }
 	  }]);
 	
 	  return Alpha;
-	})(React.Component);
+	})(_react2['default'].Component);
+	
+	exports['default'] = Alpha;
 	
 	Alpha.defaultProps = {
 	  alpha: 100,
@@ -2411,14 +2551,17 @@
 	  customColor: '#f00',
 	  onAlphaChange: function onAlphaChange() {}
 	};
-	
-	module.exports = Alpha;
+	module.exports = exports['default'];
 
 /***/ },
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	
 	var _createClass = (function () {
 	  function defineProperties(target, props) {
@@ -2450,6 +2593,10 @@
 	  }
 	};
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError('Cannot call a class as a function');
@@ -2462,13 +2609,23 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) subClass.__proto__ = superClass;
 	}
 	
-	var React = __webpack_require__(6);
-	var Colr = __webpack_require__(13);
-	var store = __webpack_require__(20);
+	var _react = __webpack_require__(6);
 	
-	var prefixClsFn = __webpack_require__(10);
+	var _react2 = _interopRequireDefault(_react);
 	
-	var colr = new Colr();
+	var _colr = __webpack_require__(13);
+	
+	var _colr2 = _interopRequireDefault(_colr);
+	
+	var _store = __webpack_require__(20);
+	
+	var _store2 = _interopRequireDefault(_store);
+	
+	var _utilsPrefixClsFn = __webpack_require__(10);
+	
+	var _utilsPrefixClsFn2 = _interopRequireDefault(_utilsPrefixClsFn);
+	
+	var colr = new _colr2['default']();
 	
 	// @see https://github.com/stayradiated/colr-convert/blob/master/index.js
 	// convert a charcode to a hex val
@@ -2518,7 +2675,7 @@
 	    _classCallCheck(this, Params);
 	
 	    _get(Object.getPrototypeOf(Params.prototype), 'constructor', this).call(this, props);
-	    var index = store.get('react-colors-picker-index') || 0;
+	    var index = _store2['default'].get('react-colors-picker-index') || 0;
 	    var modes = ['rgb', 'hsv', 'hsl'];
 	    var mode = modes[index];
 	
@@ -2534,7 +2691,7 @@
 	      alpha: props.alpha
 	    };
 	
-	    this.prefixClsFn = prefixClsFn.bind(this);
+	    this.prefixClsFn = _utilsPrefixClsFn2['default'].bind(this);
 	
 	    var events = ['formatHex', 'formatRgb', 'formatHsv', 'formatHsl', '_chagneColorsFromHex', '_chagneColorsFromRgb', '_chagneColorsFromHsv', '_chagneColorsFromHsl', 'handlerHexChange', 'handlerAlphaChange', 'getRgbFromKey', 'getHsvFromKey', 'getHslFromKey', 'handlerKeyPress', 'handlerRGBChange', 'handlerHSVChange', 'handlerHSLChange', 'handlerModeChange'];
 	
@@ -2671,7 +2828,7 @@
 	      var index = this.state.index;
 	      index = (index + 1) % 3;
 	      var mode = this.state.modes[index];
-	      store.set('react-colors-picker-index', index);
+	      _store2['default'].set('react-colors-picker-index', index);
 	      this.setState({
 	        index: index,
 	        mode: mode
@@ -2720,97 +2877,99 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return React.createElement('div', { className: this.props.prefixCls }, this.state.mode === 'rgb' && React.createElement('div', { className: this.prefixClsFn('input') }, React.createElement('input', {
+	      return _react2['default'].createElement('div', { className: this.props.prefixCls }, this.state.mode === 'rgb' && _react2['default'].createElement('div', { className: this.prefixClsFn('input') }, _react2['default'].createElement('input', {
 	        className: this.prefixClsFn('hex'),
 	        type: 'text',
 	        maxLength: '6',
 	        onChange: this.handlerHexChange,
 	        onKeyPress: this.handlerKeyPress,
-	        value: this.state.hex }), React.createElement('input', { type: 'number',
+	        value: this.state.hex }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 255,
 	        value: this.getRgbFromKey('r'),
-	        onChange: this.handlerRGBChange.bind(null, 'r') }), React.createElement('input', { type: 'number',
+	        onChange: this.handlerRGBChange.bind(null, 'r') }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 255,
 	        value: this.getRgbFromKey('g'),
-	        onChange: this.handlerRGBChange.bind(null, 'g') }), React.createElement('input', { type: 'number',
+	        onChange: this.handlerRGBChange.bind(null, 'g') }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 255,
 	        value: this.getRgbFromKey('b'),
-	        onChange: this.handlerRGBChange.bind(null, 'b') }), React.createElement('input', { type: 'number',
+	        onChange: this.handlerRGBChange.bind(null, 'b') }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 100,
 	        speed: 1,
 	        value: this.state.alpha,
-	        onChange: this.handlerAlphaChange })), this.state.mode === 'rgb' && React.createElement('div', { className: this.prefixClsFn('lable') }, React.createElement('label', { className: this.prefixClsFn('lable-hex') }, 'Hex'), React.createElement('label', { className: this.prefixClsFn('lable-number'),
-	        onClick: this.handlerModeChange }, 'R'), React.createElement('label', { className: this.prefixClsFn('lable-number'),
-	        onClick: this.handlerModeChange }, 'G'), React.createElement('label', { className: this.prefixClsFn('lable-number'),
-	        onClick: this.handlerModeChange }, 'B'), React.createElement('label', { className: this.prefixClsFn('lable-alpha') }, 'A')), this.state.mode === 'hsv' && React.createElement('div', { className: this.prefixClsFn('input') }, React.createElement('input', {
+	        onChange: this.handlerAlphaChange })), this.state.mode === 'rgb' && _react2['default'].createElement('div', { className: this.prefixClsFn('lable') }, _react2['default'].createElement('label', { className: this.prefixClsFn('lable-hex') }, 'Hex'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-number'),
+	        onClick: this.handlerModeChange }, 'R'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-number'),
+	        onClick: this.handlerModeChange }, 'G'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-number'),
+	        onClick: this.handlerModeChange }, 'B'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-alpha') }, 'A')), this.state.mode === 'hsv' && _react2['default'].createElement('div', { className: this.prefixClsFn('input') }, _react2['default'].createElement('input', {
 	        className: this.prefixClsFn('hex'),
 	        type: 'text',
 	        maxLength: '6',
 	        onChange: this.handlerHexChange,
 	        onKeyPress: this.handlerKeyPress,
-	        value: this.state.hex }), React.createElement('input', { type: 'number',
+	        value: this.state.hex }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 360,
 	        value: this.getHsvFromKey('h'),
-	        onChange: this.handlerHSVChange.bind(null, 'h') }), React.createElement('input', { type: 'number',
+	        onChange: this.handlerHSVChange.bind(null, 'h') }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 100,
 	        value: this.getHsvFromKey('s'),
-	        onChange: this.handlerHSVChange.bind(null, 's') }), React.createElement('input', { type: 'number',
+	        onChange: this.handlerHSVChange.bind(null, 's') }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 100,
 	        value: this.getHsvFromKey('v'),
-	        onChange: this.handlerHSVChange.bind(null, 'v') }), React.createElement('input', { type: 'number',
+	        onChange: this.handlerHSVChange.bind(null, 'v') }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 100,
 	        speed: 1,
 	        value: this.state.alpha,
-	        onChange: this.handlerAlphaChange })), this.state.mode === 'hsv' && React.createElement('div', { className: this.prefixClsFn('lable') }, React.createElement('label', { className: this.prefixClsFn('lable-hex') }, 'Hex'), React.createElement('label', { className: this.prefixClsFn('lable-number'),
-	        onClick: this.handlerModeChange }, 'H'), React.createElement('label', { className: this.prefixClsFn('lable-number'),
-	        onClick: this.handlerModeChange }, 'S'), React.createElement('label', { className: this.prefixClsFn('lable-number'),
-	        onClick: this.handlerModeChange }, 'B'), React.createElement('label', { className: this.prefixClsFn('lable-alpha') }, 'A')), this.state.mode === 'hsl' && React.createElement('div', { className: this.prefixClsFn('input') }, React.createElement('input', {
+	        onChange: this.handlerAlphaChange })), this.state.mode === 'hsv' && _react2['default'].createElement('div', { className: this.prefixClsFn('lable') }, _react2['default'].createElement('label', { className: this.prefixClsFn('lable-hex') }, 'Hex'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-number'),
+	        onClick: this.handlerModeChange }, 'H'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-number'),
+	        onClick: this.handlerModeChange }, 'S'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-number'),
+	        onClick: this.handlerModeChange }, 'B'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-alpha') }, 'A')), this.state.mode === 'hsl' && _react2['default'].createElement('div', { className: this.prefixClsFn('input') }, _react2['default'].createElement('input', {
 	        className: this.prefixClsFn('hex'),
 	        type: 'text',
 	        maxLength: '6',
 	        onChange: this.handlerHexChange,
 	        onKeyPress: this.handlerKeyPress,
-	        value: this.state.hex }), React.createElement('input', { type: 'number',
+	        value: this.state.hex }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 360,
 	        value: this.getHslFromKey('h'),
-	        onChange: this.handlerHSLChange.bind(null, 'h') }), React.createElement('input', { type: 'number',
+	        onChange: this.handlerHSLChange.bind(null, 'h') }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 100,
 	        value: this.getHslFromKey('s'),
-	        onChange: this.handlerHSLChange.bind(null, 's') }), React.createElement('input', { type: 'number',
+	        onChange: this.handlerHSLChange.bind(null, 's') }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 100,
 	        value: this.getHslFromKey('l'),
-	        onChange: this.handlerHSLChange.bind(null, 'l') }), React.createElement('input', { type: 'number',
+	        onChange: this.handlerHSLChange.bind(null, 'l') }), _react2['default'].createElement('input', { type: 'number',
 	        min: 0,
 	        max: 100,
 	        speed: 1,
 	        value: this.state.alpha,
-	        onChange: this.handlerAlphaChange })), this.state.mode === 'hsl' && React.createElement('div', { className: this.prefixClsFn('lable') }, React.createElement('label', { className: this.prefixClsFn('lable-hex') }, 'Hex'), React.createElement('label', { className: this.prefixClsFn('lable-number'),
-	        onClick: this.handlerModeChange }, 'H'), React.createElement('label', { className: this.prefixClsFn('lable-number'),
-	        onClick: this.handlerModeChange }, 'S'), React.createElement('label', { className: this.prefixClsFn('lable-number'),
-	        onClick: this.handlerModeChange }, 'L'), React.createElement('label', { className: this.prefixClsFn('lable-alpha') }, 'A')));
+	        onChange: this.handlerAlphaChange })), this.state.mode === 'hsl' && _react2['default'].createElement('div', { className: this.prefixClsFn('lable') }, _react2['default'].createElement('label', { className: this.prefixClsFn('lable-hex') }, 'Hex'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-number'),
+	        onClick: this.handlerModeChange }, 'H'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-number'),
+	        onClick: this.handlerModeChange }, 'S'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-number'),
+	        onClick: this.handlerModeChange }, 'L'), _react2['default'].createElement('label', { className: this.prefixClsFn('lable-alpha') }, 'A')));
 	    }
 	  }]);
 	
 	  return Params;
-	})(React.Component);
+	})(_react2['default'].Component);
+	
+	exports['default'] = Params;
 	
 	Params.propTypes = {
-	  prefixCls: React.PropTypes.string,
-	  defaultColor: React.PropTypes.string,
-	  alpha: React.PropTypes.number,
-	  onAlphaChange: React.PropTypes.func,
-	  onHexChange: React.PropTypes.func
+	  prefixCls: _react2['default'].PropTypes.string,
+	  defaultColor: _react2['default'].PropTypes.string,
+	  alpha: _react2['default'].PropTypes.number,
+	  onAlphaChange: _react2['default'].PropTypes.func,
+	  onHexChange: _react2['default'].PropTypes.func
 	};
 	
 	Params.defaultProps = {
@@ -2820,8 +2979,7 @@
 	  onAlphaChange: function onAlphaChange() {},
 	  onHexChange: function onHexChange() {}
 	};
-	
-	module.exports = Params;
+	module.exports = exports['default'];
 
 /***/ },
 /* 20 */

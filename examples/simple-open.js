@@ -3,12 +3,12 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(25);
+	module.exports = __webpack_require__(128);
 
 
 /***/ },
 
-/***/ 25:
+/***/ 128:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20,10 +20,10 @@ webpackJsonp([2],{
 	React.render(React.createElement(
 	  'div',
 	  null,
-	  React.createElement(ColorPicker, { defaultColor: '#36c', visible: true })
+	  React.createElement(ColorPicker, { defaultColor: '#36c', open: true })
 	), document.getElementById('__react-content'));
 
 /***/ }
 
 });
-//# sourceMappingURL=simple-visible.js.map
+//# sourceMappingURL=simple-open.js.map

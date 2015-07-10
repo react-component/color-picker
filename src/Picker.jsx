@@ -9,8 +9,6 @@ import Alpha from './Alpha';
 import Params from './Params';
 import prefixClsFn from './utils/prefixClsFn';
 
-// const PureRenderMixin = React.addons.PureRenderMixin;
-
 export default class Picker extends React.Component {
   constructor(props) {
     super(props);
@@ -38,8 +36,6 @@ export default class Picker extends React.Component {
       this[m] = this[m].bind(this);
     });
   }
-
-  // mixins: '[PureRenderMixin]'
 
   /**
    * 颜色选取发生改变的回调

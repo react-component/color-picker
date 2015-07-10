@@ -87,8 +87,7 @@ export default class ColorPicker extends React.Component{
       ref: function(component){
         this.savePickerRef(component);
       }.bind(this),
-      defaultColor: this.state.defaultColor,
-      style: this.state.style,
+      defaultColor: this.props.defaultColor,
       onChange: this.handlerChange,
       onBlur: this.handlerBlur
     }));
@@ -104,14 +103,14 @@ export default class ColorPicker extends React.Component{
     }
 
     return (
-      <div className={classes.join(' ')}>
+      <span className={classes.join(' ')}>
         <Trigger
           ref='trigger'
           defaultColor={this.state.defaultColor}
           onToggle={this.triggerClickHandler}
         />
         {picker}
-      </div>
+      </span>
     );
   }
 }

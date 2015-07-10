@@ -6,7 +6,7 @@ const ColorPicker = require('react-colors-picker');
 
 React.render(
   <div>
-    <ColorPicker defaultColor={'#36c'} visiable={true} />
+    <ColorPicker defaultColor={'#36c'} open={true} />
   </div>,
   document.getElementById('__react-content')
 );

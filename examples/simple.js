@@ -11,6 +11,8 @@ function changeHandler (colors) {
 React.render(
   <div style={{margin:20, textAlign: 'center'}}>
     <ColorPicker defaultColor={'#36c'} onChange={changeHandler} />
+    <hr />
+    <ColorPicker defaultColor={'#894'} align="left" />
   </div>,
   document.getElementById('__react-content')
 );

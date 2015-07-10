@@ -24,7 +24,7 @@ npm start
 
 ## Example
 
-online example: http://noyobo.com/react-colors-picker/
+online example: [http://noyobo.github.io/react-colors-picker/](http://noyobo.github.io/react-colors-picker/)
 
 ## Feature
 
@@ -49,7 +49,7 @@ React.render(<ColorsPicker />, container);
 name|type|default|description
 ---|---|---|---
 defaultColor|String|#ff0000|color board default background color
-visible| Boolean | false | Picker default is invisible, contrary
+open| Boolean | false | control Picker visible
 align| [left/right] | right | Picker positon base for trigger
 onChange| Function | noop | when select color
 
@@ -58,10 +58,9 @@ onChange| Function | noop | when select color
 name|type|default|description
 ---|---|---|---
 defaultColor|String|#ff0000|color board default background color
-visible| Boolean | true | root node is visible
 style | Object | {} | root node CSS style
 onChange|Function| | when select color trigger
-onFocus|Function| | when picker visiable trigger
+onFocus|Function| | when picker focus trigger
 onBlur|Function| | when picker loose focus
 
 ## License

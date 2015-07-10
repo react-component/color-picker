@@ -18,7 +18,7 @@ export default class ColorPicker extends React.Component{
     this.state = {
       prefixCls: props.prefixCls,
       defaultColor: props.defaultColor,
-      visiable: props.visiable,
+      open: props.open,
       style: {
         position: 'absolute',
         zIndex: 100
@@ -48,7 +48,7 @@ export default class ColorPicker extends React.Component{
   componentDidUpdate(prevProps, prevState) {
     prevState = prevState || {};
     var state = this.state;
-    if (state.visiable && !prevState.visiable) {
+    if (state.open && !prevState.open) {
       let offest = DOM.getAlign(
         React.findDOMNode(this.pickerInstance),
         React.findDOMNode(this.refs.trigger),
@@ -65,7 +65,7 @@ export default class ColorPicker extends React.Component{
 
   triggerClickHandler() {
     this.setState({
-      visiable: !this.state.visiable
+      open: !this.state.open
     });
   }
 
@@ -78,7 +78,7 @@ export default class ColorPicker extends React.Component{
 
   handlerBlur() {
     this.setState({
-      visiable: false
+      open: false
     });
   }
 
@@ -95,10 +95,10 @@ export default class ColorPicker extends React.Component{
 
   render() {
     let props = this.props;
-    let picker = this.state.visiable ? this.getPickerElement() : this.pickerElement;
+    let picker = this.state.open ? this.getPickerElement() : this.pickerElement;
 
     let classes = [props.prefixCls];
-    if (this.state.visiable ) {
+    if (this.state.open ) {
       classes.push(props.prefixCls + '-open');
     }
 
@@ -117,7 +117,7 @@ export default class ColorPicker extends React.Component{
 
 ColorPicker.propTypes = {
   prefixCls: React.PropTypes.string,
-  visiable: React.PropTypes.bool,
+  open: React.PropTypes.bool,
   defaultColor: React.PropTypes.string,
   align: React.PropTypes.string,
   onChange: React.PropTypes.func
@@ -125,7 +125,7 @@ ColorPicker.propTypes = {
 
 ColorPicker.defaultProps = {
   prefixCls: 'react-colorpicker',
-  visiable: false,
+  open: false,
   defaultColor: '#F00',
   align: 'right',
   onChange() {}

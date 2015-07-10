@@ -226,5 +226,5 @@ Board.defaultProps = {
   defaultColor: '#F00',
   alpha: 100,
   hue: 0,
-  prefixCls: 'react-colors-picker-board'
+  prefixCls: 'react-colorpicker-board'
 };

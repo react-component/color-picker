@@ -1,26 +1,22 @@
-@prefixClass: react-colors-picker;
-
-.@{prefixClass} {
-  width: 200px + 18px;
-  background-color: #fff;
-  box-sizing: border-box;
-  outline: none;
-  * {
-    box-sizing: border-box;
-  }
-  &-open{
-    display: block;
-  }
-  &-close{
-    display: none;
-  }
-}
+@prefixClass: ~'react-colorpicker';
 
 @import 'index/Layout';
-
 @import 'index/Trigger';
+@import 'index/Picker';
 @import 'index/Preview';
 @import 'index/Board';
 @import 'index/Ribbon';
 @import 'index/Alpha';
 @import 'index/Params';
+
+
+.@{prefixClass}{
+  .@{prefixClass}-picker{
+    display: none
+  }
+  &-open{
+    .@{prefixClass}-picker{
+      display: block
+    }
+  }
+}

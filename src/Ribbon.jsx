@@ -116,7 +116,7 @@ Ribbon.propTypes = {
 };
 
 Ribbon.defaultProps = {
-  prefixCls: 'react-colors-picker-ribbon',
+  prefixCls: 'react-colorpicker-ribbon',
   defaultColor: '#f00',
   onHexChange() {}
 };

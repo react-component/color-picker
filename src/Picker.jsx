@@ -9,6 +9,8 @@ import Alpha from './Alpha';
 import Params from './Params';
 import prefixClsFn from './utils/prefixClsFn';
 
+// const PureRenderMixin = React.addons.PureRenderMixin;
+
 export default class Picker extends React.Component {
   constructor(props) {
     super(props);
@@ -37,6 +39,8 @@ export default class Picker extends React.Component {
     });
   }
 
+  // mixins: '[PureRenderMixin]'
+
   /**
    * 颜色选取发生改变的回调
    * @param {object} colorsObj 回调的返回值
@@ -46,6 +50,7 @@ export default class Picker extends React.Component {
    * @param {object} colorsObj.hsl HSL对应的数值
    * @return {undefined}
    */
+
   _onChange(colorsObj) {
     this.setState({
       selectColor: colorsObj.hex
@@ -154,7 +159,7 @@ Picker.propTypes = {
 };
 
 Picker.defaultProps = {
-  prefixCls: 'react-colors-picker',
+  prefixCls: 'react-colorpicker-picker',
   defaultColor: '#ff0000',
   style: {},
   onChange() {},

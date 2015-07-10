@@ -127,7 +127,7 @@ export default class Alpha extends React.Component{
 
 Alpha.defaultProps = {
   alpha: 100,
-  prefixCls: 'react-colors-picker-alpha',
+  prefixCls: 'react-colorpicker-alpha',
   defaultColor: '#f00',
   customColor: '#f00',
   onAlphaChange: function() {}

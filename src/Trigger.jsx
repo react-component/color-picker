@@ -42,7 +42,7 @@ Trigger.propTypes = {
 };
 
 Trigger.defaultProps = {
-  prefixCls: 'react-colors-picker-trigger',
+  prefixCls: 'react-colorpicker-trigger',
   defaultColor: '#f00',
   onToggle() {}
 };

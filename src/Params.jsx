@@ -51,7 +51,7 @@ function validationHex(hex) {
 export default class Params extends React.Component{
   constructor(props) {
     super(props);
-    let index = store.get('react-colors-picker-index') || 0;
+    let index = store.get('react-colorpicker-index') || 0;
     let modes = ['rgb', 'hsv', 'hsl'];
     let mode = modes[index];
 
@@ -205,7 +205,7 @@ export default class Params extends React.Component{
     let index = this.state.index;
     index = (index + 1) % 3;
     let mode = this.state.modes[index];
-    store.set('react-colors-picker-index', index);
+    store.set('react-colorpicker-index', index);
     this.setState({
       index,
       mode
@@ -400,7 +400,7 @@ Params.propTypes = {
 };
 
 Params.defaultProps = {
-  prefixCls: 'react-colors-picker-params',
+  prefixCls: 'react-colorpicker-params',
   defaultColor: '#ff0000',
   alpha: 100,
   onAlphaChange() {},

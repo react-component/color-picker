@@ -17,7 +17,6 @@ export default class Picker extends React.Component {
       defaultColor: props.defaultColor,
       selectColor: props.defaultColor,
       customColor: props.defaultColor,
-      visible: props.visible,
       prefixCls: props.prefixCls,
       style: props.style
     };
@@ -25,8 +24,6 @@ export default class Picker extends React.Component {
     this.prefixClsFn = prefixClsFn.bind(this);
 
     let events = [
-      'toggleClassName',
-      'toggle',
       '_onChange',
       '_onHueChange',
       '_onHexChange',
@@ -40,13 +37,6 @@ export default class Picker extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.visible) {
-      // 如果从 false 切换过来则聚焦
-      React.findDOMNode(this).focus();
-    }
-  }
-
   /**
    * 颜色选取发生改变的回调
    * @param {object} colorsObj 回调的返回值
@@ -56,6 +46,7 @@ export default class Picker extends React.Component {
    * @param {object} colorsObj.hsl HSL对应的数值
    * @return {undefined}
    */
+
   _onChange(colorsObj) {
     this.setState({
       selectColor: colorsObj.hex
@@ -100,38 +91,11 @@ export default class Picker extends React.Component {
       this.props.onBlur();
     }, 100);
   }
-  /**
-   * 切换显示状态
-   * @param  {boolean} val 是否战士
-   * @return {undefined}
-   */
-  toggle(callback) {
-    this.setState({
-      visible: !this.state.visible
-    }, callback);
-  }
-
-  hide(callback) {
-    this.setState({
-      visible: false
-    }, callback);
-  }
-
-  show(callback) {
-    this.setState({
-      visible: true
-    }, callback);
-  }
-
- toggleClassName() {
-    let name = this.state.visible ? 'open' : 'close';
-    return this.prefixClsFn(name);
-  }
 
   render() {
     return (
       <div
-        className={this.props.prefixCls + ' ' + this.toggleClassName()}
+        className={this.props.prefixCls}
         style={this.state.style}
         onFocus={this.handleFocus}
         onBlur={this.handlerBlur}
@@ -182,7 +146,6 @@ export default class Picker extends React.Component {
 }
 
 Picker.propTypes = {
-  visible: React.PropTypes.bool,
   prefixCls: React.PropTypes.string,
   defaultColor: React.PropTypes.string,
   style: React.PropTypes.object,
@@ -192,8 +155,7 @@ Picker.propTypes = {
 };
 
 Picker.defaultProps = {
-  visible: true,
-  prefixCls: 'react-colors-picker',
+  prefixCls: 'react-colorpicker-picker',
   defaultColor: '#ff0000',
   style: {},
   onChange() {},

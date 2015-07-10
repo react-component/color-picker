@@ -5,14 +5,10 @@ import Trigger from './Trigger';
 import Picker from './Picker';
 import DOM from './utils/dom';
 import prefixClsFn from './utils/prefixClsFn';
+import core from 'core-js';
 
-const extend = function (target, source) {
-  for (let i in source) {
-    if (!target.hasOwnProperty(i)) {
-      target[i] = source[i];
-    }
-  }
-  return target;
+const refFn = function(field, component) {
+  this[field] = component;
 };
 
 export default class ColorPicker extends React.Component{
@@ -20,9 +16,9 @@ export default class ColorPicker extends React.Component{
     super(props);
 
     this.state = {
-      rootPrefixCls: props.rootPrefixCls,
+      prefixCls: props.prefixCls,
       defaultColor: props.defaultColor,
-      visible: props.visible,
+      open: props.open,
       style: {
         position: 'absolute',
         zIndex: 100
@@ -33,40 +29,44 @@ export default class ColorPicker extends React.Component{
     let events = [
       'triggerClickHandler',
       'handlerChange',
-      'handlerBlur'
+      'handlerBlur',
+      'getPickerElement'
     ];
 
     events.forEach(e => {
       this[e] = this[e].bind(this);
     });
+
+    this.savePickerRef = refFn.bind(this, 'pickerInstance');
   }
 
-  componentDidMount() {
-    if (this.state.visible) {
+  componentDidMount(){
+    this.componentDidUpdate();
+  }
+
+  // 在组件的更新已经同步到 DOM 中之后立刻被调用
+  componentDidUpdate(prevProps, prevState) {
+    prevState = prevState || {};
+    var state = this.state;
+    if (state.open && !prevState.open) {
       let offest = DOM.getAlign(
-        React.findDOMNode(this.refs.picker),
+        React.findDOMNode(this.pickerInstance),
         React.findDOMNode(this.refs.trigger),
         this.props.align,
         [5, 0]
       );
-      var styleObj = extend(this.state.style, offest);
-      this.setState({
+      let styleObj = core.Object.assign(this.state.style, offest);
+      this.pickerInstance.setState({
         style: styleObj
       });
+      React.findDOMNode(this.pickerInstance).focus();
     }
   }
 
   triggerClickHandler() {
-    let offest = DOM.getAlign(
-        React.findDOMNode(this.refs.picker),
-        React.findDOMNode(this.refs.trigger),
-        this.props.align,
-        [5, 0]
-    );
-
-    extend(this.state.style, offest);
-
-    this.refs.picker.toggle();
+    this.setState({
+      open: !this.state.open
+    });
   }
 
   handlerChange(colors) {
@@ -77,41 +77,55 @@ export default class ColorPicker extends React.Component{
   }
 
   handlerBlur() {
-    this.refs.picker.hide();
+    this.setState({
+      open: false
+    });
+  }
+
+  getPickerElement(){
+    return this.pickerElement || (this.pickerElement = React.cloneElement(<Picker />, {
+      ref: function(component){
+        this.savePickerRef(component);
+      }.bind(this),
+      defaultColor: this.props.defaultColor,
+      onChange: this.handlerChange,
+      onBlur: this.handlerBlur
+    }));
   }
 
   render() {
+    let props = this.props;
+    let picker = this.state.open ? this.getPickerElement() : this.pickerElement;
+
+    let classes = [props.prefixCls];
+    if (this.state.open ) {
+      classes.push(props.prefixCls + '-open');
+    }
+
     return (
-      <div>
+      <span className={classes.join(' ')}>
         <Trigger
           ref='trigger'
           defaultColor={this.state.defaultColor}
           onToggle={this.triggerClickHandler}
         />
-        <Picker
-          ref='picker'
-          defaultColor={this.state.defaultColor}
-          style={this.state.style}
-          visible={this.state.visible}
-          onChange={this.handlerChange}
-          onBlur={this.handlerBlur}
-        />
-      </div>
+        {picker}
+      </span>
     );
   }
 }
 
 ColorPicker.propTypes = {
-  rootPrefixCls: React.PropTypes.string,
-  visible: React.PropTypes.bool,
+  prefixCls: React.PropTypes.string,
+  open: React.PropTypes.bool,
   defaultColor: React.PropTypes.string,
   align: React.PropTypes.string,
   onChange: React.PropTypes.func
 };
 
 ColorPicker.defaultProps = {
-  rootPrefixCls: 'react-colors-picker',
-  visible: false,
+  prefixCls: 'react-colorpicker',
+  open: false,
   defaultColor: '#F00',
   align: 'right',
   onChange() {}

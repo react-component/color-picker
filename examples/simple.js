@@ -10,10 +10,9 @@ function changeHandler (colors) {
 
 React.render(
   <div style={{margin:20, textAlign: 'center'}}>
-    <h1>拾色器</h1>
     <ColorPicker defaultColor={'#36c'} onChange={changeHandler} />
-    <br/>
-    <ColorPicker defaultColor={'#fcd'} align="left"/>
+    <hr />
+    <ColorPicker defaultColor={'#894'} align="left" />
   </div>,
   document.getElementById('__react-content')
 );

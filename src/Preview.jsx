@@ -54,7 +54,7 @@ Preview.propTypes = {
 };
 
 Preview.defaultProps = {
-  prefixCls: 'react-colors-picker-preview',
+  prefixCls: 'react-colorpicker-preview',
   alpha: 100,
   defaultColor: '#f00', // 背景颜色 响应来自  board 面板的选取颜色
   customColor: '#f00' // 背景颜色  响应来自用户的输入颜色

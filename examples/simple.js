@@ -3,12 +3,12 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(127);
+	module.exports = __webpack_require__(128);
 
 
 /***/ },
 
-/***/ 127:
+/***/ 128:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26,7 +26,7 @@ webpackJsonp([1],{
 	  { style: { margin: 20, textAlign: 'center' } },
 	  React.createElement(ColorPicker, { defaultColor: '#36c', onChange: changeHandler }),
 	  React.createElement('hr', null),
-	  React.createElement(ColorPicker, { defaultColor: '#894', align: 'left' })
+	  React.createElement(ColorPicker, { defaultColor: '#894', align: "left" })
 	), document.getElementById('__react-content'));
 
 /***/ }

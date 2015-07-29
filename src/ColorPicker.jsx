@@ -40,7 +40,7 @@ export default class ColorPicker extends React.Component{
     this.savePickerRef = refFn.bind(this, 'pickerInstance');
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.componentDidUpdate();
   }
 
@@ -82,9 +82,9 @@ export default class ColorPicker extends React.Component{
     });
   }
 
-  getPickerElement(){
+  getPickerElement() {
     return this.pickerElement || (this.pickerElement = React.cloneElement(<Picker />, {
-      ref: function(component){
+      ref: function(component) {
         this.savePickerRef(component);
       }.bind(this),
       defaultColor: this.props.defaultColor,
@@ -98,7 +98,7 @@ export default class ColorPicker extends React.Component{
     let picker = this.state.open ? this.getPickerElement() : this.pickerElement;
 
     let classes = [props.prefixCls];
-    if (this.state.open ) {
+    if (this.state.open) {
       classes.push(props.prefixCls + '-open');
     }
 

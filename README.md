@@ -24,7 +24,7 @@ npm start
 
 ## Example
 
-online example: [http://noyobo.github.io/react-colors-picker/](http://noyobo.github.io/react-colors-picker/)
+online example: [http://react-component.github.io/react-colors-picker/](http://react-component.github.io/react-colors-picker/)
 
 ## Feature
 

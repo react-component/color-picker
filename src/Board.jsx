@@ -214,9 +214,9 @@ export default class Board extends React.Component {
     );
   }
 }
-
+let typeColor = require('./utils/validationColor');
 Board.propTypes = {
-  defaultColor: React.PropTypes.string,
+  defaultColor: typeColor,
   alpha: React.PropTypes.number,
   hue: React.PropTypes.number,
   prefixCls: React.PropTypes.string

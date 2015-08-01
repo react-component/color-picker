@@ -391,9 +391,11 @@ export default class Params extends React.Component{
   }
 }
 
+let typeColor = require('./utils/validationColor');
+
 Params.propTypes = {
   prefixCls: React.PropTypes.string,
-  defaultColor: React.PropTypes.string,
+  defaultColor: typeColor,
   alpha: React.PropTypes.number,
   onAlphaChange: React.PropTypes.func,
   onHexChange: React.PropTypes.func

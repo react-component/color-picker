@@ -108,10 +108,10 @@ export default class Ribbon extends React.Component{
     );
   }
 }
-
+let typeColor = require('./utils/validationColor');
 Ribbon.propTypes = {
   prefixCls: React.PropTypes.string,
-  defaultColor: React.PropTypes.string,
+  defaultColor: typeColor,
   onHexChange: React.PropTypes.func
 };
 

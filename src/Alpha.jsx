@@ -125,6 +125,16 @@ export default class Alpha extends React.Component{
   }
 }
 
+let typeColor = require('./utils/validationColor');
+
+Alpha.propTypes = {
+  alpha: React.PropTypes.number,
+  prefixCls: React.PropTypes.string,
+  defaultColor: typeColor,
+  customColor: typeColor,
+  onAlphaChange: React.PropTypes.func
+};
+
 Alpha.defaultProps = {
   alpha: 100,
   prefixCls: 'react-colorpicker-alpha',

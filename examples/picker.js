@@ -1,6 +1,6 @@
 'use strict';
 
-require('react-colors-picker/assets/index.css');
+require('react-colors-picker/assets/index.less');
 const React = require('react');
 const Picker = require('react-colors-picker').Picker;
 

@@ -35,7 +35,8 @@ export default class ColorPicker extends React.Component{
       'handlerBlur',
       'getPickerElement',
       'getRootDOMNode',
-      'getTriggerDOMNode'
+      'getTriggerDOMNode',
+      'getTransitionName'
     ];
 
     events.forEach(e => {
@@ -87,9 +88,12 @@ export default class ColorPicker extends React.Component{
   }
 
   triggerClickHandler() {
-    this.setState({
-      open: !this.state.open
-    });
+    // 再次点击, 触发  blur 已经设置为 false
+    if (!this.state.open) {
+      this.setState({
+        open: !this.state.open
+      });
+    }
   }
 
   handlerChange(colors) {
@@ -103,6 +107,15 @@ export default class ColorPicker extends React.Component{
     this.setState({
       open: false
     });
+  }
+
+  getTransitionName() {
+    var props = this.props;
+    var transitionName = props.transitionName;
+    if (!transitionName && props.animation) {
+      transitionName = `${props.prefixCls}-${props.animation}`;
+    }
+    return transitionName;
   }
 
   getPickerElement() {
@@ -122,11 +135,14 @@ export default class ColorPicker extends React.Component{
             component=''
             exclusive={true}
             animateMount={true}
+            showProp="pickerOpen"
+            transitionName={this.getTransitionName()}
           >
-            <Align
-              target={this.getTriggerDOMNode}
+            <Align target={this.getTriggerDOMNode}
+              key="picker"
               monitorWindowResize={true}
               disabled={!state.open}
+              pickerOpen={state.open}
               align={this.getAlign(orient)}>
                 {pickerElement}
             </Align>
@@ -163,7 +179,13 @@ export default class ColorPicker extends React.Component{
       });
     }
 
-    let picker = this.getPickerElement();
+    let picker;
+
+    this.haveOpened = this.haveOpened || this.state.open;
+
+    if (this.haveOpened) {
+      picker = this.getPickerElement();
+    }
 
     return (
       <span className={classes.join(' ')}>
@@ -177,6 +199,7 @@ let typeColor = require('./utils/validationColor');
 
 ColorPicker.propTypes = {
   adjustOrientOnCalendarOverflow: React.PropTypes.bool,
+  animation: React.PropTypes.string,
   defaultColor: typeColor,
   orient: React.PropTypes.arrayOf(
     React.PropTypes.oneOf(['left', 'top', 'right', 'bottom'])

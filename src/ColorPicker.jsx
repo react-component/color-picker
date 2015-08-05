@@ -13,6 +13,10 @@ const refFn = function(field, component) {
   this[field] = component;
 };
 
+function prevent(e) {
+  e.preventDefault();
+}
+
 export default class ColorPicker extends React.Component{
   constructor(props) {
     super(props);
@@ -88,12 +92,9 @@ export default class ColorPicker extends React.Component{
   }
 
   triggerClickHandler() {
-    // 再次点击, 触发  blur 已经设置为 false
-    if (!this.state.open) {
-      this.setState({
-        open: !this.state.open
-      });
-    }
+    this.setState({
+      open: !this.state.open
+    });
   }
 
   handlerChange(colors) {
@@ -175,7 +176,8 @@ export default class ColorPicker extends React.Component{
         style: {
           backgroundColor: this.state.defaultColor
         },
-        onClick: this.triggerClickHandler
+        onClick: this.triggerClickHandler,
+        onMouseDown: prevent // 阻止MouseDown触发, 引起 picker blur
       });
     }
 

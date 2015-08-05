@@ -145,7 +145,7 @@ export default class Picker extends React.Component {
   }
 }
 
-let typeColor = require('./utils/validationColor');
+import typeColor from './utils/validationColor';
 
 Picker.propTypes = {
   prefixCls: React.PropTypes.string,

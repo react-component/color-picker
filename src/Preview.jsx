@@ -46,7 +46,7 @@ export default class Preview extends React.Component{
   }
 }
 
-let typeColor = require('./utils/validationColor');
+import typeColor from './utils/validationColor';
 
 Preview.propTypes = {
   prefixCls: React.PropTypes.string,

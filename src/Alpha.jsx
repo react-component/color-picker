@@ -125,7 +125,7 @@ export default class Alpha extends React.Component{
   }
 }
 
-let typeColor = require('./utils/validationColor');
+import typeColor from './utils/validationColor';
 
 Alpha.propTypes = {
   alpha: React.PropTypes.number,

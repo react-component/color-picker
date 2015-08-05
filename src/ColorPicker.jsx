@@ -195,7 +195,7 @@ export default class ColorPicker extends React.Component{
   }
 }
 
-let typeColor = require('./utils/validationColor');
+import typeColor from './utils/validationColor';
 
 ColorPicker.propTypes = {
   adjustOrientOnCalendarOverflow: React.PropTypes.bool,

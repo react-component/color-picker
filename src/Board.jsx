@@ -202,8 +202,8 @@ export default class Board extends React.Component {
     return (
       <div className={this.props.prefixCls}>
         <div className={this.prefixClsFn('hsv')} style={{backgroundColor: this.state.hueColor}}>
+          <div className={this.prefixClsFn('value')}/>
           <div className={this.prefixClsFn('saturation')}/>
-          <div className={this.prefixClsFn('lightness')}/>
         </div>
         <span ref='point' style={{'left': this.state.x, 'top': this.state.y}} />
         <div
@@ -214,7 +214,7 @@ export default class Board extends React.Component {
     );
   }
 }
-let typeColor = require('./utils/validationColor');
+import typeColor from './utils/validationColor';
 Board.propTypes = {
   defaultColor: typeColor,
   alpha: React.PropTypes.number,

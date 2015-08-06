@@ -154,6 +154,13 @@ export default class Params extends React.Component {
                  value={this.props.alpha}
                  onChange={this.onAlphaChange}/>
         </div>
+        <div className={prefixCls + '-' + ('lable')}>
+           <label className={prefixCls + '-' + ('lable-hex')}>Hex</label>
+           <label className={prefixCls + '-' + ('lable-number')}>R</label>
+           <label className={prefixCls + '-' + ('lable-number')}>G</label>
+           <label className={prefixCls + '-' + ('lable-number')}>B</label>
+           <label className={prefixCls + '-' + ('lable-alpha')}>A</label>
+        </div>
       </div>
     );
   }

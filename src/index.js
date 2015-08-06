@@ -1,4 +1,3 @@
-'use strict';
 
 module.exports = require('./ColorPicker');
-module.exports.Picker = require('./Picker');
+module.exports.Panel = require('./Panel');

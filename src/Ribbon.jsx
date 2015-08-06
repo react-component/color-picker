@@ -1,124 +1,101 @@
-'use strict';
-
 import React from 'react';
-import Colr from 'colr';
-import event from 'eventlistener';
-import prefixClsFn from './utils/prefixClsFn';
+import rcUtil from 'rc-util';
+import assign from 'object-assign';
 
-let colr = new Colr();
-
-export default class Ribbon extends React.Component{
+export default class Ribbon extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      prefixCls: props.prefixCls,
-      defaultColor: props.defaultColor
-    };
 
-    this.prefixClsFn = prefixClsFn.bind(this);
-
-    let events = [
-      'handleMouseDown',
-      'handledDrag',
-      'handledDragEnd',
+    const events = [
+      'onMouseDown',
+      'onDrag',
+      'onDragEnd',
       'pointMoveTo',
-      '_setHuePosition'
+      '_setHuePosition',
     ];
     events.forEach(e => {
-      this[e] = this[e].bind(this);
+      if (this[e]) {
+        this[e] = this[e].bind(this);
+      }
     });
   }
 
-  componentDidMount() {
-    this._setHuePosition(this.state.defaultColor);
+  onMouseDown(e) {
+    const x = e.clientX;
+    const y = e.clientY;
+
+    this.pointMoveTo({
+      x, y,
+    });
+
+    this.dragListener = rcUtil.Dom.addEventListener(window, 'mousemove', this.onDrag);
+    this.dragUpListener = rcUtil.Dom.addEventListener(window, 'mouseup', this.onDragEnd);
   }
 
-  componentWillReceiveProps(nextProps) {
-    // 接收 defaultColor 响应当前坐标位置
-    if (nextProps.defaultColor !== this.props.defaultColor) {
-      this._setHuePosition(nextProps.defaultColor);
+  onDrag(e) {
+    const x = e.clientX;
+    const y = e.clientY;
+    this.pointMoveTo({
+      x, y,
+    });
+  }
+
+  onDragEnd(e) {
+    const x = e.clientX;
+    const y = e.clientY;
+    this.pointMoveTo({
+      x, y,
+    });
+    if (this.dragListener) {
+      this.dragListener.remove();
+      this.dragListener = null;
+    }
+    if (this.dragUpListener) {
+      this.dragUpListener.remove();
+      this.dragUpListener = null;
     }
   }
 
-  _setHuePosition(hex) {
-    let HSV = colr.fromHex(hex).toHsvObject();
-    let hue = HSV.h;
-    let per = hue / 360 * 100;
-    this.setState({
-      huePercent: per
-    });
-  }
-
-  pointMoveTo(coords) {
-    let rect = React.findDOMNode(this).getBoundingClientRect();
-    let width = rect.width;
-    let left = coords.x - rect.left;
-
-    left = Math.max(0, left);
-    left = Math.min(left, width);
-
-    let huePercent = left / width;
-    let hue = huePercent * 360;
-
-    huePercent = huePercent * 100;
-
-    this.setState({
-      huePercent: huePercent
-    });
-
-    this.props.onHexChange(hue);
-  }
-
-  handleMouseDown(e) {
-    let x = e.clientX, y = e.clientY;
-
-    this.pointMoveTo({
-      x, y
-    });
-
-    event.add(window, 'mousemove', this.handledDrag);
-    event.add(window, 'mouseup', this.handledDragEnd);
-  }
-
-  handledDrag(e) {
-    let x = e.clientX, y = e.clientY;
-    this.pointMoveTo({
-      x, y
-    });
-  }
-
-  handledDragEnd(e) {
-    let x = e.clientX, y = e.clientY;
-    this.pointMoveTo({
-      x, y
-    });
-    event.remove(window, 'mousemove', this.handledDrag);
-    event.remove(window, 'mouseup', this.handledDragEnd);
+  getPrefixCls() {
+    return this.props.rootPrefixCls + '-ribbon';
   }
 
   render() {
+    const prefixCls = this.getPrefixCls();
+    const HSV = this.props.hsv;
+    const hue = HSV.h;
+    const per = hue / 360 * 100;
     return (
-      <div className={this.props.prefixCls}>
-        <span ref="point" style={{left: this.state.huePercent + '%'}}></span>
+      <div className={prefixCls}>
+        <span ref="point" style={{left: per + '%'}}></span>
+
         <div
-          className={this.prefixClsFn('handler')}
-          onMouseDown={this.handleMouseDown}
-        ></div>
+          className={prefixCls + '-' + ('handler')}
+          onMouseDown={this.onMouseDown}
+          ></div>
       </div>
     );
   }
+
+  pointMoveTo(coords) {
+    const rect = React.findDOMNode(this).getBoundingClientRect();
+    const width = rect.width;
+    let left = coords.x - rect.left;
+    left = Math.max(0, left);
+    left = Math.min(left, width);
+    const huePercent = left / width;
+    const hue = huePercent * 360;
+    const hsv = assign(this.props.hsv, {
+      h: hue,
+    });
+    this.props.onChange({
+      hsv,
+    });
+  }
 }
-import typeColor from './utils/validationColor';
+
 Ribbon.propTypes = {
-  prefixCls: React.PropTypes.string,
-  defaultColor: typeColor,
-  onHexChange: React.PropTypes.func
+  rootPrefixCls: React.PropTypes.string,
+  hsv: React.PropTypes.object,
+  onChange: React.PropTypes.func,
 };
-
-Ribbon.defaultProps = {
-  prefixCls: 'react-colorpicker-ribbon',
-  defaultColor: '#f00',
-  onHexChange() {}
-};
-
-module.exports = Ribbon;

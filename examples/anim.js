@@ -1,8 +1,8 @@
 'use strict';
 
-require('react-colors-picker/assets/bootstrap.less');
-const React = require('react');
-const ColorPicker = require('react-colors-picker');
+import 'react-colors-picker/assets/index.less';
+import React from 'react';
+import ColorPicker from 'react-colors-picker';
 
 function changeHandler (colors) {
   console.log(colors);

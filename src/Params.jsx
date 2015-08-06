@@ -1,35 +1,33 @@
-'use strict';
-
 import React from 'react';
 import Colr from 'colr';
-import store from 'store';
 
-import prefixClsFn from './utils/prefixClsFn';
-
-let colr = new Colr();
+const colr = new Colr();
 
 // @see https://github.com/stayradiated/colr-convert/blob/master/index.js
 // convert a charcode to a hex val
-function hexVal (c) {
-  return (
-    c < 58 ? c - 48 : // 0 - 9
-    c < 71 ? c - 55 : // A - F
-    c - 87            // a - f
-  );
+function hexVal(c) {
+  if (c < 58) {
+    return c - 48;
+  } else if (c < 71) {
+    return c - 55;
+  }
+  return c - 87;
 }
 function validationHex(hex) {
-  let i = hex[0] === '#' ? 1 : 0;
-  let len = hex.length;
+  const i = hex[0] === '#' ? 1 : 0;
+  const len = hex.length;
 
   if (len - i < 3) {
     return false;
   }
 
-  let r, g, b;
+  let r;
+  let g;
+  let b;
 
-  let h1 = hexVal(hex.charCodeAt(0 + i));
-  let h2 = hexVal(hex.charCodeAt(1 + i));
-  let h3 = hexVal(hex.charCodeAt(2 + i));
+  const h1 = hexVal(hex.charCodeAt(0 + i));
+  const h2 = hexVal(hex.charCodeAt(1 + i));
+  const h3 = hexVal(hex.charCodeAt(2 + i));
 
   if (len - i >= 6) {
     r = (h1 << 4) + h2;
@@ -48,28 +46,10 @@ function validationHex(hex) {
   return true;
 }
 
-export default class Params extends React.Component{
+export default class Params extends React.Component {
   constructor(props) {
     super(props);
-    let index = store.get('react-colorpicker-index') || 0;
-    let modes = ['rgb', 'hsv', 'hsl'];
-    let mode = modes[index];
-
-    let colors = this.formatHex(props.defaultColor);
-
-    this.state = {
-      modes: modes,
-      index: index,
-      mode: mode,
-      prefixCls: props.prefixCls,
-      colors: colors,
-      hex: props.defaultColor.substr(1),
-      alpha: props.alpha
-    };
-
-    this.prefixClsFn = prefixClsFn.bind(this);
-
-    let events = [
+    const events = [
       'formatHex',
       'formatRgb',
       'formatHsv',
@@ -78,333 +58,111 @@ export default class Params extends React.Component{
       '_chagneColorsFromRgb',
       '_chagneColorsFromHsv',
       '_chagneColorsFromHsl',
-      'handlerHexChange',
-      'handlerAlphaChange',
+      'onHexChange',
+      'onAlphaChange',
       'getRgbFromKey',
       'getHsvFromKey',
       'getHslFromKey',
-      'handlerKeyPress',
-      'handlerRGBChange',
-      'handlerHSVChange',
-      'handlerHSLChange',
-      'handlerModeChange'
+      'onKeyPress',
+      'onRGBChange',
+      'onHSVChange',
+      'onHSLChange',
+      'onModeChange',
     ];
 
     events.forEach(e => {
-      this[e] = this[e].bind(this);
+      if (this[e]) {
+        this[e] = this[e].bind(this);
+      }
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    // 此方法需要对详细的属性做过滤, 不能单一的统一处理
-    // 父级元素的任意属性关联都可以触发, 曾经我以为是单个独自触发的
-    if (nextProps.defaultColor !== this.props.defaultColor) {
-      let colors = this.formatHex(nextProps.defaultColor);
-      this.setState({
-        hex: nextProps.defaultColor.substr(1),
-        colors
-      });
-    }
-
-    if (nextProps.alpha !== this.props.alpha) {
-      this.setState({
-        alpha: nextProps.alpha
-      });
-    }
+  onHexChange(event) {
+    const color = event.target.value;
+    this.props.onChange({
+      color,
+    });
   }
 
-  getRgbFromKey(key) {
-    let mode = this.state.mode;
-    return this.state.colors[mode][key];
-  }
-
-  getHsvFromKey(key) {
-    let mode = this.state.mode;
-    return this.state.colors[mode][key];
-  }
-
-  getHslFromKey(key) {
-    let mode = this.state.mode;
-    return this.state.colors[mode][key];
-  }
-
-  formatHex(hex) {
-    let colors = colr.fromHex(hex);
-    let rgb = colors.toRgbObject();
-    let hsv = colors.toHsvObject();
-    let hsl = colors.toHslObject();
-    return {rgb, hsv, hsl, hex};
-  }
-
-  formatRgb(rgb) {
-    let colors = colr.fromRgbObject(rgb);
-    let hex = colors.toHex();
-    let hsv = colors.toHsvObject();
-    let hsl = colors.toHslObject();
-    return {rgb, hsv, hsl, hex};
-  }
-
-  formatHsv(hsv) {
-    let colors = colr.fromHsvObject(hsv);
-    let hex = colors.toHex();
-    let rgb = colors.toRgbObject();
-    let hsl = colors.toHslObject();
-    return {rgb, hsv, hsl, hex};
-  }
-
-  formatHsl(hsl) {
-    let colors = colr.fromHslObject(hsl);
-    let hex = colors.toHex();
-    let rgb = colors.toRgbObject();
-    let hsv = colors.toHsvObject();
-    return {rgb, hsv, hsl, hex};
-  }
-
-  handlerHexChange(event) {
-    let value = event.target.value;
-    this.setState({hex: value});
-  }
-
-  handlerKeyPress(event) {
-    let hex = event.target.value;
-    let keycode = event.charCode;
+  onKeyPress(event) {
+    const hex = event.target.value;
+    const keycode = event.charCode;
 
     if (hex.length > 2 && keycode === 13 && validationHex(hex)) {
-      this.props.onHexChange('#' + hex);
-      this._chagneColorsFromHex('#' + hex);
+      this.props.onChange({color: hex});
     }
   }
 
-  handlerAlphaChange(event) {
+  onAlphaChange(event) {
     this.setState({alpha: event.target.value});
-    this.props.onAlphaChange(parseInt(event.target.value));
+    this.props.onAlphaChange(parseInt(event.target.value, 10));
   }
 
-  handlerRGBChange(type, event) {
-    let value = event.target.value;
-    let RGB = this.state.colors[this.state.mode];
-    RGB[type] = parseInt(value);
-    this._chagneColorsFromRgb(RGB);
-  }
-
-  handlerHSVChange(type, event) {
-    let value = event.target.value;
-    let HSV = this.state.colors[this.state.mode];
-    HSV[type] = parseInt(value);
-    this._chagneColorsFromHsv(HSV);
-  }
-
-  handlerHSLChange(type, event) {
-    let value = event.target.value;
-    let HSL = this.state.colors[this.state.mode];
-    HSL[type] = parseInt(value);
-    this._chagneColorsFromHsl(HSL);
-  }
-
-  handlerModeChange() {
-    let index = this.state.index;
-    index = (index + 1) % 3;
-    let mode = this.state.modes[index];
-    store.set('react-colorpicker-index', index);
-    this.setState({
-      index,
-      mode
+  onRGBChange(type, event) {
+    const value = event.target.value;
+    const rgb = this.getRgb();
+    rgb[type] = parseInt(value, 10);
+    const colors = colr.fromRgbObject(rgb);
+    const color = colors.toHex();
+    this.props.onChange({
+      color,
     });
   }
 
-  _chagneColorsFromHex(hex) {
-    let newColors = this.formatHex(hex);
-    this.props.onHexChange(hex);
-    this.setState({
-      colors: newColors,
-      hex: hex.substr(1)
-    });
+  getPrefixCls() {
+    return this.props.rootPrefixCls + '-params';
   }
 
-  _chagneColorsFromRgb(rgb) {
-    let newColors = this.formatRgb(rgb);
-    this.props.onHexChange(newColors.hex);
-    this.setState({
-      colors: newColors,
-      hex: newColors.hex.substr(1)
-    });
-  }
-
-  _chagneColorsFromHsv(hsv) {
-    let newColors = this.formatHsv(hsv);
-    this.props.onHexChange(newColors.hex);
-    this.setState({
-      colors: newColors,
-      hex: newColors.hex.substr(1)
-    });
-  }
-
-  _chagneColorsFromHsl(hsl) {
-    let newColors = this.formatHsl(hsl);
-    this.props.onHexChange(newColors.hex);
-    this.setState({
-      colors: newColors,
-      hex: newColors.hex.substr(1)
-    });
+  getRgb() {
+    const colors = colr.fromHex(this.props.color);
+    return colors.toRgbObject();
   }
 
   render() {
+    const rgb = this.getRgb();
+    const prefixCls = this.getPrefixCls();
     return (
-      <div className={this.props.prefixCls}>
-        {this.state.mode === 'rgb' &&
-        <div className={this.prefixClsFn('input')}>
+      <div className={prefixCls}>
+        <div className={prefixCls + '-' + ('input')}>
           <input
-            className={this.prefixClsFn('hex')}
-            type='text'
-            maxLength='6'
-            onChange={this.handlerHexChange}
-            onKeyPress={this.handlerKeyPress}
-            value={this.state.hex}
-          />
-          <input type='number'
-            min={0}
-            max={255}
-            value={this.getRgbFromKey('r')}
-            onChange={this.handlerRGBChange.bind(null, 'r')} />
-          <input type='number'
-            min={0}
-            max={255}
-            value={this.getRgbFromKey('g')}
-            onChange={this.handlerRGBChange.bind(null, 'g')} />
-          <input type='number'
-            min={0}
-            max={255}
-            value={this.getRgbFromKey('b')}
-            onChange={this.handlerRGBChange.bind(null, 'b')} />
-          <input type='number'
-            min={0}
-            max={100}
-            speed={1}
-            value={this.state.alpha}
-            onChange={this.handlerAlphaChange} />
+            className={prefixCls + '-' + ('hex')}
+            type="text"
+            maxLength="6"
+            onChange={this.onHexChange}
+            onKeyPress={this.onKeyPress}
+            value={this.props.color}
+            />
+          <input type="number"
+                 min={0}
+                 max={255}
+                 value={rgb.r}
+                 onChange={this.onRGBChange.bind(null, 'r')}/>
+          <input type="number"
+                 min={0}
+                 max={255}
+                 value={rgb.g}
+                 onChange={this.onRGBChange.bind(null, 'g')}/>
+          <input type="number"
+                 min={0}
+                 max={255}
+                 value={rgb.b}
+                 onChange={this.onRGBChange.bind(null, 'b')}/>
+          <input type="number"
+                 min={0}
+                 max={100}
+                 speed={1}
+                 value={this.props.alpha}
+                 onChange={this.onAlphaChange}/>
         </div>
-        }
-        {this.state.mode === 'rgb' &&
-        <div className={this.prefixClsFn('lable')}>
-          <label className={this.prefixClsFn('lable-hex')}>Hex</label>
-          <label className={this.prefixClsFn('lable-number')}
-            onClick={this.handlerModeChange}>R</label>
-          <label className={this.prefixClsFn('lable-number')}
-            onClick={this.handlerModeChange}>G</label>
-          <label className={this.prefixClsFn('lable-number')}
-            onClick={this.handlerModeChange}>B</label>
-          <label className={this.prefixClsFn('lable-alpha')}>A</label>
-        </div>
-        }
-        {this.state.mode === 'hsv' &&
-        <div className={this.prefixClsFn('input')}>
-          <input
-            className={this.prefixClsFn('hex')}
-            type='text'
-            maxLength='6'
-            onChange={this.handlerHexChange}
-            onKeyPress={this.handlerKeyPress}
-            value={this.state.hex}
-          />
-          <input type='number'
-            min={0}
-            max={360}
-            value={this.getHsvFromKey('h')}
-            onChange={this.handlerHSVChange.bind(null, 'h')} />
-          <input type='number'
-            min={0}
-            max={100}
-            value={this.getHsvFromKey('s')}
-            onChange={this.handlerHSVChange.bind(null, 's')} />
-          <input type='number'
-            min={0}
-            max={100}
-            value={this.getHsvFromKey('v')}
-            onChange={this.handlerHSVChange.bind(null, 'v')} />
-          <input type='number'
-            min={0}
-            max={100}
-            speed={1}
-            value={this.state.alpha}
-            onChange={this.handlerAlphaChange} />
-        </div>
-        }
-        {this.state.mode === 'hsv' &&
-        <div className={this.prefixClsFn('lable')}>
-          <label className={this.prefixClsFn('lable-hex')}>Hex</label>
-          <label className={this.prefixClsFn('lable-number')}
-            onClick={this.handlerModeChange}>H</label>
-          <label className={this.prefixClsFn('lable-number')}
-            onClick={this.handlerModeChange}>S</label>
-          <label className={this.prefixClsFn('lable-number')}
-            onClick={this.handlerModeChange}>B</label>
-          <label className={this.prefixClsFn('lable-alpha')}>A</label>
-        </div>
-        }
-        {this.state.mode === 'hsl' &&
-        <div className={this.prefixClsFn('input')}>
-          <input
-            className={this.prefixClsFn('hex')}
-            type='text'
-            maxLength='6'
-            onChange={this.handlerHexChange}
-            onKeyPress={this.handlerKeyPress}
-            value={this.state.hex}
-          />
-          <input type='number'
-            min={0}
-            max={360}
-            value={this.getHslFromKey('h')}
-            onChange={this.handlerHSLChange.bind(null, 'h')} />
-          <input type='number'
-            min={0}
-            max={100}
-            value={this.getHslFromKey('s')}
-            onChange={this.handlerHSLChange.bind(null, 's')} />
-          <input type='number'
-            min={0}
-            max={100}
-            value={this.getHslFromKey('l')}
-            onChange={this.handlerHSLChange.bind(null, 'l')} />
-          <input type='number'
-            min={0}
-            max={100}
-            speed={1}
-            value={this.state.alpha}
-            onChange={this.handlerAlphaChange} />
-        </div>
-        }
-        {this.state.mode === 'hsl' &&
-        <div className={this.prefixClsFn('lable')}>
-          <label className={this.prefixClsFn('lable-hex')}>Hex</label>
-          <label className={this.prefixClsFn('lable-number')}
-            onClick={this.handlerModeChange}>H</label>
-          <label className={this.prefixClsFn('lable-number')}
-            onClick={this.handlerModeChange}>S</label>
-          <label className={this.prefixClsFn('lable-number')}
-            onClick={this.handlerModeChange}>L</label>
-          <label className={this.prefixClsFn('lable-alpha')}>A</label>
-        </div>
-        }
       </div>
     );
   }
 }
 
-import typeColor from './utils/validationColor';
-
 Params.propTypes = {
-  prefixCls: React.PropTypes.string,
-  defaultColor: typeColor,
+  onChange: React.PropTypes.func,
+  color: React.PropTypes.string,
   alpha: React.PropTypes.number,
+  rootPrefixCls: React.PropTypes.string,
   onAlphaChange: React.PropTypes.func,
-  onHexChange: React.PropTypes.func
-};
-
-Params.defaultProps = {
-  prefixCls: 'react-colorpicker-params',
-  defaultColor: '#ff0000',
-  alpha: 100,
-  onAlphaChange() {},
-  onHexChange() {}
 };

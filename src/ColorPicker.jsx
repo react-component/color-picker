@@ -66,12 +66,9 @@ export default class ColorPicker extends React.Component {
   }
 
   onTriggerClick() {
-    // 再次点击, 触发  blur 已经设置为 false
-    if (!this.state.open) {
-      this.setState({
-        open: !this.state.open,
-      });
-    }
+    this.setState({
+      open: !this.state.open,
+    });
   }
 
   onChange(colors) {

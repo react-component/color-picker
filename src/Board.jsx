@@ -71,8 +71,8 @@ export default class Board extends React.Component {
     return (
       <div className={prefixCls}>
         <div className={prefixCls + '-' + ('hsv')} style={{backgroundColor: hueColor}}>
+          <div className={prefixCls + '-' + ('value')}/>
           <div className={prefixCls + '-' + ('saturation')}/>
-          <div className={prefixCls + '-' + ('lightness')}/>
         </div>
         <span style={{left: x, top: y}}/>
 

@@ -3,70 +3,33 @@ import Colr from 'colr';
 
 const colr = new Colr();
 
-// @see https://github.com/stayradiated/colr-convert/blob/master/index.js
-// convert a charcode to a hex val
-function hexVal(c) {
-  if (c < 58) {
-    return c - 48;
-  } else if (c < 71) {
-    return c - 55;
+function numberRange(value, min, max) {
+  let result = parseInt(value, 10);
+  if (isNaN(result)) {
+    result = 0;
   }
-  return c - 87;
-}
-function validationHex(hex) {
-  const i = hex[0] === '#' ? 1 : 0;
-  const len = hex.length;
+  result = Math.max(min, result);
+  result = Math.min(result, max);
 
-  if (len - i < 3) {
-    return false;
-  }
-
-  let r;
-  let g;
-  let b;
-
-  const h1 = hexVal(hex.charCodeAt(0 + i));
-  const h2 = hexVal(hex.charCodeAt(1 + i));
-  const h3 = hexVal(hex.charCodeAt(2 + i));
-
-  if (len - i >= 6) {
-    r = (h1 << 4) + h2;
-    g = (h3 << 4) + hexVal(hex.charCodeAt(3 + i));
-    b = (hexVal(hex.charCodeAt(4 + i)) << 4) + hexVal(hex.charCodeAt(5 + i));
-  } else {
-    r = (h1 << 4) + h1;
-    g = (h2 << 4) + h2;
-    b = (h3 << 4) + h3;
-  }
-
-  if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-    return false;
-  }
-
-  return true;
+  return value;
 }
 
 export default class Params extends React.Component {
   constructor(props) {
     super(props);
+
+    const colorChannel = this.getColorChannel();
+
+    // 管理 input 的状态
+    this.state = {
+      hex: props.color.substr(1),
+      colorChannel,
+    };
+
     const events = [
-      'formatHex',
-      'formatRgb',
-      'formatHsv',
-      'formatHsl',
-      '_chagneColorsFromHex',
-      '_chagneColorsFromRgb',
-      '_chagneColorsFromHsv',
-      '_chagneColorsFromHsl',
-      'onHexChange',
-      'onAlphaChange',
-      'getRgbFromKey',
-      'getHsvFromKey',
-      'getHslFromKey',
-      'onKeyPress',
-      'onRGBChange',
-      'onHSVChange',
-      'onHSLChange',
+      'onHexHandler',
+      'onAlphaHandler',
+      'onColorChannelChange',
       'onModeChange',
     ];
 
@@ -77,33 +40,62 @@ export default class Params extends React.Component {
     });
   }
 
-  onHexChange(event) {
-    const color = event.target.value;
-    this.props.onChange({
-      color,
-    });
-  }
-
-  onKeyPress(event) {
-    const hex = event.target.value;
-    const keycode = event.charCode;
-
-    if (hex.length > 2 && keycode === 13 && validationHex(hex)) {
-      this.props.onChange({color: hex});
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.color !== this.props.color) {
+      const colorChannel = this.getColorChannel(nextProps.color);
+      this.setState({
+        hex: nextProps.color.substr(1),
+        colorChannel,
+      });
     }
   }
 
-  onAlphaChange(event) {
-    this.setState({alpha: event.target.value});
-    this.props.onAlphaChange(parseInt(event.target.value, 10));
+  onHexHandler(event) {
+    const value = event.target.value;
+    let color = null;
+    try {
+      color = Colr.fromHex(value).toHex();
+    } catch(e) {
+      /* eslint no-empty:0 */
+    }
+
+    if (color !== null) {
+      const colorChannel = this.getColorChannel(color);
+      this.setState({
+        hex: value,
+        colorChannel,
+      });
+      this.props.onChange({
+        color,
+      });
+    } else {
+      this.setState({
+        hex: value,
+      });
+    }
   }
 
-  onRGBChange(type, event) {
-    const value = event.target.value;
-    const rgb = this.getRgb();
-    rgb[type] = parseInt(value, 10);
-    const colors = colr.fromRgbObject(rgb);
-    const color = colors.toHex();
+  onAlphaHandler(event) {
+    const alpha = numberRange(event.target.value, 0, 100);
+
+    this.setState({
+      alpha,
+    });
+
+    this.props.onAlphaChange(alpha);
+  }
+
+  onColorChannelChange(index, event) {
+    const value = numberRange(event.target.value, 0, 255);
+    const colorChannel = this.getColorChannel();
+
+    colorChannel[index] = value;
+
+    const color = colr.fromRgbArray(colorChannel).toHex();
+    this.setState({
+      hex: color.substr(1),
+      colorChannel,
+    });
     this.props.onChange({
       color,
     });
@@ -113,13 +105,12 @@ export default class Params extends React.Component {
     return this.props.rootPrefixCls + '-params';
   }
 
-  getRgb() {
-    const colors = colr.fromHex(this.props.color);
-    return colors.toRgbObject();
+  getColorChannel(color) {
+    const colors = colr.fromHex(color || this.props.color);
+    return colors.toRgbArray();
   }
 
   render() {
-    const rgb = this.getRgb();
     const prefixCls = this.getPrefixCls();
     return (
       <div className={prefixCls}>
@@ -128,31 +119,21 @@ export default class Params extends React.Component {
             className={prefixCls + '-' + ('hex')}
             type="text"
             maxLength="6"
-            onChange={this.onHexChange}
-            onKeyPress={this.onKeyPress}
-            value={this.props.color}
+            onChange={this.onHexHandler}
+            value={this.state.hex}
             />
           <input type="number"
-                 min={0}
-                 max={255}
-                 value={rgb.r}
-                 onChange={this.onRGBChange.bind(null, 'r')}/>
+                 value={this.state.colorChannel[0]}
+                 onChange={this.onColorChannelChange.bind(null, 0)}/>
           <input type="number"
-                 min={0}
-                 max={255}
-                 value={rgb.g}
-                 onChange={this.onRGBChange.bind(null, 'g')}/>
+                 value={this.state.colorChannel[1]}
+                 onChange={this.onColorChannelChange.bind(null, 1)}/>
           <input type="number"
-                 min={0}
-                 max={255}
-                 value={rgb.b}
-                 onChange={this.onRGBChange.bind(null, 'b')}/>
+                 value={this.state.colorChannel[2]}
+                 onChange={this.onColorChannelChange.bind(null, 2)}/>
           <input type="number"
-                 min={0}
-                 max={100}
-                 speed={1}
                  value={this.props.alpha}
-                 onChange={this.onAlphaChange}/>
+                 onChange={this.onAlphaHandler}/>
         </div>
         <div className={prefixCls + '-' + ('lable')}>
            <label className={prefixCls + '-' + ('lable-hex')}>Hex</label>

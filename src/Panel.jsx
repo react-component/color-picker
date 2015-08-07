@@ -17,6 +17,7 @@ export default class Panel extends React.Component {
     super(props);
 
     this.state = {
+      paramsColor: props.color || props.defaultColor,
       color: props.color || props.defaultColor,
       hsv: props.hsv || props.defaultHsv,
       alpha: props.defaultAlpha,
@@ -30,6 +31,7 @@ export default class Panel extends React.Component {
 
     const events = [
       'onChange',
+      'onChangeByParams',
       'onAlphaChange',
       'onFocus',
       'onBlur',
@@ -59,7 +61,7 @@ export default class Panel extends React.Component {
     }
   }
 
-  onChange(colorsObj) {
+  onChangeByParams(colorsObj) {
     const props = this.props;
     const state = assign({
       color: null,
@@ -68,7 +70,27 @@ export default class Panel extends React.Component {
     const ret = {
       color: this.getHexColor(colorsObj),
       hsv: this.getHsvColor(colorsObj),
-      original: state,
+      // original: state,
+      alpha: this.state.alpha,
+    };
+    if (!props.color && !this.props.hsv) {
+      this.setState(state);
+    }
+    this.props.onChange(ret);
+  }
+
+  onChange(colorsObj) {
+    const props = this.props;
+    const color = this.getHexColor(colorsObj);
+    const state = assign({
+      paramsColor: color,
+      color: null,
+      hsv: null,
+    }, colorsObj);
+    const ret = {
+      color: color,
+      hsv: this.getHsvColor(colorsObj),
+      // original: state,
       alpha: this.state.alpha,
     };
     if (!props.color && !this.props.hsv) {
@@ -86,10 +108,10 @@ export default class Panel extends React.Component {
     this.props.onChange({
       color: this.getHexColor(),
       hsv: this.getHsvColor(),
-      original: {
-        color: this.state.color || null,
-        hsv: this.state.hsv || null,
-      },
+      // original: {
+      //   color: this.state.color || null,
+      //   hsv: this.state.hsv || null,
+      // },
       alpha,
     });
   }
@@ -169,10 +191,10 @@ export default class Panel extends React.Component {
           <div className={prefixCls + '-' + ('wrap')} style={{height: 40, marginTop: 6}}>
             <Params
               rootPrefixCls={prefixCls}
-              color={hexColor}
+              color={this.state.paramsColor}
               alpha={alpha}
               onAlphaChange={this.onAlphaChange}
-              onChange={this.onChange}
+              onChange={this.onChangeByParams}
               />
           </div>
         </div>

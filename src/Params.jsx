@@ -11,14 +11,14 @@ function numberRange(value, min, max) {
   result = Math.max(min, result);
   result = Math.min(result, max);
 
-  return value;
+  return result;
 }
 
 export default class Params extends React.Component {
   constructor(props) {
     super(props);
 
-    const colorChannel = this.getColorChannel();
+    const colorChannel = this.getColorChannel(props.color);
 
     // 管理 input 的状态
     this.state = {
@@ -106,7 +106,7 @@ export default class Params extends React.Component {
   }
 
   getColorChannel(color) {
-    const colors = colr.fromHex(color || this.props.color);
+    const colors = colr.fromHex(color || this.state.hex);
     return colors.toRgbArray();
   }
 
@@ -120,7 +120,7 @@ export default class Params extends React.Component {
             type="text"
             maxLength="6"
             onChange={this.onHexHandler}
-            value={this.state.hex}
+            value={this.state.hex.toUpperCase()}
             />
           <input type="number"
                  value={this.state.colorChannel[0]}

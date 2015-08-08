@@ -5,7 +5,7 @@ import React from 'react';
 import ColorPicker from 'react-colors-picker';
 
 function changeHandler (colors) {
-  console.log(colors);
+  // console.log(colors);
 }
 
 React.render(

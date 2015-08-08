@@ -15,7 +15,6 @@ const colr = new Colr();
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       paramsColor: props.color || props.defaultColor,
       color: props.color || props.defaultColor,
@@ -61,7 +60,6 @@ export default class Panel extends React.Component {
   }
 
   onChange(colorsObj, syncParams = true) {
-    const props = this.props;
     const color = this.getHexColor(colorsObj);
 
     if (syncParams) {
@@ -78,9 +76,8 @@ export default class Panel extends React.Component {
       // original: state,
       alpha: this.state.alpha,
     };
-    if (!props.color && !this.props.hsv) {
-      this.setState(state);
-    }
+
+    this.setState(state);
     this.props.onChange(ret);
   }
 

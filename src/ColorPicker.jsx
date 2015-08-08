@@ -4,9 +4,6 @@ import rcUtil from 'rc-util';
 import Animate from 'rc-animate';
 const toFragment = rcUtil.Children.mapSelf;
 import ColorPickerPanel from './Panel';
-import Colr from 'colr';
-
-const colr = new Colr();
 
 function refFn(field, component) {
   this[field] = component;
@@ -22,7 +19,6 @@ export default class ColorPicker extends React.Component {
 
     this.state = {
       color: props.color || props.defaultColor,
-      hsv: props.hsv || props.hsv,
       alpha: props.alpha === undefined ? props.defaultAlpha : props.alpha,
       open: false,
     };
@@ -50,12 +46,6 @@ export default class ColorPicker extends React.Component {
     if (nextProps.color) {
       this.setState({
         color: nextProps.color,
-        hsv: null,
-      });
-    } else if (nextProps.hsv) {
-      this.setState({
-        color: null,
-        hsv: nextProps.hsv,
       });
     }
     if (nextProps.alpha) {
@@ -72,12 +62,10 @@ export default class ColorPicker extends React.Component {
   }
 
   onChange(colors) {
-    if (!this.props.color && this.props.hsv === undefined) {
-      this.setState(colors.original);
-    }
-    if (this.props.alpha === undefined) {
-      this.setState({alpha: colors.alpha});
-    }
+    this.setState({
+      color: colors.color,
+      alpha: colors.alpha,
+    });
     this.props.onChange(colors);
   }
 
@@ -132,13 +120,13 @@ export default class ColorPicker extends React.Component {
 
   getPickerElement() {
     const state = this.state;
-    const pickerPanelElement = (<ColorPickerPanel ref={this.savePickerPanelRef}
-                                                  color={this.state.color}
-                                                  alpha={this.state.alpha}
-                                                  hsv={this.state.hsv}
-                                                  prefixCls={this.props.prefixCls + '-panel'}
-                                                  onChange={this.onChange}
-                                                  onBlur={this.onBlur}
+    const pickerPanelElement = (<ColorPickerPanel
+        ref={this.savePickerPanelRef}
+        defaultColor={this.state.color}
+        alpha={this.state.alpha}
+        prefixCls={this.props.prefixCls + '-panel'}
+        onChange={this.onChange}
+        onBlur={this.onBlur}
       />);
 
     const orient = this.props.orient;
@@ -170,11 +158,6 @@ export default class ColorPicker extends React.Component {
     return React.findDOMNode(this.triggerInstance);
   }
 
-  getHexColor() {
-    const state = this.state;
-    return state.color || colr.fromHsvObject(state.hsv).toHex();
-  }
-
   render() {
     const props = this.props;
     const classes = [props.prefixCls];
@@ -190,7 +173,7 @@ export default class ColorPicker extends React.Component {
         unselectable: true,
         style: {
           opacity: this.state.alpha / 100,
-          backgroundColor: this.getHexColor(),
+          backgroundColor: this.state.color,
         },
         onClick: this.onTriggerClick,
         onMouseDown: prevent,
@@ -220,7 +203,6 @@ ColorPicker.propTypes = {
     React.PropTypes.oneOf(['left', 'top', 'right', 'bottom'])
   ),
   color: React.PropTypes.string,
-  hsv: React.PropTypes.object,
   alpha: React.PropTypes.number,
   onChange: React.PropTypes.func,
   prefixCls: React.PropTypes.string.isRequired,

@@ -5,7 +5,7 @@ import React from 'react';
 import {Panel as ColorPickerPanel} from 'react-colors-picker';
 
 function onChange(obj) {
-  console.log(obj);
+  // console.log(obj);
 }
 
 React.render(

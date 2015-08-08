@@ -67,7 +67,7 @@ export default class Params extends React.Component {
       });
       this.props.onChange({
         color,
-      });
+      }, false);
     } else {
       this.setState({
         hex: value,
@@ -98,7 +98,7 @@ export default class Params extends React.Component {
     });
     this.props.onChange({
       color,
-    });
+    }, false);
   }
 
   getPrefixCls() {

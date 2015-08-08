@@ -31,7 +31,6 @@ export default class Panel extends React.Component {
 
     const events = [
       'onChange',
-      'onChangeByParams',
       'onAlphaChange',
       'onFocus',
       'onBlur',
@@ -61,29 +60,15 @@ export default class Panel extends React.Component {
     }
   }
 
-  onChangeByParams(colorsObj) {
-    const props = this.props;
-    const state = assign({
-      color: null,
-      hsv: null,
-    }, colorsObj);
-    const ret = {
-      color: this.getHexColor(colorsObj),
-      hsv: this.getHsvColor(colorsObj),
-      // original: state,
-      alpha: this.state.alpha,
-    };
-    if (!props.color && !this.props.hsv) {
-      this.setState(state);
-    }
-    this.props.onChange(ret);
-  }
-
-  onChange(colorsObj) {
+  onChange(colorsObj, syncParams = true) {
     const props = this.props;
     const color = this.getHexColor(colorsObj);
+
+    if (syncParams) {
+      colorsObj.paramsColor = color;
+    }
+
     const state = assign({
-      paramsColor: color,
       color: null,
       hsv: null,
     }, colorsObj);
@@ -194,7 +179,7 @@ export default class Panel extends React.Component {
               color={this.state.paramsColor}
               alpha={alpha}
               onAlphaChange={this.onAlphaChange}
-              onChange={this.onChangeByParams}
+              onChange={this.onChange}
               />
           </div>
         </div>

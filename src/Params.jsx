@@ -1,27 +1,20 @@
 import React from 'react';
 import Colr from 'colr';
+import store from 'store';
 
 const colr = new Colr();
-
-function numberRange(value, min, max) {
-  let result = parseInt(value, 10);
-  if (isNaN(result)) {
-    result = 0;
-  }
-  result = Math.max(min, result);
-  result = Math.min(result, max);
-
-  return result;
-}
+const modesMap = ['RGB', 'HSB', 'HSL'];
 
 export default class Params extends React.Component {
   constructor(props) {
     super(props);
+    this.modeIndex = store.get('react-colorspicker-mode') || 0;
+    const mode = modesMap[this.modeIndex];
 
-    const colorChannel = this.getColorChannel(props.color);
-
+    const colorChannel = this.getColorChannel(props.color, mode);
     // 管理 input 的状态
     this.state = {
+      mode: mode,
       hex: props.color.substr(1),
       colorChannel,
     };
@@ -31,6 +24,8 @@ export default class Params extends React.Component {
       'onAlphaHandler',
       'onColorChannelChange',
       'onModeChange',
+      'getChannelInRange',
+      'getColorByChannel',
     ];
 
     events.forEach(e => {
@@ -75,8 +70,25 @@ export default class Params extends React.Component {
     }
   }
 
+  onModeChange() {
+    this.modeIndex = (this.modeIndex + 1) % modesMap.length;
+    const state = this.state;
+    const mode = modesMap[this.modeIndex];
+    const colorChannel = this.getColorChannel(state.color, mode);
+    store.set('react-colorspicker-mode', this.modeIndex);
+    this.setState({
+      mode,
+      colorChannel,
+    });
+  }
+
   onAlphaHandler(event) {
-    const alpha = numberRange(event.target.value, 0, 100);
+    let alpha = parseInt(event.target.value, 10);
+    if (isNaN(result)) {
+      result = 0;
+    }
+    alpha = Math.max(0, result);
+    alpha = Math.min(result, 100);
 
     this.setState({
       alpha,
@@ -86,12 +98,13 @@ export default class Params extends React.Component {
   }
 
   onColorChannelChange(index, event) {
-    const value = numberRange(event.target.value, 0, 255);
+    const value = this.getChannelInRange(event.target.value, index);
     const colorChannel = this.getColorChannel();
 
     colorChannel[index] = value;
 
-    const color = colr.fromRgbArray(colorChannel).toHex();
+    const color = this.getColorByChannel(colorChannel);
+
     this.setState({
       hex: color.substr(1),
       colorChannel,
@@ -101,13 +114,64 @@ export default class Params extends React.Component {
     }, false);
   }
 
+  getChannelInRange(value, index) {
+    const channelMap = {
+      RGB: [[0, 255], [0, 255], [0, 255]],
+      HSB: [[0, 360], [0, 100], [0, 100]],
+      HSL: [[0, 360], [0, 100], [0, 100]],
+    };
+    const mode = this.state.mode;
+    const range = channelMap[mode][index];
+    let result = parseInt(value, 10);
+    if (isNaN(result)) {
+      result = 0;
+    }
+    result = Math.max(range[0], result);
+    result = Math.min(result, range[1]);
+    return result;
+  }
+
+  getColorByChannel(colorChannel) {
+    const colorMode = this.state.mode;
+    let result;
+    switch (colorMode) {
+    case 'RGB' :
+      result = colr.fromRgbArray(colorChannel);
+      break;
+    case 'HSB' :
+      result = colr.fromHsvArray(colorChannel);
+      break;
+    case 'HSL' :
+      result = colr.fromHslArray(colorChannel);
+      break;
+    default:
+      result = colr.fromRgbArray(colorChannel);
+    }
+    return result.toHex();
+  }
+
   getPrefixCls() {
     return this.props.rootPrefixCls + '-params';
   }
 
-  getColorChannel(color) {
+  getColorChannel(color, mode) {
     const colors = colr.fromHex(color || this.state.hex);
-    return colors.toRgbArray();
+    const colorMode = mode || this.state.mode;
+    let result;
+    switch (colorMode) {
+    case 'RGB' :
+      result = colors.toRgbArray();
+      break;
+    case 'HSB' :
+      result = colors.toHsvArray();
+      break;
+    case 'HSL' :
+      result = colors.toHslArray();
+      break;
+    default:
+      result = colors.toRgbArray();
+    }
+    return result;
   }
 
   render() {
@@ -122,13 +186,13 @@ export default class Params extends React.Component {
             onChange={this.onHexHandler}
             value={this.state.hex.toUpperCase()}
             />
-          <input type="number"
+          <input type="number" ref="channel_0"
                  value={this.state.colorChannel[0]}
                  onChange={this.onColorChannelChange.bind(null, 0)}/>
-          <input type="number"
+          <input type="number" ref="channel_1"
                  value={this.state.colorChannel[1]}
                  onChange={this.onColorChannelChange.bind(null, 1)}/>
-          <input type="number"
+          <input type="number" ref="channel_2"
                  value={this.state.colorChannel[2]}
                  onChange={this.onColorChannelChange.bind(null, 2)}/>
           <input type="number"
@@ -137,9 +201,21 @@ export default class Params extends React.Component {
         </div>
         <div className={prefixCls + '-' + ('lable')}>
            <label className={prefixCls + '-' + ('lable-hex')}>Hex</label>
-           <label className={prefixCls + '-' + ('lable-number')}>R</label>
-           <label className={prefixCls + '-' + ('lable-number')}>G</label>
-           <label className={prefixCls + '-' + ('lable-number')}>B</label>
+           <label className={prefixCls + '-' + ('lable-number')}
+            onClick={this.onModeChange}
+           >
+            {this.state.mode[0]}
+           </label>
+           <label className={prefixCls + '-' + ('lable-number')}
+            onClick={this.onModeChange}
+           >
+            {this.state.mode[1]}
+           </label>
+           <label className={prefixCls + '-' + ('lable-number')}
+            onClick={this.onModeChange}
+           >
+            {this.state.mode[2]}
+           </label>
            <label className={prefixCls + '-' + ('lable-alpha')}>A</label>
         </div>
       </div>

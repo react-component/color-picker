@@ -5,7 +5,6 @@ import Preview from './Preview';
 import Ribbon from './Ribbon';
 import Alpha from './Alpha';
 import Params from './Params';
-import assign from 'object-assign';
 
 function noop() {
 }
@@ -15,18 +14,15 @@ const colr = new Colr();
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
+
+    const color = props.color || props.defaultColor;
+    const hsv = colr.fromHex(color).toHsvObject();
+
     this.state = {
-      paramsColor: props.color || props.defaultColor,
-      color: props.color || props.defaultColor,
-      hsv: props.hsv || props.defaultHsv,
-      alpha: props.defaultAlpha,
+      paramsHsv: hsv,
+      hsv: hsv,
+      alpha: props.alph || props.defaultAlpha,
     };
-
-    if (props.alpha !== undefined) {
-      this.state.alpha = props.alpha;
-    }
-
-    this.state.hsv = this.getHsvColor();
 
     const events = [
       'onChange',
@@ -42,14 +38,9 @@ export default class Panel extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.color) {
+      const hsv = colr.fromHex(nextProps.color).toHsvObject();
       this.setState({
-        color: nextProps.color,
-        hsv: null,
-      });
-    } else if (nextProps.hsv) {
-      this.setState({
-        hsv: nextProps.hsv,
-        color: null,
+        hsv,
       });
     }
     if (nextProps.alpha !== undefined) {
@@ -59,25 +50,20 @@ export default class Panel extends React.Component {
     }
   }
 
-  onChange(colorsObj, syncParams = true) {
-    const color = this.getHexColor(colorsObj);
-
+  onChange(hsvObject, syncParams = true) {
+    const hsv = hsvObject;
+    const state = {
+      hsv,
+    };
     if (syncParams) {
-      colorsObj.paramsColor = color;
+      state.paramsHsv = hsv;
     }
+    this.setState(state);
 
-    const state = assign({
-      color: null,
-      hsv: null,
-    }, colorsObj);
     const ret = {
-      color: color,
-      hsv: this.getHsvColor(colorsObj),
-      // original: state,
+      color: this.getHexColor(),
       alpha: this.state.alpha,
     };
-
-    this.setState(state);
     this.props.onChange(ret);
   }
 
@@ -89,11 +75,6 @@ export default class Panel extends React.Component {
     }
     this.props.onChange({
       color: this.getHexColor(),
-      hsv: this.getHsvColor(),
-      // original: {
-      //   color: this.state.color || null,
-      //   hsv: this.state.hsv || null,
-      // },
       alpha,
     });
   }
@@ -116,20 +97,13 @@ export default class Panel extends React.Component {
     }, 100);
   }
 
-  getHexColor(data) {
-    const state = data || this.state;
-    return state.color || colr.fromHsvObject(state.hsv).toHex();
-  }
-
-  getHsvColor(data) {
-    const state = data || this.state;
-    return state.hsv || colr.fromHex(state.color).toHsvObject();
+  getHexColor() {
+    return colr.fromHsvObject(this.state.hsv).toHex();
   }
 
   render() {
     const prefixCls = this.props.prefixCls;
-    const hsvColor = this.getHsvColor();
-    const hexColor = this.getHexColor();
+    const hsv = this.state.hsv;
     const alpha = this.state.alpha;
     return (
       <div
@@ -142,15 +116,14 @@ export default class Panel extends React.Component {
         <div className={prefixCls + '-' + ('inner')}>
           <Board
             rootPrefixCls={prefixCls}
-            hsv={hsvColor}
+            hsv={hsv}
             onChange={this.onChange}
             />
-
           <div className={prefixCls + '-' + ('wrap')}>
             <div className={prefixCls + '-' + ('wrap-ribbon')}>
               <Ribbon
                 rootPrefixCls={prefixCls}
-                hsv={hsvColor}
+                hsv={hsv}
                 onChange={this.onChange}
                 />
             </div>
@@ -158,7 +131,7 @@ export default class Panel extends React.Component {
               <Alpha
                 rootPrefixCls={prefixCls}
                 alpha={alpha}
-                color={hexColor}
+                hsv={hsv}
                 onChange={this.onAlphaChange}
                 />
             </div>
@@ -166,14 +139,14 @@ export default class Panel extends React.Component {
               <Preview
                 rootPrefixCls={prefixCls}
                 alpha={alpha}
-                color={hexColor}
+                hsv={hsv}
                 />
             </div>
           </div>
           <div className={prefixCls + '-' + ('wrap')} style={{height: 40, marginTop: 6}}>
             <Params
               rootPrefixCls={prefixCls}
-              color={this.state.paramsColor}
+              hsv={this.state.paramsHsv}
               alpha={alpha}
               onAlphaChange={this.onAlphaChange}
               onChange={this.onChange}
@@ -190,7 +163,6 @@ import typeColor from './utils/validationColor';
 Panel.propTypes = {
   prefixCls: React.PropTypes.string,
   color: typeColor,
-  hsv: React.PropTypes.object,
   alpha: React.PropTypes.number,
   style: React.PropTypes.object,
   onChange: React.PropTypes.func,
@@ -200,7 +172,6 @@ Panel.propTypes = {
 
 Panel.defaultProps = {
   prefixCls: 'react-colorpicker-panel',
-  defaultHsv: null,
   defaultColor: '#ff0000',
   defaultAlpha: 100,
   style: {},

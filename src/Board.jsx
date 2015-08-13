@@ -104,9 +104,7 @@ export default class Board extends React.Component {
       s: parseInt(left / WIDTH * 100, 10),
       v: parseInt((1 - top / HEIGHT) * 100, 10),
     };
-    this.props.onChange({
-      hsv,
-    });
+    this.props.onChange(hsv);
   }
 }
 

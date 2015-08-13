@@ -60,7 +60,7 @@ export default class Alpha extends React.Component {
   }
 
   getBackground() {
-    const {r, g, b} = colr.fromHex(this.props.color).toRgbObject();
+    const {r, g, b} = colr.fromHsvObject(this.props.hsv).toRgbObject();
     const opacityGradient = 'linear-gradient(to right, ' +
       rgbaColor(r, g, b, 0) + ', ' +
       rgbaColor(r, g, b, 100) + ')';
@@ -105,7 +105,7 @@ export default class Alpha extends React.Component {
 }
 
 Alpha.propTypes = {
-  color: React.PropTypes.string,
+  hsv: React.PropTypes.object,
   onChange: React.PropTypes.func,
   rootPrefixCls: React.PropTypes.string,
   alpha: React.PropTypes.number,

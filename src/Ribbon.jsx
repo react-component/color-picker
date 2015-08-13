@@ -85,12 +85,11 @@ export default class Ribbon extends React.Component {
     left = Math.min(left, width);
     const huePercent = left / width;
     const hue = huePercent * 360;
-    const hsv = assign(this.props.hsv, {
+    // 新的对象, 避免引用
+    const hsv = assign({}, this.props.hsv, {
       h: hue,
     });
-    this.props.onChange({
-      hsv,
-    });
+    this.props.onChange(hsv);
   }
 }
 

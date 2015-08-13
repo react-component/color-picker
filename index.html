@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>react-colors-picker@1.1.0 - color-picker ui component for react</title>
+  <title>react-colors-picker@2.0.0 - color-picker ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>react-colors-picker@1.1.0</h1>
+  <h1>react-colors-picker@2.0.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -745,9 +745,11 @@
   <div class="examples-body">
     <ul>
       
-      <li><a href="examples/picker.html">picker</a></li>
+      <li><a href="examples/anim.html">anim</a></li>
       
-      <li><a href="examples/simple-open.html">simple-open</a></li>
+      <li><a href="examples/custom-trigger.html">custom-trigger</a></li>
+      
+      <li><a href="examples/panel.html">panel</a></li>
       
       <li><a href="examples/simple.html">simple</a></li>
       
@@ -794,7 +796,7 @@
 <h2>install<a id="user-content-install" name="install" class="anchor" aria-hidden="true" href="#install"><span class="octicon octicon-link"></span></a></h2><p><a href="https://npmjs.org/package/react-colors-picker" title="null"><img src="https://nodei.co/npm/react-colors-picker.png" alt="react-colors-picker"></a></p>
 <h2>Usage<a id="user-content-usage" name="usage" class="anchor" aria-hidden="true" href="#usage"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre class="hljs"><code class="js"><span class="hljs-keyword">var</span> ColorsPicker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-colors-picker'</span>);
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
-React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ColorsPicker</span> /&gt;</span>, container);</span></code></pre></div><h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><h3>ColorPicker.props<a id="user-content-colorpicker-props" name="colorpicker-props" class="anchor" aria-hidden="true" href="#colorpicker-props"><span class="octicon octicon-link"></span></a></h3><table>
+React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ColorsPicker</span> /&gt;</span>, container);</span></code></pre></div><h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><h3>ColorPicker.props<a id="user-content-colorpicker.props" name="colorpicker.props" class="anchor" aria-hidden="true" href="#colorpicker.props"><span class="octicon octicon-link"></span></a></h3><table>
 <thead>
 <tr>
 <th>name</th>
@@ -805,22 +807,28 @@ React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-titl
 </thead>
 <tbody>
 <tr>
+<td>adjustOrientOnPickerOverflow</td>
+<td>Boolean</td>
+<td>true</td>
+<td>whether adjust picker orient if there is not enough space to show. </td>
+</tr>
+<tr>
 <td>defaultColor</td>
 <td>String</td>
 <td>#ff0000</td>
 <td>color board default background color</td>
 </tr>
 <tr>
-<td>open</td>
-<td>Boolean</td>
-<td>false</td>
-<td>control Picker visible</td>
+<td>color</td>
+<td>String</td>
+<td>#ff0000</td>
+<td>color board current background color</td>
 </tr>
 <tr>
-<td>align</td>
-<td>[left/right]</td>
-<td>right</td>
-<td>Picker positon base for trigger</td>
+<td>orient</td>
+<td>String[]</td>
+<td>[&#39;top&#39;, &#39;left&#39;]</td>
+<td>Picker show direction of trigger</td>
 </tr>
 <tr>
 <td>onChange</td>
@@ -828,9 +836,15 @@ React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-titl
 <td>noop</td>
 <td>when select color</td>
 </tr>
+<tr>
+<td>trigger</td>
+<td>Node</td>
+<td><code>&lt;span className=&#39;react-colorpicker-trigger&#39;&gt;&lt;/span&gt;</code></td>
+<td>additional trigger appended to picker</td>
+</tr>
 </tbody>
 </table>
-<h3>ColorPicker.Picker.props<a id="user-content-colorpicker-picker-props" name="colorpicker-picker-props" class="anchor" aria-hidden="true" href="#colorpicker-picker-props"><span class="octicon octicon-link"></span></a></h3><table>
+<h3>ColorPicker.Panel.props<a id="user-content-colorpicker.panel.props" name="colorpicker.panel.props" class="anchor" aria-hidden="true" href="#colorpicker.panel.props"><span class="octicon octicon-link"></span></a></h3><table>
 <thead>
 <tr>
 <th>name</th>
@@ -845,6 +859,12 @@ React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-titl
 <td>String</td>
 <td>#ff0000</td>
 <td>color board default background color</td>
+</tr>
+<tr>
+<td>color</td>
+<td>String</td>
+<td>#ff0000</td>
+<td>color board current background color</td>
 </tr>
 <tr>
 <td>style</td>

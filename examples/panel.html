@@ -229,26 +229,31 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
 <![endif]-->
     <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+  
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <h1>react-colors-picker@1.1.0</h1>
+            <h1>react-colors-picker@2.0.0</h1>
             <p>color-picker ui component for react</p>
         </div>
         <div class="example" id="__react-content"></div>
         <script src="common.js?nowrap"></script>
-        <script src="simple-open.js?nowrap"></script>
+        <script src="panel.js?nowrap"></script>
         <div class="highlight"><pre><code><span class="hljs-pi">'use strict'</span>;
 
-<span class="hljs-built_in">require</span>(<span class="hljs-string">'react-colors-picker/assets/index.css'</span>);
-<span class="hljs-keyword">const</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
-<span class="hljs-keyword">const</span> ColorPicker = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-colors-picker'</span>);
+<span class="hljs-keyword">import</span> <span class="hljs-string">'react-colors-picker/assets/index.css'</span>;
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> {Panel <span class="hljs-keyword">as</span> ColorPickerPanel} <span class="hljs-keyword">from</span> <span class="hljs-string">'react-colors-picker'</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onChange</span>(<span class="hljs-params">obj</span>) </span>{
+  <span class="hljs-comment">// console.log(obj);</span>
+}
 
 React.render(
   <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-title">ColorPicker</span> <span class="hljs-attribute">defaultColor</span>=<span class="hljs-value">{'#36c'}</span> <span class="hljs-attribute">open</span>=<span class="hljs-value">{true}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">ColorPickerPanel</span> <span class="hljs-attribute">defaultColor</span>=<span class="hljs-value">{'#468890'}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{onChange}</span>/&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>,
   document.getElementById('__react-content')
 );

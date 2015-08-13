@@ -52,16 +52,19 @@ React.render(<ColorsPicker />, container);
 
 name|type|default|description
 ---|---|---|---
+adjustOrientOnPickerOverflow|Boolean|true|whether adjust picker orient if there is not enough space to show. 
 defaultColor|String|#ff0000|color board default background color
-open| Boolean | false | control Picker visible
-align| [left/right] | right | Picker positon base for trigger
+color|String|#ff0000|color board current background color
+orient| String[] | ['top', 'left'] | Picker show direction of trigger
 onChange| Function | noop | when select color
+trigger|Node|`<span className='react-colorpicker-trigger'></span>`|additional trigger appended to picker
 
-### ColorPicker.Picker.props
+### ColorPicker.Panel.props
 
 name|type|default|description
 ---|---|---|---
 defaultColor|String|#ff0000|color board default background color
+color|String|#ff0000|color board current background color
 style | Object | {} | root node CSS style
 onChange|Function| | when select color trigger
 onFocus|Function| | when picker focus trigger

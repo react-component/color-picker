@@ -1,61 +1,26 @@
-'use strict';
-
 import React from 'react';
-import prefixClsFn from './utils/prefixClsFn';
+import Colr from 'colr';
 
-export default class Preview extends React.Component{
-  constructor(props) {
-    super(props);
+const colr = new Colr();
 
-    this.state = {
-      prefixCls: props.prefixCls,
-      alpha: props.alpha,
-      defaultColor: props.defaultColor,
-      customColor: props.customColor
-    };
-
-    this.prefixClsFn = prefixClsFn.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.defaultColor !== this.props.defaultColor) {
-      this.setState({
-        defaultColor: nextProps.defaultColor,
-        customColor: nextProps.defaultColor
-      });
-    }
-    if (nextProps.customColor !== this.props.customColor) {
-      this.setState({
-        defaultColor: nextProps.customColor,
-        customColor: nextProps.customColor
-      });
-    }
-    if (nextProps.alpha !== this.props.alpha) {
-      this.setState({
-        alpha: nextProps.alpha
-      });
-    }
+export default class Preview extends React.Component {
+  getPrefixCls() {
+    return this.props.rootPrefixCls + '-preview';
   }
 
   render() {
+    const prefixCls = this.getPrefixCls();
+    const hex = colr.fromHsvObject(this.props.hsv).toHex();
     return (
-      <div className={this.props.prefixCls}>
-        <span style={{backgroundColor: this.state.defaultColor, opacity: this.state.alpha / 100}}></span>
+      <div className={prefixCls}>
+        <span style={{backgroundColor: hex, opacity: this.props.alpha / 100}}></span>
       </div>
     );
   }
 }
 
 Preview.propTypes = {
-  prefixCls: React.PropTypes.string,
+  rootPrefixCls: React.PropTypes.string,
+  hsv: React.PropTypes.object,
   alpha: React.PropTypes.number,
-  defaultColor: React.PropTypes.string,
-  customColor: React.PropTypes.string
-};
-
-Preview.defaultProps = {
-  prefixCls: 'react-colorpicker-preview',
-  alpha: 100,
-  defaultColor: '#f00', // 背景颜色 响应来自  board 面板的选取颜色
-  customColor: '#f00' // 背景颜色  响应来自用户的输入颜色
 };

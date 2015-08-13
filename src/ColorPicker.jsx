@@ -1,132 +1,222 @@
-'use strict';
-
 import React from 'react';
-import Trigger from './Trigger';
-import Picker from './Picker';
-import DOM from './utils/dom';
-import prefixClsFn from './utils/prefixClsFn';
-import core from 'core-js';
+import Align from 'rc-align';
+import rcUtil from 'rc-util';
+import Animate from 'rc-animate';
+const toFragment = rcUtil.Children.mapSelf;
+import ColorPickerPanel from './Panel';
 
-const refFn = function(field, component) {
+function refFn(field, component) {
   this[field] = component;
-};
+}
 
-export default class ColorPicker extends React.Component{
+function prevent(e) {
+  e.preventDefault();
+}
+
+export default class ColorPicker extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      prefixCls: props.prefixCls,
-      defaultColor: props.defaultColor,
-      open: props.open,
-      style: {
-        position: 'absolute',
-        zIndex: 100
-      }
+      color: props.color || props.defaultColor,
+      alpha: props.alpha === undefined ? props.defaultAlpha : props.alpha,
+      open: false,
     };
 
-    this.prefixClsFn = prefixClsFn.bind(this);
-    let events = [
-      'triggerClickHandler',
-      'handlerChange',
-      'handlerBlur',
-      'getPickerElement'
+    const events = [
+      'getAlign',
+      'onTriggerClick',
+      'onChange',
+      'onBlur',
+      'getPickerElement',
+      'getRootDOMNode',
+      'getTriggerDOMNode',
+      'getTransitionName',
     ];
 
     events.forEach(e => {
       this[e] = this[e].bind(this);
     });
 
-    this.savePickerRef = refFn.bind(this, 'pickerInstance');
+    this.savePickerPanelRef = refFn.bind(this, 'pickerPanelInstance');
+    this.saveTriggerRef = refFn.bind(this, 'triggerInstance');
   }
 
-  componentDidMount() {
-    this.componentDidUpdate();
-  }
-
-  // 在组件的更新已经同步到 DOM 中之后立刻被调用
-  componentDidUpdate(prevProps, prevState) {
-    prevState = prevState || {};
-    var state = this.state;
-    if (state.open && !prevState.open) {
-      let offest = DOM.getAlign(
-        React.findDOMNode(this.pickerInstance),
-        React.findDOMNode(this.refs.trigger),
-        this.props.align,
-        [5, 0]
-      );
-      let styleObj = core.Object.assign(this.state.style, offest);
-      this.pickerInstance.setState({
-        style: styleObj
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.color) {
+      this.setState({
+        color: nextProps.color,
       });
-      React.findDOMNode(this.pickerInstance).focus();
+    }
+    if (nextProps.alpha) {
+      this.setState({
+        alpha: nextProps.alpha,
+      });
     }
   }
 
-  triggerClickHandler() {
+  onTriggerClick() {
     this.setState({
-      open: !this.state.open
+      open: !this.state.open,
     });
   }
 
-  handlerChange(colors) {
+  onChange(colors) {
     this.setState({
-      defaultColor: colors.hex
+      color: colors.color,
+      alpha: colors.alpha,
     });
     this.props.onChange(colors);
   }
 
-  handlerBlur() {
+  onBlur() {
     this.setState({
-      open: false
+      open: false,
     });
   }
 
+  onAlign(node) {
+    // focus after align
+    if (node !== document.activeElement && !rcUtil.Dom.contains(node, document.activeElement)) {
+      node.focus();
+    }
+  }
+
+  getTransitionName() {
+    const props = this.props;
+    let transitionName = props.transitionName;
+    if (!transitionName && props.animation) {
+      transitionName = `${props.prefixCls}-${props.animation}`;
+    }
+    return transitionName;
+  }
+
+  getAlign(orient) {
+    let points = ['tl', 'bl'];
+    let offset = [0, 5];
+    if (orient.indexOf('top') !== -1 && orient.indexOf('left') !== -1) {
+      points = ['tl', 'bl'];
+    } else if (orient.indexOf('top') !== -1 && orient.indexOf('right') !== -1) {
+      points = ['tr', 'br'];
+    } else if (orient.indexOf('bottom') !== -1 && orient.indexOf('left') !== -1) {
+      points = ['bl', 'tl'];
+      offset = [0, -5];
+    } else if (orient.indexOf('bottom') !== -1 && orient.indexOf('right') !== -1) {
+      points = ['br', 'tr'];
+      offset = [0, -5];
+    }
+
+    const adjustOrientOnPickerOverflow = this.props.adjustOrientOnPickerOverflow;
+
+    return {
+      points: points,
+      offset: offset,
+      overflow: {
+        adjustX: adjustOrientOnPickerOverflow,
+        adjustY: adjustOrientOnPickerOverflow,
+      },
+    };
+  }
+
   getPickerElement() {
-    return this.pickerElement || (this.pickerElement = React.cloneElement(<Picker />, {
-      ref: function(component) {
-        this.savePickerRef(component);
-      }.bind(this),
-      defaultColor: this.props.defaultColor,
-      onChange: this.handlerChange,
-      onBlur: this.handlerBlur
-    }));
+    const state = this.state;
+    const pickerPanelElement = (<ColorPickerPanel
+        ref={this.savePickerPanelRef}
+        defaultColor={this.state.color}
+        alpha={this.state.alpha}
+        prefixCls={this.props.prefixCls + '-panel'}
+        onChange={this.onChange}
+        onBlur={this.onBlur}
+      />);
+
+    const orient = this.props.orient;
+
+    return (<Animate
+      component=""
+      exclusive={true}
+      animateMount={true}
+      showProp="pickerOpen"
+      transitionName={this.getTransitionName()}
+      >
+      <Align target={this.getTriggerDOMNode}
+             key="picker"
+             onAlign={this.onAlign}
+             monitorWindowResize={true}
+             disabled={!state.open}
+             pickerOpen={state.open}
+             align={this.getAlign(orient)}>
+        {pickerPanelElement}
+      </Align>
+    </Animate>);
+  }
+
+  getRootDOMNode() {
+    return React.findDOMNode(this);
+  }
+
+  getTriggerDOMNode() {
+    return React.findDOMNode(this.triggerInstance);
   }
 
   render() {
-    let props = this.props;
-    let picker = this.state.open ? this.getPickerElement() : this.pickerElement;
-
-    let classes = [props.prefixCls];
+    const props = this.props;
+    const classes = [props.prefixCls];
     if (this.state.open) {
       classes.push(props.prefixCls + '-open');
     }
 
+    let trigger = props.trigger;
+
+    if (trigger) {
+      trigger = React.cloneElement(trigger, {
+        ref: this.saveTriggerRef,
+        unselectable: true,
+        style: {
+          opacity: this.state.alpha / 100,
+          backgroundColor: this.state.color,
+        },
+        onClick: this.onTriggerClick,
+        onMouseDown: prevent,
+      });
+    }
+
+    let picker;
+
+    this.haveOpened = this.haveOpened || this.state.open;
+
+    if (this.haveOpened) {
+      picker = this.getPickerElement();
+    }
+
     return (
       <span className={classes.join(' ')}>
-        <Trigger
-          ref='trigger'
-          defaultColor={this.state.defaultColor}
-          onToggle={this.triggerClickHandler}
-        />
-        {picker}
+        {toFragment([picker, trigger])}
       </span>
     );
   }
 }
 
 ColorPicker.propTypes = {
-  prefixCls: React.PropTypes.string,
-  open: React.PropTypes.bool,
-  defaultColor: React.PropTypes.string,
-  align: React.PropTypes.string,
-  onChange: React.PropTypes.func
+  adjustOrientOnPickerOverflow: React.PropTypes.bool,
+  animation: React.PropTypes.string,
+  orient: React.PropTypes.arrayOf(
+    React.PropTypes.oneOf(['left', 'top', 'right', 'bottom'])
+  ),
+  color: React.PropTypes.string,
+  alpha: React.PropTypes.number,
+  onChange: React.PropTypes.func,
+  prefixCls: React.PropTypes.string.isRequired,
+  trigger: React.PropTypes.node.isRequired,
 };
 
 ColorPicker.defaultProps = {
-  prefixCls: 'react-colorpicker',
-  open: false,
+  adjustOrientOnPickerOverflow: true,
   defaultColor: '#F00',
-  align: 'right',
-  onChange() {}
+  defaultHsv: null,
+  defaultAlpha: 100,
+  orient: ['top', 'left'],
+  onChange() {
+  },
+  prefixCls: 'react-colorpicker',
+  trigger: <span className="react-colorpicker-trigger"></span>,
 };

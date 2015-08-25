@@ -24,7 +24,8 @@
   },
   "files": [
     "src/",
-    "assets/*.less"
+    "assets/*.less",
+    "index.js"
   ],
   "config": {
     "port": 8000

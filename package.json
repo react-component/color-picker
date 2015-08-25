@@ -23,8 +23,8 @@
     "url": "http://github.com/react-component/react-colors-picker/issues"
   },
   "files": [
-    "lib/",
-    "assets/*.css"
+    "src/",
+    "assets/*.less"
   ],
   "config": {
     "port": 8000

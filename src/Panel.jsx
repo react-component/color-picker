@@ -58,13 +58,13 @@ export default class Panel extends React.Component {
     if (syncParams) {
       state.paramsHsv = hsv;
     }
-    this.setState(state);
-
-    const ret = {
-      color: this.getHexColor(),
-      alpha: this.state.alpha,
-    };
-    this.props.onChange(ret);
+    this.setState(state, () => {
+      const ret = {
+        color: this.getHexColor(),
+        alpha: this.state.alpha,
+      };
+      this.props.onChange(ret);
+    });
   }
 
   onAlphaChange(alpha) {

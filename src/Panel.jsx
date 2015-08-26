@@ -61,7 +61,8 @@ export default class Panel extends React.Component {
     this.setState(state);
 
     const ret = {
-      color: this.getHexColor(),
+      color: this.getHexColor(hsv),
+      hsv,
       alpha: this.state.alpha,
     };
     this.props.onChange(ret);
@@ -75,6 +76,7 @@ export default class Panel extends React.Component {
     }
     this.props.onChange({
       color: this.getHexColor(),
+      hsv: this.state.hsv,
       alpha,
     });
   }
@@ -97,8 +99,8 @@ export default class Panel extends React.Component {
     }, 100);
   }
 
-  getHexColor() {
-    return colr.fromHsvObject(this.state.hsv).toHex();
+  getHexColor(hsv) {
+    return colr.fromHsvObject(hsv || this.state.hsv).toHex();
   }
 
   render() {

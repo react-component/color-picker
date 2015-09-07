@@ -1,6 +1,6 @@
 import React from 'react';
 import Colr from 'colr';
-import store from 'store';
+let store;
 
 const colr = new Colr();
 const modesMap = ['RGB', 'HSB', 'HSL'];
@@ -9,7 +9,14 @@ export default class Params extends React.Component {
 
   constructor(props) {
     super(props);
-    this.modeIndex = store.get('react-colorspicker-mode') || 0;
+    let defaultIndex = 0;
+    if (props.storeMode) {
+      if (!store) {
+        store = require('store');
+      }
+      defaultIndex = store.get('react-colorspicker-mode') || 0;
+    }
+    this.modeIndex = defaultIndex;
     const mode = modesMap[this.modeIndex];
 
     const color = colr.fromHsvObject(props.hsv);
@@ -74,7 +81,9 @@ export default class Params extends React.Component {
     const state = this.state;
     const mode = modesMap[this.modeIndex];
     const colorChannel = this.getColorChannel(state.color, mode);
-    store.set('react-colorspicker-mode', this.modeIndex);
+    if (this.props.storeMode) {
+      store.set('react-colorspicker-mode', this.modeIndex);
+    }
     this.setState({
       mode,
       colorChannel,
@@ -227,4 +236,5 @@ Params.propTypes = {
   alpha: React.PropTypes.number,
   rootPrefixCls: React.PropTypes.string,
   onAlphaChange: React.PropTypes.func,
+  storeMode: React.PropTypes.boolean,
 };

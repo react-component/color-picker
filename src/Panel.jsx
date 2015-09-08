@@ -170,6 +170,7 @@ Panel.propTypes = {
   onChange: React.PropTypes.func,
   onFocus: React.PropTypes.func,
   onBlur: React.PropTypes.func,
+  storeMode: React.PropTypes.boolean,
 };
 
 Panel.defaultProps = {
@@ -180,4 +181,5 @@ Panel.defaultProps = {
   onChange: noop,
   onFocus: noop,
   onBlur: noop,
+  storeMode: true,
 };

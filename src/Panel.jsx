@@ -141,6 +141,7 @@ export default class Panel extends React.Component {
               <Preview
                 rootPrefixCls={prefixCls}
                 alpha={alpha}
+                onChange={this.onChange}
                 hsv={hsv}
                 />
             </div>
@@ -152,6 +153,7 @@ export default class Panel extends React.Component {
               alpha={alpha}
               onAlphaChange={this.onAlphaChange}
               onChange={this.onChange}
+              mode={this.props.mode}
               />
           </div>
         </div>
@@ -170,7 +172,7 @@ Panel.propTypes = {
   onChange: React.PropTypes.func,
   onFocus: React.PropTypes.func,
   onBlur: React.PropTypes.func,
-  storeMode: React.PropTypes.boolean,
+  mode: React.PropTypes.string,
 };
 
 Panel.defaultProps = {
@@ -181,5 +183,4 @@ Panel.defaultProps = {
   onChange: noop,
   onFocus: noop,
   onBlur: noop,
-  storeMode: true,
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import Colr from 'colr';
-let store;
 
 const colr = new Colr();
 const modesMap = ['RGB', 'HSB', 'HSL'];
@@ -9,21 +8,12 @@ export default class Params extends React.Component {
 
   constructor(props) {
     super(props);
-    let defaultIndex = 0;
-    if (props.storeMode) {
-      if (!store) {
-        store = require('store');
-      }
-      defaultIndex = store.get('react-colorspicker-mode') || 0;
-    }
-    this.modeIndex = defaultIndex;
-    const mode = modesMap[this.modeIndex];
 
     const color = colr.fromHsvObject(props.hsv);
 
     // 管理 input 的状态
     this.state = {
-      mode: mode,
+      mode: props.mode,
       color: color,
       hex: color.toHex().substr(1),
     };
@@ -77,13 +67,12 @@ export default class Params extends React.Component {
   }
 
   onModeChange() {
-    this.modeIndex = (this.modeIndex + 1) % modesMap.length;
+    let mode = this.state.mode;
+    const modeIndex = (modesMap.indexOf(mode) + 1) % modesMap.length;
     const state = this.state;
-    const mode = modesMap[this.modeIndex];
+
+    mode = modesMap[modeIndex];
     const colorChannel = this.getColorChannel(state.color, mode);
-    if (this.props.storeMode) {
-      store.set('react-colorspicker-mode', this.modeIndex);
-    }
     this.setState({
       mode,
       colorChannel,
@@ -236,5 +225,9 @@ Params.propTypes = {
   alpha: React.PropTypes.number,
   rootPrefixCls: React.PropTypes.string,
   onAlphaChange: React.PropTypes.func,
-  storeMode: React.PropTypes.boolean,
+  mode: React.PropTypes.oneOf(modesMap),
+};
+
+Params.defaultProps = {
+  mode: modesMap[0],
 };

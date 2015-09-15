@@ -29,6 +29,7 @@ export default class Panel extends React.Component {
       'onAlphaChange',
       'onFocus',
       'onBlur',
+      'onSystemColorPickerOpen',
     ];
     // bind methods
     events.forEach(m => {
@@ -68,6 +69,13 @@ export default class Panel extends React.Component {
     this.props.onChange(ret);
   }
 
+  onSystemColorPickerOpen(e) {
+    // only work with broswer which support color input
+    if (e.target.type === 'color') {
+      this.systemColorPickerOpen = true;
+    }
+  }
+
   onAlphaChange(alpha) {
     if (this.props.alpha === undefined) {
       this.setState({
@@ -95,6 +103,12 @@ export default class Panel extends React.Component {
       clearTimeout(this._blurTimer);
     }
     this._blurTimer = setTimeout(()=> {
+      // if is system color picker open, then stop run blur
+      if (this.systemColorPickerOpen) {
+        this.systemColorPickerOpen = false;
+        return;
+      }
+
       this.props.onBlur();
     }, 100);
   }
@@ -142,6 +156,7 @@ export default class Panel extends React.Component {
                 rootPrefixCls={prefixCls}
                 alpha={alpha}
                 onChange={this.onChange}
+                onInputClick={this.onSystemColorPickerOpen}
                 hsv={hsv}
                 />
             </div>

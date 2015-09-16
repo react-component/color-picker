@@ -58,7 +58,7 @@ color|String|#ff0000|color board current background color
 orient| String[] | ['top', 'left'] | Picker show direction of trigger
 onChange| Function | noop | when select color
 trigger|Node|`<span className='react-colorpicker-trigger'></span>`|additional trigger appended to picker
-storeMode|Boolean|true| if store color mode on localStore after color mode change
+mode|String|'RGB'| color mode, support mode 'RGB', 'HSB' or 'HSL'
 
 ### ColorPicker.Panel.props
 
@@ -70,7 +70,7 @@ style | Object | {} | root node CSS style
 onChange|Function| | when select color trigger
 onFocus|Function| | when picker focus trigger
 onBlur|Function| | when picker loose focus
-storeMode|Boolean|true| if store color mode on localStore after color mode change
+mode|String|'RGB'| color mode, support mode 'RGB', 'HSB' or 'HSL'
 
 ## License
 

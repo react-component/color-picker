@@ -123,11 +123,11 @@ export default class ColorPicker extends React.Component {
     const pickerPanelElement = (<ColorPickerPanel
         ref={this.savePickerPanelRef}
         defaultColor={this.state.color}
-        storeMode={this.props.storeMode}
         alpha={this.state.alpha}
         prefixCls={this.props.prefixCls + '-panel'}
         onChange={this.onChange}
         onBlur={this.onBlur}
+        mode={this.props.mode}
       />);
 
     const orient = this.props.orient;
@@ -208,7 +208,7 @@ ColorPicker.propTypes = {
   onChange: React.PropTypes.func,
   prefixCls: React.PropTypes.string.isRequired,
   trigger: React.PropTypes.node.isRequired,
-  storeMode: React.PropTypes.boolean,
+  mode: React.PropTypes.string,
 };
 
 ColorPicker.defaultProps = {
@@ -221,5 +221,4 @@ ColorPicker.defaultProps = {
   },
   prefixCls: 'react-colorpicker',
   trigger: <span className="react-colorpicker-trigger"></span>,
-  storeMode: true,
 };

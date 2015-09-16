@@ -10,7 +10,7 @@ function onChange(obj) {
 
 React.render(
   <div>
-    <ColorPickerPanel defaultColor={'#468890'} onChange={onChange}/>
+    <ColorPickerPanel defaultColor={'#468890'} onChange={onChange} mode="HSL"/>
   </div>,
   document.getElementById('__react-content')
 );

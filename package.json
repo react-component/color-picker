@@ -52,10 +52,9 @@
   "dependencies": {
     "colr": "~1.2.1",
     "object-assign": "~3.0.0",
-    "rc-align": "^1.2.0",
-    "rc-animate": "^1.1.0",
-    "rc-util": "^2.0.3",
-    "store": "^1.3.17"
+    "rc-align": "~1.2.0",
+    "rc-animate": "~1.1.0",
+    "rc-util": "~2.0.3"
   },
   "precommit": [
     "lint"

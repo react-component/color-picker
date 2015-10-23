@@ -3,31 +3,35 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(53);
+	module.exports = __webpack_require__(205);
 
 
 /***/ },
 
-/***/ 53:
+/***/ 205:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	__webpack_require__(11);
+	__webpack_require__(2);
 	
-	var _react = __webpack_require__(15);
+	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactColorsPicker = __webpack_require__(16);
+	var _reactDom = __webpack_require__(159);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _reactColorsPicker = __webpack_require__(160);
 	
 	function onChange(obj) {
 	  // console.log(obj);
 	}
 	
-	_react2['default'].render(_react2['default'].createElement(
+	_reactDom2['default'].render(_react2['default'].createElement(
 	  'div',
 	  null,
 	  _react2['default'].createElement(_reactColorsPicker.Panel, { defaultColor: '#468890', onChange: onChange, mode: 'HSL' })

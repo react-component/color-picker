@@ -1,6 +1,6 @@
 {
   "name": "react-colors-picker",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "color-picker ui component for react",
   "main": "lib/index.js",
   "keywords": [
@@ -10,9 +10,6 @@
     "react-colors-picker",
     "color-picker"
   ],
-  "engines": {
-    "node": ">=0.10"
-  },
   "homepage": "http://github.com/react-component/react-colors-picker",
   "author": "noyobo <noyobo@gmail.com>",
   "repository": {

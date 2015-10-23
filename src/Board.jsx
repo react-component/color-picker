@@ -1,5 +1,6 @@
 import Colr from 'colr';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import rcUtil from 'rc-util';
 
 const colr = new Colr();
@@ -61,6 +62,29 @@ export default class Board extends React.Component {
     return this.props.rootPrefixCls + '-board';
   }
 
+  /**
+   * 移动光标位置到
+   * @param  {object} pos X Y 全局坐标点
+   * @return {undefined}
+   */
+  pointMoveTo(pos) {
+    const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+    let left = pos.x - rect.left;
+    let top = pos.y - rect.top;
+
+    left = Math.max(0, left);
+    left = Math.min(left, WIDTH);
+    top = Math.max(0, top);
+    top = Math.min(top, HEIGHT);
+
+    const hsv = {
+      h: this.props.hsv.h,
+      s: parseInt(left / WIDTH * 100, 10),
+      v: parseInt((1 - top / HEIGHT) * 100, 10),
+    };
+    this.props.onChange(hsv);
+  }
+
   render() {
     const prefixCls = this.getPrefixCls();
     const hsv = this.props.hsv;
@@ -82,29 +106,6 @@ export default class Board extends React.Component {
           />
       </div>
     );
-  }
-
-  /**
-   * 移动光标位置到
-   * @param  {object} pos X Y 全局坐标点
-   * @return {undefined}
-   */
-  pointMoveTo(pos) {
-    const rect = React.findDOMNode(this).getBoundingClientRect();
-    let left = pos.x - rect.left;
-    let top = pos.y - rect.top;
-
-    left = Math.max(0, left);
-    left = Math.min(left, WIDTH);
-    top = Math.max(0, top);
-    top = Math.min(top, HEIGHT);
-
-    const hsv = {
-      h: this.props.hsv.h,
-      s: parseInt(left / WIDTH * 100, 10),
-      v: parseInt((1 - top / HEIGHT) * 100, 10),
-    };
-    this.props.onChange(hsv);
   }
 }
 

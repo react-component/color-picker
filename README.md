@@ -43,7 +43,8 @@ online example: [http://react-component.github.io/react-colors-picker/](http://r
 ```js
 var ColorsPicker = require('react-colors-picker');
 var React = require('react');
-React.render(<ColorsPicker />, container);
+var ReactDOM = require('react-dom');
+ReactDOM.render(<ColorsPicker />, container);
 ```
 
 ## API

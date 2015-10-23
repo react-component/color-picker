@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Align from 'rc-align';
 import rcUtil from 'rc-util';
 import Animate from 'rc-animate';
@@ -134,15 +135,15 @@ export default class ColorPicker extends React.Component {
 
     return (<Animate
       component=""
-      exclusive={true}
-      animateMount={true}
+      exclusive
+      animateMount
       showProp="pickerOpen"
       transitionName={this.getTransitionName()}
       >
       <Align target={this.getTriggerDOMNode}
              key="picker"
              onAlign={this.onAlign}
-             monitorWindowResize={true}
+             monitorWindowResize
              disabled={!state.open}
              pickerOpen={state.open}
              align={this.getAlign(orient)}>
@@ -152,11 +153,11 @@ export default class ColorPicker extends React.Component {
   }
 
   getRootDOMNode() {
-    return React.findDOMNode(this);
+    return ReactDOM.findDOMNode(this);
   }
 
   getTriggerDOMNode() {
-    return React.findDOMNode(this.triggerInstance);
+    return ReactDOM.findDOMNode(this.triggerInstance);
   }
 
   render() {
@@ -203,6 +204,8 @@ ColorPicker.propTypes = {
   orient: React.PropTypes.arrayOf(
     React.PropTypes.oneOf(['left', 'top', 'right', 'bottom'])
   ),
+  defaultColor: React.PropTypes.string,
+  defaultAlpha: React.PropTypes.number,
   color: React.PropTypes.string,
   alpha: React.PropTypes.number,
   onChange: React.PropTypes.func,

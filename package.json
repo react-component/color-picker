@@ -47,14 +47,15 @@
     "precommit-hook": "^1.0.7",
     "rc-server": "3.x",
     "rc-tools": "4.x",
-    "react": "0.13.x"
+    "react": "0.14.x",
+    "react-dom": "0.14.x"
   },
   "dependencies": {
     "colr": "~1.2.1",
     "object-assign": "~3.0.0",
-    "rc-align": "~1.2.0",
-    "rc-animate": "~1.1.0",
-    "rc-util": "~2.0.3"
+    "rc-align": "2.x",
+    "rc-animate": "2.x",
+    "rc-util": "2.x"
   },
   "precommit": [
     "lint"

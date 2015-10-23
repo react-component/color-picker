@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Colr from 'colr';
 import rcUtil from 'rc-util';
 
@@ -71,6 +72,19 @@ export default class Alpha extends React.Component {
     return this.props.rootPrefixCls + '-alpha';
   }
 
+  pointMoveTo(coords) {
+    const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+    const width = rect.width;
+    let left = coords.x - rect.left;
+
+    left = Math.max(0, left);
+    left = Math.min(left, width);
+
+    const alpha = Math.floor(left / width * 100);
+
+    this.props.onChange(alpha);
+  }
+
   render() {
     const prefixCls = this.getPrefixCls();
     return (
@@ -88,19 +102,6 @@ export default class Alpha extends React.Component {
           />
       </div>
     );
-  }
-
-  pointMoveTo(coords) {
-    const rect = React.findDOMNode(this).getBoundingClientRect();
-    const width = rect.width;
-    let left = coords.x - rect.left;
-
-    left = Math.max(0, left);
-    left = Math.min(left, width);
-
-    const alpha = Math.floor(left / width * 100);
-
-    this.props.onChange(alpha);
   }
 }
 

@@ -21,7 +21,7 @@ export default class Panel extends React.Component {
     this.state = {
       paramsHsv: hsv,
       hsv: hsv,
-      alpha: props.alph || props.defaultAlpha,
+      alpha: props.alpha || props.defaultAlpha,
     };
 
     const events = [
@@ -181,7 +181,9 @@ import typeColor from './utils/validationColor';
 
 Panel.propTypes = {
   prefixCls: React.PropTypes.string,
+  defaultColor: typeColor,
   color: typeColor,
+  defaultAlpha: React.PropTypes.number,
   alpha: React.PropTypes.number,
   style: React.PropTypes.object,
   onChange: React.PropTypes.func,

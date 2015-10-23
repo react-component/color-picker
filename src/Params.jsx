@@ -49,7 +49,7 @@ export default class Params extends React.Component {
     let color = null;
     try {
       color = Colr.fromHex(value);
-    } catch(e) {
+    } catch (e) {
       /* eslint no-empty:0 */
     }
 

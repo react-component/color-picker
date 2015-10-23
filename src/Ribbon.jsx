@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import rcUtil from 'rc-util';
 import assign from 'object-assign';
 
@@ -60,6 +61,21 @@ export default class Ribbon extends React.Component {
     return this.props.rootPrefixCls + '-ribbon';
   }
 
+  pointMoveTo(coords) {
+    const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+    const width = rect.width;
+    let left = coords.x - rect.left;
+    left = Math.max(0, left);
+    left = Math.min(left, width);
+    const huePercent = left / width;
+    const hue = huePercent * 360;
+    // 新的对象, 避免引用
+    const hsv = assign({}, this.props.hsv, {
+      h: hue,
+    });
+    this.props.onChange(hsv);
+  }
+
   render() {
     const prefixCls = this.getPrefixCls();
     const HSV = this.props.hsv;
@@ -75,21 +91,6 @@ export default class Ribbon extends React.Component {
           ></div>
       </div>
     );
-  }
-
-  pointMoveTo(coords) {
-    const rect = React.findDOMNode(this).getBoundingClientRect();
-    const width = rect.width;
-    let left = coords.x - rect.left;
-    left = Math.max(0, left);
-    left = Math.min(left, width);
-    const huePercent = left / width;
-    const hue = huePercent * 360;
-    // 新的对象, 避免引用
-    const hsv = assign({}, this.props.hsv, {
-      h: hue,
-    });
-    this.props.onChange(hsv);
   }
 }
 

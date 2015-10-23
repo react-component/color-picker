@@ -5,7 +5,6 @@ colors picker ui component for react
 
 [![npm version](http://img.shields.io/npm/v/react-colors-picker.svg)](https://www.npmjs.org/package/react-colors-picker) 
 [![npm download](http://img.shields.io/npm/dm/react-colors-picker.svg)](https://www.npmjs.org/package/react-colors-picker) 
-[![npm engines](http://img.shields.io/node/v/react-colors-picker.svg)](https://www.npmjs.org/package/react-colors-picker) 
 [![build status](http://img.shields.io/travis/react-component/react-colors-picker.svg)](https://travis-ci.org/react-component/react-colors-picker) 
 [![npm dependencise](https://david-dm.org/react-component/react-colors-picker.svg)](https://david-dm.org/react-component/react-colors-picker)
 

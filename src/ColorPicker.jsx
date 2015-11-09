@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Align from 'rc-align';
-import rcUtil from 'rc-util';
-import Animate from 'rc-animate';
-const toFragment = rcUtil.Children.mapSelf;
+// import rcUtil from 'rc-util';
+import Trigger from 'rc-trigger';
+// const toFragment = rcUtil.Children.mapSelf;
 import ColorPickerPanel from './Panel';
 
 function refFn(field, component) {
@@ -25,14 +24,12 @@ export default class ColorPicker extends React.Component {
     };
 
     const events = [
-      'getAlign',
       'onTriggerClick',
       'onChange',
       'onBlur',
       'getPickerElement',
       'getRootDOMNode',
       'getTriggerDOMNode',
-      'getTransitionName',
     ];
 
     events.forEach(e => {
@@ -76,52 +73,12 @@ export default class ColorPicker extends React.Component {
     });
   }
 
-  onAlign(node) {
-    // focus after align
-    if (node !== document.activeElement && !rcUtil.Dom.contains(node, document.activeElement)) {
-      node.focus();
-    }
-  }
-
-  getTransitionName() {
-    const props = this.props;
-    let transitionName = props.transitionName;
-    if (!transitionName && props.animation) {
-      transitionName = `${props.prefixCls}-${props.animation}`;
-    }
-    return transitionName;
-  }
-
-  getAlign(orient) {
-    let points = ['tl', 'bl'];
-    let offset = [0, 5];
-    if (orient.indexOf('top') !== -1 && orient.indexOf('left') !== -1) {
-      points = ['tl', 'bl'];
-    } else if (orient.indexOf('top') !== -1 && orient.indexOf('right') !== -1) {
-      points = ['tr', 'br'];
-    } else if (orient.indexOf('bottom') !== -1 && orient.indexOf('left') !== -1) {
-      points = ['bl', 'tl'];
-      offset = [0, -5];
-    } else if (orient.indexOf('bottom') !== -1 && orient.indexOf('right') !== -1) {
-      points = ['br', 'tr'];
-      offset = [0, -5];
-    }
-
-    const adjustOrientOnPickerOverflow = this.props.adjustOrientOnPickerOverflow;
-
-    return {
-      points: points,
-      offset: offset,
-      overflow: {
-        adjustX: adjustOrientOnPickerOverflow,
-        adjustY: adjustOrientOnPickerOverflow,
-      },
-    };
-  }
 
   getPickerElement() {
-    const state = this.state;
-    const pickerPanelElement = (<ColorPickerPanel
+    // const state = this.state;
+
+    return (
+        <ColorPickerPanel
         ref={this.savePickerPanelRef}
         defaultColor={this.state.color}
         alpha={this.state.alpha}
@@ -129,27 +86,8 @@ export default class ColorPicker extends React.Component {
         onChange={this.onChange}
         onBlur={this.onBlur}
         mode={this.props.mode}
-      />);
-
-    const orient = this.props.orient;
-
-    return (<Animate
-      component=""
-      exclusive
-      animateMount
-      showProp="pickerOpen"
-      transitionName={this.getTransitionName()}
-      >
-      <Align target={this.getTriggerDOMNode}
-             key="picker"
-             onAlign={this.onAlign}
-             monitorWindowResize
-             disabled={!state.open}
-             pickerOpen={state.open}
-             align={this.getAlign(orient)}>
-        {pickerPanelElement}
-      </Align>
-    </Animate>);
+      />
+    );
   }
 
   getRootDOMNode() {
@@ -186,24 +124,30 @@ export default class ColorPicker extends React.Component {
 
     this.haveOpened = this.haveOpened || this.state.open;
 
-    if (this.haveOpened) {
-      picker = this.getPickerElement();
-    }
+    // if (this.haveOpened) {
+    picker = this.getPickerElement();
+    // }
 
     return (
       <span className={classes.join(' ')}>
-        {toFragment([picker, trigger])}
+        <Trigger
+          popupAlign={{
+            points: ['tl', 'bl'],
+            offset: [0, 3],
+          }}
+          action={['click']}
+          popup={picker}
+          // defaultPopupVisible={true}
+          // popupVisible={true}
+        >
+          {trigger}
+        </Trigger>
       </span>
     );
   }
 }
 
 ColorPicker.propTypes = {
-  adjustOrientOnPickerOverflow: React.PropTypes.bool,
-  animation: React.PropTypes.string,
-  orient: React.PropTypes.arrayOf(
-    React.PropTypes.oneOf(['left', 'top', 'right', 'bottom'])
-  ),
   defaultColor: React.PropTypes.string,
   defaultAlpha: React.PropTypes.number,
   color: React.PropTypes.string,
@@ -215,11 +159,9 @@ ColorPicker.propTypes = {
 };
 
 ColorPicker.defaultProps = {
-  adjustOrientOnPickerOverflow: true,
   defaultColor: '#F00',
   defaultHsv: null,
   defaultAlpha: 100,
-  orient: ['top', 'left'],
   onChange() {
   },
   prefixCls: 'react-colorpicker',

@@ -50,8 +50,7 @@
   "dependencies": {
     "colr": "~1.2.1",
     "object-assign": "~3.0.0",
-    "rc-align": "2.x",
-    "rc-animate": "2.x",
+    "rc-trigger": "^1.0.4",
     "rc-util": "2.x"
   },
   "precommit": [

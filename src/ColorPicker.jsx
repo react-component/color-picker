@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { PropTypes }from 'react';
 import ReactDOM from 'react-dom';
-// import rcUtil from 'rc-util';
 import Trigger from 'rc-trigger';
-// const toFragment = rcUtil.Children.mapSelf;
 import ColorPickerPanel from './Panel';
+import placements from './placements';
 
 function refFn(field, component) {
   this[field] = component;
@@ -100,8 +99,9 @@ export default class ColorPicker extends React.Component {
 
   render() {
     const props = this.props;
+    const state = this.state;
     const classes = [props.prefixCls];
-    if (this.state.open) {
+    if (state.open) {
       classes.push(props.prefixCls + '-open');
     }
 
@@ -120,26 +120,31 @@ export default class ColorPicker extends React.Component {
       });
     }
 
-    let picker;
-
-    this.haveOpened = this.haveOpened || this.state.open;
-
-    // if (this.haveOpened) {
-    picker = this.getPickerElement();
-    // }
+    const {
+      prefixCls,
+      placement,
+      style,
+      getCalendarContainer,
+      align,
+      animation,
+      disabled,
+      transitionName} = props;
 
     return (
       <span className={classes.join(' ')}>
-        <Trigger
-          popupAlign={{
-            points: ['tl', 'bl'],
-            offset: [0, 3],
-          }}
-          action={['click']}
-          popup={picker}
-          // defaultPopupVisible={true}
-          // popupVisible={true}
-        >
+        <Trigger popup={this.getPickerElement()}
+                 popupAlign={align}
+                 builtinPlacements={placements}
+                 popupPlacement={placement}
+                 action={disabled ? [] : ['click']}
+                 destroyPopupOnHide
+                 getPopupContainer={getCalendarContainer}
+                 popupStyle={style}
+                 popupAnimation={animation}
+                 popupTransitionName={transitionName}
+                 popupVisible={state.open}
+                 onPopupVisibleChange={this.onVisibleChange}
+                 prefixCls={prefixCls}>
           {trigger}
         </Trigger>
       </span>
@@ -148,14 +153,17 @@ export default class ColorPicker extends React.Component {
 }
 
 ColorPicker.propTypes = {
-  defaultColor: React.PropTypes.string,
-  defaultAlpha: React.PropTypes.number,
-  color: React.PropTypes.string,
-  alpha: React.PropTypes.number,
-  onChange: React.PropTypes.func,
-  prefixCls: React.PropTypes.string.isRequired,
-  trigger: React.PropTypes.node.isRequired,
-  mode: React.PropTypes.string,
+  defaultColor: PropTypes.string,
+  defaultAlpha: PropTypes.number,
+  color: PropTypes.string,
+  alpha: PropTypes.number,
+  onChange: PropTypes.func,
+  prefixCls: PropTypes.string.isRequired,
+  trigger: PropTypes.node.isRequired,
+  mode: PropTypes.string,
+  placement: PropTypes.any,
+  style: PropTypes.object,
+  align: PropTypes.object,
 };
 
 ColorPicker.defaultProps = {
@@ -166,4 +174,7 @@ ColorPicker.defaultProps = {
   },
   prefixCls: 'react-colorpicker',
   trigger: <span className="react-colorpicker-trigger"></span>,
+  placement: 'bottomRight',
+  style: {},
+  align: {},
 };

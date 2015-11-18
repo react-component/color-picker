@@ -11,28 +11,45 @@ function changeHandler (colors) {
 
 ReactDOM.render(
   <div style={{margin:'20px 20px 20px', textAlign: 'center'}}>
+    <h4>topLeft</h4>
     <ColorPicker
-      defaultColor={'#36c'}
+      color={'#36c'}
+      alpha={30}
       onChange={changeHandler}
+      placement="topLeft"
       trigger={<span className='react-colorpicker-trigger'></span>}
     />
-    <hr/>
+    <h4>topRight</h4>
     <ColorPicker
-      defaultColor={'#F10'}
+      color={'#F10'}
       onChange={changeHandler}
-      orient={['top', 'right']}
+      placement="topRight"
     />
-    <p>^_^</p>
-    <p>^_^</p>
-    <p>^_^</p>
-    <p>^_^</p>
-    <p>^_^</p>
-    <p>^_^</p>
-    <p>^_^</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <p>-</p>
+    <h4>bottomLeft</h4>
     <ColorPicker
-      defaultColor={'#0F0'}
+      color={'#0ad'}
+      alpha={50}
       onChange={changeHandler}
-      orient={['bottom', 'right']}
+      placement="bottomLeft"
+    />
+    <h4>bottomRight</h4>
+    <ColorPicker
+      color={'#0F0'}
+      onChange={changeHandler}
+      placement="bottomRight"
     />
   </div>,
   document.getElementById('__react-content')

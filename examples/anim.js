@@ -13,9 +13,8 @@ ReactDOM.render(
   <div style={{margin:'20px 20px 20px', textAlign: 'center'}}>
     <ColorPicker
       animation="slide-up"
-      defaultColor={'#36c'}
+      color={'#36c'}
       onChange={changeHandler}
-      trigger={<span className='react-colorpicker-trigger'></span>}
     />
   </div>,
   document.getElementById('__react-content')

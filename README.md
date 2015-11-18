@@ -52,25 +52,31 @@ ReactDOM.render(<ColorsPicker />, container);
 
 name|type|default|description
 ---|---|---|---
-adjustOrientOnPickerOverflow|Boolean|true|whether adjust picker orient if there is not enough space to show. 
-defaultColor|String|#ff0000|color board default background color
-color|String|#ff0000|color board current background color
-orient| String[] | ['top', 'left'] | Picker show direction of trigger
-onChange| Function | noop | when select color
-trigger|Node|`<span className='react-colorpicker-trigger'></span>`|additional trigger appended to picker
-mode|String|'RGB'| color mode, support mode 'RGB', 'HSB' or 'HSL'
+animation | String    |         | index.css support 'slide-up'
+transitionName | String    |         | css class for animation
+getCalendarContainer| Function():Element | function(){return document.body;} | dom node where picker to be rendered into
+align     | Object: alignConfig of [dom-align](https://github.com/yiminghe/dom-align)| | popup 's align config
+alpha     | Number    | 100     | the opacity of the color 
+color     | String    | #ff0000 | color board current background color
+onChange  | Function  | noop    | when select color
+onOpen    | Function  | noop    | when color picker popup open
+onClose   | Function  | noop    | when color picker popup close
+placement | String    | topLeft | one of ['topLeft', 'topRight', 'bottomLeft', 'bottomRight']
+mode      | String    |'RGB'    | color mode, support mode 'RGB', 'HSB' or 'HSL'
+trigger   | Node      |`<span className='react-colorpicker-trigger'></span>`|additional trigger appended to picker
+
 
 ### ColorPicker.Panel.props
 
 name|type|default|description
 ---|---|---|---
-defaultColor|String|#ff0000|color board default background color
-color|String|#ff0000|color board current background color
-style | Object | {} | root node CSS style
-onChange|Function| | when select color trigger
-onFocus|Function| | when picker focus trigger
-onBlur|Function| | when picker loose focus
-mode|String|'RGB'| color mode, support mode 'RGB', 'HSB' or 'HSL'
+alpha    | Number  | 100     | the opacity of the color 
+color    | String  | #ff0000 | color board current background color
+style    | Object  | {}      | root node CSS style
+onChange | Function|         | when select color trigger
+onFocus  | Function|         | when picker focus trigger
+onBlur   | Function|         | when picker loose focus
+mode     | String  |'RGB'    | color mode, support mode 'RGB', 'HSB' or 'HSL'
 
 ## License
 

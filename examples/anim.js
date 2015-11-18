@@ -19,11 +19,11 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(159);
+	var _reactDom = __webpack_require__(160);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _reactColorsPicker = __webpack_require__(160);
+	var _reactColorsPicker = __webpack_require__(161);
 	
 	var _reactColorsPicker2 = _interopRequireDefault(_reactColorsPicker);
 	
@@ -36,9 +36,8 @@ webpackJsonp([0],[
 	  { style: { margin: '20px 20px 20px', textAlign: 'center' } },
 	  _react2['default'].createElement(_reactColorsPicker2['default'], {
 	    animation: 'slide-up',
-	    defaultColor: '#36c',
-	    onChange: changeHandler,
-	    trigger: _react2['default'].createElement('span', { className: 'react-colorpicker-trigger' })
+	    color: '#36c',
+	    onChange: changeHandler
 	  })
 	), document.getElementById('__react-content'));
 

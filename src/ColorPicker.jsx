@@ -29,6 +29,11 @@ export default class ColorPicker extends React.Component {
       'getPickerElement',
       'getRootDOMNode',
       'getTriggerDOMNode',
+      'onVisibleChange',
+      'setOpen',
+      'open',
+      'close',
+      'focus',
     ];
 
     events.forEach(e => {
@@ -72,10 +77,41 @@ export default class ColorPicker extends React.Component {
     });
   }
 
+  onVisibleChange(open) {
+    this.setOpen(open, () => {
+      if (open) {
+        ReactDOM.findDOMNode(this.pickerPanelInstance).focus();
+      }
+    });
+  }
+
+  setOpen(open, callback) {
+    const {onOpen, onClose} = this.props;
+    if (this.state.open !== open) {
+      this.setState({
+        open: open,
+      }, callback);
+      const event = {
+        open: open,
+      };
+      if (open) {
+        onOpen(event);
+      } else {
+        onClose(event);
+      }
+    }
+  }
+
+  getRootDOMNode() {
+    return ReactDOM.findDOMNode(this);
+  }
+
+  getTriggerDOMNode() {
+    return ReactDOM.findDOMNode(this.triggerInstance);
+  }
 
   getPickerElement() {
     // const state = this.state;
-
     return (
         <ColorPickerPanel
         ref={this.savePickerPanelRef}
@@ -89,12 +125,18 @@ export default class ColorPicker extends React.Component {
     );
   }
 
-  getRootDOMNode() {
-    return ReactDOM.findDOMNode(this);
+  open(callback) {
+    this.setOpen(true, callback);
   }
 
-  getTriggerDOMNode() {
-    return ReactDOM.findDOMNode(this.triggerInstance);
+  close(callback) {
+    this.setOpen(false, callback);
+  }
+
+  focus() {
+    if (!this.state.open) {
+      ReactDOM.findDOMNode(this).focus();
+    }
   }
 
   render() {
@@ -144,7 +186,7 @@ export default class ColorPicker extends React.Component {
                  popupTransitionName={transitionName}
                  popupVisible={state.open}
                  onPopupVisibleChange={this.onVisibleChange}
-                 prefixCls={prefixCls}>
+                 prefixCls={prefixCls + '-picker'}>
           {trigger}
         </Trigger>
       </span>
@@ -155,26 +197,27 @@ export default class ColorPicker extends React.Component {
 ColorPicker.propTypes = {
   defaultColor: PropTypes.string,
   defaultAlpha: PropTypes.number,
+  // can custom
   color: PropTypes.string,
   alpha: PropTypes.number,
   onChange: PropTypes.func,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func,
   prefixCls: PropTypes.string.isRequired,
   trigger: PropTypes.node.isRequired,
-  mode: PropTypes.string,
-  placement: PropTypes.any,
+  mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
+  placement: PropTypes.oneOf(['topLeft', 'topRight', 'bottomLeft', 'bottomRight']),
   style: PropTypes.object,
-  align: PropTypes.object,
 };
 
 ColorPicker.defaultProps = {
   defaultColor: '#F00',
-  defaultHsv: null,
   defaultAlpha: 100,
-  onChange() {
-  },
+  onChange() {},
+  onOpen() {},
+  onClose() {},
   prefixCls: 'react-colorpicker',
   trigger: <span className="react-colorpicker-trigger"></span>,
-  placement: 'bottomRight',
+  placement: 'topLeft',
   style: {},
-  align: {},
 };

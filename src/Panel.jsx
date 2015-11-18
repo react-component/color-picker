@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Colr from 'colr';
 import Board from './Board';
 import Preview from './Preview';
@@ -180,16 +180,17 @@ export default class Panel extends React.Component {
 import typeColor from './utils/validationColor';
 
 Panel.propTypes = {
-  prefixCls: React.PropTypes.string,
+  defaultAlpha: PropTypes.number,
   defaultColor: typeColor,
+  // can custom
+  prefixCls: PropTypes.string,
   color: typeColor,
-  defaultAlpha: React.PropTypes.number,
-  alpha: React.PropTypes.number,
-  style: React.PropTypes.object,
-  onChange: React.PropTypes.func,
-  onFocus: React.PropTypes.func,
-  onBlur: React.PropTypes.func,
-  mode: React.PropTypes.string,
+  alpha: PropTypes.number,
+  style: PropTypes.object,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
 };
 
 Panel.defaultProps = {
@@ -200,4 +201,5 @@ Panel.defaultProps = {
   onChange: noop,
   onFocus: noop,
   onBlur: noop,
+  mode: 'RGB',
 };

@@ -49,7 +49,7 @@
     &-slide-up-enter&-slide-up-enter-active&-placement-bottomRight,
     &-slide-up-appear&-slide-up-appear-active&-placement-bottomLeft,
     &-slide-up-appear&-slide-up-appear-active&-placement-bottomRight {
-      animation-name: rcDropdownSlideUpIn;
+      animation-name: rcColorPickerSlideUpIn;
       animation-play-state: running;
     }
 
@@ -57,23 +57,23 @@
     &-slide-up-enter&-slide-up-enter-active&-placement-topRight,
     &-slide-up-appear&-slide-up-appear-active&-placement-topLeft,
     &-slide-up-appear&-slide-up-appear-active&-placement-topRight {
-      animation-name: rcDropdownSlideDownIn;
+      animation-name: rcColorPickerSlideDownIn;
       animation-play-state: running;
     }
 
     &-slide-up-leave&-slide-up-leave-active&-placement-bottomLeft,
     &-slide-up-leave&-slide-up-leave-active&-placement-bottomRight {
-      animation-name: rcDropdownSlideUpOut;
+      animation-name: rcColorPickerSlideUpOut;
       animation-play-state: running;
     }
 
     &-slide-up-leave&-slide-up-leave-active&-placement-topLeft,
     &-slide-up-leave&-slide-up-leave-active&-placement-topRight {
-      animation-name: rcDropdownSlideDownOut;
+      animation-name: rcColorPickerSlideDownOut;
       animation-play-state: running;
     }
 
-    @keyframes rcDropdownSlideUpIn {
+    @keyframes rcColorPickerSlideUpIn {
       0% {
         opacity: 0;
         transform-origin: 0% 0%;
@@ -86,7 +86,7 @@
       }
     }
 
-    @keyframes rcDropdownSlideUpOut {
+    @keyframes rcColorPickerSlideUpOut {
       0% {
         opacity: 1;
         transform-origin: 0% 0%;
@@ -99,7 +99,7 @@
       }
     }
 
-    @keyframes rcDropdownSlideDownIn {
+    @keyframes rcColorPickerSlideDownIn {
       0% {
         opacity: 0;
         transform-origin: 100% 100%;
@@ -111,7 +111,7 @@
         transform: scaleY(1);
       }
     }
-    @keyframes rcDropdownSlideDownOut {
+    @keyframes rcColorPickerSlideDownOut {
       0% {
         opacity: 1;
         transform-origin: 100% 100%;

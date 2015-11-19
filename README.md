@@ -56,8 +56,10 @@ animation | String    |         | index.css support 'slide-up'
 transitionName | String    |         | css class for animation
 getCalendarContainer| Function():Element | function(){return document.body;} | dom node where picker to be rendered into
 align     | Object: alignConfig of [dom-align](https://github.com/yiminghe/dom-align)| | popup 's align config
-alpha     | Number    | 100     | the opacity of the color 
+alpha     | Number    | 100     | opacity of the color 
+defaultAlpha     | Number    | 100     | opacity of the color 
 color     | String    | #ff0000 | color board current background color
+defaultColor     | String    | #ff0000 | color board current background color
 onChange  | Function  | noop    | when select color
 onOpen    | Function  | noop    | when color picker popup open
 onClose   | Function  | noop    | when color picker popup close
@@ -70,8 +72,10 @@ trigger   | Node      |`<span className='react-colorpicker-trigger'></span>`|add
 
 name|type|default|description
 ---|---|---|---
-alpha    | Number  | 100     | the opacity of the color 
+alpha    | Number  | 100     | opacity of the color 
+defaultAlpha    | Number  | 100     | opacity of the color 
 color    | String  | #ff0000 | color board current background color
+defaultColor    | String  | #ff0000 | color board current background color
 style    | Object  | {}      | root node CSS style
 onChange | Function|         | when select color trigger
 onFocus  | Function|         | when picker focus trigger

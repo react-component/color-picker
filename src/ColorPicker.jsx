@@ -18,7 +18,7 @@ export default class ColorPicker extends React.Component {
 
     this.state = {
       color: props.color || props.defaultColor,
-      alpha: props.alpha === undefined ? props.defaultAlpha : props.alpha,
+      alpha: props.alpha || props.defaultAlpha,
       open: false,
     };
 

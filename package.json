@@ -1,23 +1,13 @@
 {
-  "name": "react-colors-picker",
-  "version": "2.3.0",
+  "name": "hubspot-color-picker",
+  "version": "0.1.0",
   "description": "color-picker ui component for react",
   "main": "lib/index.js",
-  "keywords": [
-    "react",
-    "react-component",
-    "react-color-picker",
-    "react-colors-picker",
-    "color-picker"
-  ],
-  "homepage": "http://github.com/react-component/react-colors-picker",
+  "private": true,
   "author": "noyobo <noyobo@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/react-colors-picker.git"
-  },
-  "bugs": {
-    "url": "http://github.com/react-component/react-colors-picker/issues"
+    "url": "git@github.com:HubSpot/react-colors-picker.git"
   },
   "files": [
     "lib/",
@@ -52,8 +42,5 @@
     "object-assign": "~3.0.0",
     "rc-trigger": "^1.0.4",
     "rc-util": "2.x"
-  },
-  "precommit": [
-    "lint"
-  ]
+  }
 }

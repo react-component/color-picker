@@ -1,3 +1,5 @@
+'use es6';
+
 import React, { PropTypes }from 'react';
 import ReactDOM from 'react-dom';
 import Trigger from 'rc-trigger';

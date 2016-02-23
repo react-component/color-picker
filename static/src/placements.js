@@ -1,3 +1,5 @@
+'use es6';
+
 const autoAdjustOverflow = {
   adjustX: 1,
   adjustY: 1,

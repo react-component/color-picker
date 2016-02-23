@@ -1,7 +1,8 @@
+'use es6';
+
 import Colr from 'colr';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import rcUtil from 'rc-util';
 
 const colr = new Colr();
 
@@ -28,8 +29,8 @@ export default class Board extends React.Component {
       x,
       y,
     });
-    this.dragListener = rcUtil.Dom.addEventListener(window, 'mousemove', this.onBoardDrag);
-    this.dragUpListener = rcUtil.Dom.addEventListener(window, 'mouseup', this.onBoardDragEnd);
+    this.dragListener = window.Dom.addEventListener(window, 'mousemove', this.onBoardDrag);
+    this.dragUpListener = window.Dom.addEventListener(window, 'mouseup', this.onBoardDragEnd);
   }
 
   onBoardDrag(e) {

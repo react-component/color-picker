@@ -1,6 +1,7 @@
+'use es6';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import rcUtil from 'rc-util';
 import assign from 'object-assign';
 
 export default class Ribbon extends React.Component {
@@ -29,8 +30,8 @@ export default class Ribbon extends React.Component {
       x, y,
     });
 
-    this.dragListener = rcUtil.Dom.addEventListener(window, 'mousemove', this.onDrag);
-    this.dragUpListener = rcUtil.Dom.addEventListener(window, 'mouseup', this.onDragEnd);
+    this.dragListener = window.Dom.addEventListener(window, 'mousemove', this.onDrag);
+    this.dragUpListener = window.Dom.addEventListener(window, 'mouseup', this.onDragEnd);
   }
 
   onDrag(e) {

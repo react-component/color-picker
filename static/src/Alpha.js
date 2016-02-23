@@ -1,7 +1,8 @@
+'use es6';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Colr from 'colr';
-import rcUtil from 'rc-util';
 
 const colr = new Colr();
 
@@ -32,8 +33,8 @@ export default class Alpha extends React.Component {
       x, y,
     });
 
-    this.dragListener = rcUtil.Dom.addEventListener(window, 'mousemove', this.onDrag);
-    this.dragUpListener = rcUtil.Dom.addEventListener(window, 'mouseup', this.onDragEnd);
+    this.dragListener = window.addEventListener(window, 'mousemove', this.onDrag);
+    this.dragUpListener = window.addEventListener(window, 'mouseup', this.onDragEnd);
   }
 
   onDrag(e) {

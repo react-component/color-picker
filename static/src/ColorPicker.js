@@ -2,7 +2,6 @@
 
 import React, { PropTypes }from 'react';
 import ReactDOM from 'react-dom';
-import Trigger from 'rc-trigger';
 import ColorPickerPanel from './Panel';
 import placements from './placements';
 
@@ -149,48 +148,9 @@ export default class ColorPicker extends React.Component {
       classes.push(props.prefixCls + '-open');
     }
 
-    let trigger = props.trigger;
-
-    if (trigger) {
-      trigger = React.cloneElement(trigger, {
-        ref: this.saveTriggerRef,
-        unselectable: true,
-        style: {
-          opacity: this.state.alpha / 100,
-          backgroundColor: this.state.color,
-        },
-        onClick: this.onTriggerClick,
-        onMouseDown: prevent,
-      });
-    }
-
-    const {
-      prefixCls,
-      placement,
-      style,
-      getCalendarContainer,
-      align,
-      animation,
-      disabled,
-      transitionName} = props;
-
     return (
       <span className={classes.join(' ')}>
-        <Trigger popup={this.getPickerElement()}
-                 popupAlign={align}
-                 builtinPlacements={placements}
-                 popupPlacement={placement}
-                 action={disabled ? [] : ['click']}
-                 destroyPopupOnHide
-                 getPopupContainer={getCalendarContainer}
-                 popupStyle={style}
-                 popupAnimation={animation}
-                 popupTransitionName={transitionName}
-                 popupVisible={state.open}
-                 onPopupVisibleChange={this.onVisibleChange}
-                 prefixCls={prefixCls + '-picker'}>
-          {trigger}
-        </Trigger>
+        {this.getPickerElement()}
       </span>
     );
   }

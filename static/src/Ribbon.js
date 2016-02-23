@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import assign from 'object-assign';
+import {extend} from 'underscore';
 
 export default class Ribbon extends React.Component {
   constructor(props) {

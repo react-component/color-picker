@@ -29,8 +29,8 @@ export default class Board extends React.Component {
       x,
       y,
     });
-    this.dragListener = window.Dom.addEventListener(window, 'mousemove', this.onBoardDrag);
-    this.dragUpListener = window.Dom.addEventListener(window, 'mouseup', this.onBoardDragEnd);
+    this.dragListener = window.addEventListener(window, 'mousemove', this.onBoardDrag);
+    this.dragUpListener = window.addEventListener(window, 'mouseup', this.onBoardDragEnd);
   }
 
   onBoardDrag(e) {

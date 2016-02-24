@@ -30,8 +30,8 @@ export default class Ribbon extends React.Component {
       x, y,
     });
 
-    this.dragListener = window.Dom.addEventListener(window, 'mousemove', this.onDrag);
-    this.dragUpListener = window.Dom.addEventListener(window, 'mouseup', this.onDragEnd);
+    this.dragListener = window.addEventListener(window, 'mousemove', this.onDrag);
+    this.dragUpListener = window.addEventListener(window, 'mouseup', this.onDragEnd);
   }
 
   onDrag(e) {

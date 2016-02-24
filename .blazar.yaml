@@ -1,0 +1,4 @@
+enabled: true
+stepActivation:
+  publish:
+    branches: [master]

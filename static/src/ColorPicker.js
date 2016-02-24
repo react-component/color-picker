@@ -73,9 +73,10 @@ export default class ColorPicker extends React.Component {
   }
 
   onBlur() {
+    /* LB - need to refer if blur stuff is still applicable after we removed Trigger component
     this.setState({
       open: false,
-    });
+    });*/
   }
 
   onVisibleChange(open) {

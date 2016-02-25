@@ -1,0 +1,28 @@
+$prefixClass: react-colorpicker
+
+@import ./index/Layout
+@import ./index/Trigger
+@import ./index/Panel
+@import ./index/Preview
+@import ./index/Board
+@import ./index/Ribbon
+@import ./index/Alpha
+@import ./index/Params
+
+=effect()
+  animation-duration: .3s
+  animation-fill-mode: both
+  transform-origin: 0 0
+  display: block !important
+
+.#{$prefixClass}
+  font-family: Arial, "Hiragino Sans GB", "Microsoft Yahei", "Microsoft Sans Serif", "WenQuanYi Micro Hei", sans-serif
+
+  &-picker
+    position: absolute
+    left: -9999px
+    top: -9999px
+    z-index: 1000
+
+    .effect
+      +effect

@@ -19,5 +19,8 @@
     "react": 5,
     "react-dom": 5
   },
-  "ignore": ["*/*.less"]
+  "ignore": [
+    "*/*/_*.sass",
+    "*/*/_*.scss"
+  ]
 }

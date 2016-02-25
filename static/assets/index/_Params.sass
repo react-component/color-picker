@@ -1,0 +1,50 @@
+.#{$prefixClass}-panel-params
+  font-size: 12px
+
+  &-input
+    overflow: hidden
+    padding: 2px 0
+
+  input
+    user-select: text
+    text-align: center
+    padding: 1px
+    margin: 0
+    float: left
+    border-radius: 2px
+    border: 1px solid #CACACA
+    font-family: 'Helvetica Neue', Helvetica, sans-serif
+
+  &-hex
+    width: 52px
+
+  input[type=number]
+    margin-left: 5px
+    width: 32px
+
+  &-lable
+    padding: 2px 0
+    height: 22px
+    line-height: 18px
+    -moz-user-select: none
+    -khtml-user-select: none
+    -webkit-user-select: none
+    -ms-user-select: none
+    user-select: none
+
+    label
+      float: left
+      text-align: center
+
+    &-hex
+      width: 52px
+
+    &-number, &-alpha
+      margin-left: 5px
+      width: 32px
+
+    &-number:hover
+      border-radius: 2px
+      background-color: #eee
+      box-shadow: 0 0 0 1px #ccc inset
+      cursor: pointer

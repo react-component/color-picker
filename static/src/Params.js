@@ -196,24 +196,24 @@ export default class Params extends React.Component {
     return (
       <span className="rgba-labels">
         <label
-          className={prefixCls + '-' + ('lable-number')}
+          className={prefixCls + '-' + ('label-number')}
           onClick={this.onModeChange}
           >
           {this.state.mode[0]}
         </label>
         <label
-          className={prefixCls + '-' + ('lable-number')}
+          className={prefixCls + '-' + ('label-number')}
           onClick={this.onModeChange}
           >
           {this.state.mode[1]}
         </label>
         <label
-          className={prefixCls + '-' + ('lable-number')}
+          className={prefixCls + '-' + ('label-number')}
           onClick={this.onModeChange}
           >
           {this.state.mode[2]}
         </label>
-        <label className={prefixCls + '-' + ('lable-alpha')}>A</label>
+        <label className={prefixCls + '-' + ('label-alpha')}>A</label>
       </span>
     );
   }
@@ -233,8 +233,8 @@ export default class Params extends React.Component {
             />
           {this.props.hexOnly || this.renderRgba()}
         </div>
-        <div className={prefixCls + '-' + ('lable')}>
-           <label className={prefixCls + '-' + ('lable-hex')}>Hex</label>
+        <div className={prefixCls + '-' + ('label')}>
+           <label className={prefixCls + '-' + ('label-hex')}>Hex</label>
         </div>
         {this.props.hexOnly || this.renderRgbaLabels()}
       </div>

@@ -1,3 +1,7 @@
+@import compass/css3
+
+$hexWidth: 55px
+
 .#{$prefixClass}-panel-params
   font-size: 12px
 
@@ -9,31 +13,34 @@
     margin: 0
 
   &-hex
-    width: 52px
+    width: $hexWidth
+    flex: 0 1 $hexWidth
 
   input[type=number]
     margin-left: 5px
 
-  &-label
-    padding: 2px 0
-    height: 22px
-    line-height: 18px
-    -moz-user-select: none
-    -khtml-user-select: none
-    -webkit-user-select: none
-    -ms-user-select: none
-    user-select: none
+  span.labels
+    display: flex
+    line-height: 25px
+    vertical-align: bottom
+    unselectable()
 
-    label
-      float: left
-      text-align: center
+    span.rgba-labels
+      flex: 1 0
+      display: flex
+
+  label
+    padding-left: 4px
+    flex: 1 0
+
+  &-label
+    flex: 0 1 $hexWidth
 
     &-hex
-      width: 52px
+      width: $hexWidth
 
     &-number, &-alpha
       margin-left: 5px
-      width: 32px
 
     &-number:hover
       border-radius: 2px
@@ -53,8 +60,5 @@
   .#{$prefixClass}-panel-params
     margin-left: 35px
 
-    input[name="hex"]
-      width: 65px
-
-    label
+    span.labels
       display: none

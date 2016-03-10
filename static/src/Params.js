@@ -222,6 +222,12 @@ export default class Params extends React.Component {
     const prefixCls = this.getPrefixCls();
     return (
       <div className={prefixCls}>
+        <span className="labels">
+          <div className={prefixCls + '-' + ('label')}>
+            <label className={prefixCls + '-' + ('label-hex')}>Hex</label>
+          </div>
+          {this.props.hexOnly || this.renderRgbaLabels()}
+        </span>
         <div className={prefixCls + '-' + ('input')}>
           <input
             className={prefixCls + '-' + ('hex hs-input stretch')}
@@ -233,10 +239,6 @@ export default class Params extends React.Component {
             />
           {this.props.hexOnly || this.renderRgba()}
         </div>
-        <div className={prefixCls + '-' + ('label')}>
-           <label className={prefixCls + '-' + ('label-hex')}>Hex</label>
-        </div>
-        {this.props.hexOnly || this.renderRgbaLabels()}
       </div>
     );
   }

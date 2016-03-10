@@ -171,9 +171,10 @@ export default class Panel extends React.Component {
                 />
             </div>
           </div>
-          <div className={prefixCls + '-' + ('wrap')} style={{height: 40, marginTop: 6}}>
+          <div className={prefixCls + '-' + ('wrap')}>
             <Params
               rootPrefixCls={prefixCls}
+              hexOnly={this.props.hexOnly}
               hsv={this.state.paramsHsv}
               alpha={this.state.alpha}
               onAlphaChange={this.onAlphaChange}

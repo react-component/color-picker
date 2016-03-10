@@ -171,51 +171,72 @@ export default class Params extends React.Component {
     return result;
   }
 
+  renderRgba() {
+    const colorChannel = this.getColorChannel();
+    return (
+      <span className="rgba">
+        <input type="number" ref="channel_0"
+               value={colorChannel[0]}
+               onChange={this.onColorChannelChange.bind(null, 0)}/>
+        <input type="number" ref="channel_1"
+          value={colorChannel[1]}
+          onChange={this.onColorChannelChange.bind(null, 1)}/>
+        <input type="number" ref="channel_2"
+          value={colorChannel[2]}
+          onChange={this.onColorChannelChange.bind(null, 2)}/>
+        <input type="number"
+          value={this.props.alpha}
+          onChange={this.onAlphaHandler}/>
+      </span>
+    );
+  }
+
+  renderRgbaLabels() {
+    const prefixCls = this.getPrefixCls();
+    return (
+      <span className="rgba-labels">
+        <label
+          className={prefixCls + '-' + ('lable-number')}
+          onClick={this.onModeChange}
+          >
+          {this.state.mode[0]}
+        </label>
+        <label
+          className={prefixCls + '-' + ('lable-number')}
+          onClick={this.onModeChange}
+          >
+          {this.state.mode[1]}
+        </label>
+        <label
+          className={prefixCls + '-' + ('lable-number')}
+          onClick={this.onModeChange}
+          >
+          {this.state.mode[2]}
+        </label>
+        <label className={prefixCls + '-' + ('lable-alpha')}>A</label>
+      </span>
+    );
+  }
+
   render() {
     const prefixCls = this.getPrefixCls();
-    const colorChannel = this.getColorChannel();
     return (
       <div className={prefixCls}>
         <div className={prefixCls + '-' + ('input')}>
           <input
-            className={prefixCls + '-' + ('hex')}
+            className={prefixCls + '-' + ('hex hs-input stretch')}
             type="text"
+            name="hex"
             maxLength="6"
             onChange={this.onHexHandler}
             value={this.state.hex.toUpperCase()}
             />
-          <input type="number" ref="channel_0"
-                 value={colorChannel[0]}
-                 onChange={this.onColorChannelChange.bind(null, 0)}/>
-          <input type="number" ref="channel_1"
-                 value={colorChannel[1]}
-                 onChange={this.onColorChannelChange.bind(null, 1)}/>
-          <input type="number" ref="channel_2"
-                 value={colorChannel[2]}
-                 onChange={this.onColorChannelChange.bind(null, 2)}/>
-          <input type="number"
-                 value={this.props.alpha}
-                 onChange={this.onAlphaHandler}/>
+          {this.props.hexOnly || this.renderRgba()}
         </div>
         <div className={prefixCls + '-' + ('lable')}>
            <label className={prefixCls + '-' + ('lable-hex')}>Hex</label>
-           <label className={prefixCls + '-' + ('lable-number')}
-            onClick={this.onModeChange}
-           >
-            {this.state.mode[0]}
-           </label>
-           <label className={prefixCls + '-' + ('lable-number')}
-            onClick={this.onModeChange}
-           >
-            {this.state.mode[1]}
-           </label>
-           <label className={prefixCls + '-' + ('lable-number')}
-            onClick={this.onModeChange}
-           >
-            {this.state.mode[2]}
-           </label>
-           <label className={prefixCls + '-' + ('lable-alpha')}>A</label>
         </div>
+        {this.props.hexOnly || this.renderRgbaLabels()}
       </div>
     );
   }

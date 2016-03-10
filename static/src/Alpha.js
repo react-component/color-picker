@@ -89,7 +89,7 @@ export default class Alpha extends React.Component {
   render() {
     const prefixCls = this.getPrefixCls();
     return (
-      <div className={prefixCls}>
+      <div className={prefixCls + " slider"}>
         <div
           ref="bg"
           className={prefixCls + '-' + ('bg')}

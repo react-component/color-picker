@@ -83,7 +83,7 @@ export default class Ribbon extends React.Component {
     const hue = HSV.h;
     const per = hue / 360 * 100;
     return (
-      <div className={prefixCls}>
+      <div className={prefixCls + " slider"}>
         <span ref="point" style={{left: per + '%'}}></span>
 
         <div

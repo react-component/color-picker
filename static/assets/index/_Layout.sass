@@ -7,14 +7,12 @@ $prefixClassName: #{$prefixClass}-panel
   border: 1px solid #ccc
   padding: 8px
 
-
-
 .#{$prefixClassName}-wrap
   margin: 5px 0 0
   height: 30px
   width: 100%
   position: relative
-  
+
   &-preview
     position: absolute
     right: 0
@@ -24,11 +22,16 @@ $prefixClassName: #{$prefixClass}-panel
     left: 0px
     top: 0
     right: 35px
-    height: (30px - 5px) / 2
+    height: 100%
 
   &-alpha
     position: absolute
     left: 0px
     right: 35px
     bottom: 0
-    height: (30px - 5px) / 2
+    height: 100%
+
+.#{$prefixClass}.with-alpha
+  .#{$prefixClassName}-wrap
+    &-ribbon
+      height: (30px - 5px) / 2

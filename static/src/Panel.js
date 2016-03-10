@@ -119,6 +119,21 @@ export default class Panel extends React.Component {
     return colr.fromHsvObject(hsv || this.state.hsv).toHex();
   }
 
+  renderAlpha() {
+    const prefixCls = this.props.prefixCls;
+
+    return (
+      <div className={prefixCls + '-' + ('wrap-alpha')}>
+        <Alpha
+          rootPrefixCls={prefixCls}
+          alpha={this.state.alpha}
+          hsv={this.state.hsv}
+          onChange={this.onAlphaChange}
+          />
+      </div>
+    );
+  }
+
   render() {
     const prefixCls = this.props.prefixCls;
     const hsv = this.state.hsv;
@@ -145,14 +160,7 @@ export default class Panel extends React.Component {
                 onChange={this.onChange}
                 />
             </div>
-            <div className={prefixCls + '-' + ('wrap-alpha')}>
-              <Alpha
-                rootPrefixCls={prefixCls}
-                alpha={alpha}
-                hsv={hsv}
-                onChange={this.onAlphaChange}
-                />
-            </div>
+            {this.props.includeAlpha && this.renderAlpha()}
             <div className={prefixCls + '-' + ('wrap-preview')}>
               <Preview
                 rootPrefixCls={prefixCls}
@@ -167,7 +175,7 @@ export default class Panel extends React.Component {
             <Params
               rootPrefixCls={prefixCls}
               hsv={this.state.paramsHsv}
-              alpha={alpha}
+              alpha={this.state.alpha}
               onAlphaChange={this.onAlphaChange}
               onChange={this.onChange}
               mode={this.props.mode}

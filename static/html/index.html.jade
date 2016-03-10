@@ -1,0 +1,21 @@
+html
+  head
+    script(src="http://static.hsappstatic.net/HeadJS/static-2.40/bundles/standard-head.js")
+    script(src="https://fb.me/react-0.14.7.js")
+    script(src="https://fb.me/react-dom-0.14.7.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js")
+
+    insert_bundle react-colors-picker/static/assets/index.css
+    insert_bundle react-colors-picker/static/html/example.css
+
+    insert_bundle react-colors-picker/static/vendor/colr.js
+    insert_bundle react-colors-picker/static/bundles/project.js
+    insert_bundle react-colors-picker/static/html/example.js
+  body
+    #example
+
+    script.
+      hubspot.define('react', [], function() { return window.React })
+      hubspot.define('react-dom', [], function() { return window.ReactDOM })
+      hubspot.define('underscore', [], function() { return window._ })
+      hubspot.require(['react-colors-picker/html/example'])

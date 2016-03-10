@@ -1,0 +1,62 @@
+$hexWidth: 55px
+
+.#{$prefixClass}-panel-params
+  font-size: 12px
+
+  &-input
+    display: flex
+
+  input
+    user-select: text
+    margin: 0
+
+  &-hex
+    width: $hexWidth
+    flex: 0 1 $hexWidth
+
+  input[type=number]
+    margin-left: 5px
+
+  span.labels
+    display: flex
+    line-height: 25px
+    vertical-align: bottom
+    unselectable()
+
+    span.rgba-labels
+      flex: 1 0
+      display: flex
+
+  label
+    padding-left: 4px
+    flex: 1 0
+
+  &-label
+    flex: 0 1 $hexWidth
+
+    &-hex
+      width: $hexWidth
+
+    &-number, &-alpha
+      margin-left: 5px
+
+    &-number:hover
+      border-radius: 2px
+      background-color: #eee
+      box-shadow: 0 0 0 1px #ccc inset
+      cursor: pointer
+
+  span.rgba
+    display: flex
+    flex: 1 0
+
+    > input
+      width: 0
+      flex: 1 0 0px
+
+.#{$prefixClass}.hex-only
+  .#{$prefixClass}-panel-params
+    margin-left: 35px
+
+    span.labels
+      display: none

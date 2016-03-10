@@ -1,0 +1,26 @@
+{
+  "name": "react-colors-picker",
+  "sassVersion": "node-sass",
+  "majorVersion": 1,
+  "babel": {
+    "default": {
+      "moduleRoot": "hubspot.colorpicker",
+      "sourceRoot": "src",
+      "optional": ["es7.decorators", "es7.objectRestSpread", "es7.classProperties"]
+    }
+  },
+  "deps": {},
+  "devDeps": {
+    "jasmine": 3,
+    "jasmine-runner": 1,
+    "Yuno": 1
+  },
+  "runtimeDeps": {
+    "react": 5,
+    "react-dom": 5
+  },
+  "ignore": [
+    "*/*/_*.sass",
+    "*/*/_*.scss"
+  ]
+}

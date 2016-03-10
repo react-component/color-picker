@@ -1,0 +1,26 @@
+.#{$prefixClass}-panel-ribbon
+  position: relative
+  height: 100%
+  border-radius: 2px
+  box-shadow: 0 0 2px #808080 inset
+  background-image: linear-gradient(to right, #ff0000 0%, #ff9900 10%, #cdff00 20%, #35ff00 30%, #00ff66 40%, #00fffd 50%, #0066ff 60%, #3200ff 70%, #cd00ff 80%, #ff0099 90%, #ff0000 100%)
+
+  &-handler
+    position: absolute
+    width: 104%
+    height: 100%
+    left: -2%
+    cursor: pointer
+
+// applies to both Ribbon and Alpha slider
+.#{$prefixClass} .slider
+  span
+    position: absolute
+    top: 2px
+    bottom: 2px
+    width: 6px
+    border: 1px solid #888
+    padding: 1px 0
+    margin-left: -3px
+    background-color: #eee
+    border-radius: 3px

@@ -1,23 +1,18 @@
 .#{$prefixClass}-panel-params
   font-size: 12px
-  height: 30px
 
   &-input
-    overflow: hidden
-    height: 100%
+    display: flex
 
   input
     user-select: text
     margin: 0
-    float: left
-    height: 100%
 
   &-hex
     width: 52px
 
   input[type=number]
     margin-left: 5px
-    width: 32px
 
   &-label
     padding: 2px 0
@@ -45,6 +40,14 @@
       background-color: #eee
       box-shadow: 0 0 0 1px #ccc inset
       cursor: pointer
+
+  span.rgba
+    display: flex
+    flex: 1 0
+
+    > input
+      width: 0
+      flex: 1 0 0px
 
 .#{$prefixClass}.hex-only
   .#{$prefixClass}-panel-params

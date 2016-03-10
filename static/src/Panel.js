@@ -152,7 +152,7 @@ export default class Panel extends React.Component {
             hsv={hsv}
             onChange={this.onChange}
             />
-          <div className={prefixCls + '-' + ('wrap')}>
+          <div className={prefixCls + '-' + ('wrap sliders')}>
             <div className={prefixCls + '-' + ('wrap-ribbon')}>
               <Ribbon
                 rootPrefixCls={prefixCls}

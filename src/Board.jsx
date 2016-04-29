@@ -16,7 +16,7 @@ export default class Board extends React.Component {
       'onBoardDrag',
       'onBoardDragEnd',
     ];
-    events.forEach((m)=> {
+    events.forEach((m) => {
       this[m] = this[m].bind(this);
     });
   }
@@ -59,7 +59,7 @@ export default class Board extends React.Component {
   }
 
   getPrefixCls() {
-    return this.props.rootPrefixCls + '-board';
+    return `${this.props.rootPrefixCls}-board`;
   }
 
   /**
@@ -93,17 +93,17 @@ export default class Board extends React.Component {
     const x = hsv.s / 100 * WIDTH - 4;
     const y = (1 - hsv.v / 100) * HEIGHT - 4;
     return (
-      <div className={prefixCls}>
-        <div className={prefixCls + '-' + ('hsv')} style={{backgroundColor: hueColor}}>
-          <div className={prefixCls + '-' + ('value')}/>
-          <div className={prefixCls + '-' + ('saturation')}/>
+      <div className={ prefixCls }>
+        <div className={ `${prefixCls}-hsv` } style={{ backgroundColor: hueColor }}>
+          <div className={ `${prefixCls}-value` } />
+          <div className={ `${prefixCls}-saturation` } />
         </div>
-        <span style={{left: x, top: y}}/>
+        <span style={{ left: x, top: y }} />
 
         <div
-          className={prefixCls + '-' + ('handler')}
-          onMouseDown={this.onBoardMouseDown}
-          />
+          className={ `${prefixCls}-handler` }
+          onMouseDown={ this.onBoardMouseDown }
+        />
       </div>
     );
   }

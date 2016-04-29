@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import Colr from 'colr';
 import Board from './Board';
 import Preview from './Preview';
@@ -20,7 +20,7 @@ export default class Panel extends React.Component {
 
     this.state = {
       paramsHsv: hsv,
-      hsv: hsv,
+      hsv,
       alpha: props.alpha || props.defaultAlpha,
     };
 
@@ -102,7 +102,7 @@ export default class Panel extends React.Component {
     if (this._blurTimer) {
       clearTimeout(this._blurTimer);
     }
-    this._blurTimer = setTimeout(()=> {
+    this._blurTimer = setTimeout(() => {
       // if is system color picker open, then stop run blur
       if (this.systemColorPickerOpen) {
         this.systemColorPickerOpen = false;
@@ -128,48 +128,48 @@ export default class Panel extends React.Component {
         onFocus={this.onFocus}
         onBlur={this.onBlur}
         tabIndex="0"
-        >
-        <div className={prefixCls + '-' + ('inner')}>
+      >
+        <div className={ `${prefixCls}-inner` }>
           <Board
-            rootPrefixCls={prefixCls}
-            hsv={hsv}
-            onChange={this.onChange}
-            />
-          <div className={prefixCls + '-' + ('wrap')}>
-            <div className={prefixCls + '-' + ('wrap-ribbon')}>
+            rootPrefixCls={ prefixCls }
+            hsv={ hsv }
+            onChange={ this.onChange }
+          />
+          <div className={ `${prefixCls}-wrap` }>
+            <div className={ `${prefixCls}-wrap-ribbon` }>
               <Ribbon
-                rootPrefixCls={prefixCls}
-                hsv={hsv}
-                onChange={this.onChange}
-                />
+                rootPrefixCls={ prefixCls }
+                hsv={ hsv }
+                onChange={ this.onChange }
+              />
             </div>
-            <div className={prefixCls + '-' + ('wrap-alpha')}>
+            <div className={ `${prefixCls}-wrap-alpha` }>
               <Alpha
-                rootPrefixCls={prefixCls}
-                alpha={alpha}
-                hsv={hsv}
-                onChange={this.onAlphaChange}
-                />
+                rootPrefixCls={ prefixCls }
+                alpha={ alpha }
+                hsv={ hsv }
+                onChange={ this.onAlphaChange }
+              />
             </div>
-            <div className={prefixCls + '-' + ('wrap-preview')}>
+            <div className={ `${prefixCls}-wrap-preview` }>
               <Preview
-                rootPrefixCls={prefixCls}
-                alpha={alpha}
-                onChange={this.onChange}
-                onInputClick={this.onSystemColorPickerOpen}
-                hsv={hsv}
-                />
+                rootPrefixCls={ prefixCls }
+                alpha={ alpha }
+                onChange={ this.onChange }
+                onInputClick={ this.onSystemColorPickerOpen }
+                hsv={ hsv }
+              />
             </div>
           </div>
-          <div className={prefixCls + '-' + ('wrap')} style={{height: 40, marginTop: 6}}>
+          <div className={ `${prefixCls}-wrap` } style={{ height: 40, marginTop: 6 }}>
             <Params
-              rootPrefixCls={prefixCls}
-              hsv={this.state.paramsHsv}
-              alpha={alpha}
-              onAlphaChange={this.onAlphaChange}
-              onChange={this.onChange}
-              mode={this.props.mode}
-              />
+              rootPrefixCls={ prefixCls }
+              hsv={ this.state.paramsHsv }
+              alpha={ alpha }
+              onAlphaChange={ this.onAlphaChange }
+              onChange={ this.onChange }
+              mode={ this.props.mode }
+            />
           </div>
         </div>
       </div>

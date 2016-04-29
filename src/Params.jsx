@@ -130,17 +130,17 @@ export default class Params extends React.Component {
     const colorMode = this.state.mode;
     let color;
     switch (colorMode) {
-    case 'RGB' :
-      color = colr.fromRgbArray(colorChannel);
-      break;
-    case 'HSB' :
-      color = colr.fromHsvArray(colorChannel);
-      break;
-    case 'HSL' :
-      color = colr.fromHslArray(colorChannel);
-      break;
-    default:
-      color = colr.fromRgbArray(colorChannel);
+      case 'RGB' :
+        color = colr.fromRgbArray(colorChannel);
+        break;
+      case 'HSB' :
+        color = colr.fromHsvArray(colorChannel);
+        break;
+      case 'HSL' :
+        color = colr.fromHslArray(colorChannel);
+        break;
+      default:
+        color = colr.fromRgbArray(colorChannel);
     }
     return color;
   }
@@ -154,17 +154,17 @@ export default class Params extends React.Component {
     const colorMode = mode || this.state.mode;
     let result;
     switch (colorMode) {
-    case 'RGB' :
-      result = color.toRgbArray();
-      break;
-    case 'HSB' :
-      result = color.toHsvArray();
-      break;
-    case 'HSL' :
-      result = color.toHslArray();
-      break;
-    default:
-      result = color.toRgbArray();
+      case 'RGB' :
+        result = color.toRgbArray();
+        break;
+      case 'HSB' :
+        result = color.toHsvArray();
+        break;
+      case 'HSL' :
+        result = color.toHslArray();
+        break;
+      default:
+        result = color.toRgbArray();
     }
     return result;
   }
@@ -181,7 +181,7 @@ export default class Params extends React.Component {
             maxLength="6"
             onChange={this.onHexHandler}
             value={this.state.hex.toUpperCase()}
-            />
+          />
           <input type="number" ref="channel_0"
                  value={colorChannel[0]}
                  onChange={this.onColorChannelChange.bind(null, 0)}/>
@@ -196,23 +196,23 @@ export default class Params extends React.Component {
                  onChange={this.onAlphaHandler}/>
         </div>
         <div className={prefixCls + '-' + ('lable')}>
-           <label className={prefixCls + '-' + ('lable-hex')}>Hex</label>
-           <label className={prefixCls + '-' + ('lable-number')}
-            onClick={this.onModeChange}
-           >
+          <label className={prefixCls + '-' + ('lable-hex')}>Hex</label>
+          <label className={prefixCls + '-' + ('lable-number')}
+                 onClick={this.onModeChange}
+          >
             {this.state.mode[0]}
-           </label>
-           <label className={prefixCls + '-' + ('lable-number')}
-            onClick={this.onModeChange}
-           >
+          </label>
+          <label className={prefixCls + '-' + ('lable-number')}
+                 onClick={this.onModeChange}
+          >
             {this.state.mode[1]}
-           </label>
-           <label className={prefixCls + '-' + ('lable-number')}
-            onClick={this.onModeChange}
-           >
+          </label>
+          <label className={prefixCls + '-' + ('lable-number')}
+                 onClick={this.onModeChange}
+          >
             {this.state.mode[2]}
-           </label>
-           <label className={prefixCls + '-' + ('lable-alpha')}>A</label>
+          </label>
+          <label className={prefixCls + '-' + ('lable-alpha')}>A</label>
         </div>
       </div>
     );

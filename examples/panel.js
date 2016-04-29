@@ -1,4 +1,4 @@
-'use strict';
+
 
 import 'react-colors-picker/assets/index.less';
 import React from 'react';

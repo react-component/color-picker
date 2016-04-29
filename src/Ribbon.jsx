@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import rcUtil from 'rc-util';
-import assign from 'object-assign';
 
 export default class Ribbon extends React.Component {
   constructor(props) {
@@ -70,9 +69,10 @@ export default class Ribbon extends React.Component {
     const huePercent = left / width;
     const hue = huePercent * 360;
     // 新的对象, 避免引用
-    const hsv = assign({}, this.props.hsv, {
+    const hsv = {
+      ...this.props.hsv,
       h: hue,
-    });
+    };
     this.props.onChange(hsv);
   }
 

@@ -12,20 +12,20 @@ export default class Preview extends React.Component {
   }
 
   getPrefixCls() {
-    return this.props.rootPrefixCls + '-preview';
+    return `${this.props.rootPrefixCls}-preview`;
   }
 
   render() {
     const prefixCls = this.getPrefixCls();
     const hex = colr.fromHsvObject(this.props.hsv).toHex();
     return (
-      <div className={prefixCls}>
-        <span style={{backgroundColor: hex, opacity: this.props.alpha / 100}} ></span>
+      <div className={ prefixCls }>
+        <span style={{ backgroundColor: hex, opacity: this.props.alpha / 100 }} ></span>
         <input
           type="color"
-          value={hex}
-          onChange={this.onChange.bind(this)}
-          onClick={this.props.onInputClick}
+          value={ hex }
+          onChange={ this.onChange.bind(this) }
+          onClick={ this.props.onInputClick }
         />
       </div>
     );

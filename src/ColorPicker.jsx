@@ -86,14 +86,10 @@ export default class ColorPicker extends React.Component {
   }
 
   setOpen(open, callback) {
-    const {onOpen, onClose} = this.props;
+    const { onOpen, onClose } = this.props;
     if (this.state.open !== open) {
-      this.setState({
-        open: open,
-      }, callback);
-      const event = {
-        open: open,
-      };
+      this.setState({ open }, callback);
+      const event = { open };
       if (open) {
         onOpen(event);
       } else {
@@ -114,14 +110,14 @@ export default class ColorPicker extends React.Component {
     // const state = this.state;
     return (
         <ColorPickerPanel
-        ref={this.savePickerPanelRef}
-        defaultColor={this.state.color}
-        alpha={this.state.alpha}
-        prefixCls={this.props.prefixCls + '-panel'}
-        onChange={this.onChange}
-        onBlur={this.onBlur}
-        mode={this.props.mode}
-      />
+          ref={ this.savePickerPanelRef }
+          defaultColor={ this.state.color }
+          alpha={ this.state.alpha }
+          prefixCls={ `${this.props.prefixCls}-panel` }
+          onChange={ this.onChange }
+          onBlur={ this.onBlur }
+          mode={ this.props.mode }
+        />
     );
   }
 
@@ -144,7 +140,7 @@ export default class ColorPicker extends React.Component {
     const state = this.state;
     const classes = [props.prefixCls];
     if (state.open) {
-      classes.push(props.prefixCls + '-open');
+      classes.push(`${props.prefixCls}-open`);
     }
 
     let trigger = props.trigger;
@@ -170,24 +166,26 @@ export default class ColorPicker extends React.Component {
       align,
       animation,
       disabled,
-      transitionName} = props;
+      transitionName } = props;
 
     return (
-      <span className={classes.join(' ')}>
-        <Trigger popup={this.getPickerElement()}
-                 popupAlign={align}
-                 builtinPlacements={placements}
-                 popupPlacement={placement}
-                 action={disabled ? [] : ['click']}
-                 destroyPopupOnHide
-                 getPopupContainer={getCalendarContainer}
-                 popupStyle={style}
-                 popupAnimation={animation}
-                 popupTransitionName={transitionName}
-                 popupVisible={state.open}
-                 onPopupVisibleChange={this.onVisibleChange}
-                 prefixCls={prefixCls + '-picker'}>
-          {trigger}
+      <span className={ classes.join(' ') }>
+        <Trigger
+          popup={ this.getPickerElement() }
+          popupAlign={ align }
+          builtinPlacements={ placements }
+          popupPlacement={ placement }
+          action={ disabled ? [] : ['click'] }
+          destroyPopupOnHide
+          getPopupContainer={ getCalendarContainer }
+          popupStyle={ style }
+          popupAnimation={ animation }
+          popupTransitionName={ transitionName }
+          popupVisible={ state.open }
+          onPopupVisibleChange={ this.onVisibleChange }
+          prefixCls={ `${prefixCls}-picker` }
+        >
+          { trigger }
         </Trigger>
       </span>
     );

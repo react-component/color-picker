@@ -58,7 +58,7 @@ export default class Ribbon extends React.Component {
   }
 
   getPrefixCls() {
-    return this.props.rootPrefixCls + '-ribbon';
+    return `${this.props.rootPrefixCls}-ribbon`;
   }
 
   pointMoveTo(coords) {
@@ -82,13 +82,13 @@ export default class Ribbon extends React.Component {
     const hue = HSV.h;
     const per = hue / 360 * 100;
     return (
-      <div className={prefixCls}>
-        <span ref="point" style={{left: per + '%'}}></span>
+      <div className={ prefixCls }>
+        <span ref="point" style={{ left: `${per}%` }}></span>
 
         <div
-          className={prefixCls + '-' + ('handler')}
-          onMouseDown={this.onMouseDown}
-          ></div>
+          className={ `${prefixCls}-handler` }
+          onMouseDown={ this.onMouseDown }
+        ></div>
       </div>
     );
   }

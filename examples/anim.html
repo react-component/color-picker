@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>anim.js - example - react-colors-picker@2.3.0</title>
+  <title>anim.js - example - react-colors-picker@2.3.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,26 +257,26 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>react-colors-picker@2.3.0</h1>
+    <h1>react-colors-picker@2.3.1</h1>
 
     <p>color-picker ui component for react</p>
   </div>
   <div class="example" id="__react-content"></div>
   <script src="common.js?nowrap"></script>
   <script src="anim.js?nowrap"></script>
-  <div class="highlight"><pre><code language="js"><span class="hljs-pi">'use strict'</span>;
+  <div class="highlight"><pre><code language="js">
 
-<span class="hljs-keyword">import</span> <span class="hljs-string">'react-colors-picker/assets/index.css'</span>;
-<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
-<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
-<span class="hljs-keyword">import</span> ColorPicker <span class="hljs-keyword">from</span> <span class="hljs-string">'react-colors-picker'</span>;
+import <span class="hljs-string">'react-colors-picker/assets/index.css'</span>;
+import React from <span class="hljs-string">'react'</span>;
+import ReactDOM from <span class="hljs-string">'react-dom'</span>;
+import ColorPicker from <span class="hljs-string">'react-colors-picker'</span>;
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">changeHandler</span> (<span class="hljs-params">colors</span>) </span>{
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">changeHandler</span><span class="hljs-params">(colors)</span> </span>{
   <span class="hljs-built_in">console</span>.log(colors);
 }
 
 ReactDOM.render(
-  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{margin:'20px</span> <span class="hljs-attribute">20px</span> <span class="hljs-attribute">20px</span>', <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>'}}&gt;</span>
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">margin:</span> '<span class="hljs-attribute">20px</span> <span class="hljs-attribute">20px</span> <span class="hljs-attribute">20px</span>', <span class="hljs-attribute">textAlign:</span> '<span class="hljs-attribute">center</span>' }}&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">ColorPicker</span>
       <span class="hljs-attribute">animation</span>=<span class="hljs-value">"slide-up"</span>
       <span class="hljs-attribute">color</span>=<span class="hljs-value">{'#36c'}</span>

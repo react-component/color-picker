@@ -3,12 +3,12 @@ webpackJsonp([3],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(251);
+	module.exports = __webpack_require__(253);
 
 
 /***/ },
 
-/***/ 251:
+/***/ 253:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21,16 +21,16 @@ webpackJsonp([3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(160);
+	var _reactDom = __webpack_require__(34);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _reactColorsPicker = __webpack_require__(161);
+	var _reactColorsPicker = __webpack_require__(168);
 	
 	var _reactColorsPicker2 = _interopRequireDefault(_reactColorsPicker);
 	
 	function changeHandler(colors) {
-	  // console.log(colors);
+	  console.log(colors);
 	}
 	
 	_reactDom2['default'].render(_react2['default'].createElement(

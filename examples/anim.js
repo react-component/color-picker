@@ -19,11 +19,11 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(160);
+	var _reactDom = __webpack_require__(34);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _reactColorsPicker = __webpack_require__(161);
+	var _reactColorsPicker = __webpack_require__(168);
 	
 	var _reactColorsPicker2 = _interopRequireDefault(_reactColorsPicker);
 	

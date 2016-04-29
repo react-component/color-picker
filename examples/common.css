@@ -287,7 +287,6 @@
   -webkit-animation-fill-mode: both;
           animation-fill-mode: both;
   -webkit-transform-origin: 0 0;
-      -ms-transform-origin: 0 0;
           transform-origin: 0 0;
   display: block !important;
   opacity: 0;
@@ -302,7 +301,6 @@
   -webkit-animation-fill-mode: both;
           animation-fill-mode: both;
   -webkit-transform-origin: 0 0;
-      -ms-transform-origin: 0 0;
           transform-origin: 0 0;
   display: block !important;
   opacity: 0;
@@ -317,7 +315,6 @@
   -webkit-animation-fill-mode: both;
           animation-fill-mode: both;
   -webkit-transform-origin: 0 0;
-      -ms-transform-origin: 0 0;
           transform-origin: 0 0;
   display: block !important;
   opacity: 1;
@@ -330,8 +327,8 @@
 .react-colorpicker-picker-slide-up-enter.react-colorpicker-picker-slide-up-enter-active.react-colorpicker-picker-placement-bottomRight,
 .react-colorpicker-picker-slide-up-appear.react-colorpicker-picker-slide-up-appear-active.react-colorpicker-picker-placement-bottomLeft,
 .react-colorpicker-picker-slide-up-appear.react-colorpicker-picker-slide-up-appear-active.react-colorpicker-picker-placement-bottomRight {
-  -webkit-animation-name: rcDropdownSlideUpIn;
-          animation-name: rcDropdownSlideUpIn;
+  -webkit-animation-name: rcColorPickerSlideUpIn;
+          animation-name: rcColorPickerSlideUpIn;
   -webkit-animation-play-state: running;
           animation-play-state: running;
 }
@@ -339,26 +336,26 @@
 .react-colorpicker-picker-slide-up-enter.react-colorpicker-picker-slide-up-enter-active.react-colorpicker-picker-placement-topRight,
 .react-colorpicker-picker-slide-up-appear.react-colorpicker-picker-slide-up-appear-active.react-colorpicker-picker-placement-topLeft,
 .react-colorpicker-picker-slide-up-appear.react-colorpicker-picker-slide-up-appear-active.react-colorpicker-picker-placement-topRight {
-  -webkit-animation-name: rcDropdownSlideDownIn;
-          animation-name: rcDropdownSlideDownIn;
+  -webkit-animation-name: rcColorPickerSlideDownIn;
+          animation-name: rcColorPickerSlideDownIn;
   -webkit-animation-play-state: running;
           animation-play-state: running;
 }
 .react-colorpicker-picker-slide-up-leave.react-colorpicker-picker-slide-up-leave-active.react-colorpicker-picker-placement-bottomLeft,
 .react-colorpicker-picker-slide-up-leave.react-colorpicker-picker-slide-up-leave-active.react-colorpicker-picker-placement-bottomRight {
-  -webkit-animation-name: rcDropdownSlideUpOut;
-          animation-name: rcDropdownSlideUpOut;
+  -webkit-animation-name: rcColorPickerSlideUpOut;
+          animation-name: rcColorPickerSlideUpOut;
   -webkit-animation-play-state: running;
           animation-play-state: running;
 }
 .react-colorpicker-picker-slide-up-leave.react-colorpicker-picker-slide-up-leave-active.react-colorpicker-picker-placement-topLeft,
 .react-colorpicker-picker-slide-up-leave.react-colorpicker-picker-slide-up-leave-active.react-colorpicker-picker-placement-topRight {
-  -webkit-animation-name: rcDropdownSlideDownOut;
-          animation-name: rcDropdownSlideDownOut;
+  -webkit-animation-name: rcColorPickerSlideDownOut;
+          animation-name: rcColorPickerSlideDownOut;
   -webkit-animation-play-state: running;
           animation-play-state: running;
 }
-@-webkit-keyframes rcDropdownSlideUpIn {
+@-webkit-keyframes rcColorPickerSlideUpIn {
   0% {
     opacity: 0;
     -webkit-transform-origin: 0% 0%;
@@ -374,7 +371,7 @@
             transform: scaleY(1);
   }
 }
-@keyframes rcDropdownSlideUpIn {
+@keyframes rcColorPickerSlideUpIn {
   0% {
     opacity: 0;
     -webkit-transform-origin: 0% 0%;
@@ -390,7 +387,7 @@
             transform: scaleY(1);
   }
 }
-@-webkit-keyframes rcDropdownSlideUpOut {
+@-webkit-keyframes rcColorPickerSlideUpOut {
   0% {
     opacity: 1;
     -webkit-transform-origin: 0% 0%;
@@ -406,7 +403,7 @@
             transform: scaleY(0);
   }
 }
-@keyframes rcDropdownSlideUpOut {
+@keyframes rcColorPickerSlideUpOut {
   0% {
     opacity: 1;
     -webkit-transform-origin: 0% 0%;
@@ -422,23 +419,7 @@
             transform: scaleY(0);
   }
 }
-@-webkit-keyframes rcDropdownSlideDownIn {
-  0% {
-    opacity: 0;
-    -webkit-transform-origin: 100% 100%;
-            transform-origin: 100% 100%;
-    -webkit-transform: scaleY(0);
-            transform: scaleY(0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform-origin: 100% 100%;
-            transform-origin: 100% 100%;
-    -webkit-transform: scaleY(1);
-            transform: scaleY(1);
-  }
-}
-@keyframes rcDropdownSlideDownIn {
+@-webkit-keyframes rcColorPickerSlideDownIn {
   0% {
     opacity: 0;
     -webkit-transform-origin: 100% 100%;
@@ -454,7 +435,23 @@
             transform: scaleY(1);
   }
 }
-@-webkit-keyframes rcDropdownSlideDownOut {
+@keyframes rcColorPickerSlideDownIn {
+  0% {
+    opacity: 0;
+    -webkit-transform-origin: 100% 100%;
+            transform-origin: 100% 100%;
+    -webkit-transform: scaleY(0);
+            transform: scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform-origin: 100% 100%;
+            transform-origin: 100% 100%;
+    -webkit-transform: scaleY(1);
+            transform: scaleY(1);
+  }
+}
+@-webkit-keyframes rcColorPickerSlideDownOut {
   0% {
     opacity: 1;
     -webkit-transform-origin: 100% 100%;
@@ -470,7 +467,7 @@
             transform: scaleY(0);
   }
 }
-@keyframes rcDropdownSlideDownOut {
+@keyframes rcColorPickerSlideDownOut {
   0% {
     opacity: 1;
     -webkit-transform-origin: 100% 100%;

@@ -86,7 +86,7 @@ export default class ColorPicker extends React.Component {
   }
 
   setOpen(open, callback) {
-    const {onOpen, onClose} = this.props;
+    const { onOpen, onClose } = this.props;
     if (this.state.open !== open) {
       this.setState({
         open: open,
@@ -113,7 +113,7 @@ export default class ColorPicker extends React.Component {
   getPickerElement() {
     // const state = this.state;
     return (
-        <ColorPickerPanel
+      <ColorPickerPanel
         ref={this.savePickerPanelRef}
         defaultColor={this.state.color}
         alpha={this.state.alpha}
@@ -142,15 +142,15 @@ export default class ColorPicker extends React.Component {
   render() {
     const props = this.props;
     const state = this.state;
-    const classes = [props.prefixCls];
+    const classes = [props.prefixCls + '-wrap'];
     if (state.open) {
       classes.push(props.prefixCls + '-open');
     }
 
-    let trigger = props.trigger;
+    let children = props.children;
 
-    if (trigger) {
-      trigger = React.cloneElement(trigger, {
+    if (children) {
+      children = React.cloneElement(children, {
         ref: this.saveTriggerRef,
         unselectable: true,
         style: {
@@ -170,26 +170,28 @@ export default class ColorPicker extends React.Component {
       align,
       animation,
       disabled,
-      transitionName} = props;
+      transitionName,
+    } = props;
 
     return (
-      <span className={classes.join(' ')}>
-        <Trigger popup={this.getPickerElement()}
-                 popupAlign={align}
-                 builtinPlacements={placements}
-                 popupPlacement={placement}
-                 action={disabled ? [] : ['click']}
-                 destroyPopupOnHide
-                 getPopupContainer={getCalendarContainer}
-                 popupStyle={style}
-                 popupAnimation={animation}
-                 popupTransitionName={transitionName}
-                 popupVisible={state.open}
-                 onPopupVisibleChange={this.onVisibleChange}
-                 prefixCls={prefixCls + '-picker'}>
-          {trigger}
+      <div className={classes.join(' ')}>
+        <Trigger
+          popup={this.getPickerElement()}
+          popupAlign={align}
+          builtinPlacements={placements}
+          popupPlacement={placement}
+          action={disabled ? [] : ['click']}
+          destroyPopupOnHide
+          getPopupContainer={getCalendarContainer}
+          popupStyle={style}
+          popupAnimation={animation}
+          popupTransitionName={transitionName}
+          popupVisible={state.open}
+          onPopupVisibleChange={this.onVisibleChange}
+          prefixCls={prefixCls}>
+          {children}
         </Trigger>
-      </span>
+      </div>
     );
   }
 }
@@ -204,7 +206,7 @@ ColorPicker.propTypes = {
   onOpen: PropTypes.func,
   onClose: PropTypes.func,
   prefixCls: PropTypes.string.isRequired,
-  trigger: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
   mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
   placement: PropTypes.oneOf(['topLeft', 'topRight', 'bottomLeft', 'bottomRight']),
   style: PropTypes.object,
@@ -213,11 +215,14 @@ ColorPicker.propTypes = {
 ColorPicker.defaultProps = {
   defaultColor: '#F00',
   defaultAlpha: 100,
-  onChange() {},
-  onOpen() {},
-  onClose() {},
-  prefixCls: 'react-colorpicker',
-  trigger: <span className="react-colorpicker-trigger"></span>,
+  onChange() {
+  },
+  onOpen() {
+  },
+  onClose() {
+  },
+  prefixCls: 'rc-color-picker',
+  children: <span className="rc-color-picker-trigger"/>,
   placement: 'topLeft',
   style: {},
 };

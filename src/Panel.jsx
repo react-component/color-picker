@@ -194,7 +194,7 @@ Panel.propTypes = {
 };
 
 Panel.defaultProps = {
-  prefixCls: 'react-colorpicker-panel',
+  prefixCls: 'rc-color-picker-panel',
   defaultColor: '#ff0000',
   defaultAlpha: 100,
   style: {},

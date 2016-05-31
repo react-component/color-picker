@@ -1,12 +1,11 @@
-# react-colors-picker
+# rc-color-picker
 ---
 
-colors picker ui component for react
+React Color Picker
 
-[![npm version](http://img.shields.io/npm/v/react-colors-picker.svg)](https://www.npmjs.org/package/react-colors-picker) 
-[![npm download](http://img.shields.io/npm/dm/react-colors-picker.svg)](https://www.npmjs.org/package/react-colors-picker) 
-[![build status](http://img.shields.io/travis/react-component/react-colors-picker.svg)](https://travis-ci.org/react-component/react-colors-picker) 
-[![npm dependencise](https://david-dm.org/react-component/react-colors-picker.svg)](https://david-dm.org/react-component/react-colors-picker)
+[![npm version](http://img.shields.io/npm/v/rc-color-picker.svg)](https://www.npmjs.org/package/rc-color-picker) 
+[![npm download](http://img.shields.io/npm/dm/rc-color-picker.svg)](https://www.npmjs.org/package/rc-color-picker)
+[![npm dependency](https://david-dm.org/react-component/color-picker.svg)](https://david-dm.org/react-component/color-picker)
 
 ## Browser Support
 
@@ -27,7 +26,7 @@ npm start
 
 ## Example
 
-online example: [http://react-component.github.io/react-colors-picker/](http://react-component.github.io/react-colors-picker/)
+online example: [http://react-component.github.io/color-picker/](http://react-component.github.io/color-picker/)
 
 ## Feature
 
@@ -35,15 +34,15 @@ online example: [http://react-component.github.io/react-colors-picker/](http://r
 
 ## install
 
-[![react-colors-picker](https://nodei.co/npm/react-colors-picker.png)](https://npmjs.org/package/react-colors-picker)
+[![rc-color-picker](https://nodei.co/npm/rc-color-picker.png)](https://npmjs.org/package/rc-color-picker)
 
 ## Usage
 
 ```js
-var ColorsPicker = require('react-colors-picker');
+var ColorPicker = require('rc-color-picker');
 var React = require('react');
 var ReactDOM = require('react-dom');
-ReactDOM.render(<ColorsPicker />, container);
+ReactDOM.render(<ColorPicker />, container);
 ```
 
 ## API
@@ -65,7 +64,7 @@ onOpen    | Function  | noop    | when color picker popup open
 onClose   | Function  | noop    | when color picker popup close
 placement | String    | topLeft | one of ['topLeft', 'topRight', 'bottomLeft', 'bottomRight']
 mode      | String    |'RGB'    | color mode, support mode 'RGB', 'HSB' or 'HSL'
-trigger   | Node      |`<span className='react-colorpicker-trigger'></span>`|additional trigger appended to picker
+children   | Node      |`<span className='react-colorpicker-trigger'></span>`|additional trigger appended to picker
 
 
 ### ColorPicker.Panel.props
@@ -84,4 +83,4 @@ mode     | String  |'RGB'    | color mode, support mode 'RGB', 'HSB' or 'HSL'
 
 ## License
 
-react-colors-picker is released under the MIT license.
+rc-color-picker is released under the MIT license.

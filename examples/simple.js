@@ -1,7 +1,7 @@
-import 'react-colors-picker/assets/index.less';
+import 'rc-color-picker/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ColorPicker from 'react-colors-picker';
+import ColorPicker from 'rc-color-picker';
 
 function changeHandler(colors) {
   console.log(colors);
@@ -15,8 +15,9 @@ ReactDOM.render(
       alpha={30}
       onChange={changeHandler}
       placement="topLeft"
-      trigger={<span className="react-colorpicker-trigger"/>}
-    />
+    >
+      <span className="rc-color-picker-trigger"/>
+    </ColorPicker>
     <h4>topRight</h4>
     <ColorPicker
       color={'#F10'}

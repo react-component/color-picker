@@ -20260,15 +20260,15 @@
 	    value: function render() {
 	      var props = this.props;
 	      var state = this.state;
-	      var classes = [props.prefixCls];
+	      var classes = [props.prefixCls + '-wrap'];
 	      if (state.open) {
 	        classes.push(props.prefixCls + '-open');
 	      }
 	
-	      var trigger = props.trigger;
+	      var children = props.children;
 	
-	      if (trigger) {
-	        trigger = _react2['default'].cloneElement(trigger, {
+	      if (children) {
+	        children = _react2['default'].cloneElement(children, {
 	          ref: this.saveTriggerRef,
 	          unselectable: true,
 	          style: {
@@ -20290,11 +20290,12 @@
 	      var transitionName = props.transitionName;
 	
 	      return _react2['default'].createElement(
-	        'span',
+	        'div',
 	        { className: classes.join(' ') },
 	        _react2['default'].createElement(
 	          _rcTrigger2['default'],
-	          { popup: this.getPickerElement(),
+	          {
+	            popup: this.getPickerElement(),
 	            popupAlign: align,
 	            builtinPlacements: _placements2['default'],
 	            popupPlacement: placement,
@@ -20306,8 +20307,8 @@
 	            popupTransitionName: transitionName,
 	            popupVisible: state.open,
 	            onPopupVisibleChange: this.onVisibleChange,
-	            prefixCls: prefixCls + '-picker' },
-	          trigger
+	            prefixCls: prefixCls },
+	          children
 	        )
 	      );
 	    }
@@ -20328,7 +20329,7 @@
 	  onOpen: _react.PropTypes.func,
 	  onClose: _react.PropTypes.func,
 	  prefixCls: _react.PropTypes.string.isRequired,
-	  trigger: _react.PropTypes.node.isRequired,
+	  children: _react.PropTypes.node.isRequired,
 	  mode: _react.PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
 	  placement: _react.PropTypes.oneOf(['topLeft', 'topRight', 'bottomLeft', 'bottomRight']),
 	  style: _react.PropTypes.object
@@ -20340,8 +20341,8 @@
 	  onChange: function onChange() {},
 	  onOpen: function onOpen() {},
 	  onClose: function onClose() {},
-	  prefixCls: 'react-colorpicker',
-	  trigger: _react2['default'].createElement('span', { className: 'react-colorpicker-trigger' }),
+	  prefixCls: 'rc-color-picker',
+	  children: _react2['default'].createElement('span', { className: 'rc-color-picker-trigger' }),
 	  placement: 'topLeft',
 	  style: {}
 	};
@@ -26592,7 +26593,7 @@
 	};
 	
 	Panel.defaultProps = {
-	  prefixCls: 'react-colorpicker-panel',
+	  prefixCls: 'rc-color-picker-panel',
 	  defaultColor: '#ff0000',
 	  defaultAlpha: 100,
 	  style: {},

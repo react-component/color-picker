@@ -25,9 +25,9 @@ webpackJsonp([3],{
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _reactColorsPicker = __webpack_require__(168);
+	var _rcColorPicker = __webpack_require__(168);
 	
-	var _reactColorsPicker2 = _interopRequireDefault(_reactColorsPicker);
+	var _rcColorPicker2 = _interopRequireDefault(_rcColorPicker);
 	
 	function changeHandler(colors) {
 	  console.log(colors);
@@ -41,19 +41,22 @@ webpackJsonp([3],{
 	    null,
 	    'topLeft'
 	  ),
-	  _react2['default'].createElement(_reactColorsPicker2['default'], {
-	    color: '#36c',
-	    alpha: 30,
-	    onChange: changeHandler,
-	    placement: 'topLeft',
-	    trigger: _react2['default'].createElement('span', { className: 'react-colorpicker-trigger' })
-	  }),
+	  _react2['default'].createElement(
+	    _rcColorPicker2['default'],
+	    {
+	      color: '#36c',
+	      alpha: 30,
+	      onChange: changeHandler,
+	      placement: 'topLeft'
+	    },
+	    _react2['default'].createElement('span', { className: 'rc-color-picker-trigger' })
+	  ),
 	  _react2['default'].createElement(
 	    'h4',
 	    null,
 	    'topRight'
 	  ),
-	  _react2['default'].createElement(_reactColorsPicker2['default'], {
+	  _react2['default'].createElement(_rcColorPicker2['default'], {
 	    color: '#F10',
 	    onChange: changeHandler,
 	    placement: 'topRight'
@@ -128,7 +131,7 @@ webpackJsonp([3],{
 	    null,
 	    'bottomLeft'
 	  ),
-	  _react2['default'].createElement(_reactColorsPicker2['default'], {
+	  _react2['default'].createElement(_rcColorPicker2['default'], {
 	    color: '#0ad',
 	    alpha: 50,
 	    onChange: changeHandler,
@@ -139,7 +142,7 @@ webpackJsonp([3],{
 	    null,
 	    'bottomRight'
 	  ),
-	  _react2['default'].createElement(_reactColorsPicker2['default'], {
+	  _react2['default'].createElement(_rcColorPicker2['default'], {
 	    color: '#0F0',
 	    onChange: changeHandler,
 	    placement: 'bottomRight'

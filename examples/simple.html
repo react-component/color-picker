@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - react-colors-picker@2.3.1</title>
+  <title>simple.js - example - rc-color-picker@1.0.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,17 +257,17 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>react-colors-picker@2.3.1</h1>
+    <h1>rc-color-picker@1.0.0</h1>
 
     <p>color-picker ui component for react</p>
   </div>
   <div class="example" id="__react-content"></div>
   <script src="common.js?nowrap"></script>
   <script src="simple.js?nowrap"></script>
-  <div class="highlight"><pre><code language="js">import <span class="hljs-string">'react-colors-picker/assets/index.css'</span>;
+  <div class="highlight"><pre><code language="js">import <span class="hljs-string">'rc-color-picker/assets/index.css'</span>;
 import React from <span class="hljs-string">'react'</span>;
 import ReactDOM from <span class="hljs-string">'react-dom'</span>;
-import ColorPicker from <span class="hljs-string">'react-colors-picker'</span>;
+import ColorPicker from <span class="hljs-string">'rc-color-picker'</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">changeHandler</span><span class="hljs-params">(colors)</span> </span>{
   <span class="hljs-built_in">console</span>.log(colors);
@@ -281,8 +281,9 @@ ReactDOM.render(
       <span class="hljs-attribute">alpha</span>=<span class="hljs-value">{30}</span>
       <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{changeHandler}</span>
       <span class="hljs-attribute">placement</span>=<span class="hljs-value">"topLeft"</span>
-      <span class="hljs-attribute">trigger</span>=<span class="hljs-value">{&lt;span</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"react-colorpicker-trigger"</span>/&gt;</span>}
-    /&gt;
+    &gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"rc-color-picker-trigger"</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">ColorPicker</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">h4</span>&gt;</span>topRight<span class="hljs-tag">&lt;/<span class="hljs-title">h4</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">ColorPicker</span>
       <span class="hljs-attribute">color</span>=<span class="hljs-value">{'#F10'}</span>
@@ -320,7 +321,7 @@ ReactDOM.render(
 );
 </span></code></pre></div>
 </div>
-<a href="http://github.com/react-component/react-colors-picker">
+<a href="http://github.com/react-component/color-picker">
   <img style="position: absolute; top: 0; right: 0; border: 0;"
        src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
        alt="Fork me on GitHub"

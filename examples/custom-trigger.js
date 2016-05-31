@@ -25,9 +25,9 @@ webpackJsonp([1],{
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _reactColorsPicker = __webpack_require__(168);
+	var _rcColorPicker = __webpack_require__(168);
 	
-	var _reactColorsPicker2 = _interopRequireDefault(_reactColorsPicker);
+	var _rcColorPicker2 = _interopRequireDefault(_rcColorPicker);
 	
 	function changeHandler(colors) {
 	  console.log(colors);
@@ -36,15 +36,18 @@ webpackJsonp([1],{
 	_reactDom2['default'].render(_react2['default'].createElement(
 	  'div',
 	  { style: { textAlign: 'center' } },
-	  _react2['default'].createElement(_reactColorsPicker2['default'], {
-	    color: '#36c',
-	    onChange: changeHandler,
-	    trigger: _react2['default'].createElement(
+	  _react2['default'].createElement(
+	    _rcColorPicker2['default'],
+	    {
+	      color: '#36c',
+	      onChange: changeHandler
+	    },
+	    _react2['default'].createElement(
 	      'span',
 	      { className: 'react-custom-trigger' },
 	      'choose color'
 	    )
-	  })
+	  )
 	), document.getElementById('__react-content'));
 
 /***/ }

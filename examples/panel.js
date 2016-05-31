@@ -25,7 +25,7 @@ webpackJsonp([2],{
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _reactColorsPicker = __webpack_require__(168);
+	var _rcColorPicker = __webpack_require__(168);
 	
 	function onChange(obj) {
 	  console.log(obj);
@@ -34,7 +34,7 @@ webpackJsonp([2],{
 	_reactDom2['default'].render(_react2['default'].createElement(
 	  'div',
 	  null,
-	  _react2['default'].createElement(_reactColorsPicker.Panel, { color: '#468890', onChange: onChange, mode: 'HSL' })
+	  _react2['default'].createElement(_rcColorPicker.Panel, { color: '#468890', onChange: onChange, mode: 'HSL' })
 	), document.getElementById('__react-content'));
 
 /***/ }

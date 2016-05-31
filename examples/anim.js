@@ -23,9 +23,9 @@ webpackJsonp([0],[
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _reactColorsPicker = __webpack_require__(168);
+	var _rcColorPicker = __webpack_require__(168);
 	
-	var _reactColorsPicker2 = _interopRequireDefault(_reactColorsPicker);
+	var _rcColorPicker2 = _interopRequireDefault(_rcColorPicker);
 	
 	function changeHandler(colors) {
 	  console.log(colors);
@@ -34,7 +34,7 @@ webpackJsonp([0],[
 	_reactDom2['default'].render(_react2['default'].createElement(
 	  'div',
 	  { style: { margin: '20px 20px 20px', textAlign: 'center' } },
-	  _react2['default'].createElement(_reactColorsPicker2['default'], {
+	  _react2['default'].createElement(_rcColorPicker2['default'], {
 	    animation: 'slide-up',
 	    color: '#36c',
 	    onChange: changeHandler

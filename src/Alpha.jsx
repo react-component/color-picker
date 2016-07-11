@@ -24,6 +24,10 @@ export default class Alpha extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.removeListeners();
+  }
+
   onMouseDown(e) {
     const x = e.clientX;
     const y = e.clientY;
@@ -50,14 +54,7 @@ export default class Alpha extends React.Component {
     this.pointMoveTo({
       x, y,
     });
-    if (this.dragListener) {
-      this.dragListener.remove();
-      this.dragListener = null;
-    }
-    if (this.dragUpListener) {
-      this.dragUpListener.remove();
-      this.dragUpListener = null;
-    }
+    this.removeListeners();
   }
 
   getBackground() {
@@ -83,6 +80,17 @@ export default class Alpha extends React.Component {
     const alpha = Math.floor(left / width * 100);
 
     this.props.onChange(alpha);
+  }
+
+  removeListeners() {
+    if (this.dragListener) {
+      this.dragListener.remove();
+      this.dragListener = null;
+    }
+    if (this.dragUpListener) {
+      this.dragUpListener.remove();
+      this.dragUpListener = null;
+    }
   }
 
   render() {

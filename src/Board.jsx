@@ -21,6 +21,10 @@ export default class Board extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.removeListeners();
+  }
+
   onBoardMouseDown(e) {
     const x = e.clientX;
     const y = e.clientY;
@@ -48,6 +52,14 @@ export default class Board extends React.Component {
       x,
       y,
     });
+    this.removeListeners();
+  }
+
+  getPrefixCls() {
+    return this.props.rootPrefixCls + '-board';
+  }
+
+  removeListeners() {
     if (this.dragListener) {
       this.dragListener.remove();
       this.dragListener = null;
@@ -56,10 +68,6 @@ export default class Board extends React.Component {
       this.dragUpListener.remove();
       this.dragUpListener = null;
     }
-  }
-
-  getPrefixCls() {
-    return this.props.rootPrefixCls + '-board';
   }
 
   /**

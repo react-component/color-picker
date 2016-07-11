@@ -20,6 +20,10 @@ export default class Ribbon extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.removeListeners();
+  }
+
   onMouseDown(e) {
     const x = e.clientX;
     const y = e.clientY;
@@ -46,14 +50,7 @@ export default class Ribbon extends React.Component {
     this.pointMoveTo({
       x, y,
     });
-    if (this.dragListener) {
-      this.dragListener.remove();
-      this.dragListener = null;
-    }
-    if (this.dragUpListener) {
-      this.dragUpListener.remove();
-      this.dragUpListener = null;
-    }
+    this.removeListeners();
   }
 
   getPrefixCls() {
@@ -74,6 +71,17 @@ export default class Ribbon extends React.Component {
       h: hue,
     };
     this.props.onChange(hsv);
+  }
+
+  removeListeners() {
+    if (this.dragListener) {
+      this.dragListener.remove();
+      this.dragListener = null;
+    }
+    if (this.dragUpListener) {
+      this.dragUpListener.remove();
+      this.dragUpListener = null;
+    }
   }
 
   render() {

@@ -41,8 +41,9 @@ export default class Board extends React.Component {
   }
 
   onBoardTouchStart(e) {
-    if (e.touches.length !== 1)
+    if (e.touches.length !== 1) {
       return;
+    }
 
     const x = e.targetTouches[0].clientX;
     const y = e.targetTouches[0].clientY;
@@ -66,7 +67,7 @@ export default class Board extends React.Component {
     });
   }
 
-  onBoardTouchEnd(e) {
+  onBoardTouchEnd() {
     this.removeTouchListeners();
   }
 

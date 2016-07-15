@@ -15,6 +15,9 @@ export default class Board extends React.Component {
       'onBoardMouseDown',
       'onBoardDrag',
       'onBoardDragEnd',
+      'onBoardTouchStart',
+      'onBoardTouchMove',
+      'onBoardTouchEnd',
     ];
     events.forEach((m)=> {
       this[m] = this[m].bind(this);
@@ -23,6 +26,7 @@ export default class Board extends React.Component {
 
   componentWillUnmount() {
     this.removeListeners();
+    this.removeTouchListeners();
   }
 
   onBoardMouseDown(e) {
@@ -34,6 +38,36 @@ export default class Board extends React.Component {
     });
     this.dragListener = rcUtil.Dom.addEventListener(window, 'mousemove', this.onBoardDrag);
     this.dragUpListener = rcUtil.Dom.addEventListener(window, 'mouseup', this.onBoardDragEnd);
+  }
+
+  onBoardTouchStart(e) {
+    if (e.touches.length !== 1)
+      return;
+
+    const x = e.targetTouches[0].clientX;
+    const y = e.targetTouches[0].clientY;
+    this.pointMoveTo({
+      x,
+      y,
+    });
+    this.touchMoveListener = rcUtil.Dom.addEventListener(window, 'touchmove', this.onBoardTouchMove);
+    this.touchEndListener = rcUtil.Dom.addEventListener(window, 'touchend', this.onBoardTouchEnd);
+  }
+
+  onBoardTouchMove(e) {
+    if (e.preventDefault)
+      e.preventDefault();
+
+    const x = e.targetTouches[0].clientX;
+    const y = e.targetTouches[0].clientY;
+    this.pointMoveTo({
+      x,
+      y,
+    });
+  }
+
+  onBoardTouchEnd(e) {
+    this.removeTouchListeners();
   }
 
   onBoardDrag(e) {
@@ -57,6 +91,17 @@ export default class Board extends React.Component {
 
   getPrefixCls() {
     return this.props.rootPrefixCls + '-board';
+  }
+
+  removeTouchListeners() {
+    if (this.touchMoveListener) {
+      this.touchMoveListener.remove();
+      this.touchMoveListener = null;
+    }
+    if (this.touchEndListener) {
+      this.touchEndListener.remove();
+      this.touchEndListener = null;
+    }
   }
 
   removeListeners() {
@@ -111,6 +156,7 @@ export default class Board extends React.Component {
         <div
           className={prefixCls + '-' + ('handler')}
           onMouseDown={this.onBoardMouseDown}
+          onTouchStart={this.onBoardTouchStart}
           />
       </div>
     );

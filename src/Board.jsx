@@ -56,8 +56,9 @@ export default class Board extends React.Component {
   }
 
   onBoardTouchMove(e) {
-    if (e.preventDefault)
+    if (e.preventDefault) {
       e.preventDefault();
+    }
 
     const x = e.targetTouches[0].clientX;
     const y = e.targetTouches[0].clientY;

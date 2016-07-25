@@ -21230,7 +21230,7 @@
 	          color: nextProps.color
 	        });
 	      }
-	      if (nextProps.alpha) {
+	      if (nextProps.alpha !== null && nextProps.alpha !== undefined) {
 	        this.setState({
 	          alpha: nextProps.alpha
 	        });
@@ -26018,7 +26018,7 @@
 	    _classCallCheck(this, Board);
 	
 	    _get(Object.getPrototypeOf(Board.prototype), 'constructor', this).call(this, props);
-	    var events = ['onBoardMouseDown', 'onBoardDrag', 'onBoardDragEnd'];
+	    var events = ['onBoardMouseDown', 'onBoardDrag', 'onBoardDragEnd', 'onBoardTouchStart', 'onBoardTouchMove', 'onBoardTouchEnd'];
 	    events.forEach(function (m) {
 	      _this[m] = _this[m].bind(_this);
 	    });
@@ -26028,6 +26028,7 @@
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
 	      this.removeListeners();
+	      this.removeTouchListeners();
 	    }
 	  }, {
 	    key: 'onBoardMouseDown',
@@ -26040,6 +26041,41 @@
 	      });
 	      this.dragListener = _rcUtil2['default'].Dom.addEventListener(window, 'mousemove', this.onBoardDrag);
 	      this.dragUpListener = _rcUtil2['default'].Dom.addEventListener(window, 'mouseup', this.onBoardDragEnd);
+	    }
+	  }, {
+	    key: 'onBoardTouchStart',
+	    value: function onBoardTouchStart(e) {
+	      if (e.touches.length !== 1) {
+	        return;
+	      }
+	
+	      var x = e.targetTouches[0].clientX;
+	      var y = e.targetTouches[0].clientY;
+	      this.pointMoveTo({
+	        x: x,
+	        y: y
+	      });
+	      this.touchMoveListener = _rcUtil2['default'].Dom.addEventListener(window, 'touchmove', this.onBoardTouchMove);
+	      this.touchEndListener = _rcUtil2['default'].Dom.addEventListener(window, 'touchend', this.onBoardTouchEnd);
+	    }
+	  }, {
+	    key: 'onBoardTouchMove',
+	    value: function onBoardTouchMove(e) {
+	      if (e.preventDefault) {
+	        e.preventDefault();
+	      }
+	
+	      var x = e.targetTouches[0].clientX;
+	      var y = e.targetTouches[0].clientY;
+	      this.pointMoveTo({
+	        x: x,
+	        y: y
+	      });
+	    }
+	  }, {
+	    key: 'onBoardTouchEnd',
+	    value: function onBoardTouchEnd() {
+	      this.removeTouchListeners();
 	    }
 	  }, {
 	    key: 'onBoardDrag',
@@ -26066,6 +26102,18 @@
 	    key: 'getPrefixCls',
 	    value: function getPrefixCls() {
 	      return this.props.rootPrefixCls + '-board';
+	    }
+	  }, {
+	    key: 'removeTouchListeners',
+	    value: function removeTouchListeners() {
+	      if (this.touchMoveListener) {
+	        this.touchMoveListener.remove();
+	        this.touchMoveListener = null;
+	      }
+	      if (this.touchEndListener) {
+	        this.touchEndListener.remove();
+	        this.touchEndListener = null;
+	      }
 	    }
 	  }, {
 	    key: 'removeListeners',
@@ -26125,7 +26173,8 @@
 	        _react2['default'].createElement('span', { style: { left: x, top: y } }),
 	        _react2['default'].createElement('div', {
 	          className: prefixCls + '-' + 'handler',
-	          onMouseDown: this.onBoardMouseDown
+	          onMouseDown: this.onBoardMouseDown,
+	          onTouchStart: this.onBoardTouchStart
 	        })
 	      );
 	    }

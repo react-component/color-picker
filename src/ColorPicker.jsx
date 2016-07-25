@@ -50,7 +50,7 @@ export default class ColorPicker extends React.Component {
         color: nextProps.color,
       });
     }
-    if (nextProps.alpha) {
+    if (nextProps.alpha !== null && nextProps.alpha !== undefined) {
       this.setState({
         alpha: nextProps.alpha,
       });

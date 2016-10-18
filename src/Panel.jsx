@@ -42,7 +42,7 @@ export default class Panel extends React.Component {
       const hsv = colr.fromHex(nextProps.color).toHsvObject();
       this.setState({
         hsv,
-        paramsHsv: hsv
+        paramsHsv: hsv,
       });
     }
     if (nextProps.alpha !== undefined) {

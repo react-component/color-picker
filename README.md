@@ -6,6 +6,7 @@ React Color Picker
 [![npm version](http://img.shields.io/npm/v/rc-color-picker.svg)](https://www.npmjs.org/package/rc-color-picker) 
 [![npm download](http://img.shields.io/npm/dm/rc-color-picker.svg)](https://www.npmjs.org/package/rc-color-picker)
 [![npm dependency](https://david-dm.org/react-component/color-picker.svg)](https://david-dm.org/react-component/color-picker)
+[![Build Status](https://travis-ci.org/react-component/color-picker.svg?branch=master)](https://travis-ci.org/react-component/color-picker)
 
 ## Browser Support
 

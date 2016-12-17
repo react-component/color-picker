@@ -20,7 +20,10 @@ export default class Preview extends React.Component {
     const hex = colr.fromHsvObject(this.props.hsv).toHex();
     return (
       <div className={prefixCls}>
-        <span style={{backgroundColor: hex, opacity: this.props.alpha / 100}} ></span>
+        <span style={{
+          backgroundColor: hex,
+          opacity: this.props.alpha / 100}}
+        />
         <input
           type="color"
           value={hex}

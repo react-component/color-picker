@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import Trigger from 'rc-trigger';
 import ColorPickerPanel from './Panel';
 import placements from './placements';
+import Colr from 'colr';
+
+const colr = new Colr();
 
 function refFn(field, component) {
   this[field] = component;
@@ -153,13 +156,16 @@ export default class ColorPicker extends React.Component {
 
     let children = props.children;
 
+    let RGBA = colr.fromHex(this.state.color).toRgbArray();
+
+    RGBA.push(this.state.alpha / 100);
+
     if (children) {
       children = React.cloneElement(children, {
         ref: this.saveTriggerRef,
         unselectable: true,
         style: {
-          opacity: this.state.alpha / 100,
-          backgroundColor: this.state.color,
+          backgroundColor: `rgba(${RGBA.join(',')})`,
         },
         onClick: this.onTriggerClick,
         onMouseDown: prevent,

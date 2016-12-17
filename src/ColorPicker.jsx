@@ -69,7 +69,7 @@ export default class ColorPicker extends React.Component {
 
   onChange(colors) {
     this.setState({
-      ...colors
+      ...colors,
     }, () => {
       this.props.onChange(this.state);
     });

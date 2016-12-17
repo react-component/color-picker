@@ -19,7 +19,7 @@ export default class Board extends React.Component {
       'onBoardTouchMove',
       'onBoardTouchEnd',
     ];
-    events.forEach((m)=> {
+    events.forEach((m) => {
       this[m] = this[m].bind(this);
     });
   }

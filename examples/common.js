@@ -21565,6 +21565,12 @@
 	
 	var _placements2 = _interopRequireDefault(_placements);
 	
+	var _colr = __webpack_require__(256);
+	
+	var _colr2 = _interopRequireDefault(_colr);
+	
+	var colr = new _colr2['default']();
+	
 	function refFn(field, component) {
 	  this[field] = component;
 	}
@@ -21725,13 +21731,16 @@
 	
 	      var children = props.children;
 	
+	      var RGBA = colr.fromHex(this.state.color).toRgbArray();
+	
+	      RGBA.push(this.state.alpha / 100);
+	
 	      if (children) {
 	        children = _react2['default'].cloneElement(children, {
 	          ref: this.saveTriggerRef,
 	          unselectable: true,
 	          style: {
-	            opacity: this.state.alpha / 100,
-	            backgroundColor: this.state.color
+	            backgroundColor: 'rgba(' + RGBA.join(',') + ')'
 	          },
 	          onClick: this.onTriggerClick,
 	          onMouseDown: prevent
@@ -28372,7 +28381,10 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: prefixCls },
-	        _react2['default'].createElement('span', { style: { backgroundColor: hex, opacity: this.props.alpha / 100 } }),
+	        _react2['default'].createElement('span', { style: {
+	            backgroundColor: hex,
+	            opacity: this.props.alpha / 100 }
+	        }),
 	        _react2['default'].createElement('input', {
 	          type: 'color',
 	          value: hex,

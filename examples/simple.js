@@ -7,6 +7,10 @@ function changeHandler(colors) {
   console.log(colors);
 }
 
+function closeHandler(colors) {
+  console.log(colors);
+}
+
 ReactDOM.render(
   <div style={{ margin: '20px 20px 20px', textAlign: 'center' }}>
     <h4>topLeft</h4>
@@ -14,6 +18,7 @@ ReactDOM.render(
       color={'#36c'}
       alpha={30}
       onChange={changeHandler}
+      onClose={closeHandler}
       placement="topLeft"
     >
       <span className="rc-color-picker-trigger"/>

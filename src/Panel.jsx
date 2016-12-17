@@ -25,7 +25,7 @@ export default class Panel extends React.Component {
     this.state = {
       paramsHsv: hsv,
       hsv: hsv,
-      alpha
+      alpha,
     };
 
     const events = [

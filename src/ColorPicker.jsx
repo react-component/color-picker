@@ -69,10 +69,10 @@ export default class ColorPicker extends React.Component {
 
   onChange(colors) {
     this.setState({
-      color: colors.color,
-      alpha: colors.alpha,
+      ...colors
+    }, () => {
+      this.props.onChange(this.state);
     });
-    this.props.onChange(colors);
   }
 
   onBlur() {
@@ -94,15 +94,14 @@ export default class ColorPicker extends React.Component {
     if (this.state.open !== open) {
       this.setState({
         open: open,
-      }, callback);
-      const event = {
-        open: open,
-      };
-      if (open) {
-        onOpen(event);
-      } else {
-        onClose(event);
-      }
+      }, () => {
+        callback();
+        if (this.state.open) {
+          onOpen(this.state);
+        } else {
+          onClose(this.state);
+        }
+      });
     }
   }
 

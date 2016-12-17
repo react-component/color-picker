@@ -1,4 +1,4 @@
-import React, { PropTypes }from 'react';
+import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Trigger from 'rc-trigger';
 import ColorPickerPanel from './Panel';
@@ -16,9 +16,13 @@ export default class ColorPicker extends React.Component {
   constructor(props) {
     super(props);
 
+    const alpha = typeof props.alpha === 'undefined' ?
+      props.defaultAlpha :
+      Math.min(props.alpha, props.defaultAlpha);
+
     this.state = {
       color: props.color || props.defaultColor,
-      alpha: props.alpha || props.defaultAlpha,
+      alpha,
       open: false,
     };
 

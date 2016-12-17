@@ -18,10 +18,14 @@ export default class Panel extends React.Component {
     const color = props.color || props.defaultColor;
     const hsv = colr.fromHex(color).toHsvObject();
 
+    const alpha = typeof props.alpha === 'undefined' ?
+      props.defaultAlpha :
+      Math.min(props.alpha, props.defaultAlpha);
+
     this.state = {
       paramsHsv: hsv,
       hsv: hsv,
-      alpha: props.alpha || props.defaultAlpha,
+      alpha
     };
 
     const events = [
@@ -102,7 +106,7 @@ export default class Panel extends React.Component {
     if (this._blurTimer) {
       clearTimeout(this._blurTimer);
     }
-    this._blurTimer = setTimeout(()=> {
+    this._blurTimer = setTimeout(() => {
       // if is system color picker open, then stop run blur
       if (this.systemColorPickerOpen) {
         this.systemColorPickerOpen = false;

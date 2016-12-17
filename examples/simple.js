@@ -3,12 +3,12 @@ webpackJsonp([3],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(234);
+	module.exports = __webpack_require__(280);
 
 
 /***/ },
 
-/***/ 234:
+/***/ 280:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21,15 +21,19 @@ webpackJsonp([3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(35);
+	var _reactDom = __webpack_require__(34);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rcColorPicker = __webpack_require__(174);
+	var _rcColorPicker = __webpack_require__(180);
 	
 	var _rcColorPicker2 = _interopRequireDefault(_rcColorPicker);
 	
 	function changeHandler(colors) {
+	  console.log(colors);
+	}
+	
+	function closeHandler(colors) {
 	  console.log(colors);
 	}
 	
@@ -47,6 +51,7 @@ webpackJsonp([3],{
 	      color: '#36c',
 	      alpha: 30,
 	      onChange: changeHandler,
+	      onClose: closeHandler,
 	      placement: 'topLeft'
 	    },
 	    _react2['default'].createElement('span', { className: 'rc-color-picker-trigger' })

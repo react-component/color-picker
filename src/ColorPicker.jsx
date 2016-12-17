@@ -93,7 +93,10 @@ export default class ColorPicker extends React.Component {
       this.setState({
         open: open,
       }, () => {
-        typeof callback === 'function' && callback();
+        if (typeof callback === 'function') {
+          callback();
+        }
+
         if (this.state.open) {
           onOpen(this.state);
         } else {

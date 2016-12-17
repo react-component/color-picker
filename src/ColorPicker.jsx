@@ -76,9 +76,7 @@ export default class ColorPicker extends React.Component {
   }
 
   onBlur() {
-    this.setState({
-      open: false,
-    });
+    this.setOpen(false);
   }
 
   onVisibleChange(open) {
@@ -95,7 +93,7 @@ export default class ColorPicker extends React.Component {
       this.setState({
         open: open,
       }, () => {
-        callback();
+        typeof callback === 'function' && callback();
         if (this.state.open) {
           onOpen(this.state);
         } else {

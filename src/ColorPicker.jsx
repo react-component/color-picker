@@ -156,7 +156,7 @@ export default class ColorPicker extends React.Component {
 
     let children = props.children;
 
-    let RGBA = colr.fromHex(this.state.color).toRgbArray();
+    const RGBA = colr.fromHex(this.state.color).toRgbArray();
 
     RGBA.push(this.state.alpha / 100);
 

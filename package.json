@@ -2,7 +2,7 @@
   "name": "rc-color-picker",
   "version": "1.1.2",
   "description": "color-picker ui component for react",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "react",
     "react-component",
@@ -20,29 +20,38 @@
   },
   "files": [
     "lib/",
-    "assets/*.css"
+    "assets/*.css",
+    "dist/"
   ],
   "config": {
     "port": 8010
   },
+  "entry": {
+    "rc-color-picker": [
+      "./assets/index.less",
+      "./src/index.js"
+    ]
+  },
+  "style": "./assets/index.css",
   "scripts": {
     "build": "rc-tools run build",
     "gh-pages": "rc-tools run gh-pages",
-    "start": "rc-server",
+    "start": "rc-tools run server",
     "pub": "rc-tools run pub",
     "lint": "rc-tools run lint",
     "karma": "rc-tools run karma",
     "saucelabs": "rc-tools run saucelabs",
-    "browser-test": "rc-tools run browser-test",
-    "browser-test-cover": "rc-tools run browser-test-cover"
+    "test": "rc-tools run test",
+    "coverage": "rc-tools run coverage"
   },
   "license": "MIT",
   "devDependencies": {
+    "babel-core": "^6.21.0",
+    "estraverse": "^4.2.0",
     "expect.js": "~0.3.1",
     "lesshat": "~3.0.2",
     "pre-commit": "1.x",
-    "rc-server": "3.x",
-    "rc-tools": "4.x",
+    "rc-tools": "^5.10.1",
     "react": "15.x",
     "react-dom": "15.x"
   },

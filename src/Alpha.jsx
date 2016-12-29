@@ -58,7 +58,7 @@ export default class Alpha extends React.Component {
   }
 
   getBackground() {
-    const {r, g, b} = colr.fromHsvObject(this.props.hsv).toRgbObject();
+    const { r, g, b } = colr.fromHsvObject(this.props.hsv).toRgbObject();
     const opacityGradient = 'linear-gradient(to right, ' +
       rgbaColor(r, g, b, 0) + ', ' +
       rgbaColor(r, g, b, 100) + ')';
@@ -100,9 +100,9 @@ export default class Alpha extends React.Component {
         <div
           ref="bg"
           className={prefixCls + '-' + ('bg')}
-          style={{background: this.getBackground()}}
+          style={{ background: this.getBackground() }}
           />
-        <span style={{left: this.props.alpha + '%'}}/>
+        <span style={{ left: this.props.alpha + '%' }}/>
 
         <div
           className={prefixCls + '-' + ('handler')}

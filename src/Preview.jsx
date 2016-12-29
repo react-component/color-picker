@@ -22,7 +22,7 @@ export default class Preview extends React.Component {
       <div className={prefixCls}>
         <span style={{
           backgroundColor: hex,
-          opacity: this.props.alpha / 100}}
+          opacity: this.props.alpha / 100 }}
         />
         <input
           type="color"

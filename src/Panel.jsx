@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import Colr from 'colr';
 import Board from './Board';
 import Preview from './Preview';
@@ -166,7 +166,7 @@ export default class Panel extends React.Component {
                 />
             </div>
           </div>
-          <div className={prefixCls + '-' + ('wrap')} style={{height: 40, marginTop: 6}}>
+          <div className={prefixCls + '-' + ('wrap')} style={{ height: 40, marginTop: 6 }}>
             <Params
               rootPrefixCls={prefixCls}
               hsv={this.state.paramsHsv}

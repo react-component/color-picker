@@ -94,7 +94,7 @@ export default class ColorPicker extends React.Component {
     const { onOpen, onClose } = this.props;
     if (this.state.open !== open) {
       this.setState({
-        open: open,
+        open,
       }, () => {
         if (typeof callback === 'function') {
           callback();
@@ -124,7 +124,7 @@ export default class ColorPicker extends React.Component {
         ref={this.savePickerPanelRef}
         defaultColor={this.state.color}
         alpha={this.state.alpha}
-        prefixCls={this.props.prefixCls + '-panel'}
+        prefixCls={`${this.props.prefixCls}-panel`}
         onChange={this.onChange}
         onBlur={this.onBlur}
         mode={this.props.mode}
@@ -149,9 +149,9 @@ export default class ColorPicker extends React.Component {
   render() {
     const props = this.props;
     const state = this.state;
-    const classes = [props.prefixCls + '-wrap'];
+    const classes = [`${props.prefixCls}-wrap`];
     if (state.open) {
-      classes.push(props.prefixCls + '-open');
+      classes.push(`${props.prefixCls}-open`);
     }
 
     let children = props.children;
@@ -198,7 +198,8 @@ export default class ColorPicker extends React.Component {
           popupTransitionName={transitionName}
           popupVisible={state.open}
           onPopupVisibleChange={this.onVisibleChange}
-          prefixCls={prefixCls}>
+          prefixCls={prefixCls}
+        >
           {children}
         </Trigger>
       </div>

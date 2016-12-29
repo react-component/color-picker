@@ -14,7 +14,7 @@ export default class Params extends React.Component {
     // 管理 input 的状态
     this.state = {
       mode: props.mode,
-      color: color,
+      color,
       hex: color.toHex().substr(1),
     };
 
@@ -146,7 +146,7 @@ export default class Params extends React.Component {
   }
 
   getPrefixCls() {
-    return this.props.rootPrefixCls + '-params';
+    return `${this.props.rootPrefixCls}-params`;
   }
 
   getColorChannel(colrInstance, mode) {
@@ -174,45 +174,49 @@ export default class Params extends React.Component {
     const colorChannel = this.getColorChannel();
     return (
       <div className={prefixCls}>
-        <div className={prefixCls + '-' + ('input')}>
+        <div className={`${prefixCls}-input`}>
           <input
-            className={prefixCls + '-' + ('hex')}
+            className={`${prefixCls}-hex`}
             type="text"
             maxLength="6"
             onChange={this.onHexHandler}
             value={this.state.hex.toUpperCase()}
           />
           <input type="number" ref="channel_0"
-                 value={colorChannel[0]}
-                 onChange={this.onColorChannelChange.bind(null, 0)}/>
+            value={colorChannel[0]}
+            onChange={this.onColorChannelChange.bind(null, 0)}
+          />
           <input type="number" ref="channel_1"
-                 value={colorChannel[1]}
-                 onChange={this.onColorChannelChange.bind(null, 1)}/>
+            value={colorChannel[1]}
+            onChange={this.onColorChannelChange.bind(null, 1)}
+          />
           <input type="number" ref="channel_2"
-                 value={colorChannel[2]}
-                 onChange={this.onColorChannelChange.bind(null, 2)}/>
+            value={colorChannel[2]}
+            onChange={this.onColorChannelChange.bind(null, 2)}
+          />
           <input type="number"
-                 value={this.props.alpha}
-                 onChange={this.onAlphaHandler}/>
+            value={this.props.alpha}
+            onChange={this.onAlphaHandler}
+          />
         </div>
-        <div className={prefixCls + '-' + ('lable')}>
-          <label className={prefixCls + '-' + ('lable-hex')}>Hex</label>
-          <label className={prefixCls + '-' + ('lable-number')}
-                 onClick={this.onModeChange}
+        <div className={`${prefixCls}-lable`}>
+          <label className={`${prefixCls}-lable-hex`}>Hex</label>
+          <label className={`${prefixCls}-lable-number`}
+            onClick={this.onModeChange}
           >
             {this.state.mode[0]}
           </label>
-          <label className={prefixCls + '-' + ('lable-number')}
-                 onClick={this.onModeChange}
+          <label className={`${prefixCls}-lable-number`}
+            onClick={this.onModeChange}
           >
             {this.state.mode[1]}
           </label>
-          <label className={prefixCls + '-' + ('lable-number')}
-                 onClick={this.onModeChange}
+          <label className={`${prefixCls}-lable-number`}
+            onClick={this.onModeChange}
           >
             {this.state.mode[2]}
           </label>
-          <label className={prefixCls + '-' + ('lable-alpha')}>A</label>
+          <label className={`${prefixCls}-lable-alpha'`}>A</label>
         </div>
       </div>
     );

@@ -51,8 +51,10 @@ export default class Board extends React.Component {
       x,
       y,
     });
-    this.touchMoveListener = rcUtil.Dom.addEventListener(window, 'touchmove', this.onBoardTouchMove);
-    this.touchEndListener = rcUtil.Dom.addEventListener(window, 'touchend', this.onBoardTouchEnd);
+    this.touchMoveListener = rcUtil.Dom
+      .addEventListener(window, 'touchmove', this.onBoardTouchMove);
+    this.touchEndListener = rcUtil.Dom
+      .addEventListener(window, 'touchend', this.onBoardTouchEnd);
   }
 
   onBoardTouchMove(e) {
@@ -92,7 +94,7 @@ export default class Board extends React.Component {
   }
 
   getPrefixCls() {
-    return this.props.rootPrefixCls + '-board';
+    return `${this.props.rootPrefixCls}-board`;
   }
 
   removeTouchListeners() {
@@ -149,17 +151,17 @@ export default class Board extends React.Component {
     const y = (1 - hsv.v / 100) * HEIGHT - 4;
     return (
       <div className={prefixCls}>
-        <div className={prefixCls + '-' + ('hsv')} style={{ backgroundColor: hueColor }}>
-          <div className={prefixCls + '-' + ('value')}/>
-          <div className={prefixCls + '-' + ('saturation')}/>
+        <div className={`${prefixCls}-hsv`} style={{ backgroundColor: hueColor }}>
+          <div className={`${prefixCls}-value`}/>
+          <div className={`${prefixCls}-saturation`}/>
         </div>
         <span style={{ left: x, top: y }}/>
 
         <div
-          className={prefixCls + '-' + ('handler')}
+          className={`${prefixCls}-handler`}
           onMouseDown={this.onBoardMouseDown}
           onTouchStart={this.onBoardTouchStart}
-          />
+        />
       </div>
     );
   }

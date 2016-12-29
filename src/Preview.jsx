@@ -12,7 +12,7 @@ export default class Preview extends React.Component {
   }
 
   getPrefixCls() {
-    return this.props.rootPrefixCls + '-preview';
+    return `${this.props.rootPrefixCls}-preview`;
   }
 
   render() {

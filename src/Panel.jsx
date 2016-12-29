@@ -24,7 +24,7 @@ export default class Panel extends React.Component {
 
     this.state = {
       paramsHsv: hsv,
-      hsv: hsv,
+      hsv,
       alpha,
     };
 
@@ -133,40 +133,40 @@ export default class Panel extends React.Component {
         onFocus={this.onFocus}
         onBlur={this.onBlur}
         tabIndex="0"
-        >
-        <div className={prefixCls + '-' + ('inner')}>
+      >
+        <div className={`${prefixCls}-inner`}>
           <Board
             rootPrefixCls={prefixCls}
             hsv={hsv}
             onChange={this.onChange}
-            />
-          <div className={prefixCls + '-' + ('wrap')}>
-            <div className={prefixCls + '-' + ('wrap-ribbon')}>
+          />
+          <div className={`${prefixCls}-wrap`}>
+            <div className={`${prefixCls}-wrap-ribbon`}>
               <Ribbon
                 rootPrefixCls={prefixCls}
                 hsv={hsv}
                 onChange={this.onChange}
-                />
+              />
             </div>
-            <div className={prefixCls + '-' + ('wrap-alpha')}>
+            <div className={`${prefixCls}-wrap-alpha`}>
               <Alpha
                 rootPrefixCls={prefixCls}
                 alpha={alpha}
                 hsv={hsv}
                 onChange={this.onAlphaChange}
-                />
+              />
             </div>
-            <div className={prefixCls + '-' + ('wrap-preview')}>
+            <div className={`${prefixCls}-wrap-preview`}>
               <Preview
                 rootPrefixCls={prefixCls}
                 alpha={alpha}
                 onChange={this.onChange}
                 onInputClick={this.onSystemColorPickerOpen}
                 hsv={hsv}
-                />
+              />
             </div>
           </div>
-          <div className={prefixCls + '-' + ('wrap')} style={{ height: 40, marginTop: 6 }}>
+          <div className={`${prefixCls}-wrap`} style={{ height: 40, marginTop: 6 }}>
             <Params
               rootPrefixCls={prefixCls}
               hsv={this.state.paramsHsv}
@@ -174,7 +174,7 @@ export default class Panel extends React.Component {
               onAlphaChange={this.onAlphaChange}
               onChange={this.onChange}
               mode={this.props.mode}
-              />
+            />
           </div>
         </div>
       </div>

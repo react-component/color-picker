@@ -12,7 +12,28 @@
 /******/ 			installedChunks[chunkId] = 0;
 /******/ 		}
 /******/ 		for(moduleId in moreModules) {
-/******/ 			modules[moduleId] = moreModules[moduleId];
+/******/ 			var _m = moreModules[moduleId];
+/******/
+/******/ 			// Check if module is deduplicated
+/******/ 			switch(typeof _m) {
+/******/ 			case "object":
+/******/ 				// Module can be created from a template
+/******/ 				modules[moduleId] = (function(_m) {
+/******/ 					var args = _m.slice(1), templateId = _m[0];
+/******/ 					return function (a,b,c) {
+/******/ 						modules[templateId].apply(this, [a,b,c].concat(args));
+/******/ 					};
+/******/ 				}(_m));
+/******/ 				break;
+/******/ 			case "function":
+/******/ 				// Normal module
+/******/ 				modules[moduleId] = _m;
+/******/ 				break;
+/******/ 			default:
+/******/ 				// Module is a copy of another module
+/******/ 				modules[moduleId] = modules[_m];
+/******/ 				break;
+/******/ 			}
 /******/ 		}
 /******/ 		if(parentJsonpFunction) parentJsonpFunction(chunkIds, moreModules);
 /******/ 		while(callbacks.length)
@@ -91,7 +112,30 @@
 /******/ 	__webpack_require__.p = "";
 /******/ })
 /************************************************************************/
-/******/ ([
+/******/ ((function(modules) {
+	// Check all modules for deduplicated modules
+	for(var i in modules) {
+		if(Object.prototype.hasOwnProperty.call(modules, i)) {
+			switch(typeof modules[i]) {
+			case "function": break;
+			case "object":
+				// Module can be created from a template
+				modules[i] = (function(_m) {
+					var args = _m.slice(1), fn = modules[_m[0]];
+					return function (a,b,c) {
+						fn.apply(this, [a,b,c].concat(args));
+					};
+				}(modules[i]));
+				break;
+			default:
+				// Module is a copy of another module
+				modules[i] = modules[modules[i]];
+				break;
+			}
+		}
+	}
+	return modules;
+}([
 /* 0 */,
 /* 1 */,
 /* 2 */
@@ -674,134 +718,7 @@
 
 /***/ },
 /* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * 
-	 */
-	
-	'use strict';
-	
-	var _prodInvariant = __webpack_require__(9);
-	
-	var invariant = __webpack_require__(10);
-	
-	/**
-	 * Static poolers. Several custom versions for each potential number of
-	 * arguments. A completely generic pooler is easy to implement, but would
-	 * require accessing the `arguments` object. In each of these, `this` refers to
-	 * the Class itself, not an instance. If any others are needed, simply add them
-	 * here, or in their own files.
-	 */
-	var oneArgumentPooler = function (copyFieldsFrom) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, copyFieldsFrom);
-	    return instance;
-	  } else {
-	    return new Klass(copyFieldsFrom);
-	  }
-	};
-	
-	var twoArgumentPooler = function (a1, a2) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2);
-	  }
-	};
-	
-	var threeArgumentPooler = function (a1, a2, a3) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3);
-	  }
-	};
-	
-	var fourArgumentPooler = function (a1, a2, a3, a4) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3, a4);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3, a4);
-	  }
-	};
-	
-	var fiveArgumentPooler = function (a1, a2, a3, a4, a5) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3, a4, a5);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3, a4, a5);
-	  }
-	};
-	
-	var standardReleaser = function (instance) {
-	  var Klass = this;
-	  !(instance instanceof Klass) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Trying to release an instance into a pool of a different type.') : _prodInvariant('25') : void 0;
-	  instance.destructor();
-	  if (Klass.instancePool.length < Klass.poolSize) {
-	    Klass.instancePool.push(instance);
-	  }
-	};
-	
-	var DEFAULT_POOL_SIZE = 10;
-	var DEFAULT_POOLER = oneArgumentPooler;
-	
-	/**
-	 * Augments `CopyConstructor` to be a poolable class, augmenting only the class
-	 * itself (statically) not adding any prototypical fields. Any CopyConstructor
-	 * you give this may have a `poolSize` property, and will look for a
-	 * prototypical `destructor` on instances.
-	 *
-	 * @param {Function} CopyConstructor Constructor that can be used to reset.
-	 * @param {Function} pooler Customizable pooler.
-	 */
-	var addPoolingTo = function (CopyConstructor, pooler) {
-	  // Casting as any so that flow ignores the actual implementation and trusts
-	  // it to match the type we declared
-	  var NewKlass = CopyConstructor;
-	  NewKlass.instancePool = [];
-	  NewKlass.getPooled = pooler || DEFAULT_POOLER;
-	  if (!NewKlass.poolSize) {
-	    NewKlass.poolSize = DEFAULT_POOL_SIZE;
-	  }
-	  NewKlass.release = standardReleaser;
-	  return NewKlass;
-	};
-	
-	var PooledClass = {
-	  addPoolingTo: addPoolingTo,
-	  oneArgumentPooler: oneArgumentPooler,
-	  twoArgumentPooler: twoArgumentPooler,
-	  threeArgumentPooler: threeArgumentPooler,
-	  fourArgumentPooler: fourArgumentPooler,
-	  fiveArgumentPooler: fiveArgumentPooler
-	};
-	
-	module.exports = PooledClass;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
-
-/***/ },
+[281, 9],
 /* 9 */
 /***/ function(module, exports) {
 
@@ -871,12 +788,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
+	var validateFormat = function validateFormat(format) {};
+	
+	if (process.env.NODE_ENV !== 'production') {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+	
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 	
 	  if (!condition) {
 	    var error;
@@ -4465,48 +4388,7 @@
 
 /***/ },
 /* 37 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * 
-	 */
-	'use strict';
-	
-	/**
-	 * WARNING: DO NOT manually require this module.
-	 * This is a replacement for `invariant(...)` used by the error code system
-	 * and will _only_ be required by the corresponding babel pass.
-	 * It always throws.
-	 */
-	
-	function reactProdInvariant(code) {
-	  var argCount = arguments.length - 1;
-	
-	  var message = 'Minified React error #' + code + '; visit ' + 'http://facebook.github.io/react/docs/error-decoder.html?invariant=' + code;
-	
-	  for (var argIdx = 0; argIdx < argCount; argIdx++) {
-	    message += '&args[]=' + encodeURIComponent(arguments[argIdx + 1]);
-	  }
-	
-	  message += ' for the full message or use the non-minified dev environment' + ' for full errors and additional helpful warnings.';
-	
-	  var error = new Error(message);
-	  error.name = 'Invariant Violation';
-	  error.framesToPop = 1; // we don't care about reactProdInvariant's own frame
-	
-	  throw error;
-	}
-	
-	module.exports = reactProdInvariant;
-
-/***/ },
+9,
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -6534,134 +6416,7 @@
 
 /***/ },
 /* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * 
-	 */
-	
-	'use strict';
-	
-	var _prodInvariant = __webpack_require__(37);
-	
-	var invariant = __webpack_require__(10);
-	
-	/**
-	 * Static poolers. Several custom versions for each potential number of
-	 * arguments. A completely generic pooler is easy to implement, but would
-	 * require accessing the `arguments` object. In each of these, `this` refers to
-	 * the Class itself, not an instance. If any others are needed, simply add them
-	 * here, or in their own files.
-	 */
-	var oneArgumentPooler = function (copyFieldsFrom) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, copyFieldsFrom);
-	    return instance;
-	  } else {
-	    return new Klass(copyFieldsFrom);
-	  }
-	};
-	
-	var twoArgumentPooler = function (a1, a2) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2);
-	  }
-	};
-	
-	var threeArgumentPooler = function (a1, a2, a3) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3);
-	  }
-	};
-	
-	var fourArgumentPooler = function (a1, a2, a3, a4) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3, a4);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3, a4);
-	  }
-	};
-	
-	var fiveArgumentPooler = function (a1, a2, a3, a4, a5) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3, a4, a5);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3, a4, a5);
-	  }
-	};
-	
-	var standardReleaser = function (instance) {
-	  var Klass = this;
-	  !(instance instanceof Klass) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Trying to release an instance into a pool of a different type.') : _prodInvariant('25') : void 0;
-	  instance.destructor();
-	  if (Klass.instancePool.length < Klass.poolSize) {
-	    Klass.instancePool.push(instance);
-	  }
-	};
-	
-	var DEFAULT_POOL_SIZE = 10;
-	var DEFAULT_POOLER = oneArgumentPooler;
-	
-	/**
-	 * Augments `CopyConstructor` to be a poolable class, augmenting only the class
-	 * itself (statically) not adding any prototypical fields. Any CopyConstructor
-	 * you give this may have a `poolSize` property, and will look for a
-	 * prototypical `destructor` on instances.
-	 *
-	 * @param {Function} CopyConstructor Constructor that can be used to reset.
-	 * @param {Function} pooler Customizable pooler.
-	 */
-	var addPoolingTo = function (CopyConstructor, pooler) {
-	  // Casting as any so that flow ignores the actual implementation and trusts
-	  // it to match the type we declared
-	  var NewKlass = CopyConstructor;
-	  NewKlass.instancePool = [];
-	  NewKlass.getPooled = pooler || DEFAULT_POOLER;
-	  if (!NewKlass.poolSize) {
-	    NewKlass.poolSize = DEFAULT_POOL_SIZE;
-	  }
-	  NewKlass.release = standardReleaser;
-	  return NewKlass;
-	};
-	
-	var PooledClass = {
-	  addPoolingTo: addPoolingTo,
-	  oneArgumentPooler: oneArgumentPooler,
-	  twoArgumentPooler: twoArgumentPooler,
-	  threeArgumentPooler: threeArgumentPooler,
-	  fourArgumentPooler: fourArgumentPooler,
-	  fiveArgumentPooler: fiveArgumentPooler
-	};
-	
-	module.exports = PooledClass;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
-
-/***/ },
+[281, 37],
 /* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -13650,26 +13405,7 @@
 
 /***/ },
 /* 112 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * 
-	 */
-	
-	'use strict';
-	
-	var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-	
-	module.exports = ReactPropTypesSecret;
-
-/***/ },
+30,
 /* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -16047,35 +15783,7 @@
 
 /***/ },
 /* 124 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * 
-	 */
-	
-	'use strict';
-	
-	var ReactPropTypeLocationNames = {};
-	
-	if (process.env.NODE_ENV !== 'production') {
-	  ReactPropTypeLocationNames = {
-	    prop: 'prop',
-	    context: 'context',
-	    childContext: 'child context'
-	  };
-	}
-	
-	module.exports = ReactPropTypeLocationNames;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
-
-/***/ },
+25,
 /* 125 */
 /***/ function(module, exports) {
 
@@ -16335,68 +16043,7 @@
 
 /***/ },
 /* 130 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * 
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Escape and wrap key so it is safe to use as a reactid
-	 *
-	 * @param {string} key to be escaped.
-	 * @return {string} the escaped key.
-	 */
-	
-	function escape(key) {
-	  var escapeRegex = /[=:]/g;
-	  var escaperLookup = {
-	    '=': '=0',
-	    ':': '=2'
-	  };
-	  var escapedString = ('' + key).replace(escapeRegex, function (match) {
-	    return escaperLookup[match];
-	  });
-	
-	  return '$' + escapedString;
-	}
-	
-	/**
-	 * Unescape and unwrap key for human-readable display
-	 *
-	 * @param {string} key to unescape.
-	 * @return {string} the unescaped key.
-	 */
-	function unescape(key) {
-	  var unescapeRegex = /(=0|=2)/g;
-	  var unescaperLookup = {
-	    '=0': '=',
-	    '=2': ':'
-	  };
-	  var keySubstring = key[0] === '.' && key[1] === '$' ? key.substring(2) : key.substring(1);
-	
-	  return ('' + keySubstring).replace(unescapeRegex, function (match) {
-	    return unescaperLookup[match];
-	  });
-	}
-	
-	var KeyEscapeUtils = {
-	  escape: escape,
-	  unescape: unescape
-	};
-	
-	module.exports = KeyEscapeUtils;
-
-/***/ },
+19,
 /* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -16579,74 +16226,9 @@
 
 /***/ },
 /* 132 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2014-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * 
-	 */
-	
-	'use strict';
-	
-	// The Symbol used to tag the ReactElement type. If there is no native Symbol
-	// nor polyfill, then a plain number is used for performance.
-	
-	var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol['for'] && Symbol['for']('react.element') || 0xeac7;
-	
-	module.exports = REACT_ELEMENT_TYPE;
-
-/***/ },
+16,
 /* 133 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * 
-	 */
-	
-	'use strict';
-	
-	/* global Symbol */
-	
-	var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-	var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-	
-	/**
-	 * Returns the iterator method function contained on the iterable object.
-	 *
-	 * Be sure to invoke the function with the iterable as context:
-	 *
-	 *     var iteratorFn = getIteratorFn(myIterable);
-	 *     if (iteratorFn) {
-	 *       var iterator = iteratorFn.call(myIterable);
-	 *       ...
-	 *     }
-	 *
-	 * @param {?object} maybeIterable
-	 * @return {?function}
-	 */
-	function getIteratorFn(maybeIterable) {
-	  var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-	  if (typeof iteratorFn === 'function') {
-	    return iteratorFn;
-	  }
-	}
-	
-	module.exports = getIteratorFn;
-
-/***/ },
+18,
 /* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -21108,23 +20690,7 @@
 
 /***/ },
 /* 173 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 */
-	
-	'use strict';
-	
-	module.exports = '15.4.1';
-
-/***/ },
+32,
 /* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -21529,21 +21095,11 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var _react = __webpack_require__(3);
 	
@@ -21569,7 +21125,17 @@
 	
 	var _colr2 = _interopRequireDefault(_colr);
 	
-	var colr = new _colr2['default']();
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	var colr = new _colr2.default();
 	
 	function refFn(field, component) {
 	  this[field] = component;
@@ -21579,19 +21145,17 @@
 	  e.preventDefault();
 	}
 	
-	var ColorPicker = (function (_React$Component) {
+	var ColorPicker = function (_React$Component) {
 	  _inherits(ColorPicker, _React$Component);
 	
 	  function ColorPicker(props) {
-	    var _this = this;
-	
 	    _classCallCheck(this, ColorPicker);
 	
-	    _get(Object.getPrototypeOf(ColorPicker.prototype), 'constructor', this).call(this, props);
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
 	
 	    var alpha = typeof props.alpha === 'undefined' ? props.defaultAlpha : Math.min(props.alpha, props.defaultAlpha);
 	
-	    this.state = {
+	    _this.state = {
 	      color: props.color || props.defaultColor,
 	      alpha: alpha,
 	      open: false
@@ -21603,188 +21167,177 @@
 	      _this[e] = _this[e].bind(_this);
 	    });
 	
-	    this.savePickerPanelRef = refFn.bind(this, 'pickerPanelInstance');
-	    this.saveTriggerRef = refFn.bind(this, 'triggerInstance');
+	    _this.savePickerPanelRef = refFn.bind(_this, 'pickerPanelInstance');
+	    _this.saveTriggerRef = refFn.bind(_this, 'triggerInstance');
+	    return _this;
 	  }
 	
-	  _createClass(ColorPicker, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.color) {
-	        this.setState({
-	          color: nextProps.color
-	        });
-	      }
-	      if (nextProps.alpha !== null && nextProps.alpha !== undefined) {
-	        this.setState({
-	          alpha: nextProps.alpha
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'onTriggerClick',
-	    value: function onTriggerClick() {
+	  ColorPicker.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    if (nextProps.color) {
 	      this.setState({
-	        open: !this.state.open
+	        color: nextProps.color
 	      });
 	    }
-	  }, {
-	    key: 'onChange',
-	    value: function onChange(colors) {
-	      var _this2 = this;
-	
-	      this.setState(_extends({}, colors), function () {
-	        _this2.props.onChange(_this2.state);
+	    if (nextProps.alpha !== null && nextProps.alpha !== undefined) {
+	      this.setState({
+	        alpha: nextProps.alpha
 	      });
 	    }
-	  }, {
-	    key: 'onBlur',
-	    value: function onBlur() {
-	      this.setOpen(false);
-	    }
-	  }, {
-	    key: 'onVisibleChange',
-	    value: function onVisibleChange(open) {
-	      var _this3 = this;
+	  };
 	
-	      this.setOpen(open, function () {
-	        if (open) {
-	          _reactDom2['default'].findDOMNode(_this3.pickerPanelInstance).focus();
+	  ColorPicker.prototype.onTriggerClick = function onTriggerClick() {
+	    this.setState({
+	      open: !this.state.open
+	    });
+	  };
+	
+	  ColorPicker.prototype.onChange = function onChange(colors) {
+	    var _this2 = this;
+	
+	    this.setState(_extends({}, colors), function () {
+	      _this2.props.onChange(_this2.state);
+	    });
+	  };
+	
+	  ColorPicker.prototype.onBlur = function onBlur() {
+	    this.setOpen(false);
+	  };
+	
+	  ColorPicker.prototype.onVisibleChange = function onVisibleChange(open) {
+	    var _this3 = this;
+	
+	    this.setOpen(open, function () {
+	      if (open) {
+	        _reactDom2.default.findDOMNode(_this3.pickerPanelInstance).focus();
+	      }
+	    });
+	  };
+	
+	  ColorPicker.prototype.setOpen = function setOpen(open, callback) {
+	    var _this4 = this;
+	
+	    var _props = this.props,
+	        onOpen = _props.onOpen,
+	        onClose = _props.onClose;
+	
+	    if (this.state.open !== open) {
+	      this.setState({
+	        open: open
+	      }, function () {
+	        if (typeof callback === 'function') {
+	          callback();
+	        }
+	
+	        if (_this4.state.open) {
+	          onOpen(_this4.state);
+	        } else {
+	          onClose(_this4.state);
 	        }
 	      });
 	    }
-	  }, {
-	    key: 'setOpen',
-	    value: function setOpen(open, callback) {
-	      var _this4 = this;
+	  };
 	
-	      var _props = this.props;
-	      var onOpen = _props.onOpen;
-	      var onClose = _props.onClose;
+	  ColorPicker.prototype.getRootDOMNode = function getRootDOMNode() {
+	    return _reactDom2.default.findDOMNode(this);
+	  };
 	
-	      if (this.state.open !== open) {
-	        this.setState({
-	          open: open
-	        }, function () {
-	          if (typeof callback === 'function') {
-	            callback();
-	          }
+	  ColorPicker.prototype.getTriggerDOMNode = function getTriggerDOMNode() {
+	    return _reactDom2.default.findDOMNode(this.triggerInstance);
+	  };
 	
-	          if (_this4.state.open) {
-	            onOpen(_this4.state);
-	          } else {
-	            onClose(_this4.state);
-	          }
-	        });
-	      }
+	  ColorPicker.prototype.getPickerElement = function getPickerElement() {
+	    // const state = this.state;
+	    return _react2.default.createElement(_Panel2.default, {
+	      ref: this.savePickerPanelRef,
+	      defaultColor: this.state.color,
+	      alpha: this.state.alpha,
+	      prefixCls: this.props.prefixCls + '-panel',
+	      onChange: this.onChange,
+	      onBlur: this.onBlur,
+	      mode: this.props.mode
+	    });
+	  };
+	
+	  ColorPicker.prototype.open = function open(callback) {
+	    this.setOpen(true, callback);
+	  };
+	
+	  ColorPicker.prototype.close = function close(callback) {
+	    this.setOpen(false, callback);
+	  };
+	
+	  ColorPicker.prototype.focus = function focus() {
+	    if (!this.state.open) {
+	      _reactDom2.default.findDOMNode(this).focus();
 	    }
-	  }, {
-	    key: 'getRootDOMNode',
-	    value: function getRootDOMNode() {
-	      return _reactDom2['default'].findDOMNode(this);
+	  };
+	
+	  ColorPicker.prototype.render = function render() {
+	    var props = this.props;
+	    var state = this.state;
+	    var classes = [props.prefixCls + '-wrap'];
+	    if (state.open) {
+	      classes.push(props.prefixCls + '-open');
 	    }
-	  }, {
-	    key: 'getTriggerDOMNode',
-	    value: function getTriggerDOMNode() {
-	      return _reactDom2['default'].findDOMNode(this.triggerInstance);
-	    }
-	  }, {
-	    key: 'getPickerElement',
-	    value: function getPickerElement() {
-	      // const state = this.state;
-	      return _react2['default'].createElement(_Panel2['default'], {
-	        ref: this.savePickerPanelRef,
-	        defaultColor: this.state.color,
-	        alpha: this.state.alpha,
-	        prefixCls: this.props.prefixCls + '-panel',
-	        onChange: this.onChange,
-	        onBlur: this.onBlur,
-	        mode: this.props.mode
+	
+	    var children = props.children;
+	
+	    var RGBA = colr.fromHex(this.state.color).toRgbArray();
+	
+	    RGBA.push(this.state.alpha / 100);
+	
+	    if (children) {
+	      children = _react2.default.cloneElement(children, {
+	        ref: this.saveTriggerRef,
+	        unselectable: true,
+	        style: {
+	          backgroundColor: 'rgba(' + RGBA.join(',') + ')'
+	        },
+	        onClick: this.onTriggerClick,
+	        onMouseDown: prevent
 	      });
 	    }
-	  }, {
-	    key: 'open',
-	    value: function open(callback) {
-	      this.setOpen(true, callback);
-	    }
-	  }, {
-	    key: 'close',
-	    value: function close(callback) {
-	      this.setOpen(false, callback);
-	    }
-	  }, {
-	    key: 'focus',
-	    value: function focus() {
-	      if (!this.state.open) {
-	        _reactDom2['default'].findDOMNode(this).focus();
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var props = this.props;
-	      var state = this.state;
-	      var classes = [props.prefixCls + '-wrap'];
-	      if (state.open) {
-	        classes.push(props.prefixCls + '-open');
-	      }
 	
-	      var children = props.children;
+	    var prefixCls = props.prefixCls,
+	        placement = props.placement,
+	        style = props.style,
+	        getCalendarContainer = props.getCalendarContainer,
+	        align = props.align,
+	        animation = props.animation,
+	        disabled = props.disabled,
+	        transitionName = props.transitionName;
 	
-	      var RGBA = colr.fromHex(this.state.color).toRgbArray();
 	
-	      RGBA.push(this.state.alpha / 100);
-	
-	      if (children) {
-	        children = _react2['default'].cloneElement(children, {
-	          ref: this.saveTriggerRef,
-	          unselectable: true,
-	          style: {
-	            backgroundColor: 'rgba(' + RGBA.join(',') + ')'
-	          },
-	          onClick: this.onTriggerClick,
-	          onMouseDown: prevent
-	        });
-	      }
-	
-	      var prefixCls = props.prefixCls;
-	      var placement = props.placement;
-	      var style = props.style;
-	      var getCalendarContainer = props.getCalendarContainer;
-	      var align = props.align;
-	      var animation = props.animation;
-	      var disabled = props.disabled;
-	      var transitionName = props.transitionName;
-	
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: classes.join(' ') },
-	        _react2['default'].createElement(
-	          _rcTrigger2['default'],
-	          {
-	            popup: this.getPickerElement(),
-	            popupAlign: align,
-	            builtinPlacements: _placements2['default'],
-	            popupPlacement: placement,
-	            action: disabled ? [] : ['click'],
-	            destroyPopupOnHide: true,
-	            getPopupContainer: getCalendarContainer,
-	            popupStyle: style,
-	            popupAnimation: animation,
-	            popupTransitionName: transitionName,
-	            popupVisible: state.open,
-	            onPopupVisibleChange: this.onVisibleChange,
-	            prefixCls: prefixCls },
-	          children
-	        )
-	      );
-	    }
-	  }]);
+	    return _react2.default.createElement(
+	      'div',
+	      { className: classes.join(' ') },
+	      _react2.default.createElement(
+	        _rcTrigger2.default,
+	        {
+	          popup: this.getPickerElement(),
+	          popupAlign: align,
+	          builtinPlacements: _placements2.default,
+	          popupPlacement: placement,
+	          action: disabled ? [] : ['click'],
+	          destroyPopupOnHide: true,
+	          getPopupContainer: getCalendarContainer,
+	          popupStyle: style,
+	          popupAnimation: animation,
+	          popupTransitionName: transitionName,
+	          popupVisible: state.open,
+	          onPopupVisibleChange: this.onVisibleChange,
+	          prefixCls: prefixCls
+	        },
+	        children
+	      )
+	    );
+	  };
 	
 	  return ColorPicker;
-	})(_react2['default'].Component);
+	}(_react2.default.Component);
 	
-	exports['default'] = ColorPicker;
+	exports.default = ColorPicker;
+	
 	
 	ColorPicker.propTypes = {
 	  defaultColor: _react.PropTypes.string,
@@ -21808,8 +21361,9 @@
 	  onChange: function onChange() {},
 	  onOpen: function onOpen() {},
 	  onClose: function onClose() {},
+	
 	  prefixCls: 'rc-color-picker',
-	  children: _react2['default'].createElement('span', { className: 'rc-color-picker-trigger' }),
+	  children: _react2.default.createElement('span', { className: 'rc-color-picker-trigger' }),
 	  placement: 'topLeft',
 	  style: {}
 	};
@@ -26319,19 +25873,9 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var _react = __webpack_require__(3);
 	
@@ -26361,30 +25905,38 @@
 	
 	var _Params2 = _interopRequireDefault(_Params);
 	
-	var _utilsValidationColor = __webpack_require__(276);
+	var _validationColor = __webpack_require__(276);
 	
-	var _utilsValidationColor2 = _interopRequireDefault(_utilsValidationColor);
+	var _validationColor2 = _interopRequireDefault(_validationColor);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
 	
 	function noop() {}
 	
-	var colr = new _colr2['default']();
+	var colr = new _colr2.default();
 	
-	var Panel = (function (_React$Component) {
+	var Panel = function (_React$Component) {
 	  _inherits(Panel, _React$Component);
 	
 	  function Panel(props) {
-	    var _this = this;
-	
 	    _classCallCheck(this, Panel);
 	
-	    _get(Object.getPrototypeOf(Panel.prototype), 'constructor', this).call(this, props);
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
 	
 	    var color = props.color || props.defaultColor;
 	    var hsv = colr.fromHex(color).toHsvObject();
 	
 	    var alpha = typeof props.alpha === 'undefined' ? props.defaultAlpha : Math.min(props.alpha, props.defaultAlpha);
 	
-	    this.state = {
+	    _this.state = {
 	      paramsHsv: hsv,
 	      hsv: hsv,
 	      alpha: alpha
@@ -26395,185 +25947,177 @@
 	    events.forEach(function (m) {
 	      _this[m] = _this[m].bind(_this);
 	    });
+	    return _this;
 	  }
 	
-	  _createClass(Panel, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.color) {
-	        var hsv = colr.fromHex(nextProps.color).toHsvObject();
-	        this.setState({
-	          hsv: hsv,
-	          paramsHsv: hsv
-	        });
-	      }
-	      if (nextProps.alpha !== undefined) {
-	        this.setState({
-	          alpha: nextProps.alpha
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'onChange',
-	    value: function onChange(hsvObject) {
-	      var syncParams = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-	
-	      var hsv = hsvObject;
-	      var state = {
-	        hsv: hsv
-	      };
-	      if (syncParams) {
-	        state.paramsHsv = hsv;
-	      }
-	      this.setState(state);
-	
-	      var ret = {
-	        color: this.getHexColor(hsv),
+	  Panel.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    if (nextProps.color) {
+	      var hsv = colr.fromHex(nextProps.color).toHsvObject();
+	      this.setState({
 	        hsv: hsv,
-	        alpha: this.state.alpha
-	      };
-	      this.props.onChange(ret);
+	        paramsHsv: hsv
+	      });
 	    }
-	  }, {
-	    key: 'onSystemColorPickerOpen',
-	    value: function onSystemColorPickerOpen(e) {
-	      // only work with broswer which support color input
-	      if (e.target.type === 'color') {
-	        this.systemColorPickerOpen = true;
-	      }
+	    if (nextProps.alpha !== undefined) {
+	      this.setState({
+	        alpha: nextProps.alpha
+	      });
 	    }
-	  }, {
-	    key: 'onAlphaChange',
-	    value: function onAlphaChange(alpha) {
-	      if (this.props.alpha === undefined) {
-	        this.setState({
-	          alpha: alpha
-	        });
-	      }
-	      this.props.onChange({
-	        color: this.getHexColor(),
-	        hsv: this.state.hsv,
+	  };
+	
+	  Panel.prototype.onChange = function onChange(hsvObject) {
+	    var syncParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+	
+	    var hsv = hsvObject;
+	    var state = {
+	      hsv: hsv
+	    };
+	    if (syncParams) {
+	      state.paramsHsv = hsv;
+	    }
+	    this.setState(state);
+	
+	    var ret = {
+	      color: this.getHexColor(hsv),
+	      hsv: hsv,
+	      alpha: this.state.alpha
+	    };
+	    this.props.onChange(ret);
+	  };
+	
+	  Panel.prototype.onSystemColorPickerOpen = function onSystemColorPickerOpen(e) {
+	    // only work with broswer which support color input
+	    if (e.target.type === 'color') {
+	      this.systemColorPickerOpen = true;
+	    }
+	  };
+	
+	  Panel.prototype.onAlphaChange = function onAlphaChange(alpha) {
+	    if (this.props.alpha === undefined) {
+	      this.setState({
 	        alpha: alpha
 	      });
 	    }
-	  }, {
-	    key: 'onFocus',
-	    value: function onFocus() {
-	      if (this._blurTimer) {
-	        clearTimeout(this._blurTimer);
-	        this._blurTimer = null;
-	      } else {
-	        this.props.onFocus();
-	      }
-	    }
-	  }, {
-	    key: 'onBlur',
-	    value: function onBlur() {
-	      var _this2 = this;
+	    this.props.onChange({
+	      color: this.getHexColor(),
+	      hsv: this.state.hsv,
+	      alpha: alpha
+	    });
+	  };
 	
-	      if (this._blurTimer) {
-	        clearTimeout(this._blurTimer);
-	      }
-	      this._blurTimer = setTimeout(function () {
-	        // if is system color picker open, then stop run blur
-	        if (_this2.systemColorPickerOpen) {
-	          _this2.systemColorPickerOpen = false;
-	          return;
-	        }
+	  Panel.prototype.onFocus = function onFocus() {
+	    if (this._blurTimer) {
+	      clearTimeout(this._blurTimer);
+	      this._blurTimer = null;
+	    } else {
+	      this.props.onFocus();
+	    }
+	  };
 	
-	        _this2.props.onBlur();
-	      }, 100);
+	  Panel.prototype.onBlur = function onBlur() {
+	    var _this2 = this;
+	
+	    if (this._blurTimer) {
+	      clearTimeout(this._blurTimer);
 	    }
-	  }, {
-	    key: 'getHexColor',
-	    value: function getHexColor(hsv) {
-	      return colr.fromHsvObject(hsv || this.state.hsv).toHex();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var prefixCls = this.props.prefixCls;
-	      var hsv = this.state.hsv;
-	      var alpha = this.state.alpha;
-	      return _react2['default'].createElement(
+	    this._blurTimer = setTimeout(function () {
+	      // if is system color picker open, then stop run blur
+	      if (_this2.systemColorPickerOpen) {
+	        _this2.systemColorPickerOpen = false;
+	        return;
+	      }
+	
+	      _this2.props.onBlur();
+	    }, 100);
+	  };
+	
+	  Panel.prototype.getHexColor = function getHexColor(hsv) {
+	    return colr.fromHsvObject(hsv || this.state.hsv).toHex();
+	  };
+	
+	  Panel.prototype.render = function render() {
+	    var prefixCls = this.props.prefixCls;
+	    var hsv = this.state.hsv;
+	    var alpha = this.state.alpha;
+	    return _react2.default.createElement(
+	      'div',
+	      {
+	        className: prefixCls,
+	        style: this.props.style,
+	        onFocus: this.onFocus,
+	        onBlur: this.onBlur,
+	        tabIndex: '0'
+	      },
+	      _react2.default.createElement(
 	        'div',
-	        {
-	          className: prefixCls,
-	          style: this.props.style,
-	          onFocus: this.onFocus,
-	          onBlur: this.onBlur,
-	          tabIndex: '0'
-	        },
-	        _react2['default'].createElement(
+	        { className: prefixCls + '-inner' },
+	        _react2.default.createElement(_Board2.default, {
+	          rootPrefixCls: prefixCls,
+	          hsv: hsv,
+	          onChange: this.onChange
+	        }),
+	        _react2.default.createElement(
 	          'div',
-	          { className: prefixCls + '-' + 'inner' },
-	          _react2['default'].createElement(_Board2['default'], {
-	            rootPrefixCls: prefixCls,
-	            hsv: hsv,
-	            onChange: this.onChange
-	          }),
-	          _react2['default'].createElement(
+	          { className: prefixCls + '-wrap' },
+	          _react2.default.createElement(
 	            'div',
-	            { className: prefixCls + '-' + 'wrap' },
-	            _react2['default'].createElement(
-	              'div',
-	              { className: prefixCls + '-' + 'wrap-ribbon' },
-	              _react2['default'].createElement(_Ribbon2['default'], {
-	                rootPrefixCls: prefixCls,
-	                hsv: hsv,
-	                onChange: this.onChange
-	              })
-	            ),
-	            _react2['default'].createElement(
-	              'div',
-	              { className: prefixCls + '-' + 'wrap-alpha' },
-	              _react2['default'].createElement(_Alpha2['default'], {
-	                rootPrefixCls: prefixCls,
-	                alpha: alpha,
-	                hsv: hsv,
-	                onChange: this.onAlphaChange
-	              })
-	            ),
-	            _react2['default'].createElement(
-	              'div',
-	              { className: prefixCls + '-' + 'wrap-preview' },
-	              _react2['default'].createElement(_Preview2['default'], {
-	                rootPrefixCls: prefixCls,
-	                alpha: alpha,
-	                onChange: this.onChange,
-	                onInputClick: this.onSystemColorPickerOpen,
-	                hsv: hsv
-	              })
-	            )
-	          ),
-	          _react2['default'].createElement(
-	            'div',
-	            { className: prefixCls + '-' + 'wrap', style: { height: 40, marginTop: 6 } },
-	            _react2['default'].createElement(_Params2['default'], {
+	            { className: prefixCls + '-wrap-ribbon' },
+	            _react2.default.createElement(_Ribbon2.default, {
 	              rootPrefixCls: prefixCls,
-	              hsv: this.state.paramsHsv,
+	              hsv: hsv,
+	              onChange: this.onChange
+	            })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: prefixCls + '-wrap-alpha' },
+	            _react2.default.createElement(_Alpha2.default, {
+	              rootPrefixCls: prefixCls,
 	              alpha: alpha,
-	              onAlphaChange: this.onAlphaChange,
+	              hsv: hsv,
+	              onChange: this.onAlphaChange
+	            })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: prefixCls + '-wrap-preview' },
+	            _react2.default.createElement(_Preview2.default, {
+	              rootPrefixCls: prefixCls,
+	              alpha: alpha,
 	              onChange: this.onChange,
-	              mode: this.props.mode
+	              onInputClick: this.onSystemColorPickerOpen,
+	              hsv: hsv
 	            })
 	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: prefixCls + '-wrap', style: { height: 40, marginTop: 6 } },
+	          _react2.default.createElement(_Params2.default, {
+	            rootPrefixCls: prefixCls,
+	            hsv: this.state.paramsHsv,
+	            alpha: alpha,
+	            onAlphaChange: this.onAlphaChange,
+	            onChange: this.onChange,
+	            mode: this.props.mode
+	          })
 	        )
-	      );
-	    }
-	  }]);
+	      )
+	    );
+	  };
 	
 	  return Panel;
-	})(_react2['default'].Component);
+	}(_react2.default.Component);
 	
-	exports['default'] = Panel;
+	exports.default = Panel;
+	
 	
 	Panel.propTypes = {
 	  defaultAlpha: _react.PropTypes.number,
-	  defaultColor: _utilsValidationColor2['default'],
+	  defaultColor: _validationColor2.default,
 	  // can custom
 	  prefixCls: _react.PropTypes.string,
-	  color: _utilsValidationColor2['default'],
+	  color: _validationColor2.default,
 	  alpha: _react.PropTypes.number,
 	  style: _react.PropTypes.object,
 	  onChange: _react.PropTypes.func,
@@ -27251,19 +26795,9 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var _colr = __webpack_require__(256);
 	
@@ -27281,191 +26815,189 @@
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
-	var colr = new _colr2['default']();
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	var colr = new _colr2.default();
 	
 	var WIDTH = 200;
 	var HEIGHT = 150;
 	
-	var Board = (function (_React$Component) {
+	var Board = function (_React$Component) {
 	  _inherits(Board, _React$Component);
 	
 	  function Board(props) {
-	    var _this = this;
-	
 	    _classCallCheck(this, Board);
 	
-	    _get(Object.getPrototypeOf(Board.prototype), 'constructor', this).call(this, props);
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
+	
 	    var events = ['onBoardMouseDown', 'onBoardDrag', 'onBoardDragEnd', 'onBoardTouchStart', 'onBoardTouchMove', 'onBoardTouchEnd'];
 	    events.forEach(function (m) {
 	      _this[m] = _this[m].bind(_this);
 	    });
+	    return _this;
 	  }
 	
-	  _createClass(Board, [{
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this.removeListeners();
-	      this.removeTouchListeners();
-	    }
-	  }, {
-	    key: 'onBoardMouseDown',
-	    value: function onBoardMouseDown(e) {
-	      var x = e.clientX;
-	      var y = e.clientY;
-	      this.pointMoveTo({
-	        x: x,
-	        y: y
-	      });
-	      this.dragListener = _rcUtil2['default'].Dom.addEventListener(window, 'mousemove', this.onBoardDrag);
-	      this.dragUpListener = _rcUtil2['default'].Dom.addEventListener(window, 'mouseup', this.onBoardDragEnd);
-	    }
-	  }, {
-	    key: 'onBoardTouchStart',
-	    value: function onBoardTouchStart(e) {
-	      if (e.touches.length !== 1) {
-	        return;
-	      }
+	  Board.prototype.componentWillUnmount = function componentWillUnmount() {
+	    this.removeListeners();
+	    this.removeTouchListeners();
+	  };
 	
-	      var x = e.targetTouches[0].clientX;
-	      var y = e.targetTouches[0].clientY;
-	      this.pointMoveTo({
-	        x: x,
-	        y: y
-	      });
-	      this.touchMoveListener = _rcUtil2['default'].Dom.addEventListener(window, 'touchmove', this.onBoardTouchMove);
-	      this.touchEndListener = _rcUtil2['default'].Dom.addEventListener(window, 'touchend', this.onBoardTouchEnd);
-	    }
-	  }, {
-	    key: 'onBoardTouchMove',
-	    value: function onBoardTouchMove(e) {
-	      if (e.preventDefault) {
-	        e.preventDefault();
-	      }
+	  Board.prototype.onBoardMouseDown = function onBoardMouseDown(e) {
+	    var x = e.clientX;
+	    var y = e.clientY;
+	    this.pointMoveTo({
+	      x: x,
+	      y: y
+	    });
+	    this.dragListener = _rcUtil2.default.Dom.addEventListener(window, 'mousemove', this.onBoardDrag);
+	    this.dragUpListener = _rcUtil2.default.Dom.addEventListener(window, 'mouseup', this.onBoardDragEnd);
+	  };
 	
-	      var x = e.targetTouches[0].clientX;
-	      var y = e.targetTouches[0].clientY;
-	      this.pointMoveTo({
-	        x: x,
-	        y: y
-	      });
-	    }
-	  }, {
-	    key: 'onBoardTouchEnd',
-	    value: function onBoardTouchEnd() {
-	      this.removeTouchListeners();
-	    }
-	  }, {
-	    key: 'onBoardDrag',
-	    value: function onBoardDrag(e) {
-	      var x = e.clientX;
-	      var y = e.clientY;
-	      this.pointMoveTo({
-	        x: x,
-	        y: y
-	      });
-	    }
-	  }, {
-	    key: 'onBoardDragEnd',
-	    value: function onBoardDragEnd(e) {
-	      var x = e.clientX;
-	      var y = e.clientY;
-	      this.pointMoveTo({
-	        x: x,
-	        y: y
-	      });
-	      this.removeListeners();
-	    }
-	  }, {
-	    key: 'getPrefixCls',
-	    value: function getPrefixCls() {
-	      return this.props.rootPrefixCls + '-board';
-	    }
-	  }, {
-	    key: 'removeTouchListeners',
-	    value: function removeTouchListeners() {
-	      if (this.touchMoveListener) {
-	        this.touchMoveListener.remove();
-	        this.touchMoveListener = null;
-	      }
-	      if (this.touchEndListener) {
-	        this.touchEndListener.remove();
-	        this.touchEndListener = null;
-	      }
-	    }
-	  }, {
-	    key: 'removeListeners',
-	    value: function removeListeners() {
-	      if (this.dragListener) {
-	        this.dragListener.remove();
-	        this.dragListener = null;
-	      }
-	      if (this.dragUpListener) {
-	        this.dragUpListener.remove();
-	        this.dragUpListener = null;
-	      }
+	  Board.prototype.onBoardTouchStart = function onBoardTouchStart(e) {
+	    if (e.touches.length !== 1) {
+	      return;
 	    }
 	
-	    /**
-	     * 移动光标位置到
-	     * @param  {object} pos X Y 全局坐标点
-	     * @return {undefined}
-	     */
-	  }, {
-	    key: 'pointMoveTo',
-	    value: function pointMoveTo(pos) {
-	      var rect = _reactDom2['default'].findDOMNode(this).getBoundingClientRect();
-	      var left = pos.x - rect.left;
-	      var top = pos.y - rect.top;
+	    var x = e.targetTouches[0].clientX;
+	    var y = e.targetTouches[0].clientY;
+	    this.pointMoveTo({
+	      x: x,
+	      y: y
+	    });
+	    this.touchMoveListener = _rcUtil2.default.Dom.addEventListener(window, 'touchmove', this.onBoardTouchMove);
+	    this.touchEndListener = _rcUtil2.default.Dom.addEventListener(window, 'touchend', this.onBoardTouchEnd);
+	  };
 	
-	      left = Math.max(0, left);
-	      left = Math.min(left, WIDTH);
-	      top = Math.max(0, top);
-	      top = Math.min(top, HEIGHT);
-	
-	      var hsv = {
-	        h: this.props.hsv.h,
-	        s: parseInt(left / WIDTH * 100, 10),
-	        v: parseInt((1 - top / HEIGHT) * 100, 10)
-	      };
-	      this.props.onChange(hsv);
+	  Board.prototype.onBoardTouchMove = function onBoardTouchMove(e) {
+	    if (e.preventDefault) {
+	      e.preventDefault();
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var prefixCls = this.getPrefixCls();
-	      var hsv = this.props.hsv;
-	      var hueHsv = [hsv.h, 100, 100];
-	      var hueColor = colr.fromHsvArray(hueHsv).toHex();
-	      var x = hsv.s / 100 * WIDTH - 4;
-	      var y = (1 - hsv.v / 100) * HEIGHT - 4;
-	      return _react2['default'].createElement(
+	
+	    var x = e.targetTouches[0].clientX;
+	    var y = e.targetTouches[0].clientY;
+	    this.pointMoveTo({
+	      x: x,
+	      y: y
+	    });
+	  };
+	
+	  Board.prototype.onBoardTouchEnd = function onBoardTouchEnd() {
+	    this.removeTouchListeners();
+	  };
+	
+	  Board.prototype.onBoardDrag = function onBoardDrag(e) {
+	    var x = e.clientX;
+	    var y = e.clientY;
+	    this.pointMoveTo({
+	      x: x,
+	      y: y
+	    });
+	  };
+	
+	  Board.prototype.onBoardDragEnd = function onBoardDragEnd(e) {
+	    var x = e.clientX;
+	    var y = e.clientY;
+	    this.pointMoveTo({
+	      x: x,
+	      y: y
+	    });
+	    this.removeListeners();
+	  };
+	
+	  Board.prototype.getPrefixCls = function getPrefixCls() {
+	    return this.props.rootPrefixCls + '-board';
+	  };
+	
+	  Board.prototype.removeTouchListeners = function removeTouchListeners() {
+	    if (this.touchMoveListener) {
+	      this.touchMoveListener.remove();
+	      this.touchMoveListener = null;
+	    }
+	    if (this.touchEndListener) {
+	      this.touchEndListener.remove();
+	      this.touchEndListener = null;
+	    }
+	  };
+	
+	  Board.prototype.removeListeners = function removeListeners() {
+	    if (this.dragListener) {
+	      this.dragListener.remove();
+	      this.dragListener = null;
+	    }
+	    if (this.dragUpListener) {
+	      this.dragUpListener.remove();
+	      this.dragUpListener = null;
+	    }
+	  };
+	
+	  /**
+	   * 移动光标位置到
+	   * @param  {object} pos X Y 全局坐标点
+	   * @return {undefined}
+	   */
+	
+	
+	  Board.prototype.pointMoveTo = function pointMoveTo(pos) {
+	    var rect = _reactDom2.default.findDOMNode(this).getBoundingClientRect();
+	    var left = pos.x - rect.left;
+	    var top = pos.y - rect.top;
+	
+	    left = Math.max(0, left);
+	    left = Math.min(left, WIDTH);
+	    top = Math.max(0, top);
+	    top = Math.min(top, HEIGHT);
+	
+	    var hsv = {
+	      h: this.props.hsv.h,
+	      s: parseInt(left / WIDTH * 100, 10),
+	      v: parseInt((1 - top / HEIGHT) * 100, 10)
+	    };
+	    this.props.onChange(hsv);
+	  };
+	
+	  Board.prototype.render = function render() {
+	    var prefixCls = this.getPrefixCls();
+	    var hsv = this.props.hsv;
+	    var hueHsv = [hsv.h, 100, 100];
+	    var hueColor = colr.fromHsvArray(hueHsv).toHex();
+	    var x = hsv.s / 100 * WIDTH - 4;
+	    var y = (1 - hsv.v / 100) * HEIGHT - 4;
+	    return _react2.default.createElement(
+	      'div',
+	      { className: prefixCls },
+	      _react2.default.createElement(
 	        'div',
-	        { className: prefixCls },
-	        _react2['default'].createElement(
-	          'div',
-	          { className: prefixCls + '-' + 'hsv', style: { backgroundColor: hueColor } },
-	          _react2['default'].createElement('div', { className: prefixCls + '-' + 'value' }),
-	          _react2['default'].createElement('div', { className: prefixCls + '-' + 'saturation' })
-	        ),
-	        _react2['default'].createElement('span', { style: { left: x, top: y } }),
-	        _react2['default'].createElement('div', {
-	          className: prefixCls + '-' + 'handler',
-	          onMouseDown: this.onBoardMouseDown,
-	          onTouchStart: this.onBoardTouchStart
-	        })
-	      );
-	    }
-	  }]);
+	        { className: prefixCls + '-hsv', style: { backgroundColor: hueColor } },
+	        _react2.default.createElement('div', { className: prefixCls + '-value' }),
+	        _react2.default.createElement('div', { className: prefixCls + '-saturation' })
+	      ),
+	      _react2.default.createElement('span', { style: { left: x, top: y } }),
+	      _react2.default.createElement('div', {
+	        className: prefixCls + '-handler',
+	        onMouseDown: this.onBoardMouseDown,
+	        onTouchStart: this.onBoardTouchStart
+	      })
+	    );
+	  };
 	
 	  return Board;
-	})(_react2['default'].Component);
+	}(_react2.default.Component);
 	
-	exports['default'] = Board;
+	exports.default = Board;
+	
 	
 	Board.propTypes = {
-	  hsv: _react2['default'].PropTypes.object,
-	  onChange: _react2['default'].PropTypes.func,
-	  rootPrefixCls: _react2['default'].PropTypes.string
+	  hsv: _react2.default.PropTypes.object,
+	  onChange: _react2.default.PropTypes.func,
+	  rootPrefixCls: _react2.default.PropTypes.string
 	};
 	module.exports = exports['default'];
 
@@ -28327,19 +27859,9 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var _react = __webpack_require__(3);
 	
@@ -28349,63 +27871,69 @@
 	
 	var _colr2 = _interopRequireDefault(_colr);
 	
-	var colr = new _colr2['default']();
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Preview = (function (_React$Component) {
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	var colr = new _colr2.default();
+	
+	var Preview = function (_React$Component) {
 	  _inherits(Preview, _React$Component);
 	
 	  function Preview() {
 	    _classCallCheck(this, Preview);
 	
-	    _get(Object.getPrototypeOf(Preview.prototype), 'constructor', this).apply(this, arguments);
+	    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
 	  }
 	
-	  _createClass(Preview, [{
-	    key: 'onChange',
-	    value: function onChange(e) {
-	      var value = e.target.value;
-	      var color = colr.fromHex(value);
-	      this.props.onChange(color.toHsvObject());
-	      e.stopPropagation();
-	    }
-	  }, {
-	    key: 'getPrefixCls',
-	    value: function getPrefixCls() {
-	      return this.props.rootPrefixCls + '-preview';
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var prefixCls = this.getPrefixCls();
-	      var hex = colr.fromHsvObject(this.props.hsv).toHex();
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: prefixCls },
-	        _react2['default'].createElement('span', { style: {
-	            backgroundColor: hex,
-	            opacity: this.props.alpha / 100 }
-	        }),
-	        _react2['default'].createElement('input', {
-	          type: 'color',
-	          value: hex,
-	          onChange: this.onChange.bind(this),
-	          onClick: this.props.onInputClick
-	        })
-	      );
-	    }
-	  }]);
+	  Preview.prototype.onChange = function onChange(e) {
+	    var value = e.target.value;
+	    var color = colr.fromHex(value);
+	    this.props.onChange(color.toHsvObject());
+	    e.stopPropagation();
+	  };
+	
+	  Preview.prototype.getPrefixCls = function getPrefixCls() {
+	    return this.props.rootPrefixCls + '-preview';
+	  };
+	
+	  Preview.prototype.render = function render() {
+	    var prefixCls = this.getPrefixCls();
+	    var hex = colr.fromHsvObject(this.props.hsv).toHex();
+	    return _react2.default.createElement(
+	      'div',
+	      { className: prefixCls },
+	      _react2.default.createElement('span', { style: {
+	          backgroundColor: hex,
+	          opacity: this.props.alpha / 100 }
+	      }),
+	      _react2.default.createElement('input', {
+	        type: 'color',
+	        value: hex,
+	        onChange: this.onChange.bind(this),
+	        onClick: this.props.onInputClick
+	      })
+	    );
+	  };
 	
 	  return Preview;
-	})(_react2['default'].Component);
+	}(_react2.default.Component);
 	
-	exports['default'] = Preview;
+	exports.default = Preview;
+	
 	
 	Preview.propTypes = {
-	  rootPrefixCls: _react2['default'].PropTypes.string,
-	  hsv: _react2['default'].PropTypes.object,
-	  alpha: _react2['default'].PropTypes.number,
-	  onChange: _react2['default'].PropTypes.func,
-	  onInputClick: _react2['default'].PropTypes.func
+	  rootPrefixCls: _react2.default.PropTypes.string,
+	  hsv: _react2.default.PropTypes.object,
+	  alpha: _react2.default.PropTypes.number,
+	  onChange: _react2.default.PropTypes.func,
+	  onInputClick: _react2.default.PropTypes.func
 	};
 	module.exports = exports['default'];
 
@@ -28415,21 +27943,11 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var _react = __webpack_require__(3);
 	
@@ -28443,15 +27961,23 @@
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
-	var Ribbon = (function (_React$Component) {
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	var Ribbon = function (_React$Component) {
 	  _inherits(Ribbon, _React$Component);
 	
 	  function Ribbon(props) {
-	    var _this = this;
-	
 	    _classCallCheck(this, Ribbon);
 	
-	    _get(Object.getPrototypeOf(Ribbon.prototype), 'constructor', this).call(this, props);
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
 	
 	    var events = ['onMouseDown', 'onDrag', 'onDragEnd', 'pointMoveTo', '_setHuePosition'];
 	    events.forEach(function (e) {
@@ -28459,106 +27985,98 @@
 	        _this[e] = _this[e].bind(_this);
 	      }
 	    });
+	    return _this;
 	  }
 	
-	  _createClass(Ribbon, [{
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this.removeListeners();
-	    }
-	  }, {
-	    key: 'onMouseDown',
-	    value: function onMouseDown(e) {
-	      var x = e.clientX;
-	      var y = e.clientY;
+	  Ribbon.prototype.componentWillUnmount = function componentWillUnmount() {
+	    this.removeListeners();
+	  };
 	
-	      this.pointMoveTo({
-	        x: x, y: y
-	      });
+	  Ribbon.prototype.onMouseDown = function onMouseDown(e) {
+	    var x = e.clientX;
+	    var y = e.clientY;
 	
-	      this.dragListener = _rcUtil2['default'].Dom.addEventListener(window, 'mousemove', this.onDrag);
-	      this.dragUpListener = _rcUtil2['default'].Dom.addEventListener(window, 'mouseup', this.onDragEnd);
+	    this.pointMoveTo({
+	      x: x, y: y
+	    });
+	
+	    this.dragListener = _rcUtil2.default.Dom.addEventListener(window, 'mousemove', this.onDrag);
+	    this.dragUpListener = _rcUtil2.default.Dom.addEventListener(window, 'mouseup', this.onDragEnd);
+	  };
+	
+	  Ribbon.prototype.onDrag = function onDrag(e) {
+	    var x = e.clientX;
+	    var y = e.clientY;
+	    this.pointMoveTo({
+	      x: x, y: y
+	    });
+	  };
+	
+	  Ribbon.prototype.onDragEnd = function onDragEnd(e) {
+	    var x = e.clientX;
+	    var y = e.clientY;
+	    this.pointMoveTo({
+	      x: x, y: y
+	    });
+	    this.removeListeners();
+	  };
+	
+	  Ribbon.prototype.getPrefixCls = function getPrefixCls() {
+	    return this.props.rootPrefixCls + '-ribbon';
+	  };
+	
+	  Ribbon.prototype.pointMoveTo = function pointMoveTo(coords) {
+	    var rect = _reactDom2.default.findDOMNode(this).getBoundingClientRect();
+	    var width = rect.width;
+	    var left = coords.x - rect.left;
+	    left = Math.max(0, left);
+	    left = Math.min(left, width);
+	    var huePercent = left / width;
+	    var hue = huePercent * 360;
+	    // 新的对象, 避免引用
+	    var hsv = _extends({}, this.props.hsv, {
+	      h: hue
+	    });
+	    this.props.onChange(hsv);
+	  };
+	
+	  Ribbon.prototype.removeListeners = function removeListeners() {
+	    if (this.dragListener) {
+	      this.dragListener.remove();
+	      this.dragListener = null;
 	    }
-	  }, {
-	    key: 'onDrag',
-	    value: function onDrag(e) {
-	      var x = e.clientX;
-	      var y = e.clientY;
-	      this.pointMoveTo({
-	        x: x, y: y
-	      });
+	    if (this.dragUpListener) {
+	      this.dragUpListener.remove();
+	      this.dragUpListener = null;
 	    }
-	  }, {
-	    key: 'onDragEnd',
-	    value: function onDragEnd(e) {
-	      var x = e.clientX;
-	      var y = e.clientY;
-	      this.pointMoveTo({
-	        x: x, y: y
-	      });
-	      this.removeListeners();
-	    }
-	  }, {
-	    key: 'getPrefixCls',
-	    value: function getPrefixCls() {
-	      return this.props.rootPrefixCls + '-ribbon';
-	    }
-	  }, {
-	    key: 'pointMoveTo',
-	    value: function pointMoveTo(coords) {
-	      var rect = _reactDom2['default'].findDOMNode(this).getBoundingClientRect();
-	      var width = rect.width;
-	      var left = coords.x - rect.left;
-	      left = Math.max(0, left);
-	      left = Math.min(left, width);
-	      var huePercent = left / width;
-	      var hue = huePercent * 360;
-	      // 新的对象, 避免引用
-	      var hsv = _extends({}, this.props.hsv, {
-	        h: hue
-	      });
-	      this.props.onChange(hsv);
-	    }
-	  }, {
-	    key: 'removeListeners',
-	    value: function removeListeners() {
-	      if (this.dragListener) {
-	        this.dragListener.remove();
-	        this.dragListener = null;
-	      }
-	      if (this.dragUpListener) {
-	        this.dragUpListener.remove();
-	        this.dragUpListener = null;
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var prefixCls = this.getPrefixCls();
-	      var HSV = this.props.hsv;
-	      var hue = HSV.h;
-	      var per = hue / 360 * 100;
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: prefixCls },
-	        _react2['default'].createElement('span', { ref: 'point', style: { left: per + '%' } }),
-	        _react2['default'].createElement('div', {
-	          className: prefixCls + '-' + 'handler',
-	          onMouseDown: this.onMouseDown
-	        })
-	      );
-	    }
-	  }]);
+	  };
+	
+	  Ribbon.prototype.render = function render() {
+	    var prefixCls = this.getPrefixCls();
+	    var HSV = this.props.hsv;
+	    var hue = HSV.h;
+	    var per = hue / 360 * 100;
+	    return _react2.default.createElement(
+	      'div',
+	      { className: prefixCls },
+	      _react2.default.createElement('span', { ref: 'point', style: { left: per + '%' } }),
+	      _react2.default.createElement('div', {
+	        className: prefixCls + '-handler',
+	        onMouseDown: this.onMouseDown
+	      })
+	    );
+	  };
 	
 	  return Ribbon;
-	})(_react2['default'].Component);
+	}(_react2.default.Component);
 	
-	exports['default'] = Ribbon;
+	exports.default = Ribbon;
+	
 	
 	Ribbon.propTypes = {
-	  rootPrefixCls: _react2['default'].PropTypes.string,
-	  hsv: _react2['default'].PropTypes.object,
-	  onChange: _react2['default'].PropTypes.func
+	  rootPrefixCls: _react2.default.PropTypes.string,
+	  hsv: _react2.default.PropTypes.object,
+	  onChange: _react2.default.PropTypes.func
 	};
 	module.exports = exports['default'];
 
@@ -28568,19 +28086,9 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var _react = __webpack_require__(3);
 	
@@ -28598,138 +28106,137 @@
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
-	var colr = new _colr2['default']();
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	var colr = new _colr2.default();
 	
 	function rgbaColor(r, g, b, a) {
 	  return 'rgba(' + [r, g, b, a / 100].join(',') + ')';
 	}
 	
-	var Alpha = (function (_React$Component) {
+	var Alpha = function (_React$Component) {
 	  _inherits(Alpha, _React$Component);
 	
 	  function Alpha(props) {
-	    var _this = this;
-	
 	    _classCallCheck(this, Alpha);
 	
-	    _get(Object.getPrototypeOf(Alpha.prototype), 'constructor', this).call(this, props);
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
+	
 	    var events = ['onMouseDown', 'onDrag', 'onDragEnd', 'pointMoveTo', 'getBackground'];
 	    events.forEach(function (e) {
 	      _this[e] = _this[e].bind(_this);
 	    });
+	    return _this;
 	  }
 	
-	  _createClass(Alpha, [{
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this.removeListeners();
-	    }
-	  }, {
-	    key: 'onMouseDown',
-	    value: function onMouseDown(e) {
-	      var x = e.clientX;
-	      var y = e.clientY;
+	  Alpha.prototype.componentWillUnmount = function componentWillUnmount() {
+	    this.removeListeners();
+	  };
 	
-	      this.pointMoveTo({
-	        x: x, y: y
-	      });
+	  Alpha.prototype.onMouseDown = function onMouseDown(e) {
+	    var x = e.clientX;
+	    var y = e.clientY;
 	
-	      this.dragListener = _rcUtil2['default'].Dom.addEventListener(window, 'mousemove', this.onDrag);
-	      this.dragUpListener = _rcUtil2['default'].Dom.addEventListener(window, 'mouseup', this.onDragEnd);
-	    }
-	  }, {
-	    key: 'onDrag',
-	    value: function onDrag(e) {
-	      var x = e.clientX;
-	      var y = e.clientY;
-	      this.pointMoveTo({
-	        x: x, y: y
-	      });
-	    }
-	  }, {
-	    key: 'onDragEnd',
-	    value: function onDragEnd(e) {
-	      var x = e.clientX;
-	      var y = e.clientY;
-	      this.pointMoveTo({
-	        x: x, y: y
-	      });
-	      this.removeListeners();
-	    }
-	  }, {
-	    key: 'getBackground',
-	    value: function getBackground() {
-	      var _colr$fromHsvObject$toRgbObject = colr.fromHsvObject(this.props.hsv).toRgbObject();
+	    this.pointMoveTo({
+	      x: x, y: y
+	    });
 	
-	      var r = _colr$fromHsvObject$toRgbObject.r;
-	      var g = _colr$fromHsvObject$toRgbObject.g;
-	      var b = _colr$fromHsvObject$toRgbObject.b;
+	    this.dragListener = _rcUtil2.default.Dom.addEventListener(window, 'mousemove', this.onDrag);
+	    this.dragUpListener = _rcUtil2.default.Dom.addEventListener(window, 'mouseup', this.onDragEnd);
+	  };
 	
-	      var opacityGradient = 'linear-gradient(to right, ' + rgbaColor(r, g, b, 0) + ', ' + rgbaColor(r, g, b, 100) + ')';
-	      return opacityGradient;
-	    }
-	  }, {
-	    key: 'getPrefixCls',
-	    value: function getPrefixCls() {
-	      return this.props.rootPrefixCls + '-alpha';
-	    }
-	  }, {
-	    key: 'pointMoveTo',
-	    value: function pointMoveTo(coords) {
-	      var rect = _reactDom2['default'].findDOMNode(this).getBoundingClientRect();
-	      var width = rect.width;
-	      var left = coords.x - rect.left;
+	  Alpha.prototype.onDrag = function onDrag(e) {
+	    var x = e.clientX;
+	    var y = e.clientY;
+	    this.pointMoveTo({
+	      x: x, y: y
+	    });
+	  };
 	
-	      left = Math.max(0, left);
-	      left = Math.min(left, width);
+	  Alpha.prototype.onDragEnd = function onDragEnd(e) {
+	    var x = e.clientX;
+	    var y = e.clientY;
+	    this.pointMoveTo({
+	      x: x, y: y
+	    });
+	    this.removeListeners();
+	  };
 	
-	      var alpha = Math.floor(left / width * 100);
+	  Alpha.prototype.getBackground = function getBackground() {
+	    var _colr$fromHsvObject$t = colr.fromHsvObject(this.props.hsv).toRgbObject(),
+	        r = _colr$fromHsvObject$t.r,
+	        g = _colr$fromHsvObject$t.g,
+	        b = _colr$fromHsvObject$t.b;
 	
-	      this.props.onChange(alpha);
+	    var opacityGradient = 'linear-gradient(to right, ' + rgbaColor(r, g, b, 0) + ' , ' + rgbaColor(r, g, b, 100) + ')'; // eslint-disable-line max-len
+	    return opacityGradient;
+	  };
+	
+	  Alpha.prototype.getPrefixCls = function getPrefixCls() {
+	    return this.props.rootPrefixCls + '-alpha';
+	  };
+	
+	  Alpha.prototype.pointMoveTo = function pointMoveTo(coords) {
+	    var rect = _reactDom2.default.findDOMNode(this).getBoundingClientRect();
+	    var width = rect.width;
+	    var left = coords.x - rect.left;
+	
+	    left = Math.max(0, left);
+	    left = Math.min(left, width);
+	
+	    var alpha = Math.floor(left / width * 100);
+	
+	    this.props.onChange(alpha);
+	  };
+	
+	  Alpha.prototype.removeListeners = function removeListeners() {
+	    if (this.dragListener) {
+	      this.dragListener.remove();
+	      this.dragListener = null;
 	    }
-	  }, {
-	    key: 'removeListeners',
-	    value: function removeListeners() {
-	      if (this.dragListener) {
-	        this.dragListener.remove();
-	        this.dragListener = null;
-	      }
-	      if (this.dragUpListener) {
-	        this.dragUpListener.remove();
-	        this.dragUpListener = null;
-	      }
+	    if (this.dragUpListener) {
+	      this.dragUpListener.remove();
+	      this.dragUpListener = null;
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var prefixCls = this.getPrefixCls();
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: prefixCls },
-	        _react2['default'].createElement('div', {
-	          ref: 'bg',
-	          className: prefixCls + '-' + 'bg',
-	          style: { background: this.getBackground() }
-	        }),
-	        _react2['default'].createElement('span', { style: { left: this.props.alpha + '%' } }),
-	        _react2['default'].createElement('div', {
-	          className: prefixCls + '-' + 'handler',
-	          onMouseDown: this.onMouseDown
-	        })
-	      );
-	    }
-	  }]);
+	  };
+	
+	  Alpha.prototype.render = function render() {
+	    var prefixCls = this.getPrefixCls();
+	    return _react2.default.createElement(
+	      'div',
+	      { className: prefixCls },
+	      _react2.default.createElement('div', {
+	        ref: 'bg',
+	        className: prefixCls + '-bg',
+	        style: { background: this.getBackground() }
+	      }),
+	      _react2.default.createElement('span', { style: { left: this.props.alpha + '%' } }),
+	      _react2.default.createElement('div', {
+	        className: prefixCls + '-handler',
+	        onMouseDown: this.onMouseDown
+	      })
+	    );
+	  };
 	
 	  return Alpha;
-	})(_react2['default'].Component);
+	}(_react2.default.Component);
 	
-	exports['default'] = Alpha;
+	exports.default = Alpha;
+	
 	
 	Alpha.propTypes = {
-	  hsv: _react2['default'].PropTypes.object,
-	  onChange: _react2['default'].PropTypes.func,
-	  rootPrefixCls: _react2['default'].PropTypes.string,
-	  alpha: _react2['default'].PropTypes.number
+	  hsv: _react2.default.PropTypes.object,
+	  onChange: _react2.default.PropTypes.func,
+	  rootPrefixCls: _react2.default.PropTypes.string,
+	  alpha: _react2.default.PropTypes.number
 	};
 	module.exports = exports['default'];
 
@@ -28739,19 +28246,9 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var _react = __webpack_require__(3);
 	
@@ -28761,23 +28258,31 @@
 	
 	var _colr2 = _interopRequireDefault(_colr);
 	
-	var colr = new _colr2['default']();
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+	
+	var colr = new _colr2.default();
 	var modesMap = ['RGB', 'HSB', 'HSL'];
 	
-	var Params = (function (_React$Component) {
+	var Params = function (_React$Component) {
 	  _inherits(Params, _React$Component);
 	
 	  function Params(props) {
-	    var _this = this;
-	
 	    _classCallCheck(this, Params);
 	
-	    _get(Object.getPrototypeOf(Params.prototype), 'constructor', this).call(this, props);
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
 	
 	    var color = colr.fromHsvObject(props.hsv);
 	
 	    // 管理 input 的状态
-	    this.state = {
+	    _this.state = {
 	      mode: props.mode,
 	      color: color,
 	      hex: color.toHex().substr(1)
@@ -28790,234 +28295,228 @@
 	        _this[e] = _this[e].bind(_this);
 	      }
 	    });
+	    return _this;
 	  }
 	
-	  _createClass(Params, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.hsv !== this.props.hsv) {
-	        var color = colr.fromHsvObject(nextProps.hsv);
-	        this.setState({
-	          hex: color.toHex().substr(1),
-	          color: color
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'onHexHandler',
-	    value: function onHexHandler(event) {
-	      var value = event.target.value;
-	      var color = null;
-	      try {
-	        color = _colr2['default'].fromHex(value);
-	      } catch (e) {
-	        /* eslint no-empty:0 */
-	      }
-	
-	      if (color !== null) {
-	        this.setState({
-	          color: color,
-	          hex: value
-	        });
-	        this.props.onChange(color.toHsvObject(), false);
-	      } else {
-	        this.setState({
-	          hex: value
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'onModeChange',
-	    value: function onModeChange() {
-	      var mode = this.state.mode;
-	      var modeIndex = (modesMap.indexOf(mode) + 1) % modesMap.length;
-	      var state = this.state;
-	
-	      mode = modesMap[modeIndex];
-	      var colorChannel = this.getColorChannel(state.color, mode);
-	      this.setState({
-	        mode: mode,
-	        colorChannel: colorChannel
-	      });
-	    }
-	  }, {
-	    key: 'onAlphaHandler',
-	    value: function onAlphaHandler(event) {
-	      var alpha = parseInt(event.target.value, 10);
-	      if (isNaN(alpha)) {
-	        alpha = 0;
-	      }
-	      alpha = Math.max(0, alpha);
-	      alpha = Math.min(alpha, 100);
-	
-	      this.setState({
-	        alpha: alpha
-	      });
-	
-	      this.props.onAlphaChange(alpha);
-	    }
-	  }, {
-	    key: 'onColorChannelChange',
-	    value: function onColorChannelChange(index, event) {
-	      var value = this.getChannelInRange(event.target.value, index);
-	      var colorChannel = this.getColorChannel();
-	
-	      colorChannel[index] = value;
-	
-	      var color = this.getColorByChannel(colorChannel);
-	
+	  Params.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    if (nextProps.hsv !== this.props.hsv) {
+	      var color = colr.fromHsvObject(nextProps.hsv);
 	      this.setState({
 	        hex: color.toHex().substr(1),
 	        color: color
 	      });
+	    }
+	  };
+	
+	  Params.prototype.onHexHandler = function onHexHandler(event) {
+	    var value = event.target.value;
+	    var color = null;
+	    try {
+	      color = _colr2.default.fromHex(value);
+	    } catch (e) {
+	      /* eslint no-empty:0 */
+	    }
+	
+	    if (color !== null) {
+	      this.setState({
+	        color: color,
+	        hex: value
+	      });
 	      this.props.onChange(color.toHsvObject(), false);
+	    } else {
+	      this.setState({
+	        hex: value
+	      });
 	    }
-	  }, {
-	    key: 'getChannelInRange',
-	    value: function getChannelInRange(value, index) {
-	      var channelMap = {
-	        RGB: [[0, 255], [0, 255], [0, 255]],
-	        HSB: [[0, 360], [0, 100], [0, 100]],
-	        HSL: [[0, 360], [0, 100], [0, 100]]
-	      };
-	      var mode = this.state.mode;
-	      var range = channelMap[mode][index];
-	      var result = parseInt(value, 10);
-	      if (isNaN(result)) {
-	        result = 0;
-	      }
-	      result = Math.max(range[0], result);
-	      result = Math.min(result, range[1]);
-	      return result;
+	  };
+	
+	  Params.prototype.onModeChange = function onModeChange() {
+	    var mode = this.state.mode;
+	    var modeIndex = (modesMap.indexOf(mode) + 1) % modesMap.length;
+	    var state = this.state;
+	
+	    mode = modesMap[modeIndex];
+	    var colorChannel = this.getColorChannel(state.color, mode);
+	    this.setState({
+	      mode: mode,
+	      colorChannel: colorChannel
+	    });
+	  };
+	
+	  Params.prototype.onAlphaHandler = function onAlphaHandler(event) {
+	    var alpha = parseInt(event.target.value, 10);
+	    if (isNaN(alpha)) {
+	      alpha = 0;
 	    }
-	  }, {
-	    key: 'getColorByChannel',
-	    value: function getColorByChannel(colorChannel) {
-	      var colorMode = this.state.mode;
-	      var color = undefined;
-	      switch (colorMode) {
-	        case 'RGB':
-	          color = colr.fromRgbArray(colorChannel);
-	          break;
-	        case 'HSB':
-	          color = colr.fromHsvArray(colorChannel);
-	          break;
-	        case 'HSL':
-	          color = colr.fromHslArray(colorChannel);
-	          break;
-	        default:
-	          color = colr.fromRgbArray(colorChannel);
-	      }
-	      return color;
+	    alpha = Math.max(0, alpha);
+	    alpha = Math.min(alpha, 100);
+	
+	    this.setState({
+	      alpha: alpha
+	    });
+	
+	    this.props.onAlphaChange(alpha);
+	  };
+	
+	  Params.prototype.onColorChannelChange = function onColorChannelChange(index, event) {
+	    var value = this.getChannelInRange(event.target.value, index);
+	    var colorChannel = this.getColorChannel();
+	
+	    colorChannel[index] = value;
+	
+	    var color = this.getColorByChannel(colorChannel);
+	
+	    this.setState({
+	      hex: color.toHex().substr(1),
+	      color: color
+	    });
+	    this.props.onChange(color.toHsvObject(), false);
+	  };
+	
+	  Params.prototype.getChannelInRange = function getChannelInRange(value, index) {
+	    var channelMap = {
+	      RGB: [[0, 255], [0, 255], [0, 255]],
+	      HSB: [[0, 360], [0, 100], [0, 100]],
+	      HSL: [[0, 360], [0, 100], [0, 100]]
+	    };
+	    var mode = this.state.mode;
+	    var range = channelMap[mode][index];
+	    var result = parseInt(value, 10);
+	    if (isNaN(result)) {
+	      result = 0;
 	    }
-	  }, {
-	    key: 'getPrefixCls',
-	    value: function getPrefixCls() {
-	      return this.props.rootPrefixCls + '-params';
+	    result = Math.max(range[0], result);
+	    result = Math.min(result, range[1]);
+	    return result;
+	  };
+	
+	  Params.prototype.getColorByChannel = function getColorByChannel(colorChannel) {
+	    var colorMode = this.state.mode;
+	    var color = void 0;
+	    switch (colorMode) {
+	      case 'RGB':
+	        color = colr.fromRgbArray(colorChannel);
+	        break;
+	      case 'HSB':
+	        color = colr.fromHsvArray(colorChannel);
+	        break;
+	      case 'HSL':
+	        color = colr.fromHslArray(colorChannel);
+	        break;
+	      default:
+	        color = colr.fromRgbArray(colorChannel);
 	    }
-	  }, {
-	    key: 'getColorChannel',
-	    value: function getColorChannel(colrInstance, mode) {
-	      var color = colrInstance || this.state.color;
-	      var colorMode = mode || this.state.mode;
-	      var result = undefined;
-	      switch (colorMode) {
-	        case 'RGB':
-	          result = color.toRgbArray();
-	          break;
-	        case 'HSB':
-	          result = color.toHsvArray();
-	          break;
-	        case 'HSL':
-	          result = color.toHslArray();
-	          break;
-	        default:
-	          result = color.toRgbArray();
-	      }
-	      return result;
+	    return color;
+	  };
+	
+	  Params.prototype.getPrefixCls = function getPrefixCls() {
+	    return this.props.rootPrefixCls + '-params';
+	  };
+	
+	  Params.prototype.getColorChannel = function getColorChannel(colrInstance, mode) {
+	    var color = colrInstance || this.state.color;
+	    var colorMode = mode || this.state.mode;
+	    var result = void 0;
+	    switch (colorMode) {
+	      case 'RGB':
+	        result = color.toRgbArray();
+	        break;
+	      case 'HSB':
+	        result = color.toHsvArray();
+	        break;
+	      case 'HSL':
+	        result = color.toHslArray();
+	        break;
+	      default:
+	        result = color.toRgbArray();
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var prefixCls = this.getPrefixCls();
-	      var colorChannel = this.getColorChannel();
-	      return _react2['default'].createElement(
+	    return result;
+	  };
+	
+	  Params.prototype.render = function render() {
+	    var prefixCls = this.getPrefixCls();
+	    var colorChannel = this.getColorChannel();
+	    return _react2.default.createElement(
+	      'div',
+	      { className: prefixCls },
+	      _react2.default.createElement(
 	        'div',
-	        { className: prefixCls },
-	        _react2['default'].createElement(
-	          'div',
-	          { className: prefixCls + '-' + 'input' },
-	          _react2['default'].createElement('input', {
-	            className: prefixCls + '-' + 'hex',
-	            type: 'text',
-	            maxLength: '6',
-	            onChange: this.onHexHandler,
-	            value: this.state.hex.toUpperCase()
-	          }),
-	          _react2['default'].createElement('input', { type: 'number', ref: 'channel_0',
-	            value: colorChannel[0],
-	            onChange: this.onColorChannelChange.bind(null, 0) }),
-	          _react2['default'].createElement('input', { type: 'number', ref: 'channel_1',
-	            value: colorChannel[1],
-	            onChange: this.onColorChannelChange.bind(null, 1) }),
-	          _react2['default'].createElement('input', { type: 'number', ref: 'channel_2',
-	            value: colorChannel[2],
-	            onChange: this.onColorChannelChange.bind(null, 2) }),
-	          _react2['default'].createElement('input', { type: 'number',
-	            value: this.props.alpha,
-	            onChange: this.onAlphaHandler })
+	        { className: prefixCls + '-input' },
+	        _react2.default.createElement('input', {
+	          className: prefixCls + '-hex',
+	          type: 'text',
+	          maxLength: '6',
+	          onChange: this.onHexHandler,
+	          value: this.state.hex.toUpperCase()
+	        }),
+	        _react2.default.createElement('input', { type: 'number', ref: 'channel_0',
+	          value: colorChannel[0],
+	          onChange: this.onColorChannelChange.bind(null, 0)
+	        }),
+	        _react2.default.createElement('input', { type: 'number', ref: 'channel_1',
+	          value: colorChannel[1],
+	          onChange: this.onColorChannelChange.bind(null, 1)
+	        }),
+	        _react2.default.createElement('input', { type: 'number', ref: 'channel_2',
+	          value: colorChannel[2],
+	          onChange: this.onColorChannelChange.bind(null, 2)
+	        }),
+	        _react2.default.createElement('input', { type: 'number',
+	          value: this.props.alpha,
+	          onChange: this.onAlphaHandler
+	        })
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: prefixCls + '-lable' },
+	        _react2.default.createElement(
+	          'label',
+	          { className: prefixCls + '-lable-hex' },
+	          'Hex'
 	        ),
-	        _react2['default'].createElement(
-	          'div',
-	          { className: prefixCls + '-' + 'lable' },
-	          _react2['default'].createElement(
-	            'label',
-	            { className: prefixCls + '-' + 'lable-hex' },
-	            'Hex'
-	          ),
-	          _react2['default'].createElement(
-	            'label',
-	            { className: prefixCls + '-' + 'lable-number',
-	              onClick: this.onModeChange
-	            },
-	            this.state.mode[0]
-	          ),
-	          _react2['default'].createElement(
-	            'label',
-	            { className: prefixCls + '-' + 'lable-number',
-	              onClick: this.onModeChange
-	            },
-	            this.state.mode[1]
-	          ),
-	          _react2['default'].createElement(
-	            'label',
-	            { className: prefixCls + '-' + 'lable-number',
-	              onClick: this.onModeChange
-	            },
-	            this.state.mode[2]
-	          ),
-	          _react2['default'].createElement(
-	            'label',
-	            { className: prefixCls + '-' + 'lable-alpha' },
-	            'A'
-	          )
+	        _react2.default.createElement(
+	          'label',
+	          { className: prefixCls + '-lable-number',
+	            onClick: this.onModeChange
+	          },
+	          this.state.mode[0]
+	        ),
+	        _react2.default.createElement(
+	          'label',
+	          { className: prefixCls + '-lable-number',
+	            onClick: this.onModeChange
+	          },
+	          this.state.mode[1]
+	        ),
+	        _react2.default.createElement(
+	          'label',
+	          { className: prefixCls + '-lable-number',
+	            onClick: this.onModeChange
+	          },
+	          this.state.mode[2]
+	        ),
+	        _react2.default.createElement(
+	          'label',
+	          { className: prefixCls + '-lable-alpha\'' },
+	          'A'
 	        )
-	      );
-	    }
-	  }]);
+	      )
+	    );
+	  };
 	
 	  return Params;
-	})(_react2['default'].Component);
+	}(_react2.default.Component);
 	
-	exports['default'] = Params;
+	exports.default = Params;
+	
 	
 	Params.propTypes = {
-	  onChange: _react2['default'].PropTypes.func,
-	  hsv: _react2['default'].PropTypes.object,
-	  alpha: _react2['default'].PropTypes.number,
-	  rootPrefixCls: _react2['default'].PropTypes.string,
-	  onAlphaChange: _react2['default'].PropTypes.func,
-	  mode: _react2['default'].PropTypes.oneOf(modesMap)
+	  onChange: _react2.default.PropTypes.func,
+	  hsv: _react2.default.PropTypes.object,
+	  alpha: _react2.default.PropTypes.number,
+	  rootPrefixCls: _react2.default.PropTypes.string,
+	  onAlphaChange: _react2.default.PropTypes.func,
+	  mode: _react2.default.PropTypes.oneOf(modesMap)
 	};
 	
 	Params.defaultProps = {
@@ -29029,11 +28528,11 @@
 /* 276 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	module.exports = function validationColor(props, propName, componentName) {
 	  if (props[propName] && !/^#[0-9a-fA-F]{3,6}$/.test(props[propName])) {
-	    return new Error(componentName + '.props.' + propName + ' Validation failed!');
+	    return new Error(componentName + ".props." + propName + " Validation failed!");
 	  }
 	};
 
@@ -29043,7 +28542,7 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	var autoAdjustOverflow = {
@@ -29080,9 +28579,141 @@
 	  }
 	};
 	
-	exports['default'] = placements;
+	exports.default = placements;
 	module.exports = exports['default'];
 
+/***/ },
+/* 278 */,
+/* 279 */,
+/* 280 */,
+/* 281 */
+/***/ function(module, exports, __webpack_require__, __webpack_module_template_argument_0__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * 
+	 */
+	
+	'use strict';
+	
+	var _prodInvariant = __webpack_require__(__webpack_module_template_argument_0__);
+	
+	var invariant = __webpack_require__(10);
+	
+	/**
+	 * Static poolers. Several custom versions for each potential number of
+	 * arguments. A completely generic pooler is easy to implement, but would
+	 * require accessing the `arguments` object. In each of these, `this` refers to
+	 * the Class itself, not an instance. If any others are needed, simply add them
+	 * here, or in their own files.
+	 */
+	var oneArgumentPooler = function (copyFieldsFrom) {
+	  var Klass = this;
+	  if (Klass.instancePool.length) {
+	    var instance = Klass.instancePool.pop();
+	    Klass.call(instance, copyFieldsFrom);
+	    return instance;
+	  } else {
+	    return new Klass(copyFieldsFrom);
+	  }
+	};
+	
+	var twoArgumentPooler = function (a1, a2) {
+	  var Klass = this;
+	  if (Klass.instancePool.length) {
+	    var instance = Klass.instancePool.pop();
+	    Klass.call(instance, a1, a2);
+	    return instance;
+	  } else {
+	    return new Klass(a1, a2);
+	  }
+	};
+	
+	var threeArgumentPooler = function (a1, a2, a3) {
+	  var Klass = this;
+	  if (Klass.instancePool.length) {
+	    var instance = Klass.instancePool.pop();
+	    Klass.call(instance, a1, a2, a3);
+	    return instance;
+	  } else {
+	    return new Klass(a1, a2, a3);
+	  }
+	};
+	
+	var fourArgumentPooler = function (a1, a2, a3, a4) {
+	  var Klass = this;
+	  if (Klass.instancePool.length) {
+	    var instance = Klass.instancePool.pop();
+	    Klass.call(instance, a1, a2, a3, a4);
+	    return instance;
+	  } else {
+	    return new Klass(a1, a2, a3, a4);
+	  }
+	};
+	
+	var fiveArgumentPooler = function (a1, a2, a3, a4, a5) {
+	  var Klass = this;
+	  if (Klass.instancePool.length) {
+	    var instance = Klass.instancePool.pop();
+	    Klass.call(instance, a1, a2, a3, a4, a5);
+	    return instance;
+	  } else {
+	    return new Klass(a1, a2, a3, a4, a5);
+	  }
+	};
+	
+	var standardReleaser = function (instance) {
+	  var Klass = this;
+	  !(instance instanceof Klass) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Trying to release an instance into a pool of a different type.') : _prodInvariant('25') : void 0;
+	  instance.destructor();
+	  if (Klass.instancePool.length < Klass.poolSize) {
+	    Klass.instancePool.push(instance);
+	  }
+	};
+	
+	var DEFAULT_POOL_SIZE = 10;
+	var DEFAULT_POOLER = oneArgumentPooler;
+	
+	/**
+	 * Augments `CopyConstructor` to be a poolable class, augmenting only the class
+	 * itself (statically) not adding any prototypical fields. Any CopyConstructor
+	 * you give this may have a `poolSize` property, and will look for a
+	 * prototypical `destructor` on instances.
+	 *
+	 * @param {Function} CopyConstructor Constructor that can be used to reset.
+	 * @param {Function} pooler Customizable pooler.
+	 */
+	var addPoolingTo = function (CopyConstructor, pooler) {
+	  // Casting as any so that flow ignores the actual implementation and trusts
+	  // it to match the type we declared
+	  var NewKlass = CopyConstructor;
+	  NewKlass.instancePool = [];
+	  NewKlass.getPooled = pooler || DEFAULT_POOLER;
+	  if (!NewKlass.poolSize) {
+	    NewKlass.poolSize = DEFAULT_POOL_SIZE;
+	  }
+	  NewKlass.release = standardReleaser;
+	  return NewKlass;
+	};
+	
+	var PooledClass = {
+	  addPoolingTo: addPoolingTo,
+	  oneArgumentPooler: oneArgumentPooler,
+	  twoArgumentPooler: twoArgumentPooler,
+	  threeArgumentPooler: threeArgumentPooler,
+	  fourArgumentPooler: fourArgumentPooler,
+	  fiveArgumentPooler: fiveArgumentPooler
+	};
+	
+	module.exports = PooledClass;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+
 /***/ }
-/******/ ]);
+/******/ ])));
 //# sourceMappingURL=common.js.map

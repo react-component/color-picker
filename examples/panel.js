@@ -13,8 +13,6 @@ webpackJsonp([2],{
 
 	'use strict';
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
 	__webpack_require__(2);
 	
 	var _react = __webpack_require__(3);
@@ -27,14 +25,16 @@ webpackJsonp([2],{
 	
 	var _rcColorPicker = __webpack_require__(180);
 	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function onChange(obj) {
 	  console.log(obj);
 	}
 	
-	_reactDom2['default'].render(_react2['default'].createElement(
+	_reactDom2.default.render(_react2.default.createElement(
 	  'div',
 	  null,
-	  _react2['default'].createElement(_rcColorPicker.Panel, { color: '#468890', onChange: onChange, mode: 'HSL' })
+	  _react2.default.createElement(_rcColorPicker.Panel, { color: '#468890', onChange: onChange, mode: 'HSL' })
 	), document.getElementById('__react-content'));
 
 /***/ }

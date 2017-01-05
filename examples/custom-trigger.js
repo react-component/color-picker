@@ -8,7 +8,7 @@ function changeHandler(colors) {
 }
 
 ReactDOM.render(
-  <div style={{textAlign: 'center'}}>
+  <div style={{ textAlign: 'center' }}>
     <ColorPicker
       color={'#36c'}
       onChange={changeHandler}

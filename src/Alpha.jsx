@@ -6,7 +6,7 @@ import rcUtil from 'rc-util';
 const colr = new Colr();
 
 function rgbaColor(r, g, b, a) {
-  return 'rgba(' + [r, g, b, a / 100].join(',') + ')';
+  return `rgba(${[r, g, b, a / 100].join(',')})`;
 }
 
 export default class Alpha extends React.Component {
@@ -58,15 +58,13 @@ export default class Alpha extends React.Component {
   }
 
   getBackground() {
-    const {r, g, b} = colr.fromHsvObject(this.props.hsv).toRgbObject();
-    const opacityGradient = 'linear-gradient(to right, ' +
-      rgbaColor(r, g, b, 0) + ', ' +
-      rgbaColor(r, g, b, 100) + ')';
+    const { r, g, b } = colr.fromHsvObject(this.props.hsv).toRgbObject();
+    const opacityGradient = `linear-gradient(to right, ${rgbaColor(r, g, b, 0)} , ${rgbaColor(r, g, b, 100)})`; // eslint-disable-line max-len
     return opacityGradient;
   }
 
   getPrefixCls() {
-    return this.props.rootPrefixCls + '-alpha';
+    return `${this.props.rootPrefixCls}-alpha`;
   }
 
   pointMoveTo(coords) {
@@ -99,15 +97,15 @@ export default class Alpha extends React.Component {
       <div className={prefixCls}>
         <div
           ref="bg"
-          className={prefixCls + '-' + ('bg')}
-          style={{background: this.getBackground()}}
-          />
-        <span style={{left: this.props.alpha + '%'}}/>
+          className={`${prefixCls}-bg`}
+          style={{ background: this.getBackground() }}
+        />
+        <span style={{ left: `${this.props.alpha}%` }}/>
 
         <div
-          className={prefixCls + '-' + ('handler')}
+          className={`${prefixCls}-handler`}
           onMouseDown={this.onMouseDown}
-          />
+        />
       </div>
     );
   }

@@ -20,6 +20,7 @@ ReactDOM.render(
       onChange={changeHandler}
       onClose={closeHandler}
       placement="topLeft"
+      className="some-class"
     >
       <span className="rc-color-picker-trigger"/>
     </ColorPicker>

@@ -128,7 +128,7 @@ export default class Panel extends React.Component {
     const alpha = this.state.alpha;
     return (
       <div
-        className={prefixCls}
+        className={[prefixCls, this.props.className].join(' ')}
         style={this.props.style}
         onFocus={this.onFocus}
         onBlur={this.onBlur}
@@ -196,6 +196,7 @@ Panel.propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
+  className: PropTypes.string,
 };
 
 Panel.defaultProps = {
@@ -207,4 +208,5 @@ Panel.defaultProps = {
   onFocus: noop,
   onBlur: noop,
   mode: 'RGB',
+  className: '',
 };

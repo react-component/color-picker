@@ -66,6 +66,7 @@ onClose   | Function  | noop    | when color picker popup close
 placement | String    | topLeft | one of ['topLeft', 'topRight', 'bottomLeft', 'bottomRight']
 mode      | String    |'RGB'    | color mode, support mode 'RGB', 'HSB' or 'HSL'
 children   | Node      |`<span className='react-colorpicker-trigger'></span>`|additional trigger appended to picker
+className  | String   | ''     | Aditional class to be added to component 
 
 
 ### ColorPicker.Panel.props
@@ -81,6 +82,7 @@ onChange | Function|         | when select color trigger
 onFocus  | Function|         | when picker focus trigger
 onBlur   | Function|         | when picker loose focus
 mode     | String  |'RGB'    | color mode, support mode 'RGB', 'HSB' or 'HSL'
+className  | String   | ''     | Aditional class to be added to component 
 
 ## License
 

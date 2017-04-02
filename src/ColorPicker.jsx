@@ -128,6 +128,7 @@ export default class ColorPicker extends React.Component {
         onChange={this.onChange}
         onBlur={this.onBlur}
         mode={this.props.mode}
+        className={this.props.className}
       />
     );
   }
@@ -149,7 +150,7 @@ export default class ColorPicker extends React.Component {
   render() {
     const props = this.props;
     const state = this.state;
-    const classes = [`${props.prefixCls}-wrap`];
+    const classes = [`${props.prefixCls}-wrap`, props.className];
     if (state.open) {
       classes.push(`${props.prefixCls}-open`);
     }
@@ -221,6 +222,7 @@ ColorPicker.propTypes = {
   mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
   placement: PropTypes.oneOf(['topLeft', 'topRight', 'bottomLeft', 'bottomRight']),
   style: PropTypes.object,
+  className: PropTypes.string,
 };
 
 ColorPicker.defaultProps = {
@@ -236,4 +238,5 @@ ColorPicker.defaultProps = {
   children: <span className="rc-color-picker-trigger"/>,
   placement: 'topLeft',
   style: {},
+  className: '',
 };

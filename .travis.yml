@@ -5,7 +5,8 @@ notifications:
   - noyobo@gmail.com
 
 node_js:
-- 4.0
+  - '6'
+  - 'node'
 
 before_install:
 - |

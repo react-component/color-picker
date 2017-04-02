@@ -52,7 +52,8 @@ webpackJsonp([3],{
 	      alpha: 30,
 	      onChange: changeHandler,
 	      onClose: closeHandler,
-	      placement: 'topLeft'
+	      placement: 'topLeft',
+	      className: 'some-class'
 	    },
 	    _react2.default.createElement('span', { className: 'rc-color-picker-trigger' })
 	  ),

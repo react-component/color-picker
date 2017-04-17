@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import Colr from 'colr';
 import rcUtil from 'rc-util';
 
@@ -112,8 +113,8 @@ export default class Alpha extends React.Component {
 }
 
 Alpha.propTypes = {
-  hsv: React.PropTypes.object,
-  onChange: React.PropTypes.func,
-  rootPrefixCls: React.PropTypes.string,
-  alpha: React.PropTypes.number,
+  hsv: PropTypes.object,
+  onChange: PropTypes.func,
+  rootPrefixCls: PropTypes.string,
+  alpha: PropTypes.number,
 };

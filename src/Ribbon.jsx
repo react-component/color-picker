@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import rcUtil from 'rc-util';
 
 export default class Ribbon extends React.Component {
@@ -103,7 +104,7 @@ export default class Ribbon extends React.Component {
 }
 
 Ribbon.propTypes = {
-  rootPrefixCls: React.PropTypes.string,
-  hsv: React.PropTypes.object,
-  onChange: React.PropTypes.func,
+  rootPrefixCls: PropTypes.string,
+  hsv: PropTypes.object,
+  onChange: PropTypes.func,
 };

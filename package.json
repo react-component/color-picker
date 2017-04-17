@@ -57,8 +57,11 @@
   },
   "dependencies": {
     "colr": "~1.2.1",
+    "prop-types": "^15.5.8",
     "rc-trigger": "1.x",
-    "rc-util": "2.x"
+    "rc-util": "2.x",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
   },
   "pre-commit": [
     "lint"

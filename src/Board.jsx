@@ -1,6 +1,7 @@
 import Colr from 'colr';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import rcUtil from 'rc-util';
 
 const colr = new Colr();
@@ -169,7 +170,7 @@ export default class Board extends React.Component {
 
 
 Board.propTypes = {
-  hsv: React.PropTypes.object,
-  onChange: React.PropTypes.func,
-  rootPrefixCls: React.PropTypes.string,
+  hsv: PropTypes.object,
+  onChange: PropTypes.func,
+  rootPrefixCls: PropTypes.string,
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Colr from 'colr';
-import rcUtil from 'rc-util';
+import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
 const colr = new Colr();
 
@@ -37,8 +37,8 @@ export default class Alpha extends React.Component {
       x, y,
     });
 
-    this.dragListener = rcUtil.Dom.addEventListener(window, 'mousemove', this.onDrag);
-    this.dragUpListener = rcUtil.Dom.addEventListener(window, 'mouseup', this.onDragEnd);
+    this.dragListener = addEventListener(window, 'mousemove', this.onDrag);
+    this.dragUpListener = addEventListener(window, 'mouseup', this.onDragEnd);
   }
 
   onDrag(e) {

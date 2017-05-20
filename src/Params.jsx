@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Colr from 'colr';
 
 const colr = new Colr();
@@ -224,12 +225,12 @@ export default class Params extends React.Component {
 }
 
 Params.propTypes = {
-  onChange: React.PropTypes.func,
-  hsv: React.PropTypes.object,
-  alpha: React.PropTypes.number,
-  rootPrefixCls: React.PropTypes.string,
-  onAlphaChange: React.PropTypes.func,
-  mode: React.PropTypes.oneOf(modesMap),
+  onChange: PropTypes.func,
+  hsv: PropTypes.object,
+  alpha: PropTypes.number,
+  rootPrefixCls: PropTypes.string,
+  onAlphaChange: PropTypes.func,
+  mode: PropTypes.oneOf(modesMap),
 };
 
 Params.defaultProps = {

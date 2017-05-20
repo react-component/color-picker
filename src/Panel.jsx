@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Colr from 'colr';
 import Board from './Board';
 import Preview from './Preview';

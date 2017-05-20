@@ -1,7 +1,8 @@
 import Colr from 'colr';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import rcUtil from 'rc-util';
+import PropTypes from 'prop-types';
+import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
 const colr = new Colr();
 
@@ -36,8 +37,8 @@ export default class Board extends React.Component {
       x,
       y,
     });
-    this.dragListener = rcUtil.Dom.addEventListener(window, 'mousemove', this.onBoardDrag);
-    this.dragUpListener = rcUtil.Dom.addEventListener(window, 'mouseup', this.onBoardDragEnd);
+    this.dragListener = addEventListener(window, 'mousemove', this.onBoardDrag);
+    this.dragUpListener = addEventListener(window, 'mouseup', this.onBoardDragEnd);
   }
 
   onBoardTouchStart(e) {
@@ -51,10 +52,8 @@ export default class Board extends React.Component {
       x,
       y,
     });
-    this.touchMoveListener = rcUtil.Dom
-      .addEventListener(window, 'touchmove', this.onBoardTouchMove);
-    this.touchEndListener = rcUtil.Dom
-      .addEventListener(window, 'touchend', this.onBoardTouchEnd);
+    this.touchMoveListener = addEventListener(window, 'touchmove', this.onBoardTouchMove);
+    this.touchEndListener = addEventListener(window, 'touchend', this.onBoardTouchEnd);
   }
 
   onBoardTouchMove(e) {
@@ -169,7 +168,7 @@ export default class Board extends React.Component {
 
 
 Board.propTypes = {
-  hsv: React.PropTypes.object,
-  onChange: React.PropTypes.func,
-  rootPrefixCls: React.PropTypes.string,
+  hsv: PropTypes.object,
+  onChange: PropTypes.func,
+  rootPrefixCls: PropTypes.string,
 };

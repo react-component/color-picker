@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Colr from 'colr';
 
 const colr = new Colr();
@@ -36,9 +37,9 @@ export default class Preview extends React.Component {
 }
 
 Preview.propTypes = {
-  rootPrefixCls: React.PropTypes.string,
-  hsv: React.PropTypes.object,
-  alpha: React.PropTypes.number,
-  onChange: React.PropTypes.func,
-  onInputClick: React.PropTypes.func,
+  rootPrefixCls: PropTypes.string,
+  hsv: PropTypes.object,
+  alpha: PropTypes.number,
+  onChange: PropTypes.func,
+  onInputClick: PropTypes.func,
 };

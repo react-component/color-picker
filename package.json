@@ -1,6 +1,6 @@
 {
   "name": "rc-color-picker",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "color-picker ui component for react",
   "main": "./lib/index.js",
   "keywords": [

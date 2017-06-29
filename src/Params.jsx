@@ -217,7 +217,7 @@ export default class Params extends React.Component {
           >
             {this.state.mode[2]}
           </label>
-          <label className={`${prefixCls}-lable-alpha'`}>A</label>
+          <label className={`${prefixCls}-lable-alpha`}>A</label>
         </div>
       </div>
     );

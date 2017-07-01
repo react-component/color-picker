@@ -5,15 +5,7 @@ import cx from 'classnames';
 
 const modesMap = ['RGB', 'HSB', 'HSL'];
 
-const conversionPercentage = (value = 0) => {
-  if (value <= 1) {
-    return Math.floor(Math.min(100, value * 100));
-  }
-  return value;
-};
-
 export default class Params extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -81,6 +73,7 @@ export default class Params extends React.Component {
 
     mode = modesMap[modeIndex];
     const colorChannel = this.getColorChannel(state.color, mode);
+
     this.setState({
       mode,
       colorChannel,
@@ -105,10 +98,11 @@ export default class Params extends React.Component {
   onColorChannelChange(index, event) {
     const value = this.getChannelInRange(event.target.value, index);
     const colorChannel = this.getColorChannel();
+    const colorChannelPer = this.channelConversionPercentage(colorChannel);
 
-    colorChannel[index] = value;
+    colorChannelPer[index] = value;
 
-    const color = this.getColorByChannel(colorChannel);
+    const color = this.getColorByChannel(colorChannelPer);
 
     this.setState({
       hex: color.toHex(),
@@ -135,22 +129,29 @@ export default class Params extends React.Component {
   }
 
   getColorByChannel(colorChannel) {
-    const colorMode = this.state.mode;
-    let color;
-    switch (colorMode) {
-      case 'RGB' :
-        color = tinycolor(colorChannel);
-        break;
-      case 'HSB' :
-        color = tinycolor(colorChannel);
-        break;
-      case 'HSL' :
-        color = tinycolor(colorChannel);
-        break;
-      default:
-        color = tinycolor(colorChannel);
+    const { mode } = this.state;
+    let colorInput;
+    if (mode === 'HSB') {
+      colorInput = {
+        h: colorChannel[0],
+        s: colorChannel[1] / 100,
+        v: colorChannel[2] / 100,
+      };
+    } else if (mode === 'HSL') {
+      colorInput = {
+        h: colorChannel[0],
+        s: colorChannel[1] / 100,
+        l: colorChannel[2] / 100,
+      };
+    } else {
+      colorInput = {
+        r: colorChannel[0],
+        g: colorChannel[1],
+        b: colorChannel[2],
+      };
     }
-    return color;
+
+    return tinycolor(colorInput);
   }
 
   getPrefixCls() {
@@ -161,33 +162,40 @@ export default class Params extends React.Component {
     const color = colrInstance || this.state.color;
     const colorMode = mode || this.state.mode;
     let result;
-    switch (colorMode) {
-      case 'RGB' :
-        result = color.toRgb();
-        break;
-      case 'HSB' :
-        result = color.toHsv();
-        break;
-      case 'HSL' :
-        result = color.toHsl();
-        break;
-      default:
-        result = color.toRgb();
+
+    if (colorMode === 'HSB') {
+      const hsv = color.toHsv();
+      result = [hsv.h, hsv.s, hsv.v];
+    } else if (colorMode === 'HSL') {
+      const hsl = color.toHsl();
+      result = [hsl.h, hsl.s, hsl.l];
+    } else {
+      const rgb = color.toRgb();
+      result = [rgb.r, rgb.g, rgb.b];
     }
+
     return result;
   }
+
+  channelConversionPercentage = colorChannel => {
+    const { mode } = this.state;
+    if (mode !== 'RGB') {
+      return [
+        Math.round(colorChannel[0]),
+        Math.round(colorChannel[1] * 100),
+        Math.round(colorChannel[2] * 100),
+      ];
+    }
+    return colorChannel;
+  };
 
   render() {
     const prefixCls = this.getPrefixCls();
     const colorChannel = this.getColorChannel();
+    const colorChannelPer = this.channelConversionPercentage(colorChannel);
+
     const { enableAlpha } = this.props;
-    let { mode } = this.state;
-
-    mode = mode.toLowerCase();
-
-    if (mode === 'hsb') {
-      mode = 'hsv';
-    }
+    const { mode } = this.state;
 
     const paramsClasses = cx({
       [prefixCls]: true,
@@ -204,40 +212,36 @@ export default class Params extends React.Component {
             onChange={this.onHexHandler}
             value={this.state.hex.toUpperCase()}
           />
-          <input type="number" ref="channel_0"
-            value={colorChannel[mode[0]]}
+          <input
+            type="number"
+            ref="channel_0"
+            value={colorChannelPer[0]}
             onChange={this.onColorChannelChange.bind(null, 0)}
           />
-          <input type="number" ref="channel_1"
-            value={conversionPercentage(colorChannel[mode[1]])}
+          <input
+            type="number"
+            ref="channel_1"
+            value={colorChannelPer[1]}
             onChange={this.onColorChannelChange.bind(null, 1)}
           />
-          <input type="number" ref="channel_2"
-            value={conversionPercentage(colorChannel[mode[2]])}
+          <input
+            type="number"
+            ref="channel_2"
+            value={colorChannelPer[2]}
             onChange={this.onColorChannelChange.bind(null, 2)}
           />
           {enableAlpha &&
-            <input type="number"
-              value={this.props.alpha}
-              onChange={this.onAlphaHandler}
-            />
-          }
+            <input type="number" value={this.props.alpha} onChange={this.onAlphaHandler} />}
         </div>
         <div className={`${prefixCls}-lable`}>
           <label className={`${prefixCls}-lable-hex`}>Hex</label>
-          <label className={`${prefixCls}-lable-number`}
-            onClick={this.onModeChange}
-          >
+          <label className={`${prefixCls}-lable-number`} onClick={this.onModeChange}>
             {mode[0]}
           </label>
-          <label className={`${prefixCls}-lable-number`}
-            onClick={this.onModeChange}
-          >
+          <label className={`${prefixCls}-lable-number`} onClick={this.onModeChange}>
             {mode[1]}
           </label>
-          <label className={`${prefixCls}-lable-number`}
-            onClick={this.onModeChange}
-          >
+          <label className={`${prefixCls}-lable-number`} onClick={this.onModeChange}>
             {mode[2]}
           </label>
           {enableAlpha && <label className={`${prefixCls}-lable-alpha`}>A</label>}

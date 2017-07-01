@@ -3,12 +3,12 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(323);
+	module.exports = __webpack_require__(324);
 
 
 /***/ }),
 
-/***/ 323:
+/***/ 324:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33,7 +33,9 @@ webpackJsonp([2],{
 	
 	_reactDom2.default.render(_react2.default.createElement(
 	  'div',
-	  null,
+	  { style: { backgroundColor: '#ddd', padding: 20 } },
+	  _react2.default.createElement(_rcColorPicker.Panel, { enableAlpha: false, color: '#468890', onChange: onChange, mode: 'HSL' }),
+	  _react2.default.createElement('hr', null),
 	  _react2.default.createElement(_rcColorPicker.Panel, { color: '#468890', onChange: onChange, mode: 'HSL' })
 	), document.getElementById('__react-content'));
 

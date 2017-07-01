@@ -20,13 +20,16 @@
   left: 0px;
   top: 0;
   right: 35px;
-  height: 12.5px;
+  height: 30px;
 }
 .rc-color-picker-panel-wrap-alpha {
   position: absolute;
   left: 0px;
   right: 35px;
   bottom: 0;
+  height: 12.5px;
+}
+.rc-color-picker-panel-wrap-has-alpha .rc-color-picker-panel-wrap-ribbon {
   height: 12.5px;
 }
 .rc-color-picker-trigger {
@@ -52,6 +55,7 @@
   box-sizing: border-box;
   outline: none;
   z-index: 9;
+  border-radius: 4px;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -246,7 +250,7 @@
 }
 .rc-color-picker-panel-params input[type=number] {
   margin-left: 5px;
-  width: 32px;
+  width: 44px;
 }
 .rc-color-picker-panel-params input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -270,13 +274,20 @@
 .rc-color-picker-panel-params-lable-number,
 .rc-color-picker-panel-params-lable-alpha {
   margin-left: 5px;
-  width: 32px;
+  width: 44px;
 }
 .rc-color-picker-panel-params-lable-number:hover {
   border-radius: 2px;
   background-color: #eee;
   box-shadow: 0 0 0 1px #ccc inset;
   cursor: pointer;
+}
+.rc-color-picker-panel-params-has-alpha input[type=number] {
+  width: 32px;
+}
+.rc-color-picker-panel-params-has-alpha .rc-color-picker-panel-params-lable-number,
+.rc-color-picker-panel-params-has-alpha .rc-color-picker-panel-params-lable-alpha {
+  width: 32px;
 }
 .rc-color-picker {
   position: absolute;

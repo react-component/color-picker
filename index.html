@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-color-picker@1.1.6 - color-picker ui component for react</title>
+  <title>rc-color-picker@1.1.7 - color-picker ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rc-color-picker@1.1.6</h1>
+  <h1>rc-color-picker@1.1.7</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -799,174 +799,186 @@ npm start</code></pre></div><h2>Example<a id="user-content-example" name="exampl
 ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ColorPicker</span> /&gt;</span>, container);</span></code></pre></div><h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><h3>ColorPicker.props<a id="user-content-colorpicker.props" name="colorpicker.props" class="anchor" aria-hidden="true" href="#colorpicker.props"><span class="octicon octicon-link"></span></a></h3><table>
 <thead>
 <tr>
-<th>name</th>
-<th>type</th>
-<th>default</th>
-<th>description</th>
+<th style="text-align:left">name</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">default</th>
+<th style="text-align:left">description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>animation</td>
-<td>String</td>
-<td></td>
-<td>index.css support &#39;slide-up&#39;</td>
+<td style="text-align:left">align</td>
+<td style="text-align:left">Object: alignConfig of <a href="https://github.com/yiminghe/dom-align" title="null">dom-align</a></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">popup &#39;s align config</td>
 </tr>
 <tr>
-<td>transitionName</td>
-<td>String</td>
-<td></td>
-<td>css class for animation</td>
+<td style="text-align:left">alpha</td>
+<td style="text-align:left">Number</td>
+<td style="text-align:left"><code>100</code></td>
+<td style="text-align:left">opacity of the color</td>
 </tr>
 <tr>
-<td>getCalendarContainer</td>
-<td>Function():Element</td>
-<td>function(){return document.body;}</td>
-<td>dom node where picker to be rendered into</td>
+<td style="text-align:left">animation</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">index.css support &#39;slide-up&#39;</td>
 </tr>
 <tr>
-<td>align</td>
-<td>Object: alignConfig of <a href="https://github.com/yiminghe/dom-align" title="null">dom-align</a></td>
-<td></td>
-<td>popup &#39;s align config</td>
+<td style="text-align:left">children</td>
+<td style="text-align:left">Node</td>
+<td style="text-align:left"><code>&lt;span className=&#39;react-colorpicker-trigger&#39;&gt;&lt;/span&gt;</code></td>
+<td style="text-align:left">additional trigger appended to picker</td>
 </tr>
 <tr>
-<td>alpha</td>
-<td>Number</td>
-<td>100</td>
-<td>opacity of the color </td>
+<td style="text-align:left">className</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left">&#39;&#39;</td>
+<td style="text-align:left">Aditional class to be added to component</td>
 </tr>
 <tr>
-<td>defaultAlpha</td>
-<td>Number</td>
-<td>100</td>
-<td>opacity of the color </td>
+<td style="text-align:left">color</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><code>#ff0000</code></td>
+<td style="text-align:left">color board current background color</td>
 </tr>
 <tr>
-<td>color</td>
-<td>String</td>
-<td>#ff0000</td>
-<td>color board current background color</td>
+<td style="text-align:left">defaultAlpha</td>
+<td style="text-align:left">Number</td>
+<td style="text-align:left"><code>100</code></td>
+<td style="text-align:left">opacity of the color</td>
 </tr>
 <tr>
-<td>defaultColor</td>
-<td>String</td>
-<td>#ff0000</td>
-<td>color board current background color</td>
+<td style="text-align:left">defaultColor</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><code>#ff0000</code></td>
+<td style="text-align:left">color board current background color</td>
 </tr>
 <tr>
-<td>onChange</td>
-<td>Function</td>
-<td>noop</td>
-<td>when select color</td>
+<td style="text-align:left">enableAlpha</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">enable alpha  controls</td>
 </tr>
 <tr>
-<td>onOpen</td>
-<td>Function</td>
-<td>noop</td>
-<td>when color picker popup open</td>
+<td style="text-align:left">getCalendarContainer</td>
+<td style="text-align:left">Function():Element</td>
+<td style="text-align:left"><code>function(){return document.body;}</code></td>
+<td style="text-align:left">dom node where picker to be rendered into</td>
 </tr>
 <tr>
-<td>onClose</td>
-<td>Function</td>
-<td>noop</td>
-<td>when color picker popup close</td>
+<td style="text-align:left">mode</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><code>RGB</code></td>
+<td style="text-align:left">color mode, support mode &#39;RGB&#39;, &#39;HSB&#39; or &#39;HSL&#39;</td>
 </tr>
 <tr>
-<td>placement</td>
-<td>String</td>
-<td>topLeft</td>
-<td>one of [&#39;topLeft&#39;, &#39;topRight&#39;, &#39;bottomLeft&#39;, &#39;bottomRight&#39;]</td>
+<td style="text-align:left">onChange</td>
+<td style="text-align:left">Function</td>
+<td style="text-align:left">noop</td>
+<td style="text-align:left">when select color</td>
 </tr>
 <tr>
-<td>mode</td>
-<td>String</td>
-<td>&#39;RGB&#39;</td>
-<td>color mode, support mode &#39;RGB&#39;, &#39;HSB&#39; or &#39;HSL&#39;</td>
+<td style="text-align:left">onClose</td>
+<td style="text-align:left">Function</td>
+<td style="text-align:left">noop</td>
+<td style="text-align:left">when color picker popup close</td>
 </tr>
 <tr>
-<td>children</td>
-<td>Node</td>
-<td><code>&lt;span className=&#39;react-colorpicker-trigger&#39;&gt;&lt;/span&gt;</code></td>
-<td>additional trigger appended to picker</td>
+<td style="text-align:left">onOpen</td>
+<td style="text-align:left">Function</td>
+<td style="text-align:left">noop</td>
+<td style="text-align:left">when color picker popup open</td>
 </tr>
 <tr>
-<td>className</td>
-<td>String</td>
-<td>&#39;&#39;</td>
-<td>Aditional class to be added to component </td>
+<td style="text-align:left">placement</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><code>topLeft</code></td>
+<td style="text-align:left">one of [&#39;topLeft&#39;, &#39;topRight&#39;, &#39;bottomLeft&#39;, &#39;bottomRight&#39;]</td>
+</tr>
+<tr>
+<td style="text-align:left">transitionName</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">css class for animation</td>
 </tr>
 </tbody>
 </table>
 <h3>ColorPicker.Panel.props<a id="user-content-colorpicker.panel.props" name="colorpicker.panel.props" class="anchor" aria-hidden="true" href="#colorpicker.panel.props"><span class="octicon octicon-link"></span></a></h3><table>
 <thead>
 <tr>
-<th>name</th>
-<th>type</th>
-<th>default</th>
-<th>description</th>
+<th style="text-align:left">name</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">default</th>
+<th style="text-align:left">description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>alpha</td>
-<td>Number</td>
-<td>100</td>
-<td>opacity of the color </td>
+<td style="text-align:left">alpha</td>
+<td style="text-align:left">Number</td>
+<td style="text-align:left"><code>100</code></td>
+<td style="text-align:left">opacity of the color</td>
 </tr>
 <tr>
-<td>defaultAlpha</td>
-<td>Number</td>
-<td>100</td>
-<td>opacity of the color </td>
+<td style="text-align:left">className</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><code>&#39;&#39;</code></td>
+<td style="text-align:left">Aditional class to be added to component</td>
 </tr>
 <tr>
-<td>color</td>
-<td>String</td>
-<td>#ff0000</td>
-<td>color board current background color</td>
+<td style="text-align:left">color</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><code>#ff0000</code></td>
+<td style="text-align:left">color board current background color</td>
 </tr>
 <tr>
-<td>defaultColor</td>
-<td>String</td>
-<td>#ff0000</td>
-<td>color board current background color</td>
+<td style="text-align:left">defaultAlpha</td>
+<td style="text-align:left">Number</td>
+<td style="text-align:left"><code>100</code></td>
+<td style="text-align:left">opacity of the color</td>
 </tr>
 <tr>
-<td>style</td>
-<td>Object</td>
-<td>{}</td>
-<td>root node CSS style</td>
+<td style="text-align:left">defaultColor</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><code>#ff0000</code></td>
+<td style="text-align:left">color board current background color</td>
 </tr>
 <tr>
-<td>onChange</td>
-<td>Function</td>
-<td></td>
-<td>when select color trigger</td>
+<td style="text-align:left">enableAlpha</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">enable alpha  controls</td>
 </tr>
 <tr>
-<td>onFocus</td>
-<td>Function</td>
-<td></td>
-<td>when picker focus trigger</td>
+<td style="text-align:left">mode</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><code>RGB</code></td>
+<td style="text-align:left">color mode, support mode &#39;RGB&#39;, &#39;HSB&#39; or &#39;HSL&#39;</td>
 </tr>
 <tr>
-<td>onBlur</td>
-<td>Function</td>
-<td></td>
-<td>when picker loose focus</td>
+<td style="text-align:left">onBlur</td>
+<td style="text-align:left">Function</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">when picker loose focus</td>
 </tr>
 <tr>
-<td>mode</td>
-<td>String</td>
-<td>&#39;RGB&#39;</td>
-<td>color mode, support mode &#39;RGB&#39;, &#39;HSB&#39; or &#39;HSL&#39;</td>
+<td style="text-align:left">onChange</td>
+<td style="text-align:left">Function</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">when select color trigger</td>
 </tr>
 <tr>
-<td>className</td>
-<td>String</td>
-<td>&#39;&#39;</td>
-<td>Aditional class to be added to component </td>
+<td style="text-align:left">onFocus</td>
+<td style="text-align:left">Function</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">when picker focus trigger</td>
+</tr>
+<tr>
+<td style="text-align:left">style</td>
+<td style="text-align:left">Object</td>
+<td style="text-align:left"><code>{}</code></td>
+<td style="text-align:left">root node CSS style</td>
 </tr>
 </tbody>
 </table>

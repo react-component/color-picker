@@ -1367,7 +1367,7 @@
 
 /***/ }),
 /* 17 */
-[325, 8],
+[326, 8],
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6990,7 +6990,7 @@
 
 /***/ }),
 /* 57 */
-[325, 42],
+[326, 42],
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21867,7 +21867,7 @@
 	
 	var _Panel2 = _interopRequireDefault(_Panel);
 	
-	var _placements = __webpack_require__(321);
+	var _placements = __webpack_require__(322);
 	
 	var _placements2 = _interopRequireDefault(_placements);
 	
@@ -22001,6 +22001,7 @@
 	      ref: this.savePickerPanelRef,
 	      defaultColor: this.state.color,
 	      alpha: this.state.alpha,
+	      enableAlpha: this.props.enableAlpha,
 	      prefixCls: this.props.prefixCls + '-panel',
 	      onChange: this.onChange,
 	      onBlur: this.onBlur,
@@ -22094,17 +22095,18 @@
 	  defaultColor: _propTypes2.default.string,
 	  defaultAlpha: _propTypes2.default.number,
 	  // can custom
-	  color: _propTypes2.default.string,
 	  alpha: _propTypes2.default.number,
-	  onChange: _propTypes2.default.func,
-	  onOpen: _propTypes2.default.func,
-	  onClose: _propTypes2.default.func,
-	  prefixCls: _propTypes2.default.string.isRequired,
 	  children: _propTypes2.default.node.isRequired,
+	  className: _propTypes2.default.string,
+	  color: _propTypes2.default.string,
+	  enableAlpha: _propTypes2.default.bool,
 	  mode: _propTypes2.default.oneOf(['RGB', 'HSL', 'HSB']),
+	  onChange: _propTypes2.default.func,
+	  onClose: _propTypes2.default.func,
+	  onOpen: _propTypes2.default.func,
 	  placement: _propTypes2.default.oneOf(['topLeft', 'topRight', 'bottomLeft', 'bottomRight']),
-	  style: _propTypes2.default.object,
-	  className: _propTypes2.default.string
+	  prefixCls: _propTypes2.default.string.isRequired,
+	  style: _propTypes2.default.object
 	};
 	
 	ColorPicker.defaultProps = {
@@ -22114,11 +22116,12 @@
 	  onOpen: function onOpen() {},
 	  onClose: function onClose() {},
 	
-	  prefixCls: 'rc-color-picker',
 	  children: _react2.default.createElement('span', { className: 'rc-color-picker-trigger' }),
+	  className: '',
+	  enableAlpha: true,
 	  placement: 'topLeft',
-	  style: {},
-	  className: ''
+	  prefixCls: 'rc-color-picker',
+	  style: {}
 	};
 	module.exports = exports['default'];
 
@@ -28194,13 +28197,19 @@
 	
 	var _Params2 = _interopRequireDefault(_Params);
 	
-	var _validationColor = __webpack_require__(320);
+	var _classnames = __webpack_require__(320);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _validationColor = __webpack_require__(321);
 	
 	var _validationColor2 = _interopRequireDefault(_validationColor);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -28325,9 +28334,17 @@
 	  };
 	
 	  Panel.prototype.render = function render() {
-	    var prefixCls = this.props.prefixCls;
+	    var _cx;
+	
+	    var _props = this.props,
+	        prefixCls = _props.prefixCls,
+	        enableAlpha = _props.enableAlpha;
+	
 	    var hsv = this.state.hsv;
 	    var alpha = this.state.alpha;
+	
+	    var wrapClasses = (0, _classnames2.default)((_cx = {}, _defineProperty(_cx, prefixCls + '-wrap', true), _defineProperty(_cx, prefixCls + '-wrap-has-alpha', enableAlpha), _cx));
+	
 	    return _react2.default.createElement(
 	      'div',
 	      {
@@ -28347,7 +28364,7 @@
 	        }),
 	        _react2.default.createElement(
 	          'div',
-	          { className: prefixCls + '-wrap' },
+	          { className: wrapClasses },
 	          _react2.default.createElement(
 	            'div',
 	            { className: prefixCls + '-wrap-ribbon' },
@@ -28357,7 +28374,7 @@
 	              onChange: this.onChange
 	            })
 	          ),
-	          _react2.default.createElement(
+	          enableAlpha && _react2.default.createElement(
 	            'div',
 	            { className: prefixCls + '-wrap-alpha' },
 	            _react2.default.createElement(_Alpha2.default, {
@@ -28388,7 +28405,8 @@
 	            alpha: alpha,
 	            onAlphaChange: this.onAlphaChange,
 	            onChange: this.onChange,
-	            mode: this.props.mode
+	            mode: this.props.mode,
+	            enableAlpha: this.props.enableAlpha
 	          })
 	        )
 	      )
@@ -28402,30 +28420,31 @@
 	
 	
 	Panel.propTypes = {
+	  alpha: _propTypes2.default.number,
+	  className: _propTypes2.default.string,
+	  color: _validationColor2.default,
 	  defaultAlpha: _propTypes2.default.number,
 	  defaultColor: _validationColor2.default,
-	  // can custom
-	  prefixCls: _propTypes2.default.string,
-	  color: _validationColor2.default,
-	  alpha: _propTypes2.default.number,
-	  style: _propTypes2.default.object,
+	  enableAlpha: _propTypes2.default.bool,
+	  mode: _propTypes2.default.oneOf(['RGB', 'HSL', 'HSB']),
+	  onBlur: _propTypes2.default.func,
 	  onChange: _propTypes2.default.func,
 	  onFocus: _propTypes2.default.func,
-	  onBlur: _propTypes2.default.func,
-	  mode: _propTypes2.default.oneOf(['RGB', 'HSL', 'HSB']),
-	  className: _propTypes2.default.string
+	  prefixCls: _propTypes2.default.string,
+	  style: _propTypes2.default.object
 	};
 	
 	Panel.defaultProps = {
-	  prefixCls: 'rc-color-picker-panel',
-	  defaultColor: '#ff0000',
+	  className: '',
 	  defaultAlpha: 100,
-	  style: {},
+	  defaultColor: '#ff0000',
+	  enableAlpha: true,
+	  mode: 'RGB',
+	  onBlur: noop,
 	  onChange: noop,
 	  onFocus: noop,
-	  onBlur: noop,
-	  mode: 'RGB',
-	  className: ''
+	  prefixCls: 'rc-color-picker-panel',
+	  style: {}
 	};
 	module.exports = exports['default'];
 
@@ -29717,9 +29736,15 @@
 	
 	var _colr2 = _interopRequireDefault(_colr);
 	
+	var _classnames = __webpack_require__(320);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -29893,11 +29918,18 @@
 	  };
 	
 	  Params.prototype.render = function render() {
+	    var _cx;
+	
 	    var prefixCls = this.getPrefixCls();
 	    var colorChannel = this.getColorChannel();
+	    var enableAlpha = this.props.enableAlpha;
+	
+	
+	    var paramsClasses = (0, _classnames2.default)((_cx = {}, _defineProperty(_cx, prefixCls, true), _defineProperty(_cx, prefixCls + '-has-alpha', enableAlpha), _cx));
+	
 	    return _react2.default.createElement(
 	      'div',
-	      { className: prefixCls },
+	      { className: paramsClasses },
 	      _react2.default.createElement(
 	        'div',
 	        { className: prefixCls + '-input' },
@@ -29920,7 +29952,7 @@
 	          value: colorChannel[2],
 	          onChange: this.onColorChannelChange.bind(null, 2)
 	        }),
-	        _react2.default.createElement('input', { type: 'number',
+	        enableAlpha && _react2.default.createElement('input', { type: 'number',
 	          value: this.props.alpha,
 	          onChange: this.onAlphaHandler
 	        })
@@ -29954,7 +29986,7 @@
 	          },
 	          this.state.mode[2]
 	        ),
-	        _react2.default.createElement(
+	        enableAlpha && _react2.default.createElement(
 	          'label',
 	          { className: prefixCls + '-lable-alpha' },
 	          'A'
@@ -29970,21 +30002,77 @@
 	
 	
 	Params.propTypes = {
-	  onChange: _propTypes2.default.func,
-	  hsv: _propTypes2.default.object,
 	  alpha: _propTypes2.default.number,
-	  rootPrefixCls: _propTypes2.default.string,
+	  enableAlpha: _propTypes2.default.bool,
+	  hsv: _propTypes2.default.object,
+	  mode: _propTypes2.default.oneOf(modesMap),
 	  onAlphaChange: _propTypes2.default.func,
-	  mode: _propTypes2.default.oneOf(modesMap)
+	  onChange: _propTypes2.default.func,
+	  rootPrefixCls: _propTypes2.default.string
 	};
 	
 	Params.defaultProps = {
-	  mode: modesMap[0]
+	  mode: modesMap[0],
+	  enableAlpha: true
 	};
 	module.exports = exports['default'];
 
 /***/ }),
 /* 320 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = [];
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+	
+			return classes.join(' ');
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ }),
+/* 321 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -29996,7 +30084,7 @@
 	};
 
 /***/ }),
-/* 321 */
+/* 322 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -30042,10 +30130,10 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 322 */,
 /* 323 */,
 /* 324 */,
-/* 325 */
+/* 325 */,
+/* 326 */
 /***/ (function(module, exports, __webpack_require__, __webpack_module_template_argument_0__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**

@@ -125,6 +125,7 @@ export default class ColorPicker extends React.Component {
         ref={this.savePickerPanelRef}
         defaultColor={this.state.color}
         alpha={this.state.alpha}
+        enableAlpha={this.props.enableAlpha}
         prefixCls={`${this.props.prefixCls}-panel`}
         onChange={this.onChange}
         onBlur={this.onBlur}
@@ -213,17 +214,18 @@ ColorPicker.propTypes = {
   defaultColor: PropTypes.string,
   defaultAlpha: PropTypes.number,
   // can custom
-  color: PropTypes.string,
   alpha: PropTypes.number,
-  onChange: PropTypes.func,
-  onOpen: PropTypes.func,
-  onClose: PropTypes.func,
-  prefixCls: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
-  placement: PropTypes.oneOf(['topLeft', 'topRight', 'bottomLeft', 'bottomRight']),
-  style: PropTypes.object,
   className: PropTypes.string,
+  color: PropTypes.string,
+  enableAlpha: PropTypes.bool,
+  mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
+  onChange: PropTypes.func,
+  onClose: PropTypes.func,
+  onOpen: PropTypes.func,
+  placement: PropTypes.oneOf(['topLeft', 'topRight', 'bottomLeft', 'bottomRight']),
+  prefixCls: PropTypes.string.isRequired,
+  style: PropTypes.object,
 };
 
 ColorPicker.defaultProps = {
@@ -235,9 +237,10 @@ ColorPicker.defaultProps = {
   },
   onClose() {
   },
-  prefixCls: 'rc-color-picker',
-  children: <span className="rc-color-picker-trigger"/>,
-  placement: 'topLeft',
-  style: {},
+  children: <span className="rc-color-picker-trigger" />,
   className: '',
+  enableAlpha: true,
+  placement: 'topLeft',
+  prefixCls: 'rc-color-picker',
+  style: {},
 };

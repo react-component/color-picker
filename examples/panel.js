@@ -1,5 +1,3 @@
-
-
 import 'rc-color-picker/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -10,8 +8,10 @@ function onChange(obj) {
 }
 
 ReactDOM.render(
-  <div>
-    <ColorPickerPanel color={'#468890'} onChange={onChange} mode="HSL"/>
+  <div style={{ backgroundColor: '#ddd', padding: 20 }}>
+    <ColorPickerPanel enableAlpha={false} color={'#468890'} onChange={onChange} mode="HSL" />
+    <hr />
+    <ColorPickerPanel color={'#468890'} onChange={onChange} mode="HSL" />
   </div>,
   document.getElementById('__react-content')
 );

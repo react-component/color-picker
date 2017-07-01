@@ -50,39 +50,41 @@ ReactDOM.render(<ColorPicker />, container);
 
 ### ColorPicker.props
 
-name|type|default|description
----|---|---|---
-animation | String    |         | index.css support 'slide-up'
-transitionName | String    |         | css class for animation
-getCalendarContainer| Function():Element | function(){return document.body;} | dom node where picker to be rendered into
-align     | Object: alignConfig of [dom-align](https://github.com/yiminghe/dom-align)| | popup 's align config
-alpha     | Number    | 100     | opacity of the color 
-defaultAlpha     | Number    | 100     | opacity of the color 
-color     | String    | #ff0000 | color board current background color
-defaultColor     | String    | #ff0000 | color board current background color
-onChange  | Function  | noop    | when select color
-onOpen    | Function  | noop    | when color picker popup open
-onClose   | Function  | noop    | when color picker popup close
-placement | String    | topLeft | one of ['topLeft', 'topRight', 'bottomLeft', 'bottomRight']
-mode      | String    |'RGB'    | color mode, support mode 'RGB', 'HSB' or 'HSL'
-children   | Node      |`<span className='react-colorpicker-trigger'></span>`|additional trigger appended to picker
-className  | String   | ''     | Aditional class to be added to component 
+| name                 | type                                                                      | default                                               | description                                                 |
+|:---------------------|:--------------------------------------------------------------------------|:------------------------------------------------------|:------------------------------------------------------------|
+| align                | Object: alignConfig of [dom-align](https://github.com/yiminghe/dom-align) |                                                       | popup 's align config                                       |
+| alpha                | Number                                                                    | `100`                                                 | opacity of the color                                        |
+| animation            | String                                                                    |                                                       | index.css support 'slide-up'                                |
+| children             | Node                                                                      | `<span className='react-colorpicker-trigger'></span>` | additional trigger appended to picker                       |
+| className            | String                                                                    | ''                                                    | Aditional class to be added to component                    |
+| color                | String                                                                    | `#ff0000`                                             | color board current background color                        |
+| defaultAlpha         | Number                                                                    | `100`                                                 | opacity of the color                                        |
+| defaultColor         | String                                                                    | `#ff0000`                                             | color board current background color                        |
+| enableAlpha          | Boolean                                                                   | `true`                                                | enable alpha  controls                                      |
+| getCalendarContainer | Function():Element                                                        | `function(){return document.body;}`                   | dom node where picker to be rendered into                   |
+| mode                 | String                                                                    | `RGB`                                                 | color mode, support mode 'RGB', 'HSB' or 'HSL'              |
+| onChange             | Function                                                                  | noop                                                  | when select color                                           |
+| onClose              | Function                                                                  | noop                                                  | when color picker popup close                               |
+| onOpen               | Function                                                                  | noop                                                  | when color picker popup open                                |
+| placement            | String                                                                    | `topLeft`                                             | one of ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'] |
+| transitionName       | String                                                                    |                                                       | css class for animation                                     |
 
 
 ### ColorPicker.Panel.props
 
-name|type|default|description
----|---|---|---
-alpha    | Number  | 100     | opacity of the color 
-defaultAlpha    | Number  | 100     | opacity of the color 
-color    | String  | #ff0000 | color board current background color
-defaultColor    | String  | #ff0000 | color board current background color
-style    | Object  | {}      | root node CSS style
-onChange | Function|         | when select color trigger
-onFocus  | Function|         | when picker focus trigger
-onBlur   | Function|         | when picker loose focus
-mode     | String  |'RGB'    | color mode, support mode 'RGB', 'HSB' or 'HSL'
-className  | String   | ''     | Aditional class to be added to component 
+| name         | type     | default   | description                                    |
+|:-------------|:---------|:----------|:-----------------------------------------------|
+| alpha        | Number   | `100`     | opacity of the color                           |
+| className    | String   | `''`      | Aditional class to be added to component       |
+| color        | String   | `#ff0000` | color board current background color           |
+| defaultAlpha | Number   | `100`     | opacity of the color                           |
+| defaultColor | String   | `#ff0000` | color board current background color           |
+| enableAlpha  | Boolean  | `true`    | enable alpha  controls                         |
+| mode         | String   | `RGB`     | color mode, support mode 'RGB', 'HSB' or 'HSL' |
+| onBlur       | Function |           | when picker loose focus                        |
+| onChange     | Function |           | when select color trigger                      |
+| onFocus      | Function |           | when picker focus trigger                      |
+| style        | Object   | `{}`      | root node CSS style                            |
 
 ## License
 

@@ -7,6 +7,8 @@ import Ribbon from './Ribbon';
 import Alpha from './Alpha';
 import Params from './Params';
 
+import cx from 'classnames';
+
 function noop() {
 }
 
@@ -124,9 +126,15 @@ export default class Panel extends React.Component {
   }
 
   render() {
-    const prefixCls = this.props.prefixCls;
+    const { prefixCls, enableAlpha } = this.props;
     const hsv = this.state.hsv;
     const alpha = this.state.alpha;
+
+    const wrapClasses = cx({
+      [`${prefixCls}-wrap`]: true,
+      [`${prefixCls}-wrap-has-alpha`]: enableAlpha,
+    });
+
     return (
       <div
         className={[prefixCls, this.props.className].join(' ')}
@@ -141,7 +149,7 @@ export default class Panel extends React.Component {
             hsv={hsv}
             onChange={this.onChange}
           />
-          <div className={`${prefixCls}-wrap`}>
+          <div className={wrapClasses}>
             <div className={`${prefixCls}-wrap-ribbon`}>
               <Ribbon
                 rootPrefixCls={prefixCls}
@@ -149,14 +157,16 @@ export default class Panel extends React.Component {
                 onChange={this.onChange}
               />
             </div>
-            <div className={`${prefixCls}-wrap-alpha`}>
-              <Alpha
-                rootPrefixCls={prefixCls}
-                alpha={alpha}
-                hsv={hsv}
-                onChange={this.onAlphaChange}
-              />
-            </div>
+            {enableAlpha &&
+              <div className={`${prefixCls}-wrap-alpha`}>
+                <Alpha
+                  rootPrefixCls={prefixCls}
+                  alpha={alpha}
+                  hsv={hsv}
+                  onChange={this.onAlphaChange}
+                />
+              </div>
+            }
             <div className={`${prefixCls}-wrap-preview`}>
               <Preview
                 rootPrefixCls={prefixCls}
@@ -175,6 +185,7 @@ export default class Panel extends React.Component {
               onAlphaChange={this.onAlphaChange}
               onChange={this.onChange}
               mode={this.props.mode}
+              enableAlpha={this.props.enableAlpha}
             />
           </div>
         </div>
@@ -186,28 +197,29 @@ export default class Panel extends React.Component {
 import typeColor from './utils/validationColor';
 
 Panel.propTypes = {
+  alpha: PropTypes.number,
+  className: PropTypes.string,
+  color: typeColor,
   defaultAlpha: PropTypes.number,
   defaultColor: typeColor,
-  // can custom
-  prefixCls: PropTypes.string,
-  color: typeColor,
-  alpha: PropTypes.number,
-  style: PropTypes.object,
+  enableAlpha: PropTypes.bool,
+  mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
+  onBlur: PropTypes.func,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
-  onBlur: PropTypes.func,
-  mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
-  className: PropTypes.string,
+  prefixCls: PropTypes.string,
+  style: PropTypes.object,
 };
 
 Panel.defaultProps = {
-  prefixCls: 'rc-color-picker-panel',
-  defaultColor: '#ff0000',
+  className: '',
   defaultAlpha: 100,
-  style: {},
+  defaultColor: '#ff0000',
+  enableAlpha: true,
+  mode: 'RGB',
+  onBlur: noop,
   onChange: noop,
   onFocus: noop,
-  onBlur: noop,
-  mode: 'RGB',
-  className: '',
+  prefixCls: 'rc-color-picker-panel',
+  style: {},
 };

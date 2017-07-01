@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Colr from 'colr';
+import cx from 'classnames';
 
 const colr = new Colr();
 const modesMap = ['RGB', 'HSB', 'HSL'];
@@ -173,8 +174,15 @@ export default class Params extends React.Component {
   render() {
     const prefixCls = this.getPrefixCls();
     const colorChannel = this.getColorChannel();
+    const { enableAlpha } = this.props;
+
+    const paramsClasses = cx({
+      [prefixCls]: true,
+      [`${prefixCls}-has-alpha`]: enableAlpha,
+    });
+
     return (
-      <div className={prefixCls}>
+      <div className={paramsClasses}>
         <div className={`${prefixCls}-input`}>
           <input
             className={`${prefixCls}-hex`}
@@ -195,10 +203,12 @@ export default class Params extends React.Component {
             value={colorChannel[2]}
             onChange={this.onColorChannelChange.bind(null, 2)}
           />
-          <input type="number"
-            value={this.props.alpha}
-            onChange={this.onAlphaHandler}
-          />
+          {enableAlpha &&
+            <input type="number"
+              value={this.props.alpha}
+              onChange={this.onAlphaHandler}
+            />
+          }
         </div>
         <div className={`${prefixCls}-lable`}>
           <label className={`${prefixCls}-lable-hex`}>Hex</label>
@@ -217,7 +227,7 @@ export default class Params extends React.Component {
           >
             {this.state.mode[2]}
           </label>
-          <label className={`${prefixCls}-lable-alpha`}>A</label>
+          {enableAlpha && <label className={`${prefixCls}-lable-alpha`}>A</label>}
         </div>
       </div>
     );
@@ -225,14 +235,16 @@ export default class Params extends React.Component {
 }
 
 Params.propTypes = {
-  onChange: PropTypes.func,
-  hsv: PropTypes.object,
   alpha: PropTypes.number,
-  rootPrefixCls: PropTypes.string,
-  onAlphaChange: PropTypes.func,
+  enableAlpha: PropTypes.bool,
+  hsv: PropTypes.object,
   mode: PropTypes.oneOf(modesMap),
+  onAlphaChange: PropTypes.func,
+  onChange: PropTypes.func,
+  rootPrefixCls: PropTypes.string,
 };
 
 Params.defaultProps = {
   mode: modesMap[0],
+  enableAlpha: true,
 };

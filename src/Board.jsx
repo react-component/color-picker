@@ -1,10 +1,8 @@
-import Colr from 'colr';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
-
-const colr = new Colr();
+import tinycolor from 'tinycolor2';
 
 const WIDTH = 200;
 const HEIGHT = 150;
@@ -135,8 +133,8 @@ export default class Board extends React.Component {
 
     const hsv = {
       h: this.props.hsv.h,
-      s: parseInt(left / WIDTH * 100, 10),
-      v: parseInt((1 - top / HEIGHT) * 100, 10),
+      s: left / WIDTH,
+      v: (1 - top / HEIGHT),
     };
     this.props.onChange(hsv);
   }
@@ -144,17 +142,22 @@ export default class Board extends React.Component {
   render() {
     const prefixCls = this.getPrefixCls();
     const hsv = this.props.hsv;
-    const hueHsv = [hsv.h, 100, 100];
-    const hueColor = colr.fromHsvArray(hueHsv).toHex();
-    const x = hsv.s / 100 * WIDTH - 4;
-    const y = (1 - hsv.v / 100) * HEIGHT - 4;
+    const hueHsv = {
+      h: hsv.h,
+      s: 1,
+      v: 1,
+    };
+    const hueColor = tinycolor(hueHsv).toHexString();
+    const x = hsv.s * WIDTH - 4;
+    const y = (1 - hsv.v) * HEIGHT - 4;
+
     return (
       <div className={prefixCls}>
         <div className={`${prefixCls}-hsv`} style={{ backgroundColor: hueColor }}>
-          <div className={`${prefixCls}-value`}/>
-          <div className={`${prefixCls}-saturation`}/>
+          <div className={`${prefixCls}-value`} />
+          <div className={`${prefixCls}-saturation`} />
         </div>
-        <span style={{ left: x, top: y }}/>
+        <span style={{ left: x, top: y }} />
 
         <div
           className={`${prefixCls}-handler`}
@@ -166,6 +169,12 @@ export default class Board extends React.Component {
   }
 }
 
+/**
+ * hsv
+ * h: range(1, 360)
+ * s: range(0, 1)
+ * v: range(0, 1)
+ */
 
 Board.propTypes = {
   hsv: PropTypes.object,

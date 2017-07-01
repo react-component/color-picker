@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Colr from 'colr';
 
-const colr = new Colr();
+import tinycolor from 'tinycolor2';
 
 export default class Preview extends React.Component {
   onChange(e) {
     const value = e.target.value;
-    const color = colr.fromHex(value);
-    this.props.onChange(color.toHsvObject());
+    const color = tinycolor(value);
+    this.props.onChange(color.toHsv());
     e.stopPropagation();
   }
 
@@ -18,7 +17,7 @@ export default class Preview extends React.Component {
 
   render() {
     const prefixCls = this.getPrefixCls();
-    const hex = colr.fromHsvObject(this.props.hsv).toHex();
+    const hex = tinycolor(this.props.hsv).toHexString();
     return (
       <div className={prefixCls}>
         <span style={{

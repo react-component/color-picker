@@ -9,9 +9,9 @@ function onChange(obj) {
 
 ReactDOM.render(
   <div style={{ backgroundColor: '#ddd', padding: 20 }}>
-    <ColorPickerPanel enableAlpha={false} color={'#468890'} onChange={onChange} mode="HSL" />
+    <ColorPickerPanel enableAlpha={false} color={'#FFFF00'} onChange={onChange} mode="HSL" />
     <hr />
-    <ColorPickerPanel color={'#468890'} onChange={onChange} mode="HSL" />
+    <ColorPickerPanel color={'#646464'} onChange={onChange} mode="RGB" />
   </div>,
   document.getElementById('__react-content')
 );

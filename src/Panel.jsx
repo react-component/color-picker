@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Colr from 'colr';
+import tinycolor from 'tinycolor2';
+
 import Board from './Board';
 import Preview from './Preview';
 import Ribbon from './Ribbon';
@@ -12,14 +13,13 @@ import cx from 'classnames';
 function noop() {
 }
 
-const colr = new Colr();
 
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
 
     const color = props.color || props.defaultColor;
-    const hsv = colr.fromHex(color).toHsvObject();
+    const hsv = tinycolor(color).toHsv();
 
     const alpha = typeof props.alpha === 'undefined' ?
       props.defaultAlpha :
@@ -46,7 +46,7 @@ export default class Panel extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.color) {
-      const hsv = colr.fromHex(nextProps.color).toHsvObject();
+      const hsv = tinycolor(nextProps.color).toHsv();
       this.setState({
         hsv,
         paramsHsv: hsv,
@@ -122,7 +122,7 @@ export default class Panel extends React.Component {
   }
 
   getHexColor(hsv) {
-    return colr.fromHsvObject(hsv || this.state.hsv).toHex();
+    return tinycolor(hsv || this.state.hsv).toHexString();
   }
 
   render() {

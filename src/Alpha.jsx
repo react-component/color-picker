@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import Colr from 'colr';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
-
-const colr = new Colr();
+import tinycolor from 'tinycolor2';
 
 function rgbaColor(r, g, b, a) {
   return `rgba(${[r, g, b, a / 100].join(',')})`;
@@ -59,7 +57,7 @@ export default class Alpha extends React.Component {
   }
 
   getBackground() {
-    const { r, g, b } = colr.fromHsvObject(this.props.hsv).toRgbObject();
+    const { r, g, b } = tinycolor(this.props.hsv).toRgb();
     const opacityGradient = `linear-gradient(to right, ${rgbaColor(r, g, b, 0)} , ${rgbaColor(r, g, b, 100)})`; // eslint-disable-line max-len
     return opacityGradient;
   }

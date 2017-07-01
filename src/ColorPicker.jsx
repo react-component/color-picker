@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import Trigger from 'rc-trigger';
 import ColorPickerPanel from './Panel';
 import placements from './placements';
-import Colr from 'colr';
-
-const colr = new Colr();
+import tinycolor from 'tinycolor2';
 
 function refFn(field, component) {
   this[field] = component;
@@ -159,8 +157,8 @@ export default class ColorPicker extends React.Component {
 
     let children = props.children;
 
-    const RGBA = colr.fromHex(this.state.color).toRgbArray();
-
+    const { r, g, b } = tinycolor(this.state.color).toRgb();
+    const RGBA = [r, g, b];
     RGBA.push(this.state.alpha / 100);
 
     if (children) {

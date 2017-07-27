@@ -4,30 +4,32 @@ import PropTypes from 'prop-types';
 import tinycolor from 'tinycolor2';
 
 export default class Preview extends React.Component {
-  onChange(e) {
+  onChange = e => {
     const value = e.target.value;
     const color = tinycolor(value);
-    this.props.onChange(color.toHsv());
+    this.props.onChange(color);
     e.stopPropagation();
-  }
+  };
 
-  getPrefixCls() {
+  getPrefixCls = () => {
     return `${this.props.rootPrefixCls}-preview`;
-  }
+  };
 
   render() {
     const prefixCls = this.getPrefixCls();
-    const hex = tinycolor(this.props.hsv).toHexString();
+    const hex = this.props.color.toHexString();
     return (
       <div className={prefixCls}>
-        <span style={{
-          backgroundColor: hex,
-          opacity: this.props.alpha / 100 }}
+        <span
+          style={{
+            backgroundColor: hex,
+            opacity: this.props.alpha / 100,
+          }}
         />
         <input
           type="color"
           value={hex}
-          onChange={this.onChange.bind(this)}
+          onChange={this.onChange}
           onClick={this.props.onInputClick}
         />
       </div>
@@ -37,7 +39,7 @@ export default class Preview extends React.Component {
 
 Preview.propTypes = {
   rootPrefixCls: PropTypes.string,
-  hsv: PropTypes.object,
+  color: PropTypes.object,
   alpha: PropTypes.number,
   onChange: PropTypes.func,
   onInputClick: PropTypes.func,

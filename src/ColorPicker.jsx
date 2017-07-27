@@ -18,9 +18,9 @@ export default class ColorPicker extends React.Component {
   constructor(props) {
     super(props);
 
-    const alpha = typeof props.alpha === 'undefined' ?
-      props.defaultAlpha :
-      Math.min(props.alpha, props.defaultAlpha);
+    const alpha = typeof props.alpha === 'undefined'
+      ? props.defaultAlpha
+      : Math.min(props.alpha, props.defaultAlpha);
 
     this.state = {
       color: props.color || props.defaultColor,
@@ -70,11 +70,14 @@ export default class ColorPicker extends React.Component {
   }
 
   onChange(colors) {
-    this.setState({
-      ...colors,
-    }, () => {
-      this.props.onChange(this.state);
-    });
+    this.setState(
+      {
+        ...colors,
+      },
+      () => {
+        this.props.onChange(this.state);
+      },
+    );
   }
 
   onBlur() {
@@ -92,19 +95,22 @@ export default class ColorPicker extends React.Component {
   setOpen(open, callback) {
     const { onOpen, onClose } = this.props;
     if (this.state.open !== open) {
-      this.setState({
-        open,
-      }, () => {
-        if (typeof callback === 'function') {
-          callback();
-        }
+      this.setState(
+        {
+          open,
+        },
+        () => {
+          if (typeof callback === 'function') {
+            callback();
+          }
 
-        if (this.state.open) {
-          onOpen(this.state);
-        } else {
-          onClose(this.state);
-        }
-      });
+          if (this.state.open) {
+            onOpen(this.state);
+          } else {
+            onClose(this.state);
+          }
+        },
+      );
     }
   }
 
@@ -229,12 +235,9 @@ ColorPicker.propTypes = {
 ColorPicker.defaultProps = {
   defaultColor: '#F00',
   defaultAlpha: 100,
-  onChange() {
-  },
-  onOpen() {
-  },
-  onClose() {
-  },
+  onChange() {},
+  onOpen() {},
+  onClose() {},
   children: <span className="rc-color-picker-trigger" />,
   className: '',
   enableAlpha: true,

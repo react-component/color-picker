@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
-import tinycolor from 'tinycolor2';
 
 function rgbaColor(r, g, b, a) {
   return `rgba(${[r, g, b, a / 100].join(',')})`;
@@ -11,62 +10,55 @@ function rgbaColor(r, g, b, a) {
 export default class Alpha extends React.Component {
   constructor(props) {
     super(props);
-    const events = [
-      'onMouseDown',
-      'onDrag',
-      'onDragEnd',
-      'pointMoveTo',
-      'getBackground',
-    ];
-    events.forEach(e => {
-      this[e] = this[e].bind(this);
-    });
   }
 
   componentWillUnmount() {
     this.removeListeners();
   }
 
-  onMouseDown(e) {
+  onMouseDown = e => {
     const x = e.clientX;
     const y = e.clientY;
 
     this.pointMoveTo({
-      x, y,
+      x,
+      y,
     });
 
     this.dragListener = addEventListener(window, 'mousemove', this.onDrag);
     this.dragUpListener = addEventListener(window, 'mouseup', this.onDragEnd);
-  }
+  };
 
-  onDrag(e) {
+  onDrag = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
-      x, y,
+      x,
+      y,
     });
-  }
+  };
 
-  onDragEnd(e) {
+  onDragEnd = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
-      x, y,
+      x,
+      y,
     });
     this.removeListeners();
-  }
+  };
 
-  getBackground() {
-    const { r, g, b } = tinycolor(this.props.hsv).toRgb();
+  getBackground = () => {
+    const { r, g, b } = this.props.color.toRgb();
     const opacityGradient = `linear-gradient(to right, ${rgbaColor(r, g, b, 0)} , ${rgbaColor(r, g, b, 100)})`; // eslint-disable-line max-len
     return opacityGradient;
-  }
+  };
 
-  getPrefixCls() {
+  getPrefixCls = () => {
     return `${this.props.rootPrefixCls}-alpha`;
-  }
+  };
 
-  pointMoveTo(coords) {
+  pointMoveTo = coords => {
     const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
     const width = rect.width;
     let left = coords.x - rect.left;
@@ -77,9 +69,9 @@ export default class Alpha extends React.Component {
     const alpha = Math.floor(left / width * 100);
 
     this.props.onChange(alpha);
-  }
+  };
 
-  removeListeners() {
+  removeListeners = () => {
     if (this.dragListener) {
       this.dragListener.remove();
       this.dragListener = null;
@@ -88,30 +80,23 @@ export default class Alpha extends React.Component {
       this.dragUpListener.remove();
       this.dragUpListener = null;
     }
-  }
+  };
 
   render() {
     const prefixCls = this.getPrefixCls();
     return (
       <div className={prefixCls}>
-        <div
-          ref="bg"
-          className={`${prefixCls}-bg`}
-          style={{ background: this.getBackground() }}
-        />
-        <span style={{ left: `${this.props.alpha}%` }}/>
+        <div ref="bg" className={`${prefixCls}-bg`} style={{ background: this.getBackground() }} />
+        <span style={{ left: `${this.props.alpha}%` }} />
 
-        <div
-          className={`${prefixCls}-handler`}
-          onMouseDown={this.onMouseDown}
-        />
+        <div className={`${prefixCls}-handler`} onMouseDown={this.onMouseDown} />
       </div>
     );
   }
 }
 
 Alpha.propTypes = {
-  hsv: PropTypes.object,
+  color: PropTypes.object,
   onChange: PropTypes.func,
   rootPrefixCls: PropTypes.string,
   alpha: PropTypes.number,

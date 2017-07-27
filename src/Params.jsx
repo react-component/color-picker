@@ -9,46 +9,32 @@ export default class Params extends React.Component {
   constructor(props) {
     super(props);
 
-    const color = tinycolor(props.hsv);
-
     // 管理 input 的状态
     this.state = {
       mode: props.mode,
-      color, // instanceof tinycolor
-      hex: color.toHex(),
+      hex: props.color.toHex(),
+      color: props.color, // instanceof tinycolor
     };
-
-    const events = [
-      'onHexHandler',
-      'onAlphaHandler',
-      'onColorChannelChange',
-      'onModeChange',
-      'getChannelInRange',
-      'getColorByChannel',
-    ];
-
-    events.forEach(e => {
-      if (this[e]) {
-        this[e] = this[e].bind(this);
-      }
-    });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.hsv !== this.props.hsv) {
-      const color = tinycolor(nextProps.hsv);
+    const { color: nextColor } = nextProps;
+    const { color: prevColor } = this.props;
+    // TODO compare color
+    if (nextColor.toHex() !== prevColor.toHex()) {
       this.setState({
-        hex: color.toHex(),
-        color,
+        color: nextColor,
+        hex: nextColor.toHex(),
       });
     }
   }
 
-  onHexHandler(event) {
-    const value = event.target.value;
+  onHexHandler = event => {
+    const hex = event.target.value;
     let color = null;
     try {
-      color = tinycolor(value);
+      // TODO check valid color
+      color = tinycolor(hex);
     } catch (e) {
       /* eslint no-empty:0 */
     }
@@ -56,17 +42,17 @@ export default class Params extends React.Component {
     if (color !== null) {
       this.setState({
         color,
-        hex: value,
+        hex,
       });
-      this.props.onChange(color.toHsv(), false);
+      this.props.onChange(color, false);
     } else {
       this.setState({
-        hex: value,
+        hex,
       });
     }
-  }
+  };
 
-  onModeChange() {
+  onModeChange = () => {
     let mode = this.state.mode;
     const modeIndex = (modesMap.indexOf(mode) + 1) % modesMap.length;
     const state = this.state;
@@ -78,9 +64,9 @@ export default class Params extends React.Component {
       mode,
       colorChannel,
     });
-  }
+  };
 
-  onAlphaHandler(event) {
+  onAlphaHandler = event => {
     let alpha = parseInt(event.target.value, 10);
     if (isNaN(alpha)) {
       alpha = 0;
@@ -93,9 +79,9 @@ export default class Params extends React.Component {
     });
 
     this.props.onAlphaChange(alpha);
-  }
+  };
 
-  onColorChannelChange(index, event) {
+  onColorChannelChange = (index, event) => {
     const value = this.getChannelInRange(event.target.value, index);
     const colorChannel = this.getColorChannel();
     const colorChannelPer = this.channelConversionPercentage(colorChannel);
@@ -109,9 +95,9 @@ export default class Params extends React.Component {
       color,
     });
     this.props.onChange(color.toHsv(), false);
-  }
+  };
 
-  getChannelInRange(value, index) {
+  getChannelInRange = (value, index) => {
     const channelMap = {
       RGB: [[0, 255], [0, 255], [0, 255]],
       HSB: [[0, 360], [0, 100], [0, 100]],
@@ -126,9 +112,9 @@ export default class Params extends React.Component {
     result = Math.max(range[0], result);
     result = Math.min(result, range[1]);
     return result;
-  }
+  };
 
-  getColorByChannel(colorChannel) {
+  getColorByChannel = colorChannel => {
     const { mode } = this.state;
     let colorInput;
     if (mode === 'HSB') {
@@ -152,13 +138,13 @@ export default class Params extends React.Component {
     }
 
     return tinycolor(colorInput);
-  }
+  };
 
-  getPrefixCls() {
+  getPrefixCls = () => {
     return `${this.props.rootPrefixCls}-params`;
-  }
+  };
 
-  getColorChannel(colrInstance, mode) {
+  getColorChannel = (colrInstance, mode) => {
     const color = colrInstance || this.state.color;
     const colorMode = mode || this.state.mode;
     let result;
@@ -175,7 +161,7 @@ export default class Params extends React.Component {
     }
 
     return result;
-  }
+  };
 
   channelConversionPercentage = colorChannel => {
     const { mode } = this.state;
@@ -254,7 +240,7 @@ export default class Params extends React.Component {
 Params.propTypes = {
   alpha: PropTypes.number,
   enableAlpha: PropTypes.bool,
-  hsv: PropTypes.object,
+  color: PropTypes.object,
   mode: PropTypes.oneOf(modesMap),
   onAlphaChange: PropTypes.func,
   onChange: PropTypes.func,

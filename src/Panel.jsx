@@ -10,46 +10,29 @@ import Params from './Params';
 
 import cx from 'classnames';
 
-function noop() {
-}
-
+function noop() {}
 
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
 
-    const color = props.color || props.defaultColor;
-    const hsv = tinycolor(color).toHsv();
+    const color = tinycolor(props.color || props.defaultColor);
 
-    const alpha = typeof props.alpha === 'undefined' ?
-      props.defaultAlpha :
-      Math.min(props.alpha, props.defaultAlpha);
+    const alpha = typeof props.alpha === 'undefined'
+      ? props.defaultAlpha
+      : Math.min(props.alpha, props.defaultAlpha);
 
     this.state = {
-      paramsHsv: hsv,
-      hsv,
+      color,
       alpha,
     };
-
-    const events = [
-      'onChange',
-      'onAlphaChange',
-      'onFocus',
-      'onBlur',
-      'onSystemColorPickerOpen',
-    ];
-    // bind methods
-    events.forEach(m => {
-      this[m] = this[m].bind(this);
-    });
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.color) {
-      const hsv = tinycolor(nextProps.color).toHsv();
+      const color = tinycolor(nextProps.color);
       this.setState({
-        hsv,
-        paramsHsv: hsv,
+        color,
       });
     }
     if (nextProps.alpha !== undefined) {
@@ -59,54 +42,46 @@ export default class Panel extends React.Component {
     }
   }
 
-  onChange(hsvObject, syncParams = true) {
-    const hsv = hsvObject;
-    const state = {
-      hsv,
-    };
-    if (syncParams) {
-      state.paramsHsv = hsv;
-    }
-    this.setState(state);
+  /**
+   * color change
+   * @param  {Object}  color      tinycolor instance
+   * @param  {Boolean} syncParams Sync to <Params />
+   */
+  onChange = (color, syncParams = true) => {
+    this.setState({ color });
 
-    const ret = {
-      color: this.getHexColor(hsv),
-      hsv,
-      alpha: this.state.alpha,
-    };
-    this.props.onChange(ret);
-  }
+    // TODO change
+  };
 
-  onSystemColorPickerOpen(e) {
+  onSystemColorPickerOpen = e => {
     // only work with broswer which support color input
     if (e.target.type === 'color') {
       this.systemColorPickerOpen = true;
     }
-  }
+  };
 
-  onAlphaChange(alpha) {
+  onAlphaChange = alpha => {
     if (this.props.alpha === undefined) {
       this.setState({
         alpha,
       });
     }
     this.props.onChange({
-      color: this.getHexColor(),
-      hsv: this.state.hsv,
+      color: this.state.color,
       alpha,
     });
-  }
+  };
 
-  onFocus() {
+  onFocus = () => {
     if (this._blurTimer) {
       clearTimeout(this._blurTimer);
       this._blurTimer = null;
     } else {
       this.props.onFocus();
     }
-  }
+  };
 
-  onBlur() {
+  onBlur = () => {
     if (this._blurTimer) {
       clearTimeout(this._blurTimer);
     }
@@ -119,16 +94,11 @@ export default class Panel extends React.Component {
 
       this.props.onBlur();
     }, 100);
-  }
-
-  getHexColor(hsv) {
-    return tinycolor(hsv || this.state.hsv).toHexString();
-  }
+  };
 
   render() {
     const { prefixCls, enableAlpha } = this.props;
-    const hsv = this.state.hsv;
-    const alpha = this.state.alpha;
+    const { color, alpha } = this.state;
 
     const wrapClasses = cx({
       [`${prefixCls}-wrap`]: true,
@@ -144,43 +114,34 @@ export default class Panel extends React.Component {
         tabIndex="0"
       >
         <div className={`${prefixCls}-inner`}>
-          <Board
-            rootPrefixCls={prefixCls}
-            hsv={hsv}
-            onChange={this.onChange}
-          />
+          <Board rootPrefixCls={prefixCls} color={color} onChange={this.onChange} />
           <div className={wrapClasses}>
             <div className={`${prefixCls}-wrap-ribbon`}>
-              <Ribbon
-                rootPrefixCls={prefixCls}
-                hsv={hsv}
-                onChange={this.onChange}
-              />
+              <Ribbon rootPrefixCls={prefixCls} color={color} onChange={this.onChange} />
             </div>
             {enableAlpha &&
               <div className={`${prefixCls}-wrap-alpha`}>
                 <Alpha
                   rootPrefixCls={prefixCls}
                   alpha={alpha}
-                  hsv={hsv}
+                  color={color}
                   onChange={this.onAlphaChange}
                 />
-              </div>
-            }
+              </div>}
             <div className={`${prefixCls}-wrap-preview`}>
               <Preview
                 rootPrefixCls={prefixCls}
                 alpha={alpha}
                 onChange={this.onChange}
                 onInputClick={this.onSystemColorPickerOpen}
-                hsv={hsv}
+                color={color}
               />
             </div>
           </div>
           <div className={`${prefixCls}-wrap`} style={{ height: 40, marginTop: 6 }}>
             <Params
               rootPrefixCls={prefixCls}
-              hsv={this.state.paramsHsv}
+              color={color}
               alpha={alpha}
               onAlphaChange={this.onAlphaChange}
               onChange={this.onChange}
@@ -199,9 +160,9 @@ import typeColor from './utils/validationColor';
 Panel.propTypes = {
   alpha: PropTypes.number,
   className: PropTypes.string,
-  color: typeColor,
+  color: typeColor, // Hex string
   defaultAlpha: PropTypes.number,
-  defaultColor: typeColor,
+  defaultColor: typeColor, // Hex string
   enableAlpha: PropTypes.bool,
   mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
   onBlur: PropTypes.func,

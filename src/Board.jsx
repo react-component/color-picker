@@ -10,17 +10,6 @@ const HEIGHT = 150;
 export default class Board extends React.Component {
   constructor(props) {
     super(props);
-    const events = [
-      'onBoardMouseDown',
-      'onBoardDrag',
-      'onBoardDragEnd',
-      'onBoardTouchStart',
-      'onBoardTouchMove',
-      'onBoardTouchEnd',
-    ];
-    events.forEach((m) => {
-      this[m] = this[m].bind(this);
-    });
   }
 
   componentWillUnmount() {
@@ -28,7 +17,7 @@ export default class Board extends React.Component {
     this.removeTouchListeners();
   }
 
-  onBoardMouseDown(e) {
+  onBoardMouseDown = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
@@ -37,9 +26,9 @@ export default class Board extends React.Component {
     });
     this.dragListener = addEventListener(window, 'mousemove', this.onBoardDrag);
     this.dragUpListener = addEventListener(window, 'mouseup', this.onBoardDragEnd);
-  }
+  };
 
-  onBoardTouchStart(e) {
+  onBoardTouchStart = e => {
     if (e.touches.length !== 1) {
       return;
     }
@@ -52,9 +41,9 @@ export default class Board extends React.Component {
     });
     this.touchMoveListener = addEventListener(window, 'touchmove', this.onBoardTouchMove);
     this.touchEndListener = addEventListener(window, 'touchend', this.onBoardTouchEnd);
-  }
+  };
 
-  onBoardTouchMove(e) {
+  onBoardTouchMove = e => {
     if (e.preventDefault) {
       e.preventDefault();
     }
@@ -65,22 +54,22 @@ export default class Board extends React.Component {
       x,
       y,
     });
-  }
+  };
 
-  onBoardTouchEnd() {
+  onBoardTouchEnd = () => {
     this.removeTouchListeners();
-  }
+  };
 
-  onBoardDrag(e) {
+  onBoardDrag = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
       x,
       y,
     });
-  }
+  };
 
-  onBoardDragEnd(e) {
+  onBoardDragEnd = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
@@ -88,13 +77,13 @@ export default class Board extends React.Component {
       y,
     });
     this.removeListeners();
-  }
+  };
 
-  getPrefixCls() {
+  getPrefixCls = () => {
     return `${this.props.rootPrefixCls}-board`;
-  }
+  };
 
-  removeTouchListeners() {
+  removeTouchListeners = () => {
     if (this.touchMoveListener) {
       this.touchMoveListener.remove();
       this.touchMoveListener = null;
@@ -103,9 +92,9 @@ export default class Board extends React.Component {
       this.touchEndListener.remove();
       this.touchEndListener = null;
     }
-  }
+  };
 
-  removeListeners() {
+  removeListeners = () => {
     if (this.dragListener) {
       this.dragListener.remove();
       this.dragListener = null;
@@ -114,14 +103,14 @@ export default class Board extends React.Component {
       this.dragUpListener.remove();
       this.dragUpListener = null;
     }
-  }
+  };
 
   /**
    * 移动光标位置到
    * @param  {object} pos X Y 全局坐标点
    * @return {undefined}
    */
-  pointMoveTo(pos) {
+  pointMoveTo = pos => {
     const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
     let left = pos.x - rect.left;
     let top = pos.y - rect.top;
@@ -131,17 +120,21 @@ export default class Board extends React.Component {
     top = Math.max(0, top);
     top = Math.min(top, HEIGHT);
 
-    const hsv = {
-      h: this.props.hsv.h,
-      s: left / WIDTH,
-      v: (1 - top / HEIGHT),
-    };
-    this.props.onChange(hsv);
-  }
+    const hsv = this.props.color.toHsv();
+
+    this.props.onChange(
+      tinycolor({
+        h: hsv.h,
+        s: left / WIDTH,
+        v: 1 - top / HEIGHT,
+      }),
+    );
+  };
 
   render() {
     const prefixCls = this.getPrefixCls();
-    const hsv = this.props.hsv;
+    const color = this.props.color;
+    const hsv = color.toHsv();
     const hueHsv = {
       h: hsv.h,
       s: 1,
@@ -177,7 +170,7 @@ export default class Board extends React.Component {
  */
 
 Board.propTypes = {
-  hsv: PropTypes.object,
+  color: PropTypes.object,
   onChange: PropTypes.func,
   rootPrefixCls: PropTypes.string,
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import tinycolor from 'tinycolor2';
+
+import Color from './helpers/color';
 
 import Board from './Board';
 import Preview from './Preview';
@@ -16,11 +17,11 @@ export default class Panel extends React.Component {
   constructor(props) {
     super(props);
 
-    const color = tinycolor(props.color || props.defaultColor);
-
     const alpha = typeof props.alpha === 'undefined'
       ? props.defaultAlpha
       : Math.min(props.alpha, props.defaultAlpha);
+
+    const color = new Color(props.color || props.defaultColor);
 
     this.state = {
       color,
@@ -30,7 +31,7 @@ export default class Panel extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.color) {
-      const color = tinycolor(nextProps.color);
+      const color = new Color(nextProps.color);
       this.setState({
         color,
       });
@@ -42,34 +43,11 @@ export default class Panel extends React.Component {
     }
   }
 
-  /**
-   * color change
-   * @param  {Object}  color      tinycolor instance
-   * @param  {Boolean} syncParams Sync to <Params />
-   */
-  onChange = (color, syncParams = true) => {
-    this.setState({ color });
-
-    // TODO change
-  };
-
   onSystemColorPickerOpen = e => {
     // only work with broswer which support color input
     if (e.target.type === 'color') {
       this.systemColorPickerOpen = true;
     }
-  };
-
-  onAlphaChange = alpha => {
-    if (this.props.alpha === undefined) {
-      this.setState({
-        alpha,
-      });
-    }
-    this.props.onChange({
-      color: this.state.color,
-      alpha,
-    });
   };
 
   onFocus = () => {
@@ -96,6 +74,40 @@ export default class Panel extends React.Component {
     }, 100);
   };
 
+  /**
+   * 响应 alpha 的变更
+   * @param  {Number} alpha Range 0~100
+   */
+  handleAlphaChange = alpha => {
+    const { color } = this.state;
+    color.alpha = alpha;
+
+    this.setState({
+      alpha,
+      color,
+    });
+    this.props.onChange({
+      color: color.toHexString(),
+      alpha,
+    });
+  };
+
+  /**
+   * color change
+   * @param  {Object}  color      tinycolor instance
+   * @param  {Boolean} syncParams Sync to <Params />
+   */
+  handleChange = (color) => {
+    const { alpha } = this.state;
+    color.alpha = alpha;
+
+    this.setState({ color });
+    this.props.onChange({
+      color: color.toHexString(),
+      alpha: color.alpha,
+    });
+  };
+
   render() {
     const { prefixCls, enableAlpha } = this.props;
     const { color, alpha } = this.state;
@@ -114,10 +126,10 @@ export default class Panel extends React.Component {
         tabIndex="0"
       >
         <div className={`${prefixCls}-inner`}>
-          <Board rootPrefixCls={prefixCls} color={color} onChange={this.onChange} />
+          <Board rootPrefixCls={prefixCls} color={color} onChange={this.handleChange} />
           <div className={wrapClasses}>
             <div className={`${prefixCls}-wrap-ribbon`}>
-              <Ribbon rootPrefixCls={prefixCls} color={color} onChange={this.onChange} />
+              <Ribbon rootPrefixCls={prefixCls} color={color} onChange={this.handleChange} />
             </div>
             {enableAlpha &&
               <div className={`${prefixCls}-wrap-alpha`}>
@@ -125,14 +137,14 @@ export default class Panel extends React.Component {
                   rootPrefixCls={prefixCls}
                   alpha={alpha}
                   color={color}
-                  onChange={this.onAlphaChange}
+                  onChange={this.handleAlphaChange}
                 />
               </div>}
             <div className={`${prefixCls}-wrap-preview`}>
               <Preview
                 rootPrefixCls={prefixCls}
                 alpha={alpha}
-                onChange={this.onChange}
+                onChange={this.handleChange}
                 onInputClick={this.onSystemColorPickerOpen}
                 color={color}
               />
@@ -143,8 +155,8 @@ export default class Panel extends React.Component {
               rootPrefixCls={prefixCls}
               color={color}
               alpha={alpha}
-              onAlphaChange={this.onAlphaChange}
-              onChange={this.onChange}
+              onAlphaChange={this.handleAlphaChange}
+              onChange={this.handleChange}
               mode={this.props.mode}
               enableAlpha={this.props.enableAlpha}
             />

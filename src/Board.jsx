@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
-import tinycolor from 'tinycolor2';
+
+import Color from './helpers/color';
 
 const WIDTH = 200;
 const HEIGHT = 150;
@@ -108,7 +109,6 @@ export default class Board extends React.Component {
   /**
    * 移动光标位置到
    * @param  {object} pos X Y 全局坐标点
-   * @return {undefined}
    */
   pointMoveTo = pos => {
     const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
@@ -120,29 +120,28 @@ export default class Board extends React.Component {
     top = Math.max(0, top);
     top = Math.min(top, HEIGHT);
 
-    const hsv = this.props.color.toHsv();
+    const { color } = this.props;
 
-    this.props.onChange(
-      tinycolor({
-        h: hsv.h,
-        s: left / WIDTH,
-        v: 1 - top / HEIGHT,
-      }),
-    );
+    color.saturation = left / WIDTH;
+    color.lightness = 1 - top / HEIGHT;
+
+    this.props.onChange(color);
   };
 
   render() {
     const prefixCls = this.getPrefixCls();
     const color = this.props.color;
-    const hsv = color.toHsv();
+
     const hueHsv = {
-      h: hsv.h,
+      h: color.hue,
       s: 1,
       v: 1,
     };
-    const hueColor = tinycolor(hueHsv).toHexString();
-    const x = hsv.s * WIDTH - 4;
-    const y = (1 - hsv.v) * HEIGHT - 4;
+
+    const hueColor = new Color(hueHsv).toHexString();
+
+    const x = color.saturation * WIDTH - 4;
+    const y = (1 - color.lightness) * HEIGHT - 4;
 
     return (
       <div className={prefixCls}>
@@ -164,7 +163,7 @@ export default class Board extends React.Component {
 
 /**
  * hsv
- * h: range(1, 360)
+ * h: range(0, 359)
  * s: range(0, 1)
  * v: range(0, 1)
  */

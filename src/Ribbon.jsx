@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
-import tinycolor from 'tinycolor2';
 
 export default class Ribbon extends React.Component {
   constructor(props) {
@@ -58,14 +57,12 @@ export default class Ribbon extends React.Component {
 
     const huePercent = left / width;
     const hue = huePercent * 360;
-    const HSV = this.props.color.toHsv();
 
-    this.props.onChange(
-      tinycolor({
-        ...HSV,
-        h: hue,
-      }),
-    );
+    const { color } = this.props;
+
+    color.hue = hue;
+
+    this.props.onChange(color);
   };
 
   removeListeners = () => {
@@ -81,9 +78,9 @@ export default class Ribbon extends React.Component {
 
   render() {
     const prefixCls = this.getPrefixCls();
-    const HSV = this.props.color.toHsv();
-    const hue = HSV.h;
+    const hue = this.props.color.hue;
     const per = hue / 360 * 100;
+
     return (
       <div className={prefixCls}>
         <span ref="point" style={{ left: `${per}%` }} />

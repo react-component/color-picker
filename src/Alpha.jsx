@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
@@ -49,8 +49,8 @@ export default class Alpha extends React.Component {
   };
 
   getBackground = () => {
-    const { r, g, b } = this.props.color.toRgb();
-    const opacityGradient = `linear-gradient(to right, ${rgbaColor(r, g, b, 0)} , ${rgbaColor(r, g, b, 100)})`; // eslint-disable-line max-len
+    const { red, green, blue } = this.props.color;
+    const opacityGradient = `linear-gradient(to right, ${rgbaColor(red, green, blue, 0)} , ${rgbaColor(red, green, blue, 100)})`; // eslint-disable-line max-len
     return opacityGradient;
   };
 
@@ -59,14 +59,14 @@ export default class Alpha extends React.Component {
   };
 
   pointMoveTo = coords => {
-    const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+    const rect = findDOMNode(this).getBoundingClientRect();
     const width = rect.width;
     let left = coords.x - rect.left;
 
     left = Math.max(0, left);
     left = Math.min(left, width);
 
-    const alpha = Math.floor(left / width * 100);
+    const alpha = Math.round(left / width * 100);
 
     this.props.onChange(alpha);
   };
@@ -88,7 +88,6 @@ export default class Alpha extends React.Component {
       <div className={prefixCls}>
         <div ref="bg" className={`${prefixCls}-bg`} style={{ background: this.getBackground() }} />
         <span style={{ left: `${this.props.alpha}%` }} />
-
         <div className={`${prefixCls}-handler`} onMouseDown={this.onMouseDown} />
       </div>
     );

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import tinycolor from 'tinycolor2';
+import Color from './helpers/color';
 
 export default class Preview extends React.Component {
   onChange = e => {
     const value = e.target.value;
-    const color = tinycolor(value);
+    const color = new Color(value);
     this.props.onChange(color);
     e.stopPropagation();
   };

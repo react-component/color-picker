@@ -1,10 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import Trigger from 'rc-trigger';
 import ColorPickerPanel from './Panel';
 import placements from './placements';
-import tinycolor from 'tinycolor2';
+
+import Color from './helpers/color';
 
 function refFn(field, component) {
   this[field] = component;
@@ -87,39 +88,37 @@ export default class ColorPicker extends React.Component {
   onVisibleChange(open) {
     this.setOpen(open, () => {
       if (open) {
-        ReactDOM.findDOMNode(this.pickerPanelInstance).focus();
+        findDOMNode(this.pickerPanelInstance).focus();
       }
     });
   }
 
   setOpen(open, callback) {
-    const { onOpen, onClose } = this.props;
     if (this.state.open !== open) {
       this.setState(
         {
           open,
         },
         () => {
-          if (typeof callback === 'function') {
-            callback();
-          }
-
+          if (typeof callback === 'function') callback();
+          const { onOpen, onClose } = this.props;
           if (this.state.open) {
             onOpen(this.state);
           } else {
             onClose(this.state);
           }
+          this.props.onChange(this.state);
         },
       );
     }
   }
 
   getRootDOMNode() {
-    return ReactDOM.findDOMNode(this);
+    return findDOMNode(this);
   }
 
   getTriggerDOMNode() {
-    return ReactDOM.findDOMNode(this.triggerInstance);
+    return findDOMNode(this.triggerInstance);
   }
 
   getPickerElement() {
@@ -149,7 +148,7 @@ export default class ColorPicker extends React.Component {
 
   focus() {
     if (!this.state.open) {
-      ReactDOM.findDOMNode(this).focus();
+      findDOMNode(this).focus();
     }
   }
 
@@ -163,8 +162,9 @@ export default class ColorPicker extends React.Component {
 
     let children = props.children;
 
-    const { r, g, b } = tinycolor(this.state.color).toRgb();
+    const [r, g, b] = new Color(this.state.color).RGB;
     const RGBA = [r, g, b];
+
     RGBA.push(this.state.alpha / 100);
 
     if (children) {

@@ -3,12 +3,12 @@ webpackJsonp([3],{
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(325);
+	module.exports = __webpack_require__(326);
 
 
 /***/ }),
 
-/***/ 325:
+/***/ 326:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62,11 +62,7 @@ webpackJsonp([3],{
 	    null,
 	    'topRight'
 	  ),
-	  _react2.default.createElement(_rcColorPicker2.default, {
-	    color: '#F10',
-	    onChange: changeHandler,
-	    placement: 'topRight'
-	  }),
+	  _react2.default.createElement(_rcColorPicker2.default, { color: '#F10', onChange: changeHandler, placement: 'topRight' }),
 	  _react2.default.createElement(
 	    'p',
 	    null,
@@ -137,22 +133,13 @@ webpackJsonp([3],{
 	    null,
 	    'bottomLeft'
 	  ),
-	  _react2.default.createElement(_rcColorPicker2.default, {
-	    color: '#0ad',
-	    alpha: 50,
-	    onChange: changeHandler,
-	    placement: 'bottomLeft'
-	  }),
+	  _react2.default.createElement(_rcColorPicker2.default, { color: '#0ad', alpha: 50, onChange: changeHandler, placement: 'bottomLeft' }),
 	  _react2.default.createElement(
 	    'h4',
 	    null,
 	    'bottomRight'
 	  ),
-	  _react2.default.createElement(_rcColorPicker2.default, {
-	    color: '#0F0',
-	    onChange: changeHandler,
-	    placement: 'bottomRight'
-	  })
+	  _react2.default.createElement(_rcColorPicker2.default, { color: '#0F0', onChange: changeHandler, placement: 'bottomRight' })
 	), document.getElementById('__react-content'));
 
 /***/ })

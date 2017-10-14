@@ -76,8 +76,10 @@
   width: 30px;
   overflow: hidden;
   border-radius: 2px;
-  box-shadow: 0 0 2px #808080 inset;
   background-image: url('data:image/png;base64,R0lGODdhCgAKAPAAAOXl5f///ywAAAAACgAKAEACEIQdqXt9GxyETrI279OIgwIAOw==');
+}
+.rc-color-picker-panel-preview span {
+  box-shadow: 0 0 2px #808080 inset;
 }
 .rc-color-picker-panel-preview span,
 .rc-color-picker-panel-preview input[type=color] {
@@ -275,6 +277,7 @@
 .rc-color-picker-panel-params-lable-alpha {
   margin-left: 5px;
   width: 44px;
+  text-transform: uppercase;
 }
 .rc-color-picker-panel-params-lable-number:hover {
   border-radius: 2px;

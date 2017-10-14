@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Colr from 'colr';
+
+import Color from './helpers/color';
+
 import Board from './Board';
 import Preview from './Preview';
 import Ribbon from './Ribbon';
@@ -9,47 +11,29 @@ import Params from './Params';
 
 import cx from 'classnames';
 
-function noop() {
-}
-
-const colr = new Colr();
+function noop() {}
 
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
 
-    const color = props.color || props.defaultColor;
-    const hsv = colr.fromHex(color).toHsvObject();
+    const alpha = typeof props.alpha === 'undefined'
+      ? props.defaultAlpha
+      : Math.min(props.alpha, props.defaultAlpha);
 
-    const alpha = typeof props.alpha === 'undefined' ?
-      props.defaultAlpha :
-      Math.min(props.alpha, props.defaultAlpha);
+    const color = new Color(props.color || props.defaultColor);
 
     this.state = {
-      paramsHsv: hsv,
-      hsv,
+      color,
       alpha,
     };
-
-    const events = [
-      'onChange',
-      'onAlphaChange',
-      'onFocus',
-      'onBlur',
-      'onSystemColorPickerOpen',
-    ];
-    // bind methods
-    events.forEach(m => {
-      this[m] = this[m].bind(this);
-    });
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.color) {
-      const hsv = colr.fromHex(nextProps.color).toHsvObject();
+      const color = new Color(nextProps.color);
       this.setState({
-        hsv,
-        paramsHsv: hsv,
+        color,
       });
     }
     if (nextProps.alpha !== undefined) {
@@ -59,54 +43,23 @@ export default class Panel extends React.Component {
     }
   }
 
-  onChange(hsvObject, syncParams = true) {
-    const hsv = hsvObject;
-    const state = {
-      hsv,
-    };
-    if (syncParams) {
-      state.paramsHsv = hsv;
-    }
-    this.setState(state);
-
-    const ret = {
-      color: this.getHexColor(hsv),
-      hsv,
-      alpha: this.state.alpha,
-    };
-    this.props.onChange(ret);
-  }
-
-  onSystemColorPickerOpen(e) {
+  onSystemColorPickerOpen = e => {
     // only work with broswer which support color input
     if (e.target.type === 'color') {
       this.systemColorPickerOpen = true;
     }
-  }
+  };
 
-  onAlphaChange(alpha) {
-    if (this.props.alpha === undefined) {
-      this.setState({
-        alpha,
-      });
-    }
-    this.props.onChange({
-      color: this.getHexColor(),
-      hsv: this.state.hsv,
-      alpha,
-    });
-  }
-
-  onFocus() {
+  onFocus = () => {
     if (this._blurTimer) {
       clearTimeout(this._blurTimer);
       this._blurTimer = null;
     } else {
       this.props.onFocus();
     }
-  }
+  };
 
-  onBlur() {
+  onBlur = () => {
     if (this._blurTimer) {
       clearTimeout(this._blurTimer);
     }
@@ -119,16 +72,45 @@ export default class Panel extends React.Component {
 
       this.props.onBlur();
     }, 100);
-  }
+  };
 
-  getHexColor(hsv) {
-    return colr.fromHsvObject(hsv || this.state.hsv).toHex();
-  }
+  /**
+   * 响应 alpha 的变更
+   * @param  {Number} alpha Range 0~100
+   */
+  handleAlphaChange = alpha => {
+    const { color } = this.state;
+    color.alpha = alpha;
+
+    this.setState({
+      alpha,
+      color,
+    });
+    this.props.onChange({
+      color: color.toHexString(),
+      alpha,
+    });
+  };
+
+  /**
+   * color change
+   * @param  {Object}  color      tinycolor instance
+   * @param  {Boolean} syncParams Sync to <Params />
+   */
+  handleChange = (color) => {
+    const { alpha } = this.state;
+    color.alpha = alpha;
+
+    this.setState({ color });
+    this.props.onChange({
+      color: color.toHexString(),
+      alpha: color.alpha,
+    });
+  };
 
   render() {
     const { prefixCls, enableAlpha } = this.props;
-    const hsv = this.state.hsv;
-    const alpha = this.state.alpha;
+    const { color, alpha } = this.state;
 
     const wrapClasses = cx({
       [`${prefixCls}-wrap`]: true,
@@ -144,46 +126,37 @@ export default class Panel extends React.Component {
         tabIndex="0"
       >
         <div className={`${prefixCls}-inner`}>
-          <Board
-            rootPrefixCls={prefixCls}
-            hsv={hsv}
-            onChange={this.onChange}
-          />
+          <Board rootPrefixCls={prefixCls} color={color} onChange={this.handleChange} />
           <div className={wrapClasses}>
             <div className={`${prefixCls}-wrap-ribbon`}>
-              <Ribbon
-                rootPrefixCls={prefixCls}
-                hsv={hsv}
-                onChange={this.onChange}
-              />
+              <Ribbon rootPrefixCls={prefixCls} color={color} onChange={this.handleChange} />
             </div>
             {enableAlpha &&
               <div className={`${prefixCls}-wrap-alpha`}>
                 <Alpha
                   rootPrefixCls={prefixCls}
                   alpha={alpha}
-                  hsv={hsv}
-                  onChange={this.onAlphaChange}
+                  color={color}
+                  onChange={this.handleAlphaChange}
                 />
-              </div>
-            }
+              </div>}
             <div className={`${prefixCls}-wrap-preview`}>
               <Preview
                 rootPrefixCls={prefixCls}
                 alpha={alpha}
-                onChange={this.onChange}
+                onChange={this.handleChange}
                 onInputClick={this.onSystemColorPickerOpen}
-                hsv={hsv}
+                color={color}
               />
             </div>
           </div>
           <div className={`${prefixCls}-wrap`} style={{ height: 40, marginTop: 6 }}>
             <Params
               rootPrefixCls={prefixCls}
-              hsv={this.state.paramsHsv}
+              color={color}
               alpha={alpha}
-              onAlphaChange={this.onAlphaChange}
-              onChange={this.onChange}
+              onAlphaChange={this.handleAlphaChange}
+              onChange={this.handleChange}
               mode={this.props.mode}
               enableAlpha={this.props.enableAlpha}
             />
@@ -199,9 +172,9 @@ import typeColor from './utils/validationColor';
 Panel.propTypes = {
   alpha: PropTypes.number,
   className: PropTypes.string,
-  color: typeColor,
+  color: typeColor, // Hex string
   defaultAlpha: PropTypes.number,
-  defaultColor: typeColor,
+  defaultColor: typeColor, // Hex string
   enableAlpha: PropTypes.bool,
   mode: PropTypes.oneOf(['RGB', 'HSL', 'HSB']),
   onBlur: PropTypes.func,

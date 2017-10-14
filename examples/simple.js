@@ -22,14 +22,10 @@ ReactDOM.render(
       placement="topLeft"
       className="some-class"
     >
-      <span className="rc-color-picker-trigger"/>
+      <span className="rc-color-picker-trigger" />
     </ColorPicker>
     <h4>topRight</h4>
-    <ColorPicker
-      color={'#F10'}
-      onChange={changeHandler}
-      placement="topRight"
-    />
+    <ColorPicker color={'#F10'} onChange={changeHandler} placement="topRight" />
     <p>-</p>
     <p>-</p>
     <p>-</p>
@@ -44,18 +40,9 @@ ReactDOM.render(
     <p>-</p>
     <p>-</p>
     <h4>bottomLeft</h4>
-    <ColorPicker
-      color={'#0ad'}
-      alpha={50}
-      onChange={changeHandler}
-      placement="bottomLeft"
-    />
+    <ColorPicker color={'#0ad'} alpha={50} onChange={changeHandler} placement="bottomLeft" />
     <h4>bottomRight</h4>
-    <ColorPicker
-      color={'#0F0'}
-      onChange={changeHandler}
-      placement="bottomRight"
-    />
+    <ColorPicker color={'#0F0'} onChange={changeHandler} placement="bottomRight" />
   </div>,
-  document.getElementById('__react-content')
+  document.getElementById('__react-content'),
 );

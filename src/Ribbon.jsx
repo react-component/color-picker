@@ -6,75 +6,66 @@ import addEventListener from 'rc-util/lib/Dom/addEventListener';
 export default class Ribbon extends React.Component {
   constructor(props) {
     super(props);
-
-    const events = [
-      'onMouseDown',
-      'onDrag',
-      'onDragEnd',
-      'pointMoveTo',
-      '_setHuePosition',
-    ];
-    events.forEach(e => {
-      if (this[e]) {
-        this[e] = this[e].bind(this);
-      }
-    });
   }
 
   componentWillUnmount() {
     this.removeListeners();
   }
 
-  onMouseDown(e) {
+  onMouseDown = e => {
     const x = e.clientX;
     const y = e.clientY;
 
     this.pointMoveTo({
-      x, y,
+      x,
+      y,
     });
 
     this.dragListener = addEventListener(window, 'mousemove', this.onDrag);
     this.dragUpListener = addEventListener(window, 'mouseup', this.onDragEnd);
-  }
+  };
 
-  onDrag(e) {
+  onDrag = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
-      x, y,
+      x,
+      y,
     });
-  }
+  };
 
-  onDragEnd(e) {
+  onDragEnd = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
-      x, y,
+      x,
+      y,
     });
     this.removeListeners();
-  }
+  };
 
-  getPrefixCls() {
+  getPrefixCls = () => {
     return `${this.props.rootPrefixCls}-ribbon`;
-  }
+  };
 
-  pointMoveTo(coords) {
+  pointMoveTo = coords => {
     const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
     const width = rect.width;
     let left = coords.x - rect.left;
     left = Math.max(0, left);
     left = Math.min(left, width);
+
     const huePercent = left / width;
     const hue = huePercent * 360;
-    // 新的对象, 避免引用
-    const hsv = {
-      ...this.props.hsv,
-      h: hue,
-    };
-    this.props.onChange(hsv);
-  }
 
-  removeListeners() {
+    const { color } = this.props;
+
+    color.hue = hue;
+
+    this.props.onChange(color);
+  };
+
+  removeListeners = () => {
     if (this.dragListener) {
       this.dragListener.remove();
       this.dragListener = null;
@@ -83,21 +74,17 @@ export default class Ribbon extends React.Component {
       this.dragUpListener.remove();
       this.dragUpListener = null;
     }
-  }
+  };
 
   render() {
     const prefixCls = this.getPrefixCls();
-    const HSV = this.props.hsv;
-    const hue = HSV.h;
+    const hue = this.props.color.hue;
     const per = hue / 360 * 100;
+
     return (
       <div className={prefixCls}>
-        <span ref="point" style={{ left: `${per}%` }}></span>
-
-        <div
-          className={`${prefixCls}-handler`}
-          onMouseDown={this.onMouseDown}
-        />
+        <span ref="point" style={{ left: `${per}%` }} />
+        <div className={`${prefixCls}-handler`} onMouseDown={this.onMouseDown} />
       </div>
     );
   }
@@ -105,6 +92,6 @@ export default class Ribbon extends React.Component {
 
 Ribbon.propTypes = {
   rootPrefixCls: PropTypes.string,
-  hsv: PropTypes.object,
+  color: PropTypes.object,
   onChange: PropTypes.func,
 };

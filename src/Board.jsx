@@ -1,10 +1,9 @@
-import Colr from 'colr';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
-const colr = new Colr();
+import Color from './helpers/color';
 
 const WIDTH = 200;
 const HEIGHT = 150;
@@ -12,17 +11,6 @@ const HEIGHT = 150;
 export default class Board extends React.Component {
   constructor(props) {
     super(props);
-    const events = [
-      'onBoardMouseDown',
-      'onBoardDrag',
-      'onBoardDragEnd',
-      'onBoardTouchStart',
-      'onBoardTouchMove',
-      'onBoardTouchEnd',
-    ];
-    events.forEach((m) => {
-      this[m] = this[m].bind(this);
-    });
   }
 
   componentWillUnmount() {
@@ -30,7 +18,7 @@ export default class Board extends React.Component {
     this.removeTouchListeners();
   }
 
-  onBoardMouseDown(e) {
+  onBoardMouseDown = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
@@ -39,9 +27,9 @@ export default class Board extends React.Component {
     });
     this.dragListener = addEventListener(window, 'mousemove', this.onBoardDrag);
     this.dragUpListener = addEventListener(window, 'mouseup', this.onBoardDragEnd);
-  }
+  };
 
-  onBoardTouchStart(e) {
+  onBoardTouchStart = e => {
     if (e.touches.length !== 1) {
       return;
     }
@@ -54,9 +42,9 @@ export default class Board extends React.Component {
     });
     this.touchMoveListener = addEventListener(window, 'touchmove', this.onBoardTouchMove);
     this.touchEndListener = addEventListener(window, 'touchend', this.onBoardTouchEnd);
-  }
+  };
 
-  onBoardTouchMove(e) {
+  onBoardTouchMove = e => {
     if (e.preventDefault) {
       e.preventDefault();
     }
@@ -67,22 +55,22 @@ export default class Board extends React.Component {
       x,
       y,
     });
-  }
+  };
 
-  onBoardTouchEnd() {
+  onBoardTouchEnd = () => {
     this.removeTouchListeners();
-  }
+  };
 
-  onBoardDrag(e) {
+  onBoardDrag = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
       x,
       y,
     });
-  }
+  };
 
-  onBoardDragEnd(e) {
+  onBoardDragEnd = e => {
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
@@ -90,13 +78,13 @@ export default class Board extends React.Component {
       y,
     });
     this.removeListeners();
-  }
+  };
 
-  getPrefixCls() {
+  getPrefixCls = () => {
     return `${this.props.rootPrefixCls}-board`;
-  }
+  };
 
-  removeTouchListeners() {
+  removeTouchListeners = () => {
     if (this.touchMoveListener) {
       this.touchMoveListener.remove();
       this.touchMoveListener = null;
@@ -105,9 +93,9 @@ export default class Board extends React.Component {
       this.touchEndListener.remove();
       this.touchEndListener = null;
     }
-  }
+  };
 
-  removeListeners() {
+  removeListeners = () => {
     if (this.dragListener) {
       this.dragListener.remove();
       this.dragListener = null;
@@ -116,14 +104,13 @@ export default class Board extends React.Component {
       this.dragUpListener.remove();
       this.dragUpListener = null;
     }
-  }
+  };
 
   /**
    * 移动光标位置到
    * @param  {object} pos X Y 全局坐标点
-   * @return {undefined}
    */
-  pointMoveTo(pos) {
+  pointMoveTo = pos => {
     const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
     let left = pos.x - rect.left;
     let top = pos.y - rect.top;
@@ -133,28 +120,36 @@ export default class Board extends React.Component {
     top = Math.max(0, top);
     top = Math.min(top, HEIGHT);
 
-    const hsv = {
-      h: this.props.hsv.h,
-      s: parseInt(left / WIDTH * 100, 10),
-      v: parseInt((1 - top / HEIGHT) * 100, 10),
-    };
-    this.props.onChange(hsv);
-  }
+    const { color } = this.props;
+
+    color.saturation = left / WIDTH;
+    color.lightness = 1 - top / HEIGHT;
+
+    this.props.onChange(color);
+  };
 
   render() {
     const prefixCls = this.getPrefixCls();
-    const hsv = this.props.hsv;
-    const hueHsv = [hsv.h, 100, 100];
-    const hueColor = colr.fromHsvArray(hueHsv).toHex();
-    const x = hsv.s / 100 * WIDTH - 4;
-    const y = (1 - hsv.v / 100) * HEIGHT - 4;
+    const color = this.props.color;
+
+    const hueHsv = {
+      h: color.hue,
+      s: 1,
+      v: 1,
+    };
+
+    const hueColor = new Color(hueHsv).toHexString();
+
+    const x = color.saturation * WIDTH - 4;
+    const y = (1 - color.lightness) * HEIGHT - 4;
+
     return (
       <div className={prefixCls}>
         <div className={`${prefixCls}-hsv`} style={{ backgroundColor: hueColor }}>
-          <div className={`${prefixCls}-value`}/>
-          <div className={`${prefixCls}-saturation`}/>
+          <div className={`${prefixCls}-value`} />
+          <div className={`${prefixCls}-saturation`} />
         </div>
-        <span style={{ left: x, top: y }}/>
+        <span style={{ left: x, top: y }} />
 
         <div
           className={`${prefixCls}-handler`}
@@ -166,9 +161,15 @@ export default class Board extends React.Component {
   }
 }
 
+/**
+ * hsv
+ * h: range(0, 359)
+ * s: range(0, 1)
+ * v: range(0, 1)
+ */
 
 Board.propTypes = {
-  hsv: PropTypes.object,
+  color: PropTypes.object,
   onChange: PropTypes.func,
   rootPrefixCls: PropTypes.string,
 };

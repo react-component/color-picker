@@ -1,3 +1,7 @@
+## 1.2.0
+
+- Use tinycolor2 instead colr. fixed [#31](https://github.com/react-component/color-picker/issues/31)[!47](https://github.com/react-component/color-picker/pull/47)
+
 ## 1.1.7 2017-07-01
 
 - Added the ability to hide alpha controls, props `enableAlpha`  [#43](https://github.com/react-component/color-picker/issues/43)[!45](https://github.com/react-component/color-picker/pull/45)

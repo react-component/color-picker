@@ -37,6 +37,7 @@ export default class ColorPicker extends React.Component {
       'getRootDOMNode',
       'getTriggerDOMNode',
       'onVisibleChange',
+      'onPanelMount',
       'setOpen',
       'open',
       'close',
@@ -47,7 +48,6 @@ export default class ColorPicker extends React.Component {
       this[e] = this[e].bind(this);
     });
 
-    this.savePickerPanelRef = refFn.bind(this, 'pickerPanelInstance');
     this.saveTriggerRef = refFn.bind(this, 'triggerInstance');
   }
 
@@ -86,11 +86,13 @@ export default class ColorPicker extends React.Component {
   }
 
   onVisibleChange(open) {
-    this.setOpen(open, () => {
-      if (open) {
-        findDOMNode(this.pickerPanelInstance).focus();
-      }
-    });
+    this.setOpen(open);
+  }
+
+  onPanelMount(panelDOMRef) {
+    if (this.state.open) {
+      panelDOMRef.focus();
+    }
   }
 
   setOpen(open, callback) {
@@ -125,7 +127,7 @@ export default class ColorPicker extends React.Component {
     // const state = this.state;
     return (
       <ColorPickerPanel
-        ref={this.savePickerPanelRef}
+        onMount={this.onPanelMount}
         defaultColor={this.state.color}
         alpha={this.state.alpha}
         enableAlpha={this.props.enableAlpha}
@@ -170,7 +172,7 @@ export default class ColorPicker extends React.Component {
     if (children) {
       children = React.cloneElement(children, {
         ref: this.saveTriggerRef,
-        unselectable: true,
+        unselectable: 'unselectable',
         style: {
           backgroundColor: `rgba(${RGBA.join(',')})`,
         },

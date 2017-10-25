@@ -1,3 +1,7 @@
+## 1.2.2
+
+- compatility react 16 [!50](https://github.com/react-component/color-picker/pull/50)
+
 ## 1.2.1
 
 - Fix: Dragging the mouse out of the bounds loses the hue setting [#49](https://github.com/react-component/color-picker/issues/49)

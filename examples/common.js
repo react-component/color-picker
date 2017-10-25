@@ -21251,13 +21251,12 @@
 	      open: false
 	    };
 	
-	    var events = ['onTriggerClick', 'onChange', 'onBlur', 'getPickerElement', 'getRootDOMNode', 'getTriggerDOMNode', 'onVisibleChange', 'setOpen', 'open', 'close', 'focus'];
+	    var events = ['onTriggerClick', 'onChange', 'onBlur', 'getPickerElement', 'getRootDOMNode', 'getTriggerDOMNode', 'onVisibleChange', 'onPanelMount', 'setOpen', 'open', 'close', 'focus'];
 	
 	    events.forEach(function (e) {
 	      _this[e] = _this[e].bind(_this);
 	    });
 	
-	    _this.savePickerPanelRef = refFn.bind(_this, 'pickerPanelInstance');
 	    _this.saveTriggerRef = refFn.bind(_this, 'triggerInstance');
 	    return _this;
 	  }
@@ -21294,33 +21293,33 @@
 	  };
 	
 	  ColorPicker.prototype.onVisibleChange = function onVisibleChange(open) {
-	    var _this3 = this;
+	    this.setOpen(open);
+	  };
 	
-	    this.setOpen(open, function () {
-	      if (open) {
-	        (0, _reactDom.findDOMNode)(_this3.pickerPanelInstance).focus();
-	      }
-	    });
+	  ColorPicker.prototype.onPanelMount = function onPanelMount(panelDOMRef) {
+	    if (this.state.open) {
+	      panelDOMRef.focus();
+	    }
 	  };
 	
 	  ColorPicker.prototype.setOpen = function setOpen(open, callback) {
-	    var _this4 = this;
+	    var _this3 = this;
 	
 	    if (this.state.open !== open) {
 	      this.setState({
 	        open: open
 	      }, function () {
 	        if (typeof callback === 'function') callback();
-	        var _props = _this4.props,
+	        var _props = _this3.props,
 	            onOpen = _props.onOpen,
 	            onClose = _props.onClose;
 	
-	        if (_this4.state.open) {
-	          onOpen(_this4.state);
+	        if (_this3.state.open) {
+	          onOpen(_this3.state);
 	        } else {
-	          onClose(_this4.state);
+	          onClose(_this3.state);
 	        }
-	        _this4.props.onChange(_this4.state);
+	        _this3.props.onChange(_this3.state);
 	      });
 	    }
 	  };
@@ -21336,7 +21335,7 @@
 	  ColorPicker.prototype.getPickerElement = function getPickerElement() {
 	    // const state = this.state;
 	    return _react2.default.createElement(_Panel2.default, {
-	      ref: this.savePickerPanelRef,
+	      onMount: this.onPanelMount,
 	      defaultColor: this.state.color,
 	      alpha: this.state.alpha,
 	      enableAlpha: this.props.enableAlpha,
@@ -21384,7 +21383,7 @@
 	    if (children) {
 	      children = _react2.default.cloneElement(children, {
 	        ref: this.saveTriggerRef,
-	        unselectable: true,
+	        unselectable: 'unselectable',
 	        style: {
 	          backgroundColor: 'rgba(' + RGBA.join(',') + ')'
 	        },
@@ -28449,6 +28448,10 @@
 	    return _this;
 	  }
 	
+	  Panel.prototype.componentDidMount = function componentDidMount() {
+	    this.props.onMount(this.ref);
+	  };
+	
 	  Panel.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
 	    if (nextProps.color) {
 	      var color = new _color2.default(nextProps.color);
@@ -28477,7 +28480,8 @@
 	
 	
 	  Panel.prototype.render = function render() {
-	    var _cx;
+	    var _cx,
+	        _this2 = this;
 	
 	    var _props = this.props,
 	        prefixCls = _props.prefixCls,
@@ -28492,6 +28496,9 @@
 	    return _react2.default.createElement(
 	      'div',
 	      {
+	        ref: function ref(_ref) {
+	          return _this2.ref = _ref;
+	        },
 	        className: [prefixCls, this.props.className].join(' '),
 	        style: this.props.style,
 	        onFocus: this.onFocus,
@@ -28553,61 +28560,61 @@
 	}(_react2.default.Component);
 	
 	var _initialiseProps = function _initialiseProps() {
-	  var _this2 = this;
+	  var _this3 = this;
 	
 	  this.onSystemColorPickerOpen = function (e) {
 	    // only work with broswer which support color input
 	    if (e.target.type === 'color') {
-	      _this2.systemColorPickerOpen = true;
+	      _this3.systemColorPickerOpen = true;
 	    }
 	  };
 	
 	  this.onFocus = function () {
-	    if (_this2._blurTimer) {
-	      clearTimeout(_this2._blurTimer);
-	      _this2._blurTimer = null;
+	    if (_this3._blurTimer) {
+	      clearTimeout(_this3._blurTimer);
+	      _this3._blurTimer = null;
 	    } else {
-	      _this2.props.onFocus();
+	      _this3.props.onFocus();
 	    }
 	  };
 	
 	  this.onBlur = function () {
-	    if (_this2._blurTimer) {
-	      clearTimeout(_this2._blurTimer);
+	    if (_this3._blurTimer) {
+	      clearTimeout(_this3._blurTimer);
 	    }
-	    _this2._blurTimer = setTimeout(function () {
+	    _this3._blurTimer = setTimeout(function () {
 	      // if is system color picker open, then stop run blur
-	      if (_this2.systemColorPickerOpen) {
-	        _this2.systemColorPickerOpen = false;
+	      if (_this3.systemColorPickerOpen) {
+	        _this3.systemColorPickerOpen = false;
 	        return;
 	      }
 	
-	      _this2.props.onBlur();
+	      _this3.props.onBlur();
 	    }, 100);
 	  };
 	
 	  this.handleAlphaChange = function (alpha) {
-	    var color = _this2.state.color;
+	    var color = _this3.state.color;
 	
 	    color.alpha = alpha;
 	
-	    _this2.setState({
+	    _this3.setState({
 	      alpha: alpha,
 	      color: color
 	    });
-	    _this2.props.onChange({
+	    _this3.props.onChange({
 	      color: color.toHexString(),
 	      alpha: alpha
 	    });
 	  };
 	
 	  this.handleChange = function (color) {
-	    var alpha = _this2.state.alpha;
+	    var alpha = _this3.state.alpha;
 	
 	    color.alpha = alpha;
 	
-	    _this2.setState({ color: color });
-	    _this2.props.onChange({
+	    _this3.setState({ color: color });
+	    _this3.props.onChange({
 	      color: color.toHexString(),
 	      alpha: color.alpha
 	    });
@@ -28628,6 +28635,7 @@
 	  onBlur: _propTypes2.default.func,
 	  onChange: _propTypes2.default.func,
 	  onFocus: _propTypes2.default.func,
+	  onMount: _propTypes2.default.func,
 	  prefixCls: _propTypes2.default.string,
 	  style: _propTypes2.default.object
 	};
@@ -28641,6 +28649,7 @@
 	  onBlur: noop,
 	  onChange: noop,
 	  onFocus: noop,
+	  onMount: noop,
 	  prefixCls: 'rc-color-picker-panel',
 	  style: {}
 	};

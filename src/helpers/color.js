@@ -45,10 +45,10 @@ export default class Color {
 
   // 色调
   set hue(value) {
-    const hsl = this.color.toHsl();
     this.color = tinycolor({
-      ...hsl,
       h: value,
+      s: this.saturation,
+      l: this.lightness,
     });
 
     this.initRgb();
@@ -61,10 +61,10 @@ export default class Color {
 
   // 饱和度
   set saturation(value) {
-    const hsl = this.color.toHsl();
     this.color = tinycolor({
-      ...hsl,
+      h: this.hue,
       s: value,
+      l: this.lightness,
     });
 
     this.initRgb();
@@ -77,9 +77,9 @@ export default class Color {
 
   // 亮度
   set lightness(value) {
-    const hsl = this.color.toHsl();
     this.color = tinycolor({
-      ...hsl,
+      h: this.hue,
+      s: this.saturation,
       v: value,
     });
 

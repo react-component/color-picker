@@ -17,11 +17,11 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(39);
+	var _reactDom = __webpack_require__(14);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rcColorPicker = __webpack_require__(186);
+	var _rcColorPicker = __webpack_require__(34);
 	
 	var _rcColorPicker2 = _interopRequireDefault(_rcColorPicker);
 	

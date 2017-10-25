@@ -1,3 +1,7 @@
+## 1.2.1
+
+- Fix: Dragging the mouse out of the bounds loses the hue setting [#49](https://github.com/react-component/color-picker/issues/49)
+
 ## 1.2.0
 
 - Use tinycolor2 instead colr. fixed [#31](https://github.com/react-component/color-picker/issues/31)[!47](https://github.com/react-component/color-picker/pull/47)

@@ -115,15 +115,18 @@ export default class Board extends React.Component {
     let left = pos.x - rect.left;
     let top = pos.y - rect.top;
 
+    const rWidth = rect.width || WIDTH;
+    const rHeight = rect.height || HEIGHT;
+
     left = Math.max(0, left);
-    left = Math.min(left, WIDTH);
+    left = Math.min(left, rWidth);
     top = Math.max(0, top);
-    top = Math.min(top, HEIGHT);
+    top = Math.min(top, rHeight);
 
     const { color } = this.props;
 
-    color.saturation = left / WIDTH;
-    color.lightness = 1 - top / HEIGHT;
+    color.saturation = left / rWidth;
+    color.lightness = 1 - top / rHeight;
 
     this.props.onChange(color);
   };
@@ -140,8 +143,8 @@ export default class Board extends React.Component {
 
     const hueColor = new Color(hueHsv).toHexString();
 
-    const x = color.saturation * WIDTH - 4;
-    const y = (1 - color.lightness) * HEIGHT - 4;
+    const xRel = color.saturation * 100;
+    const yRel = (1 - color.lightness) * 100;
 
     return (
       <div className={prefixCls}>
@@ -149,7 +152,7 @@ export default class Board extends React.Component {
           <div className={`${prefixCls}-value`} />
           <div className={`${prefixCls}-saturation`} />
         </div>
-        <span style={{ left: x, top: y }} />
+        <span style={{ left: `${xRel}%`, top: `${yRel}%` }} />
 
         <div
           className={`${prefixCls}-handler`}

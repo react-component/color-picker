@@ -24,11 +24,11 @@ export default class Color {
   };
 
   initHsb = () => {
-    const { h, s, l } = this.color.toHsl();
+    const { h, s, v } = this.color.toHsv();
 
     this.hueValue = h;
     this.saturationValue = s;
-    this.lightnessValue = l;
+    this.lightnessValue = v;
   };
 
   toHexString = () => {
@@ -48,7 +48,7 @@ export default class Color {
     this.color = tinycolor({
       h: value,
       s: this.saturation,
-      l: this.lightness,
+      v: this.lightness,
     });
 
     this.initRgb();
@@ -64,7 +64,7 @@ export default class Color {
     this.color = tinycolor({
       h: this.hue,
       s: value,
-      l: this.lightness,
+      v: this.lightness,
     });
 
     this.initRgb();

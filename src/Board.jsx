@@ -126,7 +126,7 @@ export default class Board extends React.Component {
     const { color } = this.props;
 
     color.saturation = left / rWidth;
-    color.lightness = 1 - top / rHeight;
+    color.brightness = 1 - top / rHeight;
 
     this.props.onChange(color);
   };
@@ -144,7 +144,7 @@ export default class Board extends React.Component {
     const hueColor = new Color(hueHsv).toHexString();
 
     const xRel = color.saturation * 100;
-    const yRel = (1 - color.lightness) * 100;
+    const yRel = (1 - color.brightness) * 100;
 
     return (
       <div className={prefixCls}>

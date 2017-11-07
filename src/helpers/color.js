@@ -28,7 +28,7 @@ export default class Color {
 
     this.hueValue = h;
     this.saturationValue = s;
-    this.lightnessValue = v;
+    this.brightnessValue = v;
   };
 
   toHexString = () => {
@@ -48,7 +48,7 @@ export default class Color {
     this.color = tinycolor({
       h: value,
       s: this.saturation,
-      v: this.lightness,
+      v: this.brightness,
     });
 
     this.initRgb();
@@ -64,7 +64,7 @@ export default class Color {
     this.color = tinycolor({
       h: this.hue,
       s: value,
-      v: this.lightness,
+      v: this.brightness,
     });
 
     this.initRgb();
@@ -80,7 +80,7 @@ export default class Color {
     this.color = tinycolor({
       h: this.hue,
       s: this.saturation,
-      v: value,
+      l: value,
     });
 
     this.initRgb();
@@ -89,6 +89,21 @@ export default class Color {
 
   get lightness() {
     return this.lightnessValue;
+  }
+
+  set brightness(value) {
+    this.color = tinycolor({
+      h: this.hue,
+      s: this.saturation,
+      v: value,
+    });
+
+    this.initRgb();
+    this.brightnessValue = value;
+  }
+
+  get brightness() {
+    return this.brightnessValue;
   }
 
   // red
@@ -153,6 +168,6 @@ export default class Color {
   }
 
   get HSB() {
-    return [this.hue, this.saturation, this.lightness];
+    return [this.hue, this.saturation, this.brightness];
   }
 }

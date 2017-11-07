@@ -102,7 +102,7 @@ export default class Params extends React.Component {
       } else if (channel === 'S') {
         color.saturation = parseInt(value, 10) / 100;
       } else if (channel === 'B') {
-        color.lightness = parseInt(value, 10) / 100;
+        color.brightness = parseInt(value, 10) / 100;
       }
     } else {
       if (channel === 'R') {

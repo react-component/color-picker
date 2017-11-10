@@ -48,8 +48,9 @@ export default class Params extends React.Component {
     return `${this.props.rootPrefixCls}-params`;
   };
 
-  handleHexHandler = event => {
-    const hex = event.target.value;
+  handleHexBlur = () => {
+    const hex = this.state.hex;
+
     let color = null;
 
     if (Color.isValidHex(hex)) {
@@ -62,11 +63,34 @@ export default class Params extends React.Component {
         hex,
       });
       this.props.onChange(color, false);
-    } else {
-      this.setState({
-        hex,
-      });
     }
+  };
+
+  handleHexPress = event => {
+    const hex = this.state.hex;
+    if (event.nativeEvent.which === 13) {
+      let color = null;
+
+      if (Color.isValidHex(hex)) {
+        color = new Color(hex);
+      }
+
+      if (color !== null) {
+        this.setState({
+          color,
+          hex,
+        });
+        this.props.onChange(color, false);
+      }
+    }
+  };
+
+  handleHexChange = event => {
+    const hex = event.target.value;
+
+    this.setState({
+      hex,
+    });
   };
 
   handleModeChange = () => {
@@ -132,7 +156,7 @@ export default class Params extends React.Component {
       },
       () => {
         this.props.onChange(color, false);
-      },
+      }
     );
   };
 
@@ -161,8 +185,10 @@ export default class Params extends React.Component {
             className={`${prefixCls}-hex`}
             type="text"
             maxLength="6"
-            onChange={this.handleHexHandler}
-            value={this.state.hex.toUpperCase()}
+            onKeyPress={this.handleHexPress}
+            onBlur={this.handleHexBlur}
+            onChange={this.handleHexChange}
+            value={this.state.hex.toLowerCase()}
           />
           <input
             type="number"
@@ -182,12 +208,13 @@ export default class Params extends React.Component {
             value={colorChannel[2]}
             onChange={this.handleColorChannelChange.bind(null, 2)}
           />
-          {enableAlpha &&
+          {enableAlpha && (
             <input
               type="number"
               value={Math.round(this.props.alpha)}
               onChange={this.handleAlphaHandler}
-            />}
+            />
+          )}
         </div>
         <div className={`${prefixCls}-lable`}>
           <label className={`${prefixCls}-lable-hex`}>Hex</label>

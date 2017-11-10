@@ -83,13 +83,14 @@ export default class Params extends React.Component {
 
   handleAlphaHandler = event => {
     let alpha = parseInt(event.target.value, 10);
+
     if (isNaN(alpha)) {
       alpha = 0;
     }
     alpha = Math.max(0, alpha);
     alpha = Math.min(alpha, 100);
 
-    this.props.onAlphaChange(alpha / 100);
+    this.props.onAlphaChange(alpha);
   };
 
   updateColorByChanel = (channel, value) => {

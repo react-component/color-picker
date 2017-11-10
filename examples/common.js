@@ -28695,14 +28695,14 @@
 	    };
 	
 	    this.initHsb = function () {
-	      var _color$toHsl = _this.color.toHsl(),
-	          h = _color$toHsl.h,
-	          s = _color$toHsl.s,
-	          l = _color$toHsl.l;
+	      var _color$toHsv = _this.color.toHsv(),
+	          h = _color$toHsv.h,
+	          s = _color$toHsv.s,
+	          v = _color$toHsv.v;
 	
 	      _this.hueValue = h;
 	      _this.saturationValue = s;
-	      _this.lightnessValue = l;
+	      _this.brightnessValue = v;
 	    };
 	
 	    this.toHexString = function () {
@@ -28740,7 +28740,7 @@
 	      this.color = (0, _tinycolor2.default)({
 	        h: value,
 	        s: this.saturation,
-	        l: this.lightness
+	        v: this.brightness
 	      });
 	
 	      this.initRgb();
@@ -28758,7 +28758,7 @@
 	      this.color = (0, _tinycolor2.default)({
 	        h: this.hue,
 	        s: value,
-	        l: this.lightness
+	        v: this.brightness
 	      });
 	
 	      this.initRgb();
@@ -28776,7 +28776,7 @@
 	      this.color = (0, _tinycolor2.default)({
 	        h: this.hue,
 	        s: this.saturation,
-	        v: value
+	        l: value
 	      });
 	
 	      this.initRgb();
@@ -28784,6 +28784,21 @@
 	    },
 	    get: function get() {
 	      return this.lightnessValue;
+	    }
+	  }, {
+	    key: 'brightness',
+	    set: function set(value) {
+	      this.color = (0, _tinycolor2.default)({
+	        h: this.hue,
+	        s: this.saturation,
+	        v: value
+	      });
+	
+	      this.initRgb();
+	      this.brightnessValue = value;
+	    },
+	    get: function get() {
+	      return this.brightnessValue;
 	    }
 	
 	    // red
@@ -28855,7 +28870,7 @@
 	  }, {
 	    key: 'HSB',
 	    get: function get() {
-	      return [this.hue, this.saturation, this.lightness];
+	      return [this.hue, this.saturation, this.brightness];
 	    }
 	  }]);
 	
@@ -30210,16 +30225,19 @@
 	      var left = pos.x - rect.left;
 	      var top = pos.y - rect.top;
 	
+	      var rWidth = rect.width || WIDTH;
+	      var rHeight = rect.height || HEIGHT;
+	
 	      left = Math.max(0, left);
-	      left = Math.min(left, WIDTH);
+	      left = Math.min(left, rWidth);
 	      top = Math.max(0, top);
-	      top = Math.min(top, HEIGHT);
+	      top = Math.min(top, rHeight);
 	
 	      var color = _this.props.color;
 	
 	
-	      color.saturation = left / WIDTH;
-	      color.lightness = 1 - top / HEIGHT;
+	      color.saturation = left / rWidth;
+	      color.brightness = 1 - top / rHeight;
 	
 	      _this.props.onChange(color);
 	    };
@@ -30250,8 +30268,8 @@
 	
 	    var hueColor = new _color2.default(hueHsv).toHexString();
 	
-	    var x = color.saturation * WIDTH - 4;
-	    var y = (1 - color.lightness) * HEIGHT - 4;
+	    var xRel = color.saturation * 100;
+	    var yRel = (1 - color.brightness) * 100;
 	
 	    return _react2.default.createElement(
 	      'div',
@@ -30262,7 +30280,7 @@
 	        _react2.default.createElement('div', { className: prefixCls + '-value' }),
 	        _react2.default.createElement('div', { className: prefixCls + '-saturation' })
 	      ),
-	      _react2.default.createElement('span', { style: { left: x, top: y } }),
+	      _react2.default.createElement('span', { style: { left: xRel + '%', top: yRel + '%' } }),
 	      _react2.default.createElement('div', {
 	        className: prefixCls + '-handler',
 	        onMouseDown: this.onBoardMouseDown,
@@ -30742,8 +30760,9 @@
 	      return _this.props.rootPrefixCls + '-params';
 	    };
 	
-	    _this.handleHexHandler = function (event) {
-	      var hex = event.target.value;
+	    _this.handleHexBlur = function () {
+	      var hex = _this.state.hex;
+	
 	      var color = null;
 	
 	      if (_color2.default.isValidHex(hex)) {
@@ -30756,11 +30775,34 @@
 	          hex: hex
 	        });
 	        _this.props.onChange(color, false);
-	      } else {
-	        _this.setState({
-	          hex: hex
-	        });
 	      }
+	    };
+	
+	    _this.handleHexPress = function (event) {
+	      var hex = _this.state.hex;
+	      if (event.nativeEvent.which === 13) {
+	        var color = null;
+	
+	        if (_color2.default.isValidHex(hex)) {
+	          color = new _color2.default(hex);
+	        }
+	
+	        if (color !== null) {
+	          _this.setState({
+	            color: color,
+	            hex: hex
+	          });
+	          _this.props.onChange(color, false);
+	        }
+	      }
+	    };
+	
+	    _this.handleHexChange = function (event) {
+	      var hex = event.target.value;
+	
+	      _this.setState({
+	        hex: hex
+	      });
 	    };
 	
 	    _this.handleModeChange = function () {
@@ -30777,13 +30819,14 @@
 	
 	    _this.handleAlphaHandler = function (event) {
 	      var alpha = parseInt(event.target.value, 10);
+	
 	      if (isNaN(alpha)) {
 	        alpha = 0;
 	      }
 	      alpha = Math.max(0, alpha);
 	      alpha = Math.min(alpha, 100);
 	
-	      _this.props.onAlphaChange(alpha / 100);
+	      _this.props.onAlphaChange(alpha);
 	    };
 	
 	    _this.updateColorByChanel = function (channel, value) {
@@ -30797,7 +30840,7 @@
 	        } else if (channel === 'S') {
 	          color.saturation = parseInt(value, 10) / 100;
 	        } else if (channel === 'B') {
-	          color.lightness = parseInt(value, 10) / 100;
+	          color.brightness = parseInt(value, 10) / 100;
 	        }
 	      } else {
 	        if (channel === 'R') {
@@ -30876,8 +30919,10 @@
 	          className: prefixCls + '-hex',
 	          type: 'text',
 	          maxLength: '6',
-	          onChange: this.handleHexHandler,
-	          value: this.state.hex.toUpperCase()
+	          onKeyPress: this.handleHexPress,
+	          onBlur: this.handleHexBlur,
+	          onChange: this.handleHexChange,
+	          value: this.state.hex.toLowerCase()
 	        }),
 	        _react2.default.createElement('input', {
 	          type: 'number',

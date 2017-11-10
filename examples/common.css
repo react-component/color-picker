@@ -3,7 +3,7 @@
   border-radius: 4px;
   box-shadow: 0 1px 5px #ccc;
   border: 1px solid #ccc;
-  padding: 8px;
+  padding-bottom: 8px;
 }
 .rc-color-picker-panel-wrap {
   margin: 5px 0 0;
@@ -13,19 +13,19 @@
 }
 .rc-color-picker-panel-wrap-preview {
   position: absolute;
-  right: 0px;
+  right: 8px;
 }
 .rc-color-picker-panel-wrap-ribbon {
   position: absolute;
-  left: 0px;
+  left: 8px;
   top: 0;
-  right: 35px;
+  right: 43px;
   height: 30px;
 }
 .rc-color-picker-panel-wrap-alpha {
   position: absolute;
-  left: 0px;
-  right: 35px;
+  left: 8px;
+  right: 43px;
   bottom: 0;
   height: 12.5px;
 }
@@ -99,6 +99,7 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  margin: 8px 8px 0px;
 }
 .rc-color-picker-panel-board span {
   position: absolute;
@@ -106,6 +107,7 @@
   border: 1px solid #fff;
   width: 9px;
   height: 9px;
+  margin: -4px 0 0 -4px;
   left: -999px;
   top: -999px;
   box-shadow: 0 0 1px rgba(120, 120, 120, 0.7);
@@ -232,7 +234,7 @@
 }
 .rc-color-picker-panel-params-input {
   overflow: hidden;
-  padding: 2px 0;
+  padding: 2px 8px;
 }
 .rc-color-picker-panel-params input {
   -webkit-user-select: text;
@@ -258,7 +260,7 @@
   -webkit-appearance: none;
 }
 .rc-color-picker-panel-params-lable {
-  padding: 2px 0;
+  padding: 2px 8px;
   height: 22px;
   line-height: 18px;
   -webkit-user-select: none;

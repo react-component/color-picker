@@ -1,3 +1,9 @@
+## 1.2.3
+
+- Fix: Manual alpha change does not work [#53](https://github.com/react-component/color-picker/issues/53)
+- Fix: delete the word of hex input will be automatically completed [#52](https://github.com/react-component/color-picker/issues/52)
+- Refactor: Don't use hardcoded dimensions for Board [!51](https://github.com/react-component/color-picker/pull/51)
+
 ## 1.2.2
 
 - compatility react 16 [!50](https://github.com/react-component/color-picker/pull/50)

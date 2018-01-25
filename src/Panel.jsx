@@ -29,10 +29,6 @@ export default class Panel extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.props.onMount(this.ref);
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.color) {
       const color = new Color(nextProps.color);
@@ -185,7 +181,6 @@ Panel.propTypes = {
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
-  onMount: PropTypes.func,
   prefixCls: PropTypes.string,
   style: PropTypes.object,
 };
@@ -199,7 +194,6 @@ Panel.defaultProps = {
   onBlur: noop,
   onChange: noop,
   onFocus: noop,
-  onMount: noop,
   prefixCls: 'rc-color-picker-panel',
   style: {},
 };

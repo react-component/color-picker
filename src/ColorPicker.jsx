@@ -32,7 +32,6 @@ export default class ColorPicker extends React.Component {
     const events = [
       'onTriggerClick',
       'onChange',
-      'onBlur',
       'getPickerElement',
       'getRootDOMNode',
       'getTriggerDOMNode',
@@ -79,10 +78,6 @@ export default class ColorPicker extends React.Component {
         this.props.onChange(this.state);
       },
     );
-  }
-
-  onBlur() {
-    this.setOpen(false);
   }
 
   onVisibleChange(open) {
@@ -133,7 +128,6 @@ export default class ColorPicker extends React.Component {
         enableAlpha={this.props.enableAlpha}
         prefixCls={`${this.props.prefixCls}-panel`}
         onChange={this.onChange}
-        onBlur={this.onBlur}
         mode={this.props.mode}
         className={this.props.className}
       />

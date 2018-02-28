@@ -21319,7 +21319,6 @@
 	        } else {
 	          onClose(_this3.state);
 	        }
-	        _this3.props.onChange(_this3.state);
 	      });
 	    }
 	  };

@@ -109,7 +109,6 @@ export default class ColorPicker extends React.Component {
           } else {
             onClose(this.state);
           }
-          this.props.onChange(this.state);
         },
       );
     }

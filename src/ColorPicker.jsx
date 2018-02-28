@@ -37,7 +37,6 @@ export default class ColorPicker extends React.Component {
       'getRootDOMNode',
       'getTriggerDOMNode',
       'onVisibleChange',
-      'onPanelMount',
       'setOpen',
       'open',
       'close',
@@ -89,12 +88,6 @@ export default class ColorPicker extends React.Component {
     this.setOpen(open);
   }
 
-  onPanelMount(panelDOMRef) {
-    if (this.state.open) {
-      panelDOMRef.focus();
-    }
-  }
-
   setOpen(open, callback) {
     if (this.state.open !== open) {
       this.setState(
@@ -126,7 +119,6 @@ export default class ColorPicker extends React.Component {
     // const state = this.state;
     return (
       <ColorPickerPanel
-        onMount={this.onPanelMount}
         defaultColor={this.state.color}
         alpha={this.state.alpha}
         enableAlpha={this.props.enableAlpha}

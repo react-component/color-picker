@@ -21298,7 +21298,9 @@
 	
 	  ColorPicker.prototype.onPanelMount = function onPanelMount(panelDOMRef) {
 	    if (this.state.open) {
-	      panelDOMRef.focus();
+	      setTimeout(function () {
+	        panelDOMRef.focus();
+	      }, 1);
 	    }
 	  };
 	

@@ -16,7 +16,7 @@ React Color Picker
 
 ## Screenshots
 
-<img src=https://cloud.githubusercontent.com/assets/1292082/8275606/8608e8f8-18db-11e5-8d10-703253db2a4f.png width=238 />
+![](https://cloud.githubusercontent.com/assets/1292082/8275606/8608e8f8-18db-11e5-8d10-703253db2a4f.png)
 
 ## Development
 

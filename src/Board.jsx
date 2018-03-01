@@ -19,12 +19,19 @@ export default class Board extends React.Component {
   }
 
   onBoardMouseDown = e => {
+    const buttons = e.buttons;
+
+    // only work on left click
+    // @see https://developer.mozilla.org/en-US/docs/Web/Events/mousedown
+    if (buttons !== 1) return;
+
     const x = e.clientX;
     const y = e.clientY;
     this.pointMoveTo({
       x,
       y,
     });
+    this.removeListeners();
     this.dragListener = addEventListener(window, 'mousemove', this.onBoardDrag);
     this.dragUpListener = addEventListener(window, 'mouseup', this.onBoardDragEnd);
   };
@@ -33,7 +40,7 @@ export default class Board extends React.Component {
     if (e.touches.length !== 1) {
       return;
     }
-
+    this.removeTouchListeners();
     const x = e.targetTouches[0].clientX;
     const y = e.targetTouches[0].clientY;
     this.pointMoveTo({

@@ -25,13 +25,10 @@ export default class Board extends React.Component {
     // @see https://developer.mozilla.org/en-US/docs/Web/Events/mousedown
     if (buttons !== 1) return;
 
+    this.removeListeners();
     const x = e.clientX;
     const y = e.clientY;
-    this.pointMoveTo({
-      x,
-      y,
-    });
-    this.removeListeners();
+    this.pointMoveTo({ x, y });
     this.dragListener = addEventListener(window, 'mousemove', this.onBoardDrag);
     this.dragUpListener = addEventListener(window, 'mouseup', this.onBoardDragEnd);
   };
@@ -43,10 +40,7 @@ export default class Board extends React.Component {
     this.removeTouchListeners();
     const x = e.targetTouches[0].clientX;
     const y = e.targetTouches[0].clientY;
-    this.pointMoveTo({
-      x,
-      y,
-    });
+    this.pointMoveTo({ x, y });
     this.touchMoveListener = addEventListener(window, 'touchmove', this.onBoardTouchMove);
     this.touchEndListener = addEventListener(window, 'touchend', this.onBoardTouchEnd);
   };

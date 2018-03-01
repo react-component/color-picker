@@ -3,12 +3,12 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(172);
+	module.exports = __webpack_require__(170);
 
 
 /***/ }),
 
-/***/ 172:
+/***/ 170:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23,7 +23,7 @@ webpackJsonp([2],{
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rcColorPicker = __webpack_require__(34);
+	var _rcColorPicker = __webpack_require__(29);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	

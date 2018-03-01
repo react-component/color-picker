@@ -3,12 +3,12 @@ webpackJsonp([3],{
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(173);
+	module.exports = __webpack_require__(171);
 
 
 /***/ }),
 
-/***/ 173:
+/***/ 171:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23,7 +23,7 @@ webpackJsonp([3],{
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rcColorPicker = __webpack_require__(34);
+	var _rcColorPicker = __webpack_require__(29);
 	
 	var _rcColorPicker2 = _interopRequireDefault(_rcColorPicker);
 	
@@ -40,6 +40,31 @@ webpackJsonp([3],{
 	_reactDom2.default.render(_react2.default.createElement(
 	  'div',
 	  { style: { margin: '20px 20px 20px', textAlign: 'center' } },
+	  _react2.default.createElement(
+	    'p',
+	    null,
+	    '-'
+	  ),
+	  _react2.default.createElement(
+	    'p',
+	    null,
+	    '-'
+	  ),
+	  _react2.default.createElement(
+	    'p',
+	    null,
+	    '-'
+	  ),
+	  _react2.default.createElement(
+	    'p',
+	    null,
+	    '-'
+	  ),
+	  _react2.default.createElement(
+	    'p',
+	    null,
+	    '-'
+	  ),
 	  _react2.default.createElement(
 	    'h4',
 	    null,
@@ -63,31 +88,6 @@ webpackJsonp([3],{
 	    'topRight'
 	  ),
 	  _react2.default.createElement(_rcColorPicker2.default, { color: '#F10', onChange: changeHandler, placement: 'topRight' }),
-	  _react2.default.createElement(
-	    'p',
-	    null,
-	    '-'
-	  ),
-	  _react2.default.createElement(
-	    'p',
-	    null,
-	    '-'
-	  ),
-	  _react2.default.createElement(
-	    'p',
-	    null,
-	    '-'
-	  ),
-	  _react2.default.createElement(
-	    'p',
-	    null,
-	    '-'
-	  ),
-	  _react2.default.createElement(
-	    'p',
-	    null,
-	    '-'
-	  ),
 	  _react2.default.createElement(
 	    'p',
 	    null,

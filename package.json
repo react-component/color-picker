@@ -66,5 +66,6 @@
   },
   "pre-commit": [
     "lint"
-  ]
+  ],
+  "types": "index.d.ts"
 }

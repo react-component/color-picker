@@ -57,7 +57,7 @@ export default class Params extends React.Component {
       color = new Color(hex);
     }
 
-    if (color !== null) {
+    if (color) {
       this.setState({
         color,
         hex,
@@ -75,7 +75,7 @@ export default class Params extends React.Component {
         color = new Color(hex);
       }
 
-      if (color !== null) {
+      if (color) {
         this.setState({
           color,
           hex,

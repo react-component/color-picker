@@ -32,6 +32,8 @@
   "devDependencies": {
     "less": "^4.1.1",
     "lesshat": "^3.0.2",
+    "react": "*",
+    "react-dom": "*",
     "typescript": "^4.2.4"
   },
   "dependencies": {

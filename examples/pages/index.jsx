@@ -3,14 +3,16 @@ import { readdir } from 'fs/promises'
 import { basename, extname, resolve } from 'path'
 
 const MainPage = (props) => {
-    const { examples } = props
+    const { examples, normalLinks } = props
     return (
         <>
             <h1>Examples</h1>
             <ul>
                 {examples.map(example => (
                     <li key={example}>
-                        <Link href={`./${example}`}>{example}</Link>
+                        {normalLinks
+                            ? <a href={`./${example}`}>{example}</a>
+                            : <Link href={`./${example}`}>{example}</Link>}
                     </li>
                 ))}
             </ul>
@@ -26,7 +28,8 @@ export const getStaticProps = async () => {
         props: {
             examples: (await readdir(pagesPath))
                 .map(p => basename(p, extname(p)))
-                .filter(p => !['index', '_app'].includes(p))
+                .filter(p => !['index', '_app'].includes(p)),
+            normalLinks: process.env.NODE_ENV === 'production'
         }
     })
 }

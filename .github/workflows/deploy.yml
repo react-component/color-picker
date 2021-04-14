@@ -1,0 +1,28 @@
+name: Deploy
+on:
+  pull_request: 
+    types: [opened, edited, closed, synchronize]
+  push:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install Root Dependencies
+        run: npm ci
+      - name: Build rc-color-picker
+        run: npm run build
+      - name: Install Examples Dependencies
+        run: npm i
+        working-directory: examples
+      - name: Build Next.js Demo
+        run: npm run build
+        working-directory: examples
+      - name: Build and deploy to gh-pages
+        uses: sauloxd/review-apps@v1.3.3
+        with:
+          build-cmd: 'echo "Already built"'
+          dist: 'examples/out'

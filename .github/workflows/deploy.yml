@@ -1,8 +1,11 @@
 name: Deploy
 on:
-  pull_request: [opened, edited, closed, synchronize]
+  pull_request: 
+    types: [opened, edited, closed, synchronize]
+  push:
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     steps:
       - name: Build Next.js Demo
         run: npm run build

@@ -11,8 +11,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-      - name: Install Dependencies
-        run: npm i
+      - name: Install Root Dependencies
+        run: npm ci
+      - name: Install Examples Dependencies
+        run: npm ci
         working-directory: examples
       - name: Build Next.js Demo
         run: npm run build

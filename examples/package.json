@@ -8,11 +8,10 @@
         "next": "^10.1.3",
         "posthtml": "^0.15.2",
         "posthtml-cli": "^0.9.1",
-        "posthtml-plugin-relative-urls": "file:../posthtml-plugin",
-        "touch-cli": "^0.0.1"
+        "posthtml-plugin-relative-urls": "file:../posthtml-plugin"
     },
     "scripts": {
         "dev": "next",
-        "build": "next build && next export && posthtml out/*.html -u posthtml-plugin-relative-urls && touch out/.nojekyll"
+        "build": "next build && next export && posthtml out/*.html -u posthtml-plugin-relative-urls"
     }
 }

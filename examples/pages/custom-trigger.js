@@ -1,13 +1,10 @@
-import 'rc-color-picker/assets/index.less';
-import React from 'react';
-import ReactDOM from 'react-dom';
 import ColorPicker from 'rc-color-picker';
 
 function changeHandler(colors) {
   console.log(colors);
 }
 
-ReactDOM.render(
+const CustomTrigger = () => (
   <div style={{ textAlign: 'center' }}>
     <ColorPicker
       color={'#36c'}
@@ -15,6 +12,7 @@ ReactDOM.render(
     >
       <span className="react-custom-trigger">choose color</span>
     </ColorPicker>
-  </div>,
-  document.getElementById('__react-content')
+  </div>
 );
+
+export default CustomTrigger

@@ -1,6 +1,3 @@
-import 'rc-color-picker/assets/index.less';
-import React from 'react';
-import ReactDOM from 'react-dom';
 import ColorPicker from 'rc-color-picker';
 
 function changeHandler(colors) {
@@ -11,7 +8,7 @@ function closeHandler(colors) {
   console.log(colors);
 }
 
-ReactDOM.render(
+const Simple = () => (
   <div style={{ margin: '20px 20px 20px', textAlign: 'center' }}>
     <p>-</p>
     <p>-</p>
@@ -43,6 +40,7 @@ ReactDOM.render(
     <ColorPicker color={'#0ad'} alpha={50} onChange={changeHandler} placement="bottomLeft" />
     <h4>bottomRight</h4>
     <ColorPicker color={'#0F0'} onChange={changeHandler} placement="bottomRight" />
-  </div>,
-  document.getElementById('__react-content'),
+  </div>
 );
+
+export default Simple

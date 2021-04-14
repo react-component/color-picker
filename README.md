@@ -1,3 +1,5 @@
+# This is a fork of https://github.com/react-component/color-picker. The original one is inactive and has many outdated dependencies with vulnerabilities. Install `@programmerraj/rc-color-picker` for this maintained version.
+
 # rc-color-picker
 ---
 

@@ -1,0 +1,14 @@
+{
+    "include": [
+        "src/*.js",
+        "src/*.jsx"
+    ],
+    "compilerOptions": {
+        "allowJs": true,
+        "outDir": "lib",
+        "jsx": "react",
+        "target": "ES2015",
+        "module": "CommonJS",
+        "esModuleInterop": true
+    }
+}

@@ -1,16 +1,13 @@
-# This is a fork of https://github.com/react-component/color-picker. The original one is inactive and has many outdated dependencies with vulnerabilities. Install `@programmerraj/rc-color-picker` for this maintained version.
+# @programmerraj/rc-color-picker
 
-# rc-color-picker
----
+[![License](https://badgen.net/github/license/ChocolateLoverRaj/react-json-input)](https://github.com/ChocolateLoverRaj/react-json-input/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@programmerraj/rc-color-picker.svg)](https://www.npmjs.org/package/programmerraj/rc-color-picker) 
+[![npm download](https://img.shields.io/npm/dm/@programmerraj/rc-color-picker.svg)](https://www.npmjs.org/package/programmerraj/rc-color-picker)
 
-React Color Picker
-
-[![npm version](http://img.shields.io/npm/v/rc-color-picker.svg)](https://www.npmjs.org/package/rc-color-picker) 
-[![npm download](http://img.shields.io/npm/dm/rc-color-picker.svg)](https://www.npmjs.org/package/rc-color-picker)
-[![npm dependency](https://david-dm.org/react-component/color-picker.svg)](https://david-dm.org/react-component/color-picker)
-[![Build Status](https://travis-ci.org/react-component/color-picker.svg?branch=master)](https://travis-ci.org/react-component/color-picker)
+> Notice: This package is a fork of [`rc-color-picker`](https://github.com/react-component/color-picker). [`rc-color-picker`](https://github.com/react-component/color-picker) has outdated dependencies which are deprecated and have vulnerabilities.
 
 ## Browser Support
+If something isn't working as it is shown, please make an issue.
 
 | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) |
 | --- | --- | --- | --- | --- | --- |
@@ -22,14 +19,28 @@ React Color Picker
 
 ## Development
 
+In the root folder
+```bash
+npm i
 ```
-npm install
-npm start
+
+To build package.
+```bash
+npm run build
+```
+
+In the `examples` folder
+```bash
+npm i
+```
+To view examples
+```bash
+npm run dev
 ```
 
 ## Example
 
-online example: [http://react-component.github.io/color-picker/](http://react-component.github.io/color-picker/)
+Online example: [http://chocolateloverraj.github.io/color-picker/](http://chocolateloverraj.github.io/color-picker/)
 
 ## Feature
 
@@ -37,12 +48,12 @@ online example: [http://react-component.github.io/color-picker/](http://react-co
 
 ## install
 
-[![rc-color-picker](https://nodei.co/npm/rc-color-picker.png)](https://npmjs.org/package/rc-color-picker)
+[![rc-color-picker](https://nodei.co/npm/@programmerraj/rc-color-picker.png)](https://npmjs.org/package/@programmerraj/rc-color-picker)
 
 ## Usage
 
 ```js
-var ColorPicker = require('rc-color-picker');
+var ColorPicker = require('@chocolateloverraj/rc-color-picker');
 var React = require('react');
 var ReactDOM = require('react-dom');
 ReactDOM.render(<ColorPicker />, container);
@@ -87,7 +98,3 @@ ReactDOM.render(<ColorPicker />, container);
 | onChange     | Function |           | when select color trigger                      |
 | onFocus      | Function |           | when picker focus trigger                      |
 | style        | Object   | `{}`      | root node CSS style                            |
-
-## License
-
-rc-color-picker is released under the MIT license.

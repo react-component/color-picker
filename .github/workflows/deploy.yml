@@ -13,6 +13,8 @@ jobs:
           node-version: 14
       - name: Install Root Dependencies
         run: npm ci
+      - name: Build rc-color-picker
+        run: npm run build
       - name: Install Examples Dependencies
         run: npm i
         working-directory: examples

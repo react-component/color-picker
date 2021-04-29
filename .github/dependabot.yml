@@ -1,0 +1,28 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: rc-util
+    versions:
+    - 5.10.0
+    - 5.10.1
+    - 5.11.0
+    - 5.4.0
+    - 5.8.1
+    - 5.9.2
+    - 5.9.4
+    - 5.9.5
+    - 5.9.8
+    - 5.9.9
+  - dependency-name: rc-trigger
+    versions:
+    - 5.2.0
+    - 5.2.2
+    - 5.2.3
+    - 5.2.4
+    - 5.2.5

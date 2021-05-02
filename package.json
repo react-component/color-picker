@@ -39,7 +39,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "prop-types": "^15.5.8",
-    "rc-trigger": "1.x",
+    "rc-trigger": "^5.2.6",
     "rc-util": "^4.0.2",
     "tinycolor2": "^1.4.1"
   },

@@ -26,10 +26,12 @@
     "lib/"
   ],
   "scripts": {
-    "build": "tsc && lessc assets/index.less assets/index.css --js"
+    "build": "tsc && lessc assets/index.less assets/index.css --js",
+    "prepublishOnly": "npm run build"
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/react": "^17.0.4",
     "less": "^4.1.1",
     "lesshat": "^3.0.2",
     "react": "*",

@@ -26,23 +26,43 @@
     "lib/"
   ],
   "scripts": {
+    "lint": "eslint .",
     "build": "tsc && lessc assets/index.less assets/index.css --js",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/react": "^6.2.9",
     "@types/react": "^17.0.4",
+    "@types/tinycolor2": "^1.4.2",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "babel-loader": "^8.2.2",
+    "eslint": "^7.25.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-config-standard-jsx": "^10.0.0",
+    "eslint-config-standard-with-typescript": "^20.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-react": "^7.23.2",
     "less": "^4.1.1",
     "lesshat": "^3.0.2",
-    "react": "*",
-    "react-dom": "*",
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
+    "@react-stately/utils": "^3.2.0",
+    "@segment/prevent-default": "^1.0.0",
+    "classnames": "^2.3.1",
     "prop-types": "^15.5.8",
     "rc-trigger": "^5.2.6",
     "rc-util": "^4.0.2",
+    "round": "^2.0.1",
     "tinycolor2": "^1.4.1"
   },
   "peerDependencies": {

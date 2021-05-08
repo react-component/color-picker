@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/tsconfig.json",
+  "extends": "./common-tsconfig.json",
+  "include": [
+    "src/**/*.stories.tsx"
+  ]
+}

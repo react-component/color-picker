@@ -27,7 +27,8 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "build": "tsc && lessc assets/index.less assets/index.css --js",
+    "build:less": "lessc assets/index.less assets/index.css --js",
+    "build": "tsc && npm run build:less",
     "prepublishOnly": "npm run build",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"

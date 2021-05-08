@@ -13,8 +13,10 @@ jobs:
           node-version: 15
       - name: Install Root Dependencies
         run: npm ci
+      - name: Build Css
+        run: npm run build:less
       - name: Build and deploy to gh-pages
         uses: sauloxd/review-apps@v1.3.3
         with:
-          build-cmd: npm run build:less && npm run build-storybook
+          build-cmd: npm run build-storybook
           dist: 'storybook-static'

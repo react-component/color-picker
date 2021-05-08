@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/tsconfig.json",
+  "include": [
+    "src/*.js",
+    "src/*.jsx",
+    "src/*.ts",
+    "src/*.tsx"
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "outDir": "lib",
+    "jsx": "react",
+    "target": "ES2015",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "declaration": true
+  }
+}

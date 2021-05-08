@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "**/*.jsx",
+    "src/**/*.js",
+    "lib",
+    "storybook-static"
+  ],
+  "extends": [
+    "standard-with-typescript",
+    "standard-jsx"
+  ],
+  "rules": {
+    "max-len": [
+      "error",
+      100
+    ]
+  },
+  "parserOptions": {
+    "project": "./eslint-tsconfig.json"
+  }
+}

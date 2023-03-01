@@ -61,7 +61,7 @@
     "@types/warning": "^3.0.0",
     "@umijs/fabric": "^3.0.0",
     "dumi": "^2.0.18",
-    "eslint": "^7.0.0",
+    "eslint": "^8.35.0",
     "father": "^4.0.0",
     "gh-pages": "^4.0.0",
     "husky": "^8.0.3",

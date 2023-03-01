@@ -30,6 +30,7 @@
     "coverage": "rc-test --coverage",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d .doc",
+    "docs:preview": "PREVIEW=true dumi build",
     "gh-pages": "npm run docs:build && npm run docs:deploy",
     "lint": "eslint src/ --ext .tsx,.ts",
     "prepare": "husky install",

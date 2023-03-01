@@ -1,3 +1,4 @@
+.storybook
 *.iml
 *.log
 .idea/
@@ -24,4 +25,20 @@ dist
 assets/**/*.css
 build
 lib
+coverage
 .vscode
+yarn.lock
+storybook/
+es/
+package-lock.json
+src/*.js
+src/*.map
+tslint.json
+tsconfig.test.json
+.prettierignore
+.doc/
+
+# dumi
+.dumi/tmp
+.dumi/tmp-test
+.dumi/tmp-production

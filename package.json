@@ -1,70 +1,80 @@
 {
-  "name": "rc-color-picker",
-  "version": "1.2.6",
-  "description": "color-picker ui component for react",
-  "main": "./lib/index.js",
+  "name": "@rc-component/color-picker",
+  "version": "0.0.0",
+  "description": "React Color Picker",
   "keywords": [
     "react",
     "react-component",
-    "react-color-picker",
+    "react-mentions",
     "color-picker"
   ],
   "homepage": "http://github.com/react-component/color-picker",
-  "author": "noyobo <noyobo@gmail.com>",
+  "bugs": {
+    "url": "http://github.com/react-component/color-picker/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:react-component/color-picker.git"
   },
-  "bugs": {
-    "url": "http://github.com/react-component/color-picker/issues"
-  },
+  "license": "MIT",
+  "main": "./lib/index",
+  "module": "./es/index",
   "files": [
-    "lib/",
     "assets/*.css",
-    "dist/"
+    "es",
+    "dist",
+    "lib"
   ],
-  "config": {
-    "port": 8010
+  "scripts": {
+    "compile": "father build",
+    "coverage": "rc-test --coverage",
+    "docs:build": "dumi build",
+    "docs:deploy": "gh-pages -d .doc",
+    "docs:preview": "PREVIEW=true dumi build",
+    "gh-pages": "npm run docs:build && npm run docs:deploy",
+    "lint": "eslint src/ --ext .tsx,.ts",
+    "prepare": "husky install",
+    "prepublishOnly": "npm run compile && np --yolo --no-publish",
+    "postpublish": "npm run gh-pages",
+    "start": "dumi dev",
+    "test": "rc-test"
   },
-  "entry": {
-    "rc-color-picker": [
-      "./assets/index.less",
-      "./src/index.js"
+  "lint-staged": {
+    "**/*.{js,jsx,tsx,ts,md,json}": [
+      "prettier --write",
+      "git add"
     ]
   },
-  "style": "./assets/index.css",
-  "scripts": {
-    "build": "rc-tools run build",
-    "gh-pages": "rc-tools run gh-pages",
-    "start": "rc-tools run server",
-    "pub": "rc-tools run pub",
-    "lint": "rc-tools run lint",
-    "karma": "rc-tools run karma",
-    "saucelabs": "rc-tools run saucelabs",
-    "test": "rc-tools run test",
-    "coverage": "rc-tools run coverage"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "babel-core": "^6.21.0",
-    "estraverse": "^4.2.0",
-    "expect.js": "~0.3.1",
-    "lesshat": "~3.0.2",
-    "pre-commit": "1.x",
-    "rc-tools": "^5.10.1"
-  },
   "dependencies": {
-    "classnames": "^2.2.5",
-    "prop-types": "^15.5.8",
-    "rc-trigger": "1.x",
-    "rc-util": "^4.0.2",
-    "tinycolor2": "^1.4.1"
+    "@babel/runtime": "^7.10.1",
+    "@ctrl/tinycolor": "^3.6.0",
+    "@rc-component/trigger": "^1.4.0",
+    "classnames": "^2.2.6"
+  },
+  "devDependencies": {
+    "@rc-component/father-plugin": "^1.0.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@types/classnames": "^2.2.6",
+    "@types/react": "^18.0.8",
+    "@types/react-dom": "^18.0.3",
+    "@types/warning": "^3.0.0",
+    "@umijs/fabric": "^3.0.0",
+    "dumi": "^2.0.18",
+    "eslint": "^7.0.0",
+    "father": "^4.0.0",
+    "gh-pages": "^4.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "np": "^7.0.0",
+    "prettier": "^2.0.5",
+    "rc-test": "^7.0.14",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^4.0.3"
   },
   "peerDependencies": {
-    "react": "16.x",
-    "react-dom": "16.x"
-  },
-  "pre-commit": [
-    "lint"
-  ]
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  }
 }

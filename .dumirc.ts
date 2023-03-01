@@ -10,7 +10,7 @@ const name = 'color-picker';
 export default defineConfig({
   favicons: ['https://avatars0.githubusercontent.com/u/9441414?s=200&v=4'],
   themeConfig: {
-    name: '@rc-component/color-picker',
+    name: 'color-picker',
     logo: 'https://avatars0.githubusercontent.com/u/9441414?s=200&v=4',
   },
   outputPath: '.doc',

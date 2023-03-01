@@ -1,4 +1,4 @@
-# rc-mentions
+# @rc-component/color-picker
 
 TODO: Badges
 

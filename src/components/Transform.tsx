@@ -1,5 +1,5 @@
-import type { TransformOffset } from '@/interface';
 import React, { forwardRef } from 'react';
+import type { TransformOffset } from '../interface';
 
 const Transform = forwardRef<
   HTMLDivElement,

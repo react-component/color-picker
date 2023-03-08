@@ -1,8 +1,8 @@
-import ColorPicker from '@/ColorPicker';
-import { Color } from '@/interface';
-import { defaultColor } from '@/util';
+import ColorPicker from '@rc-component/color-picker';
 import React, { useState } from 'react';
 import '../../assets/index.less';
+import { Color } from '../../src/interface';
+import { defaultColor } from '../../src/util';
 
 export default () => {
   const [value, setValue] = useState<Color>(defaultColor);

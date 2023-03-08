@@ -1,7 +1,7 @@
-import ColorPickerContext from '@/context';
 import { useContext } from '@rc-component/context';
 import type { FC } from 'react';
 import React from 'react';
+import ColorPickerContext from '../context';
 
 const Square: FC<{
   children?: React.ReactElement;

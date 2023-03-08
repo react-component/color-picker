@@ -1,7 +1,7 @@
-import ColorPickerContext from '@/context';
 import { useContext } from '@rc-component/context';
 import classNames from 'classnames';
 import React, { FC } from 'react';
+import ColorPickerContext from '../context';
 
 type pointSize = 'default' | 'small';
 

@@ -1,9 +1,9 @@
-import ColorPickerContext from '@/context';
-import type { Color, HsvaColorType } from '@/interface';
-import { generateColor } from '@/util';
 import { useContext } from '@rc-component/context';
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
+import ColorPickerContext from '../context';
+import type { Color, HsvaColorType } from '../interface';
+import { generateColor } from '../util';
 
 const Gradient: FC<{
   colors: (Color | string)[];

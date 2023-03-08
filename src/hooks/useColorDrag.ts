@@ -1,5 +1,5 @@
-import type { Color, TransformOffset } from '@/interface';
 import { useEffect, useRef, useState } from 'react';
+import type { Color, TransformOffset } from '../interface';
 
 type EventHandle = (
   e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent,

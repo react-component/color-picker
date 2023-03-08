@@ -1,11 +1,11 @@
-import ColorPickerContext from '@/context';
-import useColorDrag from '@/hooks/useColorDrag';
-import type { HsvaColorType } from '@/interface';
-import Square from '@/shape/Square';
-import { calculateColor, calculateOffset } from '@/util';
 import { useContext } from '@rc-component/context';
 import type { FC } from 'react';
 import React, { useMemo, useRef } from 'react';
+import ColorPickerContext from '../context';
+import useColorDrag from '../hooks/useColorDrag';
+import type { HsvaColorType } from '../interface';
+import Square from '../shape/Square';
+import { calculateColor, calculateOffset } from '../util';
 
 import Gradient from './Gradient';
 import Point from './Point';

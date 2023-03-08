@@ -10,7 +10,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@@/*": [".dumi/tmp/*"],
-      "@rc-component/color-picker": ["src/index.tsx"]
+      "@rc-component/color-picker": ["src/ColorPicker.tsx"]
     }
   }
 }

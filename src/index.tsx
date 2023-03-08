@@ -1,7 +1,3 @@
-import React, { FC } from 'react';
-
-const ColorPicker: FC = () => {
-  return <div>ColorPicker</div>;
-};
+import ColorPicker from './ColorPicker';
 
 export default ColorPicker;

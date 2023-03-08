@@ -1,0 +1,50 @@
+@ColorPickerPrefixCls: rc-color;
+@font-size-base: 12px;
+@vertical-space: 12px;
+@inner-border-radius: 4px;
+@outer-border-radius: 8px;
+@default-point-size: 16px;
+@sm-point-size: 12px;
+@point-border-size: 2px;
+
+.@{ColorPickerPrefixCls} {
+  &-panel {
+    display: flex;
+    flex-direction: column;
+    width: 258px;
+    padding: @vertical-space;
+  }
+  &-picker {
+    .@{ColorPickerPrefixCls}-shape-square {
+      height: 160px;
+      overflow: hidden;
+    }
+    .@{ColorPickerPrefixCls}-gradient {
+      border-radius: @inner-border-radius;
+    }
+    margin-bottom: @vertical-space;
+  }
+
+  &-point {
+    box-sizing: border-box;
+    width: @default-point-size;
+    height: @default-point-size;
+    border: @point-border-size solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.06);
+  }
+  &-point-sm {
+    width: @sm-point-size;
+    height: @sm-point-size;
+  }
+
+  &-slider {
+    .@{ColorPickerPrefixCls}-shape-square {
+      height: 8px;
+    }
+    .@{ColorPickerPrefixCls}-gradient {
+      border-radius: @inner-border-radius;
+    }
+    margin-bottom: @vertical-space;
+  }
+}

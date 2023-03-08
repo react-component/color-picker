@@ -1,5 +1,5 @@
 ---
-title: rc-mentions
+title: rc-color-picker
 ---
 
 <embed src="../README.md"></embed>

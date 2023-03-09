@@ -1,94 +1,85 @@
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { FC } from 'react';
 import React, { useMemo, useState } from 'react';
+import type { ColorPickerCtxProps } from './context';
 import { ColorPickerProvider } from './context';
 import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
-
-import type { ColorPickerProps } from './ColorPicker';
-import type { ColorPickerCtxProps } from './context';
 
 import DataBar from './components/DataBar';
 import Picker from './components/Picker';
 import Slider from './components/Slider';
+import { Color, Hsv } from './interface';
 
-const Panel: FC<
-  Omit<ColorPickerProps, 'open' | 'trigger' | 'placement' | 'onOpenChange'>
-> = ({
+const hueColor = [
+  'rgb(255, 0, 0) 0%',
+  'rgb(255, 255, 0) 17%',
+  'rgb(0, 255, 0) 33%',
+  'rgb(0, 255, 255) 50%',
+  'rgb(0, 0, 255) 67%',
+  'rgb(255, 0, 255) 83%',
+  'rgb(255, 0, 0) 100%',
+];
+
+export interface PanelProps {
+  value?: string | Color;
+  defaultValue?: string | Color;
+  prefixCls?: string;
+  onChange?: (value: Color) => void;
+}
+
+const Panel: FC<PanelProps> = ({
   value,
   defaultValue,
-  format = 'hex',
   prefixCls = ColorPickerPrefixCls,
   onChange,
-  onFormatChange,
 }) => {
   const [color, setColor] = useMergedState(defaultColor, {
     value,
     defaultValue,
   });
-  const [colorFormat, setColorFormat] = useState(format);
-  const [hue, setHue] = useState(generateColor(color).toHsv().h || 160);
-  const formatColor = useMemo(() => {
-    const result = generateColor(color);
-    return `rgb(${result.r},${result.g},${result.b})`;
-  }, [color]);
+  const colorValue = useMemo(() => generateColor(color), [color]);
+  const [hue, setHue] = useState(colorValue.toHsv().h || 160);
+  const alphaColor = useMemo(() => {
+    // Alpha color need equal 1 for base color
+    colorValue.setAlpha(1);
+    return colorValue.toRgbString();
+  }, [colorValue]);
 
-  const handleChange: ColorPickerCtxProps['handleChange'] = (
-    colorValue,
-    type,
-  ) => {
-    const hsv = colorValue.toHsv();
-    const originalInput = colorValue.originalInput;
+  const handleChange: ColorPickerCtxProps['handleChange'] = (data, type) => {
+    const hsv = data.toHsv();
+    const originalInput = data.originalInput as Hsv;
+
     // Maintain color hue not to 0
     if (type === 'Hue') {
       if (hsv.h !== 0) {
         setHue(hsv.h);
-      } else if (typeof colorValue.originalInput !== 'string') {
-        // @ts-ignore
+      } else if (typeof data.originalInput !== 'string') {
         setHue(originalInput.h);
       }
     }
 
-    setColor(colorValue);
-    onChange?.(colorValue, colorValue.toHexString());
+    setColor(data);
+    onChange?.(data);
   };
-
-  const handleFormatChange: ColorPickerCtxProps['handleFormatChange'] =
-    formatValue => {
-      setColorFormat(formatValue);
-      onFormatChange?.(formatValue);
-    };
 
   const contextValue = useMemo<ColorPickerCtxProps>(
     () => ({
-      color: generateColor(color),
-      colorFormat,
+      color: colorValue,
       prefixCls,
       hue,
       handleChange,
-      handleFormatChange,
     }),
-    [color, colorFormat, prefixCls, hue],
+    [colorValue, prefixCls, hue],
   );
 
   return (
     <ColorPickerProvider value={contextValue}>
       <div className={`${prefixCls}-panel`}>
         <Picker />
-        <Slider
-          type="Hue"
-          gradientColors={[
-            'rgb(255, 0, 0) 0%',
-            'rgb(255, 255, 0) 17%',
-            'rgb(0, 255, 0) 33%',
-            'rgb(0, 255, 255) 50%',
-            'rgb(0, 0, 255) 67%',
-            'rgb(255, 0, 255) 83%',
-            'rgb(255, 0, 0) 100%',
-          ]}
-        />
+        <Slider type="Hue" gradientColors={hueColor} />
         <Slider
           type="Alpha"
-          gradientColors={['rgba(255, 0, 4, 0) 0%', formatColor]}
+          gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
         />
         <DataBar />
       </div>

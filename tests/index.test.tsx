@@ -4,7 +4,11 @@ import ColorPicker from '../src/ColorPicker';
 
 describe('ColorPicker', () => {
   it('should work', () => {
-    const { container } = render(<ColorPicker />);
+    const { container } = render(
+      <ColorPicker>
+        <div>Color Picker</div>
+      </ColorPicker>,
+    );
     expect(container.querySelector('.rc-color')).toBeTruthy();
   });
 });

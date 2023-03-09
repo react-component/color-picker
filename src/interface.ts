@@ -4,6 +4,14 @@ export interface Color extends TinyColor {}
 
 export type ColorFormat = 'rgb' | 'hex' | 'hsb';
 
+export type TriggerPlacement =
+  | 'top'
+  | 'topLeft'
+  | 'topRight'
+  | 'bottom'
+  | 'bottomLeft'
+  | 'bottomRight';
+
 export type Hsv = {
   h: number;
   s: number;

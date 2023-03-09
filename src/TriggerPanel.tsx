@@ -1,28 +1,33 @@
 import Trigger from '@rc-component/trigger';
-import type { FC } from 'react';
-import React from 'react';
-import type { ColorPickerProps } from './ColorPicker';
-import Panel from './Panel';
+import React, { FC } from 'react';
+import placements from './components/placements';
+import { TriggerPlacement } from './interface';
+import Panel, { PanelProps } from './Panel';
 
-const TriggerPanel: FC<
-  Pick<
-    ColorPickerProps,
-    'open' | 'trigger' | 'placement' | 'onOpenChange' | 'children'
-  >
-> = props => {
+export interface TriggerPanelProps extends PanelProps {
+  open?: boolean;
+  trigger?: 'click' | 'hover';
+  children: React.ReactElement;
+  disabled?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  placement?: TriggerPlacement;
+}
+
+const TriggerPanel: FC<TriggerPanelProps> = props => {
   const {
-    open = false,
+    open,
     trigger = 'hover',
-    placement = 'bottomLeft',
     children,
     onOpenChange,
+    placement = 'bottomLeft',
   } = props;
   return (
     <Trigger
-      action={trigger}
+      action={[trigger]}
       popupVisible={open}
       popup={<Panel {...props} />}
       popupPlacement={placement}
+      builtinPlacements={placements}
       onPopupVisibleChange={onOpenChange}
     >
       {children}

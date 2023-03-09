@@ -9,20 +9,24 @@ export default () => {
   return (
     <div>
       <p>hex: {value?.toHexString()}</p>
+      <p>hsv: {value?.toHsvString()}</p>
       <p>rbg: {value?.toRgbString()}</p>
-      <div
-        style={{
-          width: 30,
-          height: 30,
-          background: value?.toRgbString(),
-        }}
-      ></div>
+
       <ColorPicker
         value={value}
+        open={true}
         onChange={value => {
           setValue(value);
         }}
-      />
+      >
+        <div
+          style={{
+            width: 30,
+            height: 30,
+            background: value?.toRgbString(),
+          }}
+        ></div>
+      </ColorPicker>
     </div>
   );
 };

@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "paths": {
       "@@/*": [".dumi/tmp/*"],
-      "@rc-component/color-picker": ["src/ColorPicker.tsx"]
+      "@rc-component/color-picker": ["src/index.tsx"]
     }
   }
 }

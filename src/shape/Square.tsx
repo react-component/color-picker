@@ -4,7 +4,7 @@ import React from 'react';
 import ColorPickerContext from '../context';
 
 const Square: FC<{
-  children?: React.ReactElement;
+  children?: React.ReactNode;
   style?: React.CSSProperties;
 }> = ({ children, style }) => {
   const prefixCls = useContext(ColorPickerContext, 'prefixCls');

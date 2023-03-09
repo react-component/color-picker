@@ -1,3 +1,4 @@
+@import '@rc-component/trigger/assets/index.css';
 @ColorPickerPrefixCls: rc-color;
 @font-size-base: 12px;
 @vertical-space: 12px;
@@ -6,6 +7,7 @@
 @default-point-size: 16px;
 @sm-point-size: 12px;
 @point-border-size: 2px;
+@shadow-2-down:0px 3px 6px -4px rgba(0, 0, 0, 0.12),0px 6px 16px 0px rgba(0, 0, 0, 0.08),0px 9px 28px 8px rgba(0, 0, 0, 0.05);
 
 .@{ColorPickerPrefixCls} {
   &-panel {
@@ -13,6 +15,9 @@
     flex-direction: column;
     width: 258px;
     padding: @vertical-space;
+    background-color: #fff;
+    border-radius: @outer-border-radius;
+    box-shadow: @shadow-2-down;
   }
   &-picker {
     .@{ColorPickerPrefixCls}-shape-square {

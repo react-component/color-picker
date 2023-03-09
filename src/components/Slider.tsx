@@ -62,12 +62,10 @@ const Slider: FC<{
       onMouseDown={dragStart}
     >
       <Square>
-        <>
-          <Transform offset={offest} ref={transformRef}>
-            <Point size="small" color={generatePointColor} />
-          </Transform>
-          <Gradient colors={gradientColors} direction={direction} type={type} />
-        </>
+        <Transform offset={offest} ref={transformRef}>
+          <Point size="small" color={generatePointColor} />
+        </Transform>
+        <Gradient colors={gradientColors} direction={direction} type={type} />
       </Square>
     </div>
   );

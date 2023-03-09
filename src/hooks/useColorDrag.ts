@@ -21,7 +21,11 @@ function getPosition(
   e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent,
 ) {
   const obj = 'touches' in e ? e.touches[0] : e;
-  return { pageX: obj.pageX, pageY: obj.pageY };
+  const scrollOffset =
+    document.documentElement.scrollTop ||
+    document.body.scrollTop ||
+    window.pageYOffset;
+  return { pageX: obj.pageX, pageY: obj.pageY - scrollOffset };
 }
 
 function useColorDrag(
@@ -70,12 +74,12 @@ function useColorDrag(
     const centerOffset = targetWidth / 2;
 
     const limtX =
-      pageX - rectX > width - centerOffset
+      pageX - rectX > width
         ? width - centerOffset
         : pageX - rectX - centerOffset;
 
     const limtY =
-      pageY - rectY > height - centerOffset
+      pageY - rectY > height
         ? height - centerOffset
         : pageY - rectY - centerOffset;
 

@@ -5,7 +5,7 @@ import type { ColorPickerCtxProps } from './context';
 import { ColorPickerProvider } from './context';
 import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
 
-import DataBar from './components/DataBar';
+import ColorDisplay from './components/ColorDisplay';
 import Picker from './components/Picker';
 import Slider from './components/Slider';
 import { Color, Hsv } from './interface';
@@ -25,6 +25,8 @@ export interface PanelProps {
   defaultValue?: string | Color;
   prefixCls?: string;
   onChange?: (value: Color) => void;
+  /** Get panel element  */
+  getPanelEle?: (penel: React.ReactElement) => React.ReactElement;
 }
 
 const Panel: FC<PanelProps> = ({
@@ -32,6 +34,7 @@ const Panel: FC<PanelProps> = ({
   defaultValue,
   prefixCls = ColorPickerPrefixCls,
   onChange,
+  getPanelEle,
 }) => {
   const [color, setColor] = useMergedState(defaultColor, {
     value,
@@ -40,17 +43,17 @@ const Panel: FC<PanelProps> = ({
   const colorValue = useMemo(() => generateColor(color), [color]);
   const [hue, setHue] = useState(colorValue.toHsv().h || 160);
   const alphaColor = useMemo(() => {
-    // Alpha color need equal 1 for base color
-    colorValue.setAlpha(1);
-    return colorValue.toRgbString();
+    const rgb = generateColor(colorValue.toRgbString());
+    // alpha color need equal 1 for base color
+    rgb.setAlpha(1);
+    return rgb.toRgbString();
   }, [colorValue]);
 
   const handleChange: ColorPickerCtxProps['handleChange'] = (data, type) => {
     const hsv = data.toHsv();
     const originalInput = data.originalInput as Hsv;
-
     // Maintain color hue not to 0
-    if (type === 'Hue') {
+    if (type === 'hue') {
       if (hsv.h !== 0) {
         setHue(hsv.h);
       } else if (typeof data.originalInput !== 'string') {
@@ -72,16 +75,28 @@ const Panel: FC<PanelProps> = ({
     [colorValue, prefixCls, hue],
   );
 
+  const panelElement = useMemo(
+    () => (
+      <>
+        <Picker />
+        <ColorDisplay>
+          <Slider type="hue" gradientColors={hueColor} />
+          <Slider
+            type="alpha"
+            gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
+          />
+        </ColorDisplay>
+      </>
+    ),
+    [hueColor, alphaColor],
+  );
+
   return (
     <ColorPickerProvider value={contextValue}>
       <div className={`${prefixCls}-panel`}>
-        <Picker />
-        <Slider type="Hue" gradientColors={hueColor} />
-        <Slider
-          type="Alpha"
-          gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
-        />
-        <DataBar />
+        {typeof getPanelEle === 'function'
+          ? getPanelEle(panelElement)
+          : panelElement}
       </div>
     </ColorPickerProvider>
   );

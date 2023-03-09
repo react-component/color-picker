@@ -19,7 +19,7 @@ export type Hsv = {
   a: number;
 };
 
-export type HsvaColorType = 'Hue' | 'Saturation' | 'Lightness' | 'Alpha';
+export type HsvaColorType = 'hue' | 'saturation' | 'lightness' | 'alpha';
 
 export type TransformOffset = {
   x: number;

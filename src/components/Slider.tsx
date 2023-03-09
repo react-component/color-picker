@@ -1,4 +1,5 @@
 import { useContext } from '@rc-component/context';
+import classNames from 'classnames';
 import type { FC } from 'react';
 import React, { useMemo, useRef } from 'react';
 import ColorPickerContext from '../context';
@@ -11,11 +12,17 @@ import Gradient from './Gradient';
 import Point from './Point';
 import Transform from './Transform';
 
-const Slider: FC<{
+interface SliderProps {
   gradientColors: string[];
   direction?: string;
   type?: HsvaColorType;
-}> = ({ gradientColors = [], direction = 'to right', type = 'Hue' }) => {
+}
+
+const Slider: FC<SliderProps> = ({
+  gradientColors = [],
+  direction = 'to right',
+  type = 'hue',
+}) => {
   const sliderRef = useRef();
   const transformRef = useRef();
   const { color, prefixCls, hue, handleChange } = useContext(
@@ -44,11 +51,10 @@ const Slider: FC<{
   });
 
   const generatePointColor = useMemo(() => {
-    const { r, g, b, a } = color;
     switch (type) {
-      case 'Alpha':
-        return `rgba(${r},${g},${b},${a})`;
-      case 'Hue':
+      case 'alpha':
+        return color.toRgbString();
+      case 'hue':
         return `hsl(${hue},100%, 50%)`;
       default:
         break;
@@ -58,7 +64,10 @@ const Slider: FC<{
   return (
     <div
       ref={sliderRef}
-      className={`${prefixCls}-slider`}
+      className={classNames(
+        `${prefixCls}-slider`,
+        `${prefixCls}-slider-${type}`,
+      )}
       onMouseDown={dragStart}
     >
       <Square>

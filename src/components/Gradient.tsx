@@ -17,7 +17,7 @@ const Gradient: FC<{
       colors
         .map((color, idx) => {
           const result = generateColor(color);
-          if (type === 'Alpha' && idx === colors.length - 1) {
+          if (type === 'alpha' && idx === colors.length - 1) {
             result.setAlpha(1);
           }
           return result.toRgbString();

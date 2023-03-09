@@ -10,6 +10,7 @@ export interface TriggerPanelProps extends PanelProps {
   children: React.ReactElement;
   disabled?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** Popup placement */
   placement?: TriggerPlacement;
 }
 
@@ -21,6 +22,7 @@ const TriggerPanel: FC<TriggerPanelProps> = props => {
     onOpenChange,
     placement = 'bottomLeft',
   } = props;
+
   return (
     <Trigger
       action={[trigger]}

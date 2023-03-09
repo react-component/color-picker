@@ -51,12 +51,12 @@ export const calculateColor = (props: {
 
   if (type) {
     switch (type) {
-      case 'Hue':
+      case 'hue':
         return generateColor({
           ...hsv,
           h: hueOffset <= 0 ? 0 : hueOffset,
         });
-      case 'Alpha':
+      case 'alpha':
         return generateColor({
           ...hsv,
           a: alphaOffset <= 0 ? 0 : alphaOffset,
@@ -86,12 +86,12 @@ export const calculateOffset = (
   const hsv = color.toHsv();
   if (type) {
     switch (type) {
-      case 'Hue':
+      case 'hue':
         return {
           x: (hsv.h / 360) * width,
           y: -centerOffset / 3,
         };
-      case 'Alpha':
+      case 'alpha':
         return {
           x: (hsv.a / 1) * width - centerOffset,
           y: -centerOffset / 3,

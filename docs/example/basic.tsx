@@ -8,13 +8,19 @@ export default () => {
   const [value, setValue] = useState<Color>(defaultColor);
   return (
     <div>
-      <p>hex: {value?.toHexString()}</p>
+      <p>
+        hex:
+        {value.getAlpha() === 1 ? value?.toHexString() : value?.toHex8String()}
+      </p>
       <p>hsv: {value?.toHsvString()}</p>
       <p>rbg: {value?.toRgbString()}</p>
 
       <ColorPicker
         value={value}
         open={true}
+        getPanelEle={panel => {
+          return <div>{panel}</div>;
+        }}
         onChange={value => {
           setValue(value);
         }}

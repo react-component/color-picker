@@ -13,7 +13,7 @@
   &-panel {
     display: flex;
     flex-direction: column;
-    width: 258px;
+    min-width: 258px;
     padding: @vertical-space;
     background-color: #fff;
     border-radius: @outer-border-radius;
@@ -21,7 +21,7 @@
   }
   &-picker {
     .@{ColorPickerPrefixCls}-shape-square {
-      height: 160px;
+      min-height: 160px;
       overflow: hidden;
     }
     .@{ColorPickerPrefixCls}-gradient {
@@ -50,6 +50,27 @@
     .@{ColorPickerPrefixCls}-gradient {
       border-radius: @inner-border-radius;
     }
+    &-alpha {
+      background: url('./alpha.svg');
+    }
     margin-bottom: @vertical-space;
+  }
+
+  &-display {
+    display: flex;
+    &-block {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      margin-right: @vertical-space;
+      background-image: url('./alpha.svg');
+      border-radius: @inner-border-radius;
+      .@{ColorPickerPrefixCls}-gradient {
+        border-radius: @inner-border-radius;
+      }
+    }
+    &-slot {
+      flex: 1;
+    }
   }
 }

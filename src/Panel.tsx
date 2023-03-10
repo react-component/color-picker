@@ -15,9 +15,9 @@ import Params from './Params'
 import Preview from './Preview'
 import Ribbon from './Ribbon'
 import { Value } from './types'
-import { useControlledState } from '@react-stately/utils'
 import prefixCls from './prefixCls'
 import TinyColor from 'tinycolor2'
+import useOptionalState from 'use-optional-state'
 
 export interface PanelProps {
   value?: Value
@@ -41,7 +41,11 @@ const Panel: FC<PanelProps> = props => {
   const [
     value,
     setValue
-  ] = useControlledState<Value>(propsValue as Value, defaultValue as Value, onChange as any)
+  ] = useOptionalState<Value>({
+    initialValue: defaultValue,
+    controlledValue: propsValue,
+    onChange
+  }) as [Value, (value: Value) => void]
 
   const ref = useRef<HTMLDivElement>(null)
   const [focusingOnInput, setFocusingOnInput] = useState(false)
@@ -66,7 +70,7 @@ const Panel: FC<PanelProps> = props => {
         setFocusingOnInput(false)
       }, 100 /* 100 I don't know why but og code had 100 */) as unknown as number
     } else {
-      setValue(value => ({ ...value, open: false }))
+      setValue({ ...value, open: false })
     }
   }
   const handleFocus: FocusEventHandler<HTMLDivElement> = () => {
@@ -79,14 +83,14 @@ const Panel: FC<PanelProps> = props => {
   }
 
   const handleChange: Dispatch<Color> = color => {
-    setValue(value => ({
+    setValue({
       ...value,
       color: new TinyColor(color.hex).setAlpha(value.color.getAlpha())
-    }))
+    })
   }
 
   const handleAlphaChange: Dispatch<number> = alpha => {
-    setValue(value => ({ ...value, color: new TinyColor(value.color).setAlpha(alpha / 100) }))
+    setValue({ ...value, color: new TinyColor(value.color).setAlpha(alpha / 100) })
   }
 
   const color = new Color(value.color)

@@ -1,5 +1,4 @@
 import React, { CSSProperties, Dispatch, FC, MouseEventHandler } from 'react'
-import { useControlledState } from '@react-stately/utils'
 import Trigger, { TriggerProps } from 'rc-trigger'
 import cn from 'classnames'
 import prefixCls from './prefixCls'
@@ -8,6 +7,7 @@ import Panel from './Panel'
 import TinyColor from 'tinycolor2'
 import prevent from '@segment/prevent-default'
 import { Value } from './types'
+import useOptionalState from 'use-optional-state'
 
 export type Placement = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'
 
@@ -41,14 +41,18 @@ const ColorPicker: FC<ColorPickerProps> = props => {
   const [
     value,
     setValue
-  ] = useControlledState(propsValue as Value, defaultValue as Value, onChange as any)
+  ] = useOptionalState<Value>({
+    initialValue: defaultValue,
+    controlledValue: propsValue,
+    onChange
+  }) as [Value, (value: Value) => void]
 
   const handlePopupVisibleChange: TriggerProps['onPopupVisibleChange'] = open => {
-    setValue(value => ({ ...value, open }))
+    setValue({ ...value, open })
   }
 
   const handleToggle: MouseEventHandler<HTMLDivElement> = () => {
-    setValue(value => ({ ...value, open: !value.open }))
+    setValue({ ...value, open: !value.open })
   }
 
   return (

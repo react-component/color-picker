@@ -15,7 +15,10 @@ const improveColor = (color: TinyColor) => {
 
   color.toHsvString = () => {
     const hsv = color.toHsv();
-    const originalInput = color.originalInput as Hsv;
+    const originalInput =
+      typeof color.originalInput === 'string'
+        ? { h: 0, s: 0, v: 0 }
+        : (color.originalInput as Hsv);
     const saturation = Math.round(originalInput.s * 100);
     const lightness = Math.round(originalInput.v * 100);
     const hue = Math.round(originalInput.h);
@@ -27,13 +30,16 @@ const improveColor = (color: TinyColor) => {
 
   color.toHsv = () => {
     const hsv = toHsv() as Hsv;
-    const originalInput = color.originalInput as Hsv;
+    const originalInput =
+      typeof color.originalInput === 'string'
+        ? { h: 0, s: 0, v: 0 }
+        : (color.originalInput as Hsv);
     const hue = Math.round(originalInput.h);
 
     return hsv.h === 0
       ? {
           ...hsv,
-          h: hue || 160,
+          h: hue,
         }
       : hsv;
   };
@@ -51,15 +57,16 @@ export const generateColor = (color: Color | string | Hsv) => {
 export const defaultColor = generateColor('#1677ff');
 
 export const getFormatColor = (color: Color | string, format: ColorFormat) => {
+  const colorVaue = generateColor(color);
   switch (format) {
     case 'hex':
-      return generateColor(color).toHexString();
+      return colorVaue.toHexString();
     case 'hsb':
-      return generateColor(color).toHslString();
+      return colorVaue.toHslString();
     case 'rgb':
-      return generateColor(color).toRgbString();
+      return colorVaue.toRgbString();
     default:
-      return generateColor(color).toHexString();
+      return colorVaue.toHexString();
   }
 };
 

@@ -51,7 +51,7 @@ const Picker: FC<PickerProps> = ({ color, onChange }) => {
         <Transform offset={offest} ref={transformRef}>
           <Handler color={getFormatColor(color, 'rgb')} />
         </Transform>
-        <Gradient colors={[formatColor, formatColor]} direction="to right">
+        <Gradient colors={[formatColor]}>
           <Gradient
             colors={['rgb(255, 255, 255)', 'rgba(255, 255, 255, 0)']}
             direction="to right"

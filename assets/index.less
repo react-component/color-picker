@@ -23,9 +23,10 @@
     .@{ColorPickerPrefixCls}-palette {
       min-height: 160px;
       overflow: hidden;
-    }
-    .@{ColorPickerPrefixCls}-gradient {
       border-radius: @inner-border-radius;
+      & > .@{ColorPickerPrefixCls}-gradient {
+        border-top-left-radius: 5px;
+      }
     }
     margin-bottom: @vertical-space;
   }

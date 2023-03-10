@@ -32,7 +32,10 @@ const Gradient: FC<{
       style={{
         position: 'absolute',
         inset: 0,
-        background: `linear-gradient(${direction}, ${gradientColors})`,
+        background:
+          colors.length === 1
+            ? gradientColors
+            : `linear-gradient(${direction}, ${gradientColors})`,
       }}
     >
       {children}

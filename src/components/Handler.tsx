@@ -3,17 +3,17 @@ import classNames from 'classnames';
 import React, { FC } from 'react';
 import ColorPickerContext from '../context';
 
-type pointSize = 'default' | 'small';
+type HandlerSize = 'default' | 'small';
 
-const Point: FC<{
-  size?: pointSize;
+const Handler: FC<{
+  size?: HandlerSize;
   color?: string;
 }> = ({ size = 'default', color }) => {
   const prefixCls = useContext(ColorPickerContext, 'prefixCls');
   return (
     <div
-      className={classNames(`${prefixCls}-point`, {
-        [`${prefixCls}-point-sm`]: size === 'small',
+      className={classNames(`${prefixCls}-handler`, {
+        [`${prefixCls}-handler-sm`]: size === 'small',
       })}
       style={{
         backgroundColor: color,
@@ -22,4 +22,4 @@ const Point: FC<{
   );
 };
 
-export default Point;
+export default Handler;

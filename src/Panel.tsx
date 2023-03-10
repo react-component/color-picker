@@ -8,7 +8,7 @@ import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
 import ColorDisplay from './components/ColorDisplay';
 import Picker from './components/Picker';
 import Slider from './components/Slider';
-import { Color, Hsv } from './interface';
+import { Color } from './interface';
 
 const hueColor = [
   'rgb(255, 0, 0) 0%',
@@ -26,7 +26,7 @@ export interface PanelProps {
   prefixCls?: string;
   onChange?: (value: Color) => void;
   /** Get panel element  */
-  getPanelEle?: (penel: React.ReactElement) => React.ReactElement;
+  panelRender?: (penel: React.ReactElement) => React.ReactElement;
 }
 
 const Panel: FC<PanelProps> = ({
@@ -34,14 +34,13 @@ const Panel: FC<PanelProps> = ({
   defaultValue,
   prefixCls = ColorPickerPrefixCls,
   onChange,
-  getPanelEle,
+  panelRender,
 }) => {
-  const [color, setColor] = useMergedState(defaultColor, {
+  const [color] = useMergedState(defaultColor, {
     value,
     defaultValue,
   });
-  const colorValue = useMemo(() => generateColor(color), [color]);
-  const [hue, setHue] = useState(colorValue.toHsv().h || 160);
+  const [colorValue, setcolorValue] = useState(generateColor(color));
   const alphaColor = useMemo(() => {
     const rgb = generateColor(colorValue.toRgbString());
     // alpha color need equal 1 for base color
@@ -49,19 +48,8 @@ const Panel: FC<PanelProps> = ({
     return rgb.toRgbString();
   }, [colorValue]);
 
-  const handleChange: ColorPickerCtxProps['handleChange'] = (data, type) => {
-    const hsv = data.toHsv();
-    const originalInput = data.originalInput as Hsv;
-    // Maintain color hue not to 0
-    if (type === 'hue') {
-      if (hsv.h !== 0) {
-        setHue(hsv.h);
-      } else if (typeof data.originalInput !== 'string') {
-        setHue(originalInput.h);
-      }
-    }
-
-    setColor(data);
+  const handleChange: ColorPickerCtxProps['handleChange'] = data => {
+    setcolorValue(data);
     onChange?.(data);
   };
 
@@ -69,33 +57,44 @@ const Panel: FC<PanelProps> = ({
     () => ({
       color: colorValue,
       prefixCls,
-      hue,
       handleChange,
     }),
-    [colorValue, prefixCls, hue],
+    [colorValue, prefixCls],
   );
 
   const panelElement = useMemo(
     () => (
       <>
-        <Picker />
-        <ColorDisplay>
-          <Slider type="hue" gradientColors={hueColor} />
-          <Slider
-            type="alpha"
-            gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
-          />
-        </ColorDisplay>
+        <Picker color={colorValue} onChange={handleChange} />
+        <ColorDisplay
+          color={colorValue}
+          slotRender={() => (
+            <>
+              <Slider
+                type="hue"
+                gradientColors={hueColor}
+                color={colorValue}
+                onChange={handleChange}
+              />
+              <Slider
+                type="alpha"
+                gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
+                color={colorValue}
+                onChange={handleChange}
+              />
+            </>
+          )}
+        ></ColorDisplay>
       </>
     ),
-    [hueColor, alphaColor],
+    [hueColor, alphaColor, colorValue, handleChange],
   );
 
   return (
     <ColorPickerProvider value={contextValue}>
       <div className={`${prefixCls}-panel`}>
-        {typeof getPanelEle === 'function'
-          ? getPanelEle(panelElement)
+        {typeof panelRender === 'function'
+          ? panelRender(panelElement)
           : panelElement}
       </div>
     </ColorPickerProvider>

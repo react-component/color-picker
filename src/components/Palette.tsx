@@ -3,14 +3,14 @@ import type { FC } from 'react';
 import React from 'react';
 import ColorPickerContext from '../context';
 
-const Square: FC<{
+const Palette: FC<{
   children?: React.ReactNode;
   style?: React.CSSProperties;
 }> = ({ children, style }) => {
   const prefixCls = useContext(ColorPickerContext, 'prefixCls');
   return (
     <div
-      className={`${prefixCls}-shape-square`}
+      className={`${prefixCls}-palette`}
       style={{
         position: 'relative',
         ...style,
@@ -21,4 +21,4 @@ const Square: FC<{
   );
 };
 
-export default Square;
+export default Palette;

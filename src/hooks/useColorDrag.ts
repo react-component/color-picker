@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Color, TransformOffset } from '../interface';
 
-type EventHandle = (
-  e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent,
-) => void;
+type EventType =
+  | MouseEvent
+  | React.MouseEvent<Element, MouseEvent>
+  | React.TouchEvent<Element>
+  | TouchEvent;
+
+type EventHandle = (e: EventType) => void;
 
 interface useColorDragProps {
   color?: Color;
@@ -17,9 +21,7 @@ interface useColorDragProps {
   ) => TransformOffset;
 }
 
-function getPosition(
-  e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent,
-) {
+function getPosition(e: EventType) {
   const obj = 'touches' in e ? e.touches[0] : e;
   const scrollOffset =
     document.documentElement.scrollTop ||
@@ -42,7 +44,7 @@ function useColorDrag(
   const [offestValue, setOffsetValue] = useState(offest || { x: 0, y: 0 });
   const mouseMoveRef = useRef<(event: MouseEvent) => void>(null);
   const mouseUpRef = useRef<(event: MouseEvent) => void>(null);
-  const cache = useRef({
+  const draggingRef = useRef({
     startDarg: false,
   });
 
@@ -52,14 +54,15 @@ function useColorDrag(
     }
   }, []);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       document.removeEventListener('mousemove', mouseMoveRef.current);
       document.removeEventListener('mouseup', mouseUpRef.current);
       mouseMoveRef.current = null;
       mouseUpRef.current = null;
-    };
-  }, []);
+    },
+    [],
+  );
 
   const updateOffset: EventHandle = e => {
     const { pageX, pageY } = getPosition(e);
@@ -69,28 +72,24 @@ function useColorDrag(
       width,
       height,
     } = containerRef.current.getBoundingClientRect();
-    const { width: targetWidth } = targetRef.current.getBoundingClientRect();
+    const { width: targetWidth, height: targetHeight } =
+      targetRef.current.getBoundingClientRect();
 
-    const centerOffset = targetWidth / 2;
+    const centerOffsetX = targetWidth / 2;
+    const centerOffsetY = targetHeight / 2;
 
-    const limtX =
-      pageX - rectX > width
-        ? width - centerOffset
-        : pageX - rectX - centerOffset;
-
-    const limtY =
-      pageY - rectY > height
-        ? height - centerOffset
-        : pageY - rectY - centerOffset;
+    const offsetX = Math.max(0, Math.min(pageX - rectX, width)) - centerOffsetX;
+    const offsetY =
+      Math.max(0, Math.min(pageY - rectY, height)) - centerOffsetY;
 
     let offset = {
-      x: pageX - rectX <= 0 ? -centerOffset : limtX,
-      y: pageY - rectY <= 0 ? -centerOffset : limtY,
+      x: offsetX,
+      y: offsetY,
     };
 
     if (direction === 'x') {
       offset = {
-        x: pageX - rectX <= 0 ? -centerOffset : limtX,
+        x: offset.x,
         y: offestValue.y,
       };
     }
@@ -98,7 +97,7 @@ function useColorDrag(
     if (direction === 'y') {
       offset = {
         x: offestValue.y,
-        y: pageY - rectY <= 0 ? -centerOffset : limtY,
+        y: offset.y,
       };
     }
 
@@ -106,32 +105,32 @@ function useColorDrag(
     onDragChange?.(offset);
   };
 
-  const dragMove: EventHandle = e => {
+  const onDragMove: EventHandle = e => {
     e.preventDefault();
-    if (cache.current.startDarg) {
+    if (draggingRef.current.startDarg) {
       updateOffset(e);
     }
   };
 
-  const dragStop: EventHandle = e => {
+  const onDragStop: EventHandle = e => {
     e.preventDefault();
-    cache.current.startDarg = false;
+    draggingRef.current.startDarg = false;
     document.removeEventListener('mousemove', mouseMoveRef.current);
     document.removeEventListener('mouseup', mouseUpRef.current);
     mouseMoveRef.current = null;
     mouseUpRef.current = null;
   };
 
-  const dragStart: EventHandle = e => {
+  const onDragStart: EventHandle = e => {
     updateOffset(e);
-    cache.current.startDarg = true;
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', dragStop);
-    mouseMoveRef.current = dragMove;
-    mouseUpRef.current = dragStop;
+    draggingRef.current.startDarg = true;
+    document.addEventListener('mousemove', onDragMove);
+    document.addEventListener('mouseup', onDragStop);
+    mouseMoveRef.current = onDragMove;
+    mouseUpRef.current = onDragStop;
   };
 
-  return [offestValue, dragStart];
+  return [offestValue, onDragStart];
 }
 
 export default useColorDrag;

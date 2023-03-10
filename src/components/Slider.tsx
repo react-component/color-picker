@@ -2,41 +2,42 @@ import { useContext } from '@rc-component/context';
 import classNames from 'classnames';
 import type { FC } from 'react';
 import React, { useMemo, useRef } from 'react';
-import ColorPickerContext from '../context';
+import ColorPickerContext, { ColorPickerCtxProps } from '../context';
 import useColorDrag from '../hooks/useColorDrag';
-import type { HsvaColorType } from '../interface';
-import Square from '../shape/Square';
+import type { Color, HsvaColorType } from '../interface';
 import { calculateColor, calculateOffset } from '../util';
+import Palette from './Palette';
 
 import Gradient from './Gradient';
-import Point from './Point';
+import Handler from './Handler';
 import Transform from './Transform';
 
 interface SliderProps {
   gradientColors: string[];
   direction?: string;
   type?: HsvaColorType;
+  color: Color;
+  onChange: ColorPickerCtxProps['handleChange'];
 }
 
 const Slider: FC<SliderProps> = ({
   gradientColors = [],
   direction = 'to right',
   type = 'hue',
+  color,
+  onChange,
 }) => {
   const sliderRef = useRef();
   const transformRef = useRef();
-  const { color, prefixCls, hue, handleChange } = useContext(
-    ColorPickerContext,
-    ['color', 'prefixCls', 'hue', 'handleChange'],
-  );
-  const [offest, dragStart] = useColorDrag({
+  const prefixCls = useContext(ColorPickerContext, 'prefixCls');
+  const [offest, dragStartHandle] = useColorDrag({
     color,
     targetRef: transformRef,
     containerRef: sliderRef,
     calculate: containerRef =>
       calculateOffset(containerRef, transformRef, color, type),
     onDragChange: offsetValue => {
-      handleChange(
+      onChange(
         calculateColor({
           offset: offsetValue,
           targetRef: transformRef,
@@ -50,16 +51,16 @@ const Slider: FC<SliderProps> = ({
     direction: 'x',
   });
 
-  const generatePointColor = useMemo(() => {
+  const generateHandlerColor = useMemo(() => {
     switch (type) {
       case 'alpha':
         return color.toRgbString();
       case 'hue':
-        return `hsl(${hue},100%, 50%)`;
+        return `hsl(${color.toHsv().h},100%, 50%)`;
       default:
         break;
     }
-  }, [type, color, hue]);
+  }, [type, color]);
 
   return (
     <div
@@ -68,14 +69,14 @@ const Slider: FC<SliderProps> = ({
         `${prefixCls}-slider`,
         `${prefixCls}-slider-${type}`,
       )}
-      onMouseDown={dragStart}
+      onMouseDown={dragStartHandle}
     >
-      <Square>
+      <Palette>
         <Transform offset={offest} ref={transformRef}>
-          <Point size="small" color={generatePointColor} />
+          <Handler size="small" color={generateHandlerColor} />
         </Transform>
         <Gradient colors={gradientColors} direction={direction} type={type} />
-      </Square>
+      </Palette>
     </div>
   );
 };

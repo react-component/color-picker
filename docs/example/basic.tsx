@@ -6,11 +6,12 @@ import { defaultColor } from '../../src/util';
 
 export default () => {
   const [value, setValue] = useState<Color>(defaultColor);
+
   return (
     <div>
       <p>
         hex:
-        {value.getAlpha() === 1 ? value?.toHexString() : value?.toHex8String()}
+        {value?.getAlpha() === 1 ? value?.toHexString() : value?.toHex8String()}
       </p>
       <p>hsv: {value?.toHsvString()}</p>
       <p>rbg: {value?.toRgbString()}</p>
@@ -18,7 +19,7 @@ export default () => {
       <ColorPicker
         value={value}
         open={true}
-        getPanelEle={panel => {
+        panelRender={panel => {
           return <div>{panel}</div>;
         }}
         onChange={value => {

@@ -9,11 +9,43 @@ import type {
 
 export const ColorPickerPrefixCls = 'rc-color';
 
+const improveColor = (color: TinyColor) => {
+  const toHsvString = color.toHsvString.bind(color);
+  const toHsv = color.toHsv.bind(color);
+
+  color.toHsvString = () => {
+    const hsv = color.toHsv();
+    const originalInput = color.originalInput as Hsv;
+    const saturation = Math.round(originalInput.s * 100);
+    const lightness = Math.round(originalInput.v * 100);
+    const hue = Math.round(originalInput.h);
+
+    return hsv.v === 0 || hsv.s === 0
+      ? `hsv(${hue}, ${saturation}%, ${lightness}%)`
+      : toHsvString();
+  };
+
+  color.toHsv = () => {
+    const hsv = toHsv() as Hsv;
+    const originalInput = color.originalInput as Hsv;
+    const hue = Math.round(originalInput.h);
+
+    return hsv.h === 0
+      ? {
+          ...hsv,
+          h: hue || 160,
+        }
+      : hsv;
+  };
+  return color;
+};
+
 export const generateColor = (color: Color | string | Hsv) => {
   if (color instanceof TinyColor) {
     return color;
   }
-  return new TinyColor(color);
+  const tinyColor = new TinyColor(color);
+  return improveColor(tinyColor);
 };
 
 export const defaultColor = generateColor('#1677ff');
@@ -37,9 +69,8 @@ export const calculateColor = (props: {
   targetRef: React.RefObject<HTMLDivElement>;
   color: Color;
   type?: HsvaColorType;
-  hue?: number;
 }): Color => {
-  const { offset, targetRef, containerRef, color, type, hue } = props;
+  const { offset, targetRef, containerRef, color, type } = props;
   const { width, height } = containerRef.current.getBoundingClientRect();
   const { width: targetWidth } = targetRef.current.getBoundingClientRect();
   const centerOffset = targetWidth / 2;
@@ -68,7 +99,7 @@ export const calculateColor = (props: {
 
   return generateColor({
     ...hsv,
-    h: hue || hsv.h,
+    h: hsv.h,
     s: saturation < 0 ? 0 : saturation,
     v: bright > 1 ? 1 : bright,
   });

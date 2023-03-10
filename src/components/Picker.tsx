@@ -1,50 +1,55 @@
 import { useContext } from '@rc-component/context';
-import type { FC } from 'react';
-import React, { useMemo, useRef } from 'react';
-import ColorPickerContext from '../context';
+import React, { FC, useMemo, useRef } from 'react';
+import { Color } from 'src/interface';
+import ColorPickerContext, { ColorPickerCtxProps } from '../context';
 import useColorDrag from '../hooks/useColorDrag';
-import Square from '../shape/Square';
 import { calculateColor, calculateOffset, getFormatColor } from '../util';
+
 import Gradient from './Gradient';
-import Point from './Point';
+import Handler from './Handler';
+import Palette from './Palette';
 import Transform from './Transform';
 
-const Picker: FC = () => {
+export interface PickerProps {
+  color: Color;
+  onChange: ColorPickerCtxProps['handleChange'];
+}
+
+const Picker: FC<PickerProps> = ({ color, onChange }) => {
   const pickerRef = useRef();
   const transformRef = useRef();
-  const { color, prefixCls, hue, handleChange } = useContext(
-    ColorPickerContext,
-    ['color', 'prefixCls', 'hue', 'handleChange'],
-  );
-  const [offest, dragStart] = useColorDrag({
+  const prefixCls = useContext(ColorPickerContext, 'prefixCls');
+  const [offest, dragStartHandle] = useColorDrag({
     color,
     containerRef: pickerRef,
     targetRef: transformRef,
     calculate: containerRef =>
       calculateOffset(containerRef, transformRef, color),
     onDragChange: offsetValue =>
-      handleChange(
+      onChange(
         calculateColor({
           offset: offsetValue,
           targetRef: transformRef,
           containerRef: pickerRef,
           color,
-          hue,
         }),
       ),
   });
 
-  const formatColor = useMemo(() => `hsl(${hue},100%, 50%)`, [hue]);
+  const formatColor = useMemo(
+    () => `hsl(${color.toHsv().h},100%, 50%)`,
+    [color],
+  );
 
   return (
     <div
       ref={pickerRef}
       className={`${prefixCls}-picker`}
-      onMouseDown={dragStart}
+      onMouseDown={dragStartHandle}
     >
-      <Square>
+      <Palette>
         <Transform offset={offest} ref={transformRef}>
-          <Point color={getFormatColor(color, 'rgb')} />
+          <Handler color={getFormatColor(color, 'rgb')} />
         </Transform>
         <Gradient colors={[formatColor, formatColor]} direction="to right">
           <Gradient
@@ -57,7 +62,7 @@ const Picker: FC = () => {
             />
           </Gradient>
         </Gradient>
-      </Square>
+      </Palette>
     </div>
   );
 };

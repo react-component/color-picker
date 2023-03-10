@@ -1,11 +1,10 @@
 import { createContext } from '@rc-component/context';
-import type { Color, HsvaColorType } from './interface';
+import type { Color } from './interface';
 
 export interface ColorPickerCtxProps {
   color: Color;
   prefixCls: string;
-  hue: number;
-  handleChange: (color: Color, type?: HsvaColorType) => void;
+  handleChange: (color: Color) => void;
 }
 
 const ColorPickerContext = createContext<ColorPickerCtxProps>();

@@ -1,15 +1,14 @@
 import { useContext } from '@rc-component/context';
 import React, { FC, useMemo } from 'react';
+import { Color } from 'src/interface';
 import ColorPickerContext from '../context';
 import Gradient from './Gradient';
 
 const ColorDisplay: FC<{
-  children?: React.ReactNode;
-}> = ({ children }) => {
-  const { color, prefixCls } = useContext(ColorPickerContext, [
-    'prefixCls',
-    'color',
-  ]);
+  slotRender?: () => React.ReactElement;
+  color: Color;
+}> = ({ slotRender, color }) => {
+  const prefixCls = useContext(ColorPickerContext, 'prefixCls');
 
   const formatRgbColor = useMemo(() => color.toRgbString(), [color]);
 
@@ -21,7 +20,9 @@ const ColorDisplay: FC<{
           direction="to right"
         />
       </div>
-      <div className={`${prefixCls}-display-slot`}>{children}</div>
+      {typeof slotRender === 'function' ? (
+        <div className={`${prefixCls}-display-slot`}>{slotRender()}</div>
+      ) : null}
     </div>
   );
 };

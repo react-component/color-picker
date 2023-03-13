@@ -82,7 +82,7 @@ const Panel: FC<PanelProps> = ({
         </div>
       </>
     ),
-    [alphaColor, colorValue, handleChange],
+    [prefixCls, alphaColor, colorValue, handleChange],
   );
 
   return (

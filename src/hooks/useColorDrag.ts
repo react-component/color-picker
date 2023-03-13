@@ -82,7 +82,7 @@ function useColorDrag(
     const offsetY =
       Math.max(0, Math.min(pageY - rectY, height)) - centerOffsetY;
 
-    let offset = {
+    const offset = {
       x: direction === 'y' ? offestValue.x : offsetX,
       y: direction === 'x' ? offestValue.y : offsetY,
     };

@@ -1,5 +1,5 @@
-import { HSVA, TinyColor } from '@ctrl/tinycolor';
-
+import type { HSVA } from '@ctrl/tinycolor';
+import { TinyColor } from '@ctrl/tinycolor';
 export interface Color
   extends Pick<
     TinyColor,

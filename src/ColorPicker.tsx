@@ -3,8 +3,9 @@ import type { FC } from 'react';
 import React from 'react';
 import placements from './components/placements';
 import { TriggerPlacement } from './interface';
-import Panel, { PanelProps } from './Panel';
-export interface ColorPickerProps extends Omit<PanelProps, 'prefixCls'> {
+import type { PanelProps } from './Panel';
+import Panel from './Panel';
+export interface ColorPickerProps extends PanelProps {
   open?: boolean;
   trigger?: 'click' | 'hover';
   children: React.ReactElement;

@@ -1,13 +1,12 @@
-import { useContext } from '@rc-component/context';
 import type { FC } from 'react';
 import React from 'react';
-import ColorPickerContext from '../context';
+import { ColorPickerPrefixCls } from '../util';
 
 const Palette: FC<{
   children?: React.ReactNode;
   style?: React.CSSProperties;
-}> = ({ children, style }) => {
-  const prefixCls = useContext(ColorPickerContext, 'prefixCls');
+  prefixCls?: string;
+}> = ({ children, style, prefixCls = ColorPickerPrefixCls }) => {
   return (
     <div
       className={`${prefixCls}-palette`}

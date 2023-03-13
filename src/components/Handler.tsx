@@ -1,15 +1,14 @@
-import { useContext } from '@rc-component/context';
 import classNames from 'classnames';
 import React, { FC } from 'react';
-import ColorPickerContext from '../context';
+import { ColorPickerPrefixCls } from '../util';
 
 type HandlerSize = 'default' | 'small';
 
 const Handler: FC<{
   size?: HandlerSize;
   color?: string;
-}> = ({ size = 'default', color }) => {
-  const prefixCls = useContext(ColorPickerContext, 'prefixCls');
+  prefixCls?: string;
+}> = ({ size = 'default', color, prefixCls = ColorPickerPrefixCls }) => {
   return (
     <div
       className={classNames(`${prefixCls}-handler`, {

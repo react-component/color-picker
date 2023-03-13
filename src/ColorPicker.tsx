@@ -4,7 +4,6 @@ import React from 'react';
 import placements from './components/placements';
 import { TriggerPlacement } from './interface';
 import Panel, { PanelProps } from './Panel';
-import { ColorPickerPrefixCls } from './util';
 export interface ColorPickerProps extends Omit<PanelProps, 'prefixCls'> {
   open?: boolean;
   trigger?: 'click' | 'hover';
@@ -13,12 +12,10 @@ export interface ColorPickerProps extends Omit<PanelProps, 'prefixCls'> {
   onOpenChange?: (open: boolean) => void;
   /** Popup placement */
   placement?: TriggerPlacement;
-  prefixCls?: string;
 }
 
 const ColorPicker: FC<ColorPickerProps> = props => {
   const {
-    prefixCls = ColorPickerPrefixCls,
     open,
     trigger = 'hover',
     children,
@@ -27,18 +24,16 @@ const ColorPicker: FC<ColorPickerProps> = props => {
   } = props;
 
   return (
-    <div className={`${prefixCls}`}>
-      <Trigger
-        action={[trigger]}
-        popupVisible={open}
-        popup={<Panel {...props} />}
-        popupPlacement={placement}
-        builtinPlacements={placements}
-        onPopupVisibleChange={onOpenChange}
-      >
-        {children}
-      </Trigger>
-    </div>
+    <Trigger
+      action={[trigger]}
+      popupVisible={open}
+      popup={<Panel {...props} />}
+      popupPlacement={placement}
+      builtinPlacements={placements}
+      onPopupVisibleChange={onOpenChange}
+    >
+      {children}
+    </Trigger>
   );
 };
 

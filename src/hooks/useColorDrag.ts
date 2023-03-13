@@ -83,23 +83,9 @@ function useColorDrag(
       Math.max(0, Math.min(pageY - rectY, height)) - centerOffsetY;
 
     let offset = {
-      x: offsetX,
-      y: offsetY,
+      x: direction === 'y' ? offestValue.x : offsetX,
+      y: direction === 'x' ? offestValue.y : offsetY,
     };
-
-    if (direction === 'x') {
-      offset = {
-        x: offset.x,
-        y: offestValue.y,
-      };
-    }
-
-    if (direction === 'y') {
-      offset = {
-        x: offestValue.y,
-        y: offset.y,
-      };
-    }
 
     setOffsetValue(offset);
     onDragChange?.(offset);

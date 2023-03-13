@@ -11,7 +11,7 @@ export default () => {
     <div>
       <p>
         hex:
-        {value?.getAlpha() === 1 ? value?.toHexString() : value?.toHex8String()}
+        {value?.toHsv().a === 1 ? value?.toHexString() : value?.toHex8String()}
       </p>
       <p>hsv: {value?.toHsvString()}</p>
       <p>rbg: {value?.toRgbString()}</p>

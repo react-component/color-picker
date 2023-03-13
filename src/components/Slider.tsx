@@ -1,23 +1,20 @@
-import { useContext } from '@rc-component/context';
 import classNames from 'classnames';
 import type { FC } from 'react';
-import React, { useMemo, useRef } from 'react';
-import ColorPickerContext, { ColorPickerCtxProps } from '../context';
+import React, { useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
-import type { Color, HsvaColorType } from '../interface';
-import { calculateColor, calculateOffset } from '../util';
+import type { baseProps, HsvaColorType } from '../interface';
+import { calculateColor, calculateOffset, ColorPickerPrefixCls } from '../util';
 import Palette from './Palette';
 
 import Gradient from './Gradient';
 import Handler from './Handler';
 import Transform from './Transform';
 
-interface SliderProps {
+interface SliderProps extends baseProps {
   gradientColors: string[];
   direction?: string;
   type?: HsvaColorType;
-  color: Color;
-  onChange: ColorPickerCtxProps['handleChange'];
+  value?: string;
 }
 
 const Slider: FC<SliderProps> = ({
@@ -25,11 +22,12 @@ const Slider: FC<SliderProps> = ({
   direction = 'to right',
   type = 'hue',
   color,
+  value,
   onChange,
+  prefixCls = ColorPickerPrefixCls,
 }) => {
   const sliderRef = useRef();
   const transformRef = useRef();
-  const prefixCls = useContext(ColorPickerContext, 'prefixCls');
   const [offest, dragStartHandle] = useColorDrag({
     color,
     targetRef: transformRef,
@@ -45,22 +43,10 @@ const Slider: FC<SliderProps> = ({
           color,
           type,
         }),
-        type,
       );
     },
     direction: 'x',
   });
-
-  const generateHandlerColor = useMemo(() => {
-    switch (type) {
-      case 'alpha':
-        return color.toRgbString();
-      case 'hue':
-        return `hsl(${color.toHsv().h},100%, 50%)`;
-      default:
-        break;
-    }
-  }, [type, color]);
 
   return (
     <div
@@ -73,7 +59,7 @@ const Slider: FC<SliderProps> = ({
     >
       <Palette>
         <Transform offset={offest} ref={transformRef}>
-          <Handler size="small" color={generateHandlerColor} />
+          <Handler size="small" color={value} />
         </Transform>
         <Gradient colors={gradientColors} direction={direction} type={type} />
       </Palette>

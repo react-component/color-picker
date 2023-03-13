@@ -1,24 +1,27 @@
-import { useContext } from '@rc-component/context';
-import React, { FC, useMemo, useRef } from 'react';
-import { Color } from 'src/interface';
-import ColorPickerContext, { ColorPickerCtxProps } from '../context';
+import React, { FC, useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
-import { calculateColor, calculateOffset, getFormatColor } from '../util';
+import { baseProps } from '../interface';
+import {
+  calculateColor,
+  calculateOffset,
+  ColorPickerPrefixCls,
+  getFormatColor,
+} from '../util';
 
 import Gradient from './Gradient';
 import Handler from './Handler';
 import Palette from './Palette';
 import Transform from './Transform';
 
-export interface PickerProps {
-  color: Color;
-  onChange: ColorPickerCtxProps['handleChange'];
-}
+export interface PickerProps extends baseProps {}
 
-const Picker: FC<PickerProps> = ({ color, onChange }) => {
+const Picker: FC<PickerProps> = ({
+  color,
+  onChange,
+  prefixCls = ColorPickerPrefixCls,
+}) => {
   const pickerRef = useRef();
   const transformRef = useRef();
-  const prefixCls = useContext(ColorPickerContext, 'prefixCls');
   const [offest, dragStartHandle] = useColorDrag({
     color,
     containerRef: pickerRef,
@@ -36,27 +39,27 @@ const Picker: FC<PickerProps> = ({ color, onChange }) => {
       ),
   });
 
-  const formatColor = useMemo(
-    () => `hsl(${color.toHsv().h},100%, 50%)`,
-    [color],
-  );
-
   return (
     <div
       ref={pickerRef}
       className={`${prefixCls}-picker`}
       onMouseDown={dragStartHandle}
     >
-      <Palette>
+      <Palette prefixCls={prefixCls}>
         <Transform offset={offest} ref={transformRef}>
-          <Handler color={getFormatColor(color, 'rgb')} />
+          <Handler color={getFormatColor(color, 'rgb')} prefixCls={prefixCls} />
         </Transform>
-        <Gradient colors={[formatColor]}>
+        <Gradient
+          colors={[`hsl(${color.toHsv().h},100%, 50%)`]}
+          prefixCls={prefixCls}
+        >
           <Gradient
+            prefixCls={prefixCls}
             colors={['rgb(255, 255, 255)', 'rgba(255, 255, 255, 0)']}
             direction="to right"
           >
             <Gradient
+              prefixCls={prefixCls}
               colors={['rgb(0, 0, 0)', 'rgba(0, 0, 0, 0)']}
               direction="to top"
             />

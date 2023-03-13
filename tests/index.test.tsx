@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import React from 'react';
-import ColorPicker from '../src/ColorPicker';
+import ColorPicker from '../src/index';
 
 describe('ColorPicker', () => {
   it('should work', () => {

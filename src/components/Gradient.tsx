@@ -1,17 +1,21 @@
-import { useContext } from '@rc-component/context';
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
-import ColorPickerContext from '../context';
 import type { Color, HsvaColorType } from '../interface';
-import { generateColor } from '../util';
+import { ColorPickerPrefixCls, generateColor } from '../util';
 
 const Gradient: FC<{
   colors: (Color | string)[];
   direction?: string;
   children?: React.ReactElement;
   type?: HsvaColorType;
-}> = ({ colors, children, direction = 'to right', type }) => {
-  const prefixCls = useContext(ColorPickerContext, 'prefixCls');
+  prefixCls?: string;
+}> = ({
+  colors,
+  children,
+  direction = 'to right',
+  type,
+  prefixCls = ColorPickerPrefixCls,
+}) => {
   const gradientColors = useMemo(
     () =>
       colors

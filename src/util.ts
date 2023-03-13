@@ -1,8 +1,9 @@
+import type { ColorInput, Numberify } from '@ctrl/tinycolor';
 import { TinyColor } from '@ctrl/tinycolor';
 import type {
   Color,
   ColorFormat,
-  Hsv,
+  Hsva,
   HsvaColorType,
   TransformOffset,
 } from './interface';
@@ -17,24 +18,24 @@ const improveColor = (color: TinyColor) => {
     const hsv = color.toHsv();
     const originalInput =
       typeof color.originalInput === 'string'
-        ? { h: 0, s: 0, v: 0 }
-        : (color.originalInput as Hsv);
-    const saturation = Math.round(originalInput.s * 100);
-    const lightness = Math.round(originalInput.v * 100);
-    const hue = Math.round(originalInput.h);
+        ? { h: 0, s: 0, v: 0, a: 0 }
+        : (color.originalInput as Hsva);
+    const saturation = Math.round(Number(originalInput.s) * 100);
+    const lightness = Math.round(Number(originalInput.v) * 100);
+    const hue = Math.round(Number(originalInput.h));
 
     return hsv.v === 0 || hsv.s === 0
       ? `hsv(${hue}, ${saturation}%, ${lightness}%)`
       : toHsvString();
   };
 
-  color.toHsv = () => {
-    const hsv = toHsv() as Hsv;
+  color.toHsv = (): Numberify<Hsva> => {
+    const hsv = toHsv();
     const originalInput =
       typeof color.originalInput === 'string'
-        ? { h: 0, s: 0, v: 0 }
-        : (color.originalInput as Hsv);
-    const hue = Math.round(originalInput.h);
+        ? { h: 0, s: 0, v: 0, a: 0 }
+        : (color.originalInput as Hsva);
+    const hue = Math.round(Number(originalInput.h));
 
     return hsv.h === 0
       ? {
@@ -46,11 +47,11 @@ const improveColor = (color: TinyColor) => {
   return color;
 };
 
-export const generateColor = (color: Color | string | Hsv) => {
+export const generateColor = (color: Color | string | Hsva) => {
   if (color instanceof TinyColor) {
     return color;
   }
-  const tinyColor = new TinyColor(color);
+  const tinyColor = new TinyColor(color as ColorInput);
   return improveColor(tinyColor);
 };
 
@@ -62,7 +63,7 @@ export const getFormatColor = (color: Color | string, format: ColorFormat) => {
     case 'hex':
       return colorVaue.toHexString();
     case 'hsb':
-      return colorVaue.toHslString();
+      return colorVaue.toHsvString();
     case 'rgb':
       return colorVaue.toRgbString();
     default:

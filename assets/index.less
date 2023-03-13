@@ -58,19 +58,26 @@
   }
 
   &-display {
-    display: flex;
     &-block {
       position: relative;
       width: 28px;
       height: 28px;
       margin-right: @vertical-space;
+      overflow: hidden;
       background-image: url('./alpha.svg');
       border-radius: @inner-border-radius;
       .@{ColorPickerPrefixCls}-gradient {
         border-radius: @inner-border-radius;
       }
     }
-    &-slot {
+    &-layer {
+      position: absolute;
+      inset: 0;
+    }
+  }
+  &-slider-container {
+    display: flex;
+    .@{ColorPickerPrefixCls}-slider-group {
       flex: 1;
     }
   }

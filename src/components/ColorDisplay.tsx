@@ -1,12 +1,11 @@
 import type { FC } from 'react';
 import React from 'react';
 import { Color } from '../interface';
-import { ColorPickerPrefixCls } from '../util';
 
 const ColorDisplay: FC<{
   color: Color;
   prefixCls?: string;
-}> = ({ color, prefixCls = ColorPickerPrefixCls }) => {
+}> = ({ color, prefixCls }) => {
   return (
     <div className={`${prefixCls}-display`}>
       <div className={`${prefixCls}-display-block`}>

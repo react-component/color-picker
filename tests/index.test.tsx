@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import ColorPicker from '../src';
 import { defaultColor } from '../src/util';
 
-function doMouseMove(container, start, end, element = 'rc-slider-handle') {
+function doMouseMove(container, start, end, element = 'rc-color-handler') {
   const mouseDown: any = createEvent.mouseDown(
     container.getElementsByClassName(element)[0],
   );
@@ -20,6 +20,23 @@ function doMouseMove(container, start, end, element = 'rc-slider-handle') {
 
   const mouseUp = createEvent.mouseUp(document);
   fireEvent(document, mouseUp);
+}
+function doTouchMove(container, start, end, element = 'rc-color-handler') {
+  const touchStart: any = createEvent.touchStart(
+    container.getElementsByClassName(element)[0],
+    {
+      touches: [{}],
+    },
+  );
+  touchStart.touches[0].pageX = start;
+  fireEvent(container.getElementsByClassName(element)[0], touchStart);
+
+  // Drag
+  const touchMove: any = createEvent.touchMove(document, {
+    touches: [{}],
+  });
+  touchMove.touches[0].pageX = end;
+  fireEvent(document, touchMove);
 }
 
 describe('ColorPicker', () => {
@@ -70,7 +87,7 @@ describe('ColorPicker', () => {
     ).toBeTruthy();
   });
 
-  it('Should pick color work', () => {
+  it('Should pick color work by mouse', () => {
     spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
         x: 0,
@@ -92,27 +109,55 @@ describe('ColorPicker', () => {
       'hsv(215, 91%, 100%)',
     );
 
-    doMouseMove(container, 0, 9999, 'rc-color-handler');
+    doMouseMove(container, 0, 9999);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsv(215, 100%, 0%)',
     );
 
-    doMouseMove(
-      container.querySelector('.rc-color-slider-hue'),
-      0,
-      9999,
-      'rc-color-handler',
-    );
+    doMouseMove(container.querySelector('.rc-color-slider-hue'), 0, 9999);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsv(360, 0%, 0%)',
     );
 
-    doMouseMove(
-      container.querySelector('.rc-color-slider-alpha'),
-      9999,
-      0,
-      'rc-color-handler',
+    doMouseMove(container.querySelector('.rc-color-slider-alpha'), 9999, 0);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsva(360, 0%, 0%, 0)',
     );
+  });
+
+  it('Should pick color work by touch', () => {
+    spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        x: 0,
+        y: 100,
+        width: 100,
+        height: 100,
+      }),
+    });
+    const App = () => {
+      const [value, setValue] = useState(defaultColor);
+      return (
+        <ColorPicker open value={value} onChange={value => setValue(value)}>
+          <div className="pick-color">{value.toHsvString()}</div>
+        </ColorPicker>
+      );
+    };
+    const { container } = render(<App />);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsv(215, 91%, 100%)',
+    );
+
+    doTouchMove(container, 0, 9999);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsv(215, 100%, 0%)',
+    );
+
+    doTouchMove(container.querySelector('.rc-color-slider-hue'), 0, 9999);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsv(360, 0%, 0%)',
+    );
+
+    doTouchMove(container.querySelector('.rc-color-slider-alpha'), 9999, 0);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsva(360, 0%, 0%, 0)',
     );

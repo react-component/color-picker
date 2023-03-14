@@ -63,7 +63,6 @@ const Panel: FC<PanelProps> = ({
           <ColorDisplay color={colorValue} prefixCls={prefixCls} />
           <div className={`${prefixCls}-slider-group`}>
             <Slider
-              type="hue"
               gradientColors={hueColor}
               prefixCls={prefixCls}
               color={colorValue}

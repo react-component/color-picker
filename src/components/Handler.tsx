@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import type { FC } from 'react';
 import React from 'react';
-import { ColorPickerPrefixCls } from '../util';
 
 type HandlerSize = 'default' | 'small';
 
@@ -9,7 +8,7 @@ const Handler: FC<{
   size?: HandlerSize;
   color?: string;
   prefixCls?: string;
-}> = ({ size = 'default', color, prefixCls = ColorPickerPrefixCls }) => {
+}> = ({ size = 'default', color, prefixCls }) => {
   return (
     <div
       className={classNames(`${prefixCls}-handler`, {

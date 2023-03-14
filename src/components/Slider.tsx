@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import React, { useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
 import type { baseProps, HsvaColorType } from '../interface';
-import { calculateColor, calculateOffset, ColorPickerPrefixCls } from '../util';
+import { calculateColor, calculateOffset } from '../util';
 import Palette from './Palette';
 
 import Gradient from './Gradient';
@@ -18,13 +18,13 @@ interface SliderProps extends baseProps {
 }
 
 const Slider: FC<SliderProps> = ({
-  gradientColors = [],
+  gradientColors,
   direction = 'to right',
   type = 'hue',
   color,
   value,
   onChange,
-  prefixCls = ColorPickerPrefixCls,
+  prefixCls,
 }) => {
   const sliderRef = useRef();
   const transformRef = useRef();
@@ -56,6 +56,7 @@ const Slider: FC<SliderProps> = ({
         `${prefixCls}-slider-${type}`,
       )}
       onMouseDown={dragStartHandle}
+      onTouchStart={dragStartHandle}
     >
       <Palette prefixCls={prefixCls}>
         <Transform offset={offest} ref={transformRef}>

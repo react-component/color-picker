@@ -8,7 +8,7 @@ const Transform = forwardRef<
     children?: React.ReactNode;
   }
 >((props, ref) => {
-  const { children, offset = { x: 0, y: 0 } } = props;
+  const { children, offset } = props;
   return (
     <div
       ref={ref}

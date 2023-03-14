@@ -2,7 +2,7 @@ import type { TinyColor } from '@ctrl/tinycolor';
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
 import type { Color, HsvaColorType } from '../interface';
-import { ColorPickerPrefixCls, generateColor } from '../util';
+import { generateColor } from '../util';
 
 const Gradient: FC<{
   colors: (Color | string)[];
@@ -10,13 +10,7 @@ const Gradient: FC<{
   children?: React.ReactElement;
   type?: HsvaColorType;
   prefixCls?: string;
-}> = ({
-  colors,
-  children,
-  direction = 'to right',
-  type,
-  prefixCls = ColorPickerPrefixCls,
-}) => {
+}> = ({ colors, children, direction = 'to right', type, prefixCls }) => {
   const gradientColors = useMemo(
     () =>
       colors

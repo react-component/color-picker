@@ -14,9 +14,10 @@ const improveColor = (color: TinyColor) => {
       typeof color.originalInput === 'string'
         ? { h: 0, s: 0, v: 0, a: 0 }
         : (color.originalInput as Hsva);
-    const saturation = Math.round(Number(originalInput.s) * 100);
-    const lightness = Math.round(Number(originalInput.v) * 100);
-    const hue = Math.round(Number(originalInput.h));
+
+    const saturation = Math.round(Number(originalInput.s || 0) * 100);
+    const lightness = Math.round(Number(originalInput.v || 0) * 100);
+    const hue = Math.round(Number(originalInput.h || 0));
     const alpha = Number(originalInput.a);
     const hsvString = `hsv(${hue}, ${saturation}%, ${lightness}%)`;
     const hsvaString = `hsva(${hue}, ${saturation}%, ${lightness}%, ${alpha.toFixed(
@@ -36,7 +37,6 @@ const improveColor = (color: TinyColor) => {
         ? { h: 0, s: 0, v: 0, a: 0 }
         : (color.originalInput as Hsva);
     const hue = Math.round(Number(originalInput.h));
-
     return hsv.h === 0
       ? {
           ...hsv,
@@ -88,12 +88,11 @@ export const calculateColor = (props: {
         });
     }
   }
-
   return generateColor({
     ...hsv,
     h: hsv.h,
-    s: saturation < 0 ? 0 : saturation,
-    v: bright > 1 ? 1 : bright,
+    s: saturation <= 0 ? 0 : saturation,
+    v: bright >= 1 ? 1 : bright,
   });
 };
 

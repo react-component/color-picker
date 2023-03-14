@@ -1,7 +1,7 @@
 import React, { FC, useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
 import { baseProps } from '../interface';
-import { calculateColor, calculateOffset, ColorPickerPrefixCls } from '../util';
+import { calculateColor, calculateOffset } from '../util';
 
 import Gradient from './Gradient';
 import Handler from './Handler';
@@ -10,11 +10,7 @@ import Transform from './Transform';
 
 export interface PickerProps extends baseProps {}
 
-const Picker: FC<PickerProps> = ({
-  color,
-  onChange,
-  prefixCls = ColorPickerPrefixCls,
-}) => {
+const Picker: FC<PickerProps> = ({ color, onChange, prefixCls }) => {
   const pickerRef = useRef();
   const transformRef = useRef();
   const [offest, dragStartHandle] = useColorDrag({
@@ -39,6 +35,7 @@ const Picker: FC<PickerProps> = ({
       ref={pickerRef}
       className={`${prefixCls}-picker`}
       onMouseDown={dragStartHandle}
+      onTouchStart={dragStartHandle}
     >
       <Palette prefixCls={prefixCls}>
         <Transform offset={offest} ref={transformRef}>

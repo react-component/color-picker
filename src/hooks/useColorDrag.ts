@@ -44,20 +44,17 @@ function useColorDrag(
   const [offestValue, setOffsetValue] = useState(offest || { x: 0, y: 0 });
   const mouseMoveRef = useRef<(event: MouseEvent) => void>(null);
   const mouseUpRef = useRef<(event: MouseEvent) => void>(null);
-  const draggingRef = useRef({
-    startDarg: false,
-  });
 
   useEffect(() => {
-    if (calculate) {
-      setOffsetValue(calculate(containerRef));
-    }
+    setOffsetValue(calculate?.(containerRef));
   }, []);
 
   useEffect(
     () => () => {
       document.removeEventListener('mousemove', mouseMoveRef.current);
       document.removeEventListener('mouseup', mouseUpRef.current);
+      document.removeEventListener('touchmove', mouseMoveRef.current);
+      document.removeEventListener('touchend', mouseUpRef.current);
       mouseMoveRef.current = null;
       mouseUpRef.current = null;
     },
@@ -75,12 +72,6 @@ function useColorDrag(
     const { width: targetWidth, height: targetHeight } =
       targetRef.current.getBoundingClientRect();
 
-    console.log(
-      containerRef.current.getBoundingClientRect(),
-      targetRef.current.getBoundingClientRect(),
-      'targetRef.current.getBoundingClientRect()',
-    );
-
     const centerOffsetX = targetWidth / 2;
     const centerOffsetY = targetHeight / 2;
 
@@ -89,7 +80,7 @@ function useColorDrag(
       Math.max(0, Math.min(pageY - rectY, height)) - centerOffsetY;
 
     const offset = {
-      x: direction === 'y' ? offestValue.x : offsetX,
+      x: offsetX,
       y: direction === 'x' ? offestValue.y : offsetY,
     };
 
@@ -99,25 +90,25 @@ function useColorDrag(
 
   const onDragMove: EventHandle = e => {
     e.preventDefault();
-    if (draggingRef.current.startDarg) {
-      updateOffset(e);
-    }
+    updateOffset(e);
   };
 
   const onDragStop: EventHandle = e => {
     e.preventDefault();
-    draggingRef.current.startDarg = false;
     document.removeEventListener('mousemove', mouseMoveRef.current);
     document.removeEventListener('mouseup', mouseUpRef.current);
+    document.removeEventListener('touchmove', mouseMoveRef.current);
+    document.removeEventListener('touchend', mouseUpRef.current);
     mouseMoveRef.current = null;
     mouseUpRef.current = null;
   };
 
   const onDragStart: EventHandle = e => {
     updateOffset(e);
-    draggingRef.current.startDarg = true;
     document.addEventListener('mousemove', onDragMove);
     document.addEventListener('mouseup', onDragStop);
+    document.addEventListener('touchmove', onDragMove);
+    document.addEventListener('touchend', onDragStop);
     mouseMoveRef.current = onDragMove;
     mouseUpRef.current = onDragStop;
   };

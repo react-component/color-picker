@@ -57,11 +57,16 @@ const Slider: FC<SliderProps> = ({
       )}
       onMouseDown={dragStartHandle}
     >
-      <Palette>
+      <Palette prefixCls={prefixCls}>
         <Transform offset={offest} ref={transformRef}>
-          <Handler size="small" color={value} />
+          <Handler size="small" color={value} prefixCls={prefixCls} />
         </Transform>
-        <Gradient colors={gradientColors} direction={direction} type={type} />
+        <Gradient
+          colors={gradientColors}
+          direction={direction}
+          type={type}
+          prefixCls={prefixCls}
+        />
       </Palette>
     </div>
   );

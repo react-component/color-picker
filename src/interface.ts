@@ -24,7 +24,7 @@ export type TriggerPlacement =
 
 export type Hsva = HSVA;
 
-export type HsvaColorType = 'hue' | 'saturation' | 'lightness' | 'alpha';
+export type HsvaColorType = 'hue' | 'alpha';
 
 export type TransformOffset = {
   x: number;

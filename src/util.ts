@@ -1,12 +1,6 @@
 import type { ColorInput, Numberify } from '@ctrl/tinycolor';
 import { TinyColor } from '@ctrl/tinycolor';
-import type {
-  Color,
-  ColorFormat,
-  Hsva,
-  HsvaColorType,
-  TransformOffset,
-} from './interface';
+import type { Color, Hsva, HsvaColorType, TransformOffset } from './interface';
 
 export const ColorPickerPrefixCls = 'rc-color';
 
@@ -23,10 +17,16 @@ const improveColor = (color: TinyColor) => {
     const saturation = Math.round(Number(originalInput.s) * 100);
     const lightness = Math.round(Number(originalInput.v) * 100);
     const hue = Math.round(Number(originalInput.h));
+    const alpha = Number(originalInput.a);
+    const hsvString = `hsv(${hue}, ${saturation}%, ${lightness}%)`;
+    const hsvaString = `hsva(${hue}, ${saturation}%, ${lightness}%, ${alpha.toFixed(
+      alpha === 0 ? 0 : 2,
+    )})`;
 
-    return hsv.v === 0 || hsv.s === 0
-      ? `hsv(${hue}, ${saturation}%, ${lightness}%)`
-      : toHsvString();
+    if (hsv.v === 0 || hsv.s === 0) {
+      return hsv.a === 1 ? hsvString : hsvaString;
+    }
+    return toHsvString();
   };
 
   color.toHsv = (): Numberify<Hsva> => {
@@ -47,7 +47,7 @@ const improveColor = (color: TinyColor) => {
   return color;
 };
 
-export const generateColor = (color: Color | string | Hsva) => {
+export const generateColor = (color: Color | string | Hsva): Color => {
   if (color instanceof TinyColor) {
     return color;
   }
@@ -56,20 +56,6 @@ export const generateColor = (color: Color | string | Hsva) => {
 };
 
 export const defaultColor = generateColor('#1677ff');
-
-export const getFormatColor = (color: Color | string, format: ColorFormat) => {
-  const colorVaue = generateColor(color);
-  switch (format) {
-    case 'hex':
-      return colorVaue.toHexString();
-    case 'hsb':
-      return colorVaue.toHsvString();
-    case 'rgb':
-      return colorVaue.toRgbString();
-    default:
-      return colorVaue.toHexString();
-  }
-};
 
 export const calculateColor = (props: {
   offset: TransformOffset;
@@ -100,8 +86,6 @@ export const calculateColor = (props: {
           ...hsv,
           a: alphaOffset <= 0 ? 0 : alphaOffset,
         });
-      default:
-        break;
     }
   }
 
@@ -135,8 +119,6 @@ export const calculateOffset = (
           x: (hsv.a / 1) * width - centerOffset,
           y: -centerOffset / 3,
         };
-      default:
-        break;
     }
   }
   return {

@@ -15,7 +15,9 @@ export default () => {
       </p>
       <p>hsv: {value?.toHsvString()}</p>
       <p>rbg: {value?.toRgbString()}</p>
-
+      <ColorPicker trigger="hover">
+        <div className="trigger">Color Picker</div>
+      </ColorPicker>
       <ColorPicker
         value={value}
         open={true}

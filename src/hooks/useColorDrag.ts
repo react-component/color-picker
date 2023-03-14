@@ -75,6 +75,12 @@ function useColorDrag(
     const { width: targetWidth, height: targetHeight } =
       targetRef.current.getBoundingClientRect();
 
+    console.log(
+      containerRef.current.getBoundingClientRect(),
+      targetRef.current.getBoundingClientRect(),
+      'targetRef.current.getBoundingClientRect()',
+    );
+
     const centerOffsetX = targetWidth / 2;
     const centerOffsetY = targetHeight / 2;
 

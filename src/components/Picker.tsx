@@ -1,12 +1,7 @@
 import React, { FC, useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
 import { baseProps } from '../interface';
-import {
-  calculateColor,
-  calculateOffset,
-  ColorPickerPrefixCls,
-  getFormatColor,
-} from '../util';
+import { calculateColor, calculateOffset, ColorPickerPrefixCls } from '../util';
 
 import Gradient from './Gradient';
 import Handler from './Handler';
@@ -47,7 +42,7 @@ const Picker: FC<PickerProps> = ({
     >
       <Palette prefixCls={prefixCls}>
         <Transform offset={offest} ref={transformRef}>
-          <Handler color={getFormatColor(color, 'rgb')} prefixCls={prefixCls} />
+          <Handler color={color.toRgbString()} prefixCls={prefixCls} />
         </Transform>
         <Gradient
           colors={[`hsl(${color.toHsv().h},100%, 50%)`]}

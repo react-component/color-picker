@@ -48,7 +48,7 @@ describe('ColorPicker', () => {
   });
   it('Should component render correct', () => {
     const { container } = render(
-      <ColorPicker open>
+      <ColorPicker open defaultValue={defaultColor}>
         <div>Color Picker</div>
       </ColorPicker>,
     );
@@ -100,7 +100,11 @@ describe('ColorPicker', () => {
       const [value, setValue] = useState(defaultColor);
       return (
         <ColorPicker open value={value} onChange={value => setValue(value)}>
-          <div className="pick-color">{value.toHsvString()}</div>
+          <>
+            <div className="pick-color">{value.toHsvString()}</div>
+            <div>{value.toHexString()}</div>
+            <div>{value.toHex8String()}</div>
+          </>
         </ColorPicker>
       );
     };

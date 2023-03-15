@@ -1,12 +1,13 @@
-import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { FC } from 'react';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
 
+import type { Color } from './color';
 import ColorDisplay from './components/ColorDisplay';
 import Picker from './components/Picker';
 import Slider from './components/Slider';
-import { baseProps, Color } from './interface';
+import useColorState from './hooks/useColorState';
+import { BaseColorPickerProps } from './interface';
 
 const hueColor = [
   'rgb(255, 0, 0) 0%',
@@ -34,11 +35,10 @@ const Panel: FC<PanelProps> = ({
   onChange,
   panelRender,
 }) => {
-  const [color] = useMergedState(defaultColor, {
+  const [colorValue, setColorValue] = useColorState(defaultColor, {
     value,
     defaultValue,
   });
-  const [colorValue, setcolorValue] = useState(generateColor(color) as Color);
   const alphaColor = useMemo(() => {
     const rgb = generateColor(colorValue.toRgbString());
     // alpha color need equal 1 for base color
@@ -46,8 +46,8 @@ const Panel: FC<PanelProps> = ({
     return rgb.toRgbString();
   }, [colorValue]);
 
-  const handleChange: baseProps['onChange'] = data => {
-    setcolorValue(data);
+  const handleChange: BaseColorPickerProps['onChange'] = data => {
+    setColorValue(data);
     onChange?.(data);
   };
 

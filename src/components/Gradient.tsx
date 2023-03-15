@@ -1,7 +1,7 @@
-import type { TinyColor } from '@ctrl/tinycolor';
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
-import type { Color, HsvaColorType } from '../interface';
+import type { Color } from '../color';
+import type { HsvaColorType } from '../interface';
 import { generateColor } from '../util';
 
 const Gradient: FC<{
@@ -15,7 +15,7 @@ const Gradient: FC<{
     () =>
       colors
         .map((color, idx) => {
-          const result = generateColor(color) as TinyColor;
+          const result = generateColor(color);
           if (type === 'alpha' && idx === colors.length - 1) {
             result.setAlpha(1);
           }

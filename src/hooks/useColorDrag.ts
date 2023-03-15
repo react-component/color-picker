@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Color, TransformOffset } from '../interface';
+import type { Color } from '../color';
+import type { TransformOffset } from '../interface';
 
 type EventType =
   | MouseEvent

@@ -1,16 +1,5 @@
 import type { HSVA } from '@ctrl/tinycolor';
-import { TinyColor } from '@ctrl/tinycolor';
-export interface Color
-  extends Pick<
-    TinyColor,
-    | 'toHsv'
-    | 'toHsvString'
-    | 'toHex'
-    | 'toHexString'
-    | 'toHex8String'
-    | 'toRgb'
-    | 'toRgbString'
-  > {}
+import type { Color } from './color';
 
 export type ColorFormat = 'rgb' | 'hex' | 'hsb';
 
@@ -31,7 +20,7 @@ export type TransformOffset = {
   y: number;
 };
 
-export interface baseProps {
+export interface BaseColorPickerProps {
   color: Color;
   prefixCls?: string;
   onChange: (color: Color) => void;

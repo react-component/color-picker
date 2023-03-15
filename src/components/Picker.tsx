@@ -1,6 +1,6 @@
 import React, { FC, useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
-import { baseProps } from '../interface';
+import { BaseColorPickerProps } from '../interface';
 import { calculateColor, calculateOffset } from '../util';
 
 import Gradient from './Gradient';
@@ -8,7 +8,7 @@ import Handler from './Handler';
 import Palette from './Palette';
 import Transform from './Transform';
 
-export interface PickerProps extends baseProps {}
+export interface PickerProps extends BaseColorPickerProps {}
 
 const Picker: FC<PickerProps> = ({ color, onChange, prefixCls }) => {
   const pickerRef = useRef();

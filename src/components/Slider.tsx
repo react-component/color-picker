@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import type { FC } from 'react';
 import React, { useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
-import type { baseProps, HsvaColorType } from '../interface';
+import type { BaseColorPickerProps, HsvaColorType } from '../interface';
 import { calculateColor, calculateOffset } from '../util';
 import Palette from './Palette';
 
@@ -10,7 +10,7 @@ import Gradient from './Gradient';
 import Handler from './Handler';
 import Transform from './Transform';
 
-interface SliderProps extends baseProps {
+interface SliderProps extends BaseColorPickerProps {
   gradientColors: string[];
   direction?: string;
   type?: HsvaColorType;

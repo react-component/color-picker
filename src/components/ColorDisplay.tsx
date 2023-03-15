@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React from 'react';
-import { Color } from '../interface';
+import type { Color } from '../color';
 
 const ColorDisplay: FC<{
   color: Color;

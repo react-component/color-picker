@@ -24,11 +24,15 @@ interface useColorDragProps {
 
 function getPosition(e: EventType) {
   const obj = 'touches' in e ? e.touches[0] : e;
-  const scrollOffset =
+  const scrollXOffset =
+    document.documentElement.scrollLeft ||
+    document.body.scrollLeft ||
+    window.pageXOffset;
+  const scrollYOffset =
     document.documentElement.scrollTop ||
     document.body.scrollTop ||
     window.pageYOffset;
-  return { pageX: obj.pageX, pageY: obj.pageY - scrollOffset };
+  return { pageX: obj.pageX - scrollXOffset, pageY: obj.pageY - scrollYOffset };
 }
 
 function useColorDrag(
@@ -84,6 +88,14 @@ function useColorDrag(
       x: offsetX,
       y: direction === 'x' ? offestValue.y : offsetY,
     };
+
+    // Exclusion of boundary cases
+    if (
+      (targetWidth === 0 && targetHeight === 0) ||
+      targetWidth !== targetHeight
+    ) {
+      return false;
+    }
 
     setOffsetValue(offset);
     onDragChange?.(offset);

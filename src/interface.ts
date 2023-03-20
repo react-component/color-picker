@@ -1,7 +1,6 @@
-import type { HSVA } from '@ctrl/tinycolor';
-import type { Color } from './color';
+import type { HSVA, TinyColor } from '@ctrl/tinycolor';
 
-export type ColorFormat = 'rgb' | 'hex' | 'hsb';
+export type Color = TinyColor;
 
 export type TriggerPlacement =
   | 'top'
@@ -20,8 +19,10 @@ export type TransformOffset = {
   y: number;
 };
 
+export type TriggerType = 'click' | 'hover';
+
 export interface BaseColorPickerProps {
-  color: Color;
+  color?: Color;
   prefixCls?: string;
-  onChange: (color: Color) => void;
+  onChange?: (color: Color) => void;
 }

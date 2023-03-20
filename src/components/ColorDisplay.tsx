@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React from 'react';
-import type { Color } from '../color';
+import type { Color } from '../interface';
 
 const ColorDisplay: FC<{
   color: Color;
@@ -8,7 +8,14 @@ const ColorDisplay: FC<{
 }> = ({ color, prefixCls }) => {
   return (
     <div className={`${prefixCls}-display`}>
-      <div className={`${prefixCls}-display-block`}>
+      <div
+        className={`${prefixCls}-display-block`}
+        style={{
+          border: `1px solid ${
+            color.getAlpha() === 0 ? 'rgba(0,0,0,0.06)' : color.toRgbString()
+          }`,
+        }}
+      >
         <div
           className={`${prefixCls}-display-layer`}
           style={{

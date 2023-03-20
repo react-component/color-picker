@@ -1,13 +1,56 @@
-import { Color } from './color';
-import type { Hsva, HsvaColorType, TransformOffset } from './interface';
+import { Numberify, TinyColor } from '@ctrl/tinycolor';
+import type { Color, Hsva, HsvaColorType, TransformOffset } from './interface';
 
 export const ColorPickerPrefixCls = 'rc-color';
 
+const improveColor = (color: TinyColor) => {
+  const toHsvString = color.toHsvString.bind(color);
+  const toHsv = color.toHsv.bind(color);
+
+  color.toHsvString = () => {
+    const hsv = color.toHsv();
+    const originalInput =
+      typeof color.originalInput === 'string'
+        ? { h: 0, s: 0, v: 0, a: 0 }
+        : (color.originalInput as Hsva);
+
+    const saturation = Math.round(Number(originalInput.s || 0) * 100);
+    const lightness = Math.round(Number(originalInput.v || 0) * 100);
+    const hue = Math.round(Number(originalInput.h || 0));
+    const alpha = Number(originalInput.a);
+    const hsvString = `hsv(${hue}, ${saturation}%, ${lightness}%)`;
+    const hsvaString = `hsva(${hue}, ${saturation}%, ${lightness}%, ${alpha.toFixed(
+      alpha === 0 ? 0 : 2,
+    )})`;
+
+    if (hsv.v === 0 || hsv.s === 0) {
+      return hsv.a === 1 ? hsvString : hsvaString;
+    }
+    return toHsvString();
+  };
+
+  color.toHsv = (): Numberify<Hsva> => {
+    const hsv = toHsv();
+    const originalInput =
+      typeof color.originalInput === 'string'
+        ? { h: 0, s: 0, v: 0, a: 0 }
+        : (color.originalInput as Hsva);
+    const hue = Math.round(Number(originalInput.h));
+    return hsv.h === 0
+      ? {
+          ...hsv,
+          h: hue,
+        }
+      : hsv;
+  };
+  return color;
+};
+
 export const generateColor = (color: Color | string | Hsva): Color => {
-  if (color instanceof Color) {
+  if (color instanceof TinyColor) {
     return color;
   }
-  return new Color(color);
+  return improveColor(new TinyColor(color));
 };
 
 export const defaultColor = generateColor('#1677ff');
@@ -43,6 +86,7 @@ export const calculateColor = (props: {
         });
     }
   }
+
   return generateColor({
     ...hsv,
     h: hsv.h,

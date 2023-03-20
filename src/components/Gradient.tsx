@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
-import type { Color } from '../color';
-import type { HsvaColorType } from '../interface';
+import type { Color, HsvaColorType } from '../interface';
 import { generateColor } from '../util';
 
 const Gradient: FC<{

@@ -1,12 +1,11 @@
-import type { FC } from 'react';
-import React, { useMemo } from 'react';
+import useMergedState from 'rc-util/lib/hooks/useMergedState';
+import React, { FC, useMemo, useState } from 'react';
 import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
 
-import type { Color } from './color';
 import ColorDisplay from './components/ColorDisplay';
 import Picker from './components/Picker';
 import Slider from './components/Slider';
-import useColorState from './hooks/useColorState';
+import type { Color } from './interface';
 import { BaseColorPickerProps } from './interface';
 
 const hueColor = [
@@ -19,11 +18,9 @@ const hueColor = [
   'rgb(255, 0, 0) 100%',
 ];
 
-export interface PanelProps {
+export interface PanelProps extends BaseColorPickerProps {
   value?: string | Color;
   defaultValue?: string | Color;
-  prefixCls?: string;
-  onChange?: (value: Color) => void;
   /** Get panel element  */
   panelRender?: (penel: React.ReactElement) => React.ReactElement;
 }
@@ -35,10 +32,11 @@ const Panel: FC<PanelProps> = ({
   onChange,
   panelRender,
 }) => {
-  const [colorValue, setColorValue] = useColorState(defaultColor, {
+  const [color] = useMergedState(defaultColor, {
     value,
     defaultValue,
   });
+  const [colorValue, setColorValue] = useState(generateColor(color));
   const alphaColor = useMemo(() => {
     const rgb = generateColor(colorValue.toRgbString());
     // alpha color need equal 1 for base color

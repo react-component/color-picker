@@ -67,9 +67,7 @@ describe('ColorPicker', () => {
     fireEvent.click(clickContainer.querySelector('.trigger'));
     expect(clickContainer.querySelector('.rc-color-panel')).toBeTruthy();
     fireEvent.click(clickContainer.querySelector('.trigger'));
-    expect(
-      document.body.querySelector('.rc-trigger-popup-hidden'),
-    ).toBeTruthy();
+    expect(document.body.querySelector('.rc-color-hidden')).toBeTruthy();
 
     const { container: hoverContainer } = render(
       <ColorPicker trigger="hover">
@@ -82,9 +80,7 @@ describe('ColorPicker', () => {
     fireEvent.mouseEnter(hoverContainer.querySelector('.trigger'));
     expect(hoverContainer.querySelector('.rc-color-panel')).toBeTruthy();
     fireEvent.mouseLeave(hoverContainer.querySelector('.trigger'));
-    expect(
-      document.body.querySelector('.rc-trigger-popup-hidden'),
-    ).toBeTruthy();
+    expect(document.body.querySelector('.rc-color-hidden')).toBeTruthy();
   });
 
   it('Should pick color work by mouse', () => {
@@ -187,5 +183,32 @@ describe('ColorPicker', () => {
       </ColorPicker>,
     );
     expect(container).toMatchSnapshot();
+  });
+
+  it('Should drag boundary cases work', () => {
+    spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        x: 0,
+        y: 100,
+        width: 0,
+        height: 0,
+      }),
+    });
+    const App = () => {
+      const [value, setValue] = useState(defaultColor);
+      return (
+        <ColorPicker open value={value} onChange={value => setValue(value)}>
+          <div className="pick-color">{value.toHsvString()}</div>
+        </ColorPicker>
+      );
+    };
+    const { container } = render(<App />);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsv(215, 91%, 100%)',
+    );
+    doMouseMove(container, 0, 9999);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsv(215, 91%, 100%)',
+    );
   });
 });

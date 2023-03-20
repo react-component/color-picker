@@ -14,8 +14,8 @@ const Transform = forwardRef<
       ref={ref}
       style={{
         position: 'absolute',
-        left: `${offset.x}px`,
-        top: `${offset.y}px`,
+        left: offset.x,
+        top: offset.y,
         zIndex: 1,
       }}
     >

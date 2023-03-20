@@ -10,16 +10,12 @@ export default () => {
     <div>
       <p>
         hex:
-        {value?.toHsv().a === 1 ? value?.toHexString() : value?.toHex8String()}
+        {value.getAlpha() === 1 ? value.toHexString() : value?.toHex8String()}
       </p>
       <p>hsv: {value?.toHsvString()}</p>
       <p>rbg: {value?.toRgbString()}</p>
-      <ColorPicker trigger="hover">
-        <div className="trigger">Color Picker</div>
-      </ColorPicker>
       <ColorPicker
         value={value}
-        open={true}
         panelRender={panel => {
           return <div>{panel}</div>;
         }}

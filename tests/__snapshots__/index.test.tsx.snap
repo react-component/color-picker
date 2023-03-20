@@ -6,7 +6,7 @@ exports[`ColorPicker Should component render correct 1`] = `
     Color Picker
   </div>
   <div
-    class="rc-trigger-popup rc-trigger-popup-placement-bottomLeft"
+    class="rc-color rc-color-placement-bottomLeft"
     style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
   >
     <div
@@ -51,6 +51,7 @@ exports[`ColorPicker Should component render correct 1`] = `
         >
           <div
             class="rc-color-display-block"
+            style="border: 1px solid rgb(22, 119, 255);"
           >
             <div
               class="rc-color-display-layer"
@@ -116,7 +117,7 @@ exports[`ColorPicker Should custom panel work 1`] = `
     Color Picker
   </div>
   <div
-    class="rc-trigger-popup rc-trigger-popup-placement-bottomLeft"
+    class="rc-color rc-color-placement-bottomLeft"
     style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
   >
     <div
@@ -164,6 +165,7 @@ exports[`ColorPicker Should custom panel work 1`] = `
           >
             <div
               class="rc-color-display-block"
+              style="border: 1px solid rgb(22, 119, 255);"
             >
               <div
                 class="rc-color-display-layer"
@@ -230,7 +232,7 @@ exports[`ColorPicker Should prefixCls work 1`] = `
     Color Picker
   </div>
   <div
-    class="rc-trigger-popup rc-trigger-popup-placement-bottomLeft"
+    class="test-prefixCls test-prefixCls-placement-bottomLeft"
     style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
   >
     <div
@@ -275,6 +277,7 @@ exports[`ColorPicker Should prefixCls work 1`] = `
         >
           <div
             class="test-prefixCls-display-block"
+            style="border: 1px solid rgb(22, 119, 255);"
           >
             <div
               class="test-prefixCls-display-layer"

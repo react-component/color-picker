@@ -15,9 +15,9 @@ export interface ColorPickerProps extends PanelProps {
   onOpenChange?: (open: boolean) => void;
   /** Popup placement */
   placement?: TriggerPlacement;
-  getColorPopupContainer?: (node: HTMLElement) => HTMLElement;
-  overlayClassName?: string | undefined;
-  overlayStyle?: CSSProperties | undefined;
+  getPopupContainer?: (node: HTMLElement) => HTMLElement;
+  classNames?: { popup?: string };
+  style?: { popup?: CSSProperties };
   builtinPlacements?: BuildInPlacements;
   arrow?: boolean;
   motion?: TriggerProps['popupMotion'];
@@ -30,13 +30,12 @@ const ColorPicker: FC<ColorPickerProps> = props => {
     children,
     onOpenChange,
     placement = 'bottomLeft',
+    classNames,
+    style,
     prefixCls = ColorPickerPrefixCls,
-    getColorPopupContainer,
-    overlayClassName,
-    overlayStyle,
-    builtinPlacements,
-    arrow,
+    builtinPlacements = placements,
     motion,
+    ...resetProps
   } = props;
 
   return (
@@ -45,14 +44,13 @@ const ColorPicker: FC<ColorPickerProps> = props => {
       popupVisible={open}
       popup={<Panel {...props} />}
       popupPlacement={placement}
-      builtinPlacements={builtinPlacements || placements}
       onPopupVisibleChange={onOpenChange}
-      prefixCls={prefixCls}
-      getPopupContainer={getColorPopupContainer}
-      popupClassName={overlayClassName}
-      popupStyle={overlayStyle}
-      arrow={arrow}
+      popupClassName={classNames?.popup}
+      popupStyle={style?.popup}
+      builtinPlacements={builtinPlacements}
       popupMotion={motion}
+      prefixCls={prefixCls}
+      {...resetProps}
     >
       {children}
     </Trigger>

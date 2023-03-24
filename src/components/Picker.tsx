@@ -42,7 +42,7 @@ const Picker: FC<PickerProps> = ({ color, onChange, prefixCls }) => {
           <Handler color={color.toRgbString()} prefixCls={prefixCls} />
         </Transform>
         <Gradient
-          colors={[`hsl(${color.toHsv().h},100%, 50%)`]}
+          colors={[`hsl(${color.toHsb().h},100%, 50%)`]}
           prefixCls={prefixCls}
         >
           <Gradient

@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import type { Color } from '../interface';
+import { useEffect, useState } from 'react';
+import type { Color } from '../color';
+import type { ColorGenInput } from '../interface';
 import { generateColor } from '../util';
 
-type ColorValue = Color | string | undefined;
+type ColorValue = ColorGenInput | undefined;
 
 function hasValue(value: ColorValue) {
   return value !== undefined;
@@ -27,6 +28,13 @@ const useColorState = (
     }
     return generateColor(mergeState);
   });
+
+  useEffect(() => {
+    if (value) {
+      setColorValue(generateColor(value));
+    }
+  }, [value]);
+
   return [colorValue, setColorValue];
 };
 

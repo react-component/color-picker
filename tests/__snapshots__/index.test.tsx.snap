@@ -50,9 +50,11 @@ exports[`ColorPicker Should component render correct 1`] = `
           class="rc-color-display"
         >
           <div
-            class="rc-color-display-block"
-            style="border: 1px solid rgb(22, 119, 255);"
+            class="rc-color-display-container"
           >
+            <div
+              class="rc-color-display-block"
+            />
             <div
               class="rc-color-display-layer"
               style="background: rgb(22, 119, 255);"
@@ -164,9 +166,11 @@ exports[`ColorPicker Should custom panel work 1`] = `
             class="rc-color-display"
           >
             <div
-              class="rc-color-display-block"
-              style="border: 1px solid rgb(22, 119, 255);"
+              class="rc-color-display-container"
             >
+              <div
+                class="rc-color-display-block"
+              />
               <div
                 class="rc-color-display-layer"
                 style="background: rgb(22, 119, 255);"
@@ -184,7 +188,7 @@ exports[`ColorPicker Should custom panel work 1`] = `
                 style="position: relative;"
               >
                 <div
-                  style="position: absolute; left: 59.728183118741065px; top: -16.666666666666668px; z-index: 1;"
+                  style="position: absolute; left: 9.728183118741065px; top: -16.666666666666668px; z-index: 1;"
                 >
                   <div
                     class="rc-color-handler rc-color-handler-sm"
@@ -276,9 +280,11 @@ exports[`ColorPicker Should prefixCls work 1`] = `
           class="test-prefixCls-display"
         >
           <div
-            class="test-prefixCls-display-block"
-            style="border: 1px solid rgb(22, 119, 255);"
+            class="test-prefixCls-display-container"
           >
+            <div
+              class="test-prefixCls-display-block"
+            />
             <div
               class="test-prefixCls-display-layer"
               style="background: rgb(22, 119, 255);"
@@ -296,7 +302,7 @@ exports[`ColorPicker Should prefixCls work 1`] = `
               style="position: relative;"
             >
               <div
-                style="position: absolute; left: 59.728183118741065px; top: -16.666666666666668px; z-index: 1;"
+                style="position: absolute; left: 9.728183118741065px; top: -16.666666666666668px; z-index: 1;"
               >
                 <div
                   class="test-prefixCls-handler test-prefixCls-handler-sm"

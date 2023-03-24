@@ -97,7 +97,7 @@ describe('ColorPicker', () => {
       return (
         <ColorPicker open value={value} onChange={value => setValue(value)}>
           <>
-            <div className="pick-color">{value.toHsvString()}</div>
+            <div className="pick-color">{value.toHsbString()}</div>
             <div>{value.toHexString()}</div>
             <div>{value.toHex8String()}</div>
           </>
@@ -106,22 +106,64 @@ describe('ColorPicker', () => {
     };
     const { container } = render(<App />);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsv(215, 91%, 100%)',
+      'hsb(215, 91%, 100%)',
     );
 
     doMouseMove(container, 0, 9999);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsv(215, 100%, 0%)',
+      'hsb(215, 100%, 0%)',
     );
 
     doMouseMove(container.querySelector('.rc-color-slider-hue'), 0, 9999);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsv(360, 0%, 0%)',
+      'hsb(360, 100%, 0%)',
     );
 
     doMouseMove(container.querySelector('.rc-color-slider-alpha'), 9999, 0);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsva(360, 0%, 0%, 0)',
+      'hsba(360, 100%, 0%, 0)',
+    );
+  });
+
+  it('Should no control pick color work', () => {
+    spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        x: 0,
+        y: 100,
+        width: 100,
+        height: 100,
+      }),
+    });
+    const App = () => {
+      const [value, setValue] = useState(defaultColor);
+      return (
+        <ColorPicker open onChange={value => setValue(value)}>
+          <>
+            <div className="pick-color">{value.toHsbString()}</div>
+            <div>{value.toHexString()}</div>
+            <div>{value.toHex8String()}</div>
+          </>
+        </ColorPicker>
+      );
+    };
+    const { container } = render(<App />);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsb(215, 91%, 100%)',
+    );
+
+    doMouseMove(container, 0, 9999);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsb(215, 100%, 0%)',
+    );
+
+    doMouseMove(container.querySelector('.rc-color-slider-hue'), 0, 9999);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsb(360, 100%, 0%)',
+    );
+
+    doMouseMove(container.querySelector('.rc-color-slider-alpha'), 9999, 0);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsba(360, 100%, 0%, 0)',
     );
   });
 
@@ -138,28 +180,28 @@ describe('ColorPicker', () => {
       const [value, setValue] = useState(defaultColor);
       return (
         <ColorPicker open value={value} onChange={value => setValue(value)}>
-          <div className="pick-color">{value.toHsvString()}</div>
+          <div className="pick-color">{value.toHsbString()}</div>
         </ColorPicker>
       );
     };
     const { container } = render(<App />);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsv(215, 91%, 100%)',
+      'hsb(215, 91%, 100%)',
     );
 
     doTouchMove(container, 0, 9999);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsv(215, 100%, 0%)',
+      'hsb(215, 100%, 0%)',
     );
 
     doTouchMove(container.querySelector('.rc-color-slider-hue'), 0, 9999);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsv(360, 0%, 0%)',
+      'hsb(360, 100%, 0%)',
     );
 
     doTouchMove(container.querySelector('.rc-color-slider-alpha'), 9999, 0);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsva(360, 0%, 0%, 0)',
+      'hsba(360, 100%, 0%, 0)',
     );
   });
 
@@ -198,17 +240,77 @@ describe('ColorPicker', () => {
       const [value, setValue] = useState(defaultColor);
       return (
         <ColorPicker open value={value} onChange={value => setValue(value)}>
-          <div className="pick-color">{value.toHsvString()}</div>
+          <div className="pick-color">{value.toHsbString()}</div>
         </ColorPicker>
       );
     };
     const { container } = render(<App />);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsv(215, 91%, 100%)',
+      'hsb(215, 91%, 100%)',
     );
     doMouseMove(container, 0, 9999);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsv(215, 91%, 100%)',
+      'hsb(215, 91%, 100%)',
     );
+  });
+
+  it('Should hsb string work', () => {
+    const App = () => (
+      <ColorPicker open value={'hsb(215, 91%, 100%)'}>
+        <div>Color Picker</div>
+      </ColorPicker>
+    );
+    const { container } = render(<App />);
+    expect(
+      container.querySelector('.rc-color-handler').getAttribute('style'),
+    ).toEqual('background-color: rgb(23, 120, 255);');
+  });
+
+  it('Should rgb string work', () => {
+    const App = () => (
+      <ColorPicker open value={'rgb(23, 120, 255)'}>
+        <div>Color Picker</div>
+      </ColorPicker>
+    );
+    const { container } = render(<App />);
+    expect(
+      container.querySelector('.rc-color-handler').getAttribute('style'),
+    ).toEqual('background-color: rgb(23, 120, 255);');
+  });
+
+  it('Should hex string work', () => {
+    const App = () => (
+      <ColorPicker open value={'#1778ff'}>
+        <div>Color Picker</div>
+      </ColorPicker>
+    );
+    const { container } = render(<App />);
+    expect(
+      container.querySelector('.rc-color-handler').getAttribute('style'),
+    ).toEqual('background-color: rgb(23, 120, 255);');
+  });
+
+  it('Should hsb obj work', () => {
+    const App = () => (
+      <ColorPicker open value={{ h: 215, s: 0.91, b: 1 }}>
+        <div>Color Picker</div>
+      </ColorPicker>
+    );
+    const { container } = render(<App />);
+    expect(
+      container.querySelector('.rc-color-handler').getAttribute('style'),
+    ).toEqual('background-color: rgb(23, 120, 255);');
+  });
+
+  it('Should rgb obj work', () => {
+    const App = () => (
+      <ColorPicker open value={{ r: 23, g: 120, b: 255 }}>
+        <div>Color Picker</div>
+      </ColorPicker>
+    );
+    const { container } = render(<App />);
+    expect(
+      container.querySelector('.rc-color-handler').getAttribute('style'),
+    ).toEqual('background-color: rgb(23, 120, 255);');
   });
 });

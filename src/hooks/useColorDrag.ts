@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Color, TransformOffset } from '../interface';
+import { Color } from '../color';
+import type { TransformOffset } from '../interface';
 
 type EventType =
   | MouseEvent
@@ -44,14 +45,23 @@ function useColorDrag(
     direction,
     onDragChange,
     calculate,
+    color,
   } = props;
   const [offestValue, setOffsetValue] = useState(offest || { x: 0, y: 0 });
   const mouseMoveRef = useRef<(event: MouseEvent) => void>(null);
   const mouseUpRef = useRef<(event: MouseEvent) => void>(null);
+  const dragRef = useRef({
+    flag: false,
+  });
 
   useEffect(() => {
-    setOffsetValue(calculate?.(containerRef));
-  }, []);
+    if (dragRef.current.flag === false) {
+      const calcOffest = calculate?.(containerRef);
+      if (calcOffest) {
+        setOffsetValue(calcOffest);
+      }
+    }
+  }, [color]);
 
   useEffect(
     () => () => {
@@ -107,6 +117,7 @@ function useColorDrag(
 
   const onDragStop: EventHandle = e => {
     e.preventDefault();
+    dragRef.current.flag = false;
     document.removeEventListener('mousemove', mouseMoveRef.current);
     document.removeEventListener('mouseup', mouseUpRef.current);
     document.removeEventListener('touchmove', mouseMoveRef.current);
@@ -117,6 +128,7 @@ function useColorDrag(
 
   const onDragStart: EventHandle = e => {
     updateOffset(e);
+    dragRef.current.flag = true;
     document.addEventListener('mousemove', onDragMove);
     document.addEventListener('mouseup', onDragStop);
     document.addEventListener('touchmove', onDragMove);

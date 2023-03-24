@@ -66,21 +66,22 @@
   }
 
   &-display {
-    &-block {
+    margin-right: @vertical-space;
+    &-container {
       position: relative;
-      width: 28px;
-      height: 28px;
-      margin-right: @vertical-space;
       overflow: hidden;
-      background-image: url('./alpha.svg');
       border-radius: @inner-border-radius;
-      .@{ColorPickerPrefixCls}-gradient {
+      &-block {
+        width: 28px;
+        height: 28px;
+        background-image: url('./alpha.svg');
+        border: '1px solid rgba(0,0,0,0.06)';
         border-radius: @inner-border-radius;
       }
-    }
-    &-layer {
-      position: absolute;
-      inset: 0;
+      &-layer {
+        position: absolute;
+        inset: 0;
+      }
     }
   }
   &-slider-container {

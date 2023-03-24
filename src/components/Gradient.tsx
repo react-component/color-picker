@@ -1,13 +1,14 @@
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
-import type { Color, HsvaColorType } from '../interface';
+import type { Color } from '../color';
+import type { HsbaColorType } from '../interface';
 import { generateColor } from '../util';
 
 const Gradient: FC<{
   colors: (Color | string)[];
   direction?: string;
   children?: React.ReactElement;
-  type?: HsvaColorType;
+  type?: HsbaColorType;
   prefixCls?: string;
 }> = ({ colors, children, direction = 'to right', type, prefixCls }) => {
   const gradientColors = useMemo(

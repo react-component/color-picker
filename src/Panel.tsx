@@ -5,8 +5,7 @@ import ColorDisplay from './components/ColorDisplay';
 import Picker from './components/Picker';
 import Slider from './components/Slider';
 import useColorState from './hooks/useColorState';
-import type { Color } from './interface';
-import { BaseColorPickerProps } from './interface';
+import { BaseColorPickerProps, ColorGenInput } from './interface';
 
 const hueColor = [
   'rgb(255, 0, 0) 0%',
@@ -19,8 +18,8 @@ const hueColor = [
 ];
 
 export interface PanelProps extends BaseColorPickerProps {
-  value?: string | Color;
-  defaultValue?: string | Color;
+  value?: ColorGenInput;
+  defaultValue?: ColorGenInput;
   /** Get panel element  */
   panelRender?: (penel: React.ReactElement) => React.ReactElement;
 }
@@ -44,7 +43,9 @@ const Panel: FC<PanelProps> = ({
   }, [colorValue]);
 
   const handleChange: BaseColorPickerProps['onChange'] = data => {
-    setColorValue(data);
+    if (!value) {
+      setColorValue(data);
+    }
     onChange?.(data);
   };
 
@@ -63,7 +64,7 @@ const Panel: FC<PanelProps> = ({
               gradientColors={hueColor}
               prefixCls={prefixCls}
               color={colorValue}
-              value={`hsl(${colorValue.toHsv().h},100%, 50%)`}
+              value={`hsl(${colorValue.toHsb().h},100%, 50%)`}
               onChange={handleChange}
             />
             <Slider

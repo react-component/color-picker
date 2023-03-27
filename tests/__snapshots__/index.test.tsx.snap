@@ -1,0 +1,344 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColorPicker Should component render correct 1`] = `
+<div>
+  <div>
+    Color Picker
+  </div>
+  <div
+    class="rc-color rc-color-placement-bottomLeft"
+    style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
+  >
+    <div
+      class="rc-color-panel"
+    >
+      <div
+        class="rc-color-picker"
+      >
+        <div
+          class="rc-color-palette"
+          style="position: relative;"
+        >
+          <div
+            style="position: absolute; left: 0px; top: 0px; z-index: 1;"
+          >
+            <div
+              class="rc-color-handler"
+              style="background-color: rgb(22, 119, 255);"
+            />
+          </div>
+          <div
+            class="rc-color-gradient"
+            style="position: absolute; inset: 0; background: rgb(0, 106, 255);"
+          >
+            <div
+              class="rc-color-gradient"
+              style="position: absolute; inset: 0;"
+            >
+              <div
+                class="rc-color-gradient"
+                style="position: absolute; inset: 0;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="rc-color-slider-container"
+      >
+        <div
+          class="rc-color-display"
+        >
+          <div
+            class="rc-color-display-container"
+          >
+            <div
+              class="rc-color-display-block"
+            />
+            <div
+              class="rc-color-display-layer"
+              style="background: rgb(22, 119, 255);"
+            />
+          </div>
+        </div>
+        <div
+          class="rc-color-slider-group"
+        >
+          <div
+            class="rc-color-slider rc-color-slider-hue"
+          >
+            <div
+              class="rc-color-palette"
+              style="position: relative;"
+            >
+              <div
+                style="position: absolute; left: 0px; top: 0px; z-index: 1;"
+              >
+                <div
+                  class="rc-color-handler rc-color-handler-sm"
+                  style="background-color: rgb(0, 0, 0);"
+                />
+              </div>
+              <div
+                class="rc-color-gradient"
+                style="position: absolute; inset: 0;"
+              />
+            </div>
+          </div>
+          <div
+            class="rc-color-slider rc-color-slider-alpha"
+          >
+            <div
+              class="rc-color-palette"
+              style="position: relative;"
+            >
+              <div
+                style="position: absolute; left: 0px; top: 0px; z-index: 1;"
+              >
+                <div
+                  class="rc-color-handler rc-color-handler-sm"
+                  style="background-color: rgb(22, 119, 255);"
+                />
+              </div>
+              <div
+                class="rc-color-gradient"
+                style="position: absolute; inset: 0;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ColorPicker Should custom panel work 1`] = `
+<div>
+  <div>
+    Color Picker
+  </div>
+  <div
+    class="rc-color rc-color-placement-bottomLeft"
+    style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
+  >
+    <div
+      class="rc-color-panel"
+    >
+      <div
+        class="custom-panel"
+      >
+        <div
+          class="rc-color-picker"
+        >
+          <div
+            class="rc-color-palette"
+            style="position: relative;"
+          >
+            <div
+              style="position: absolute; left: 41.372549019607845px; top: -50px; z-index: 1;"
+            >
+              <div
+                class="rc-color-handler"
+                style="background-color: rgb(22, 119, 255);"
+              />
+            </div>
+            <div
+              class="rc-color-gradient"
+              style="position: absolute; inset: 0; background: rgb(0, 106, 255);"
+            >
+              <div
+                class="rc-color-gradient"
+                style="position: absolute; inset: 0;"
+              >
+                <div
+                  class="rc-color-gradient"
+                  style="position: absolute; inset: 0;"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="rc-color-slider-container"
+        >
+          <div
+            class="rc-color-display"
+          >
+            <div
+              class="rc-color-display-container"
+            >
+              <div
+                class="rc-color-display-block"
+              />
+              <div
+                class="rc-color-display-layer"
+                style="background: rgb(22, 119, 255);"
+              />
+            </div>
+          </div>
+          <div
+            class="rc-color-slider-group"
+          >
+            <div
+              class="rc-color-slider rc-color-slider-hue"
+            >
+              <div
+                class="rc-color-palette"
+                style="position: relative;"
+              >
+                <div
+                  style="position: absolute; left: 9.728183118741065px; top: -16.666666666666668px; z-index: 1;"
+                >
+                  <div
+                    class="rc-color-handler rc-color-handler-sm"
+                    style="background-color: rgb(0, 0, 0);"
+                  />
+                </div>
+                <div
+                  class="rc-color-gradient"
+                  style="position: absolute; inset: 0;"
+                />
+              </div>
+            </div>
+            <div
+              class="rc-color-slider rc-color-slider-alpha"
+            >
+              <div
+                class="rc-color-palette"
+                style="position: relative;"
+              >
+                <div
+                  style="position: absolute; left: 50px; top: -16.666666666666668px; z-index: 1;"
+                >
+                  <div
+                    class="rc-color-handler rc-color-handler-sm"
+                    style="background-color: rgb(22, 119, 255);"
+                  />
+                </div>
+                <div
+                  class="rc-color-gradient"
+                  style="position: absolute; inset: 0;"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ColorPicker Should prefixCls work 1`] = `
+<div>
+  <div>
+    Color Picker
+  </div>
+  <div
+    class="test-prefixCls test-prefixCls-placement-bottomLeft"
+    style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
+  >
+    <div
+      class="test-prefixCls-panel"
+    >
+      <div
+        class="test-prefixCls-picker"
+      >
+        <div
+          class="test-prefixCls-palette"
+          style="position: relative;"
+        >
+          <div
+            style="position: absolute; left: 41.372549019607845px; top: -50px; z-index: 1;"
+          >
+            <div
+              class="test-prefixCls-handler"
+              style="background-color: rgb(22, 119, 255);"
+            />
+          </div>
+          <div
+            class="test-prefixCls-gradient"
+            style="position: absolute; inset: 0; background: rgb(0, 106, 255);"
+          >
+            <div
+              class="test-prefixCls-gradient"
+              style="position: absolute; inset: 0;"
+            >
+              <div
+                class="test-prefixCls-gradient"
+                style="position: absolute; inset: 0;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="test-prefixCls-slider-container"
+      >
+        <div
+          class="test-prefixCls-display"
+        >
+          <div
+            class="test-prefixCls-display-container"
+          >
+            <div
+              class="test-prefixCls-display-block"
+            />
+            <div
+              class="test-prefixCls-display-layer"
+              style="background: rgb(22, 119, 255);"
+            />
+          </div>
+        </div>
+        <div
+          class="test-prefixCls-slider-group"
+        >
+          <div
+            class="test-prefixCls-slider test-prefixCls-slider-hue"
+          >
+            <div
+              class="test-prefixCls-palette"
+              style="position: relative;"
+            >
+              <div
+                style="position: absolute; left: 9.728183118741065px; top: -16.666666666666668px; z-index: 1;"
+              >
+                <div
+                  class="test-prefixCls-handler test-prefixCls-handler-sm"
+                  style="background-color: rgb(0, 0, 0);"
+                />
+              </div>
+              <div
+                class="test-prefixCls-gradient"
+                style="position: absolute; inset: 0;"
+              />
+            </div>
+          </div>
+          <div
+            class="test-prefixCls-slider test-prefixCls-slider-alpha"
+          >
+            <div
+              class="test-prefixCls-palette"
+              style="position: relative;"
+            >
+              <div
+                style="position: absolute; left: 50px; top: -16.666666666666668px; z-index: 1;"
+              >
+                <div
+                  class="test-prefixCls-handler test-prefixCls-handler-sm"
+                  style="background-color: rgb(22, 119, 255);"
+                />
+              </div>
+              <div
+                class="test-prefixCls-gradient"
+                style="position: absolute; inset: 0;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

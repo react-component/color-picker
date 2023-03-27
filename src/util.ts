@@ -12,11 +12,7 @@ export const ColorPickerPrefixCls = 'rc-color';
 export const getRoundNumber = (value: number) => Math.round(Number(value || 0));
 
 export const convertHsb2Hsv = (color: ColorGenInput): ColorInput => {
-  if (
-    typeof color === 'object' &&
-    Reflect.has(color, 'h') &&
-    Reflect.has(color, 'b')
-  ) {
+  if (color && typeof color === 'object' && 'h' in color && 'b' in color) {
     const { b, ...resets } = color as HSB;
     return {
       ...resets,

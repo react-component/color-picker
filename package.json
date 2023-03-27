@@ -22,7 +22,6 @@
   "files": [
     "assets/*.css",
     "es",
-    "dist",
     "lib"
   ],
   "scripts": {

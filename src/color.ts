@@ -23,7 +23,7 @@ export class Color extends TinyColor {
   toHsb(): Numberify<HSBA> {
     let hsv = this.toHsv();
     if (typeof this.originalInput === 'object' && this.originalInput) {
-      if (Reflect.has(this.originalInput, 'h')) {
+      if ('h' in this.originalInput) {
         hsv = this.originalInput as Numberify<HSVA>;
       }
     }

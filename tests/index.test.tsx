@@ -1,8 +1,23 @@
-import { createEvent, fireEvent, render } from '@testing-library/react';
+import { act, createEvent, fireEvent, render } from '@testing-library/react';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import React, { useState } from 'react';
 import ColorPicker from '../src';
 import { defaultColor } from '../src/util';
+
+export async function waitFakeTimer(advanceTime = 1000, times = 20) {
+  for (let i = 0; i < times; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    await act(async () => {
+      await Promise.resolve();
+
+      if (advanceTime > 0) {
+        jest.advanceTimersByTime(advanceTime);
+      } else {
+        jest.runAllTimers();
+      }
+    });
+  }
+}
 
 function doMouseMove(container, start, end, element = 'rc-color-handler') {
   const mouseDown: any = createEvent.mouseDown(
@@ -325,5 +340,30 @@ describe('ColorPicker', () => {
     // click
     fireEvent.click(container.querySelector('.trigger'));
     expect(container.querySelector('.rc-color-panel')).toBeFalsy();
+  });
+
+  it('Should component open work', async () => {
+    const handleOpenChange = jest.fn();
+    const App = () => {
+      const [open, setOpen] = useState(false);
+      return (
+        <ColorPicker open={open} onOpenChange={handleOpenChange}>
+          <div className="trigger" onClick={() => setOpen(!open)}>
+            Color Picker
+          </div>
+        </ColorPicker>
+      );
+    };
+    const { container } = render(<App />);
+
+    fireEvent.click(container.querySelector('.trigger'));
+    await waitFakeTimer();
+    expect(container.querySelector('.rc-color-panel')).toBeTruthy();
+    expect(handleOpenChange).toHaveBeenCalledWith(true);
+
+    fireEvent.click(container.querySelector('.trigger'));
+    await waitFakeTimer();
+    expect(document.body.querySelector('.rc-color-hidden')).toBeTruthy();
+    expect(handleOpenChange).toHaveBeenCalledWith(false);
   });
 });

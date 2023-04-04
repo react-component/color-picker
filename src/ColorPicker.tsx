@@ -1,9 +1,9 @@
 import type { BuildInPlacements, TriggerProps } from '@rc-component/trigger';
 import Trigger from '@rc-component/trigger';
+import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import placements from './components/placements';
-import useDisabled from './hooks/useDisabled';
 import { TriggerPlacement, TriggerType } from './interface';
 import type { PanelProps } from './Panel';
 import Panel from './Panel';
@@ -28,7 +28,7 @@ const ColorPicker: FC<ColorPickerProps> = props => {
   const {
     open,
     disabled,
-    trigger = 'hover',
+    trigger = 'click',
     children,
     onOpenChange,
     placement = 'bottomLeft',
@@ -40,7 +40,17 @@ const ColorPicker: FC<ColorPickerProps> = props => {
     ...resetProps
   } = props;
 
-  const [oepnValue] = useDisabled(disabled, open);
+  const [oepnValue, setOepnValue] = useMergedState(false, {
+    value: open,
+    postState: openData => (!!disabled ? false : openData),
+  });
+
+  const handleOpenChange = (visible: boolean) => {
+    if (typeof open !== 'boolean') {
+      setOepnValue(visible);
+    }
+    onOpenChange?.(visible);
+  };
 
   return (
     <Trigger
@@ -48,7 +58,7 @@ const ColorPicker: FC<ColorPickerProps> = props => {
       popupVisible={oepnValue}
       popup={<Panel {...props} />}
       popupPlacement={placement}
-      onPopupVisibleChange={onOpenChange}
+      onPopupVisibleChange={handleOpenChange}
       popupClassName={classNames?.popup}
       popupStyle={style?.popup}
       builtinPlacements={builtinPlacements}

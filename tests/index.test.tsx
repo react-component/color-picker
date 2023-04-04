@@ -313,4 +313,17 @@ describe('ColorPicker', () => {
       container.querySelector('.rc-color-handler').getAttribute('style'),
     ).toEqual('background-color: rgb(23, 120, 255);');
   });
+
+  it('Should disabled work', () => {
+    const App = () => (
+      <ColorPicker disabled>
+        <div className="trigger">Color Picker</div>
+      </ColorPicker>
+    );
+    const { container } = render(<App />);
+
+    // click
+    fireEvent.click(container.querySelector('.trigger'));
+    expect(container.querySelector('.rc-color-panel')).toBeFalsy();
+  });
 });

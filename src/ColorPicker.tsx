@@ -3,6 +3,7 @@ import Trigger from '@rc-component/trigger';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import placements from './components/placements';
+import useDisabled from './hooks/useDisabled';
 import { TriggerPlacement, TriggerType } from './interface';
 import type { PanelProps } from './Panel';
 import Panel from './Panel';
@@ -26,6 +27,7 @@ export interface ColorPickerProps extends PanelProps {
 const ColorPicker: FC<ColorPickerProps> = props => {
   const {
     open,
+    disabled,
     trigger = 'hover',
     children,
     onOpenChange,
@@ -38,10 +40,12 @@ const ColorPicker: FC<ColorPickerProps> = props => {
     ...resetProps
   } = props;
 
+  const [oepnValue] = useDisabled(disabled, open);
+
   return (
     <Trigger
       action={[trigger]}
-      popupVisible={open}
+      popupVisible={oepnValue}
       popup={<Panel {...props} />}
       popupPlacement={placement}
       onPopupVisibleChange={onOpenChange}

@@ -40,7 +40,7 @@ const ColorPicker: FC<ColorPickerProps> = props => {
     ...resetProps
   } = props;
 
-  const [oepnValue, setOepnValue] = useMergedState(false, {
+  const [openValue, setOpenValue] = useMergedState(false, {
     value: open,
     postState: openData => !disabled && openData,
     onChange: onOpenChange,
@@ -49,10 +49,10 @@ const ColorPicker: FC<ColorPickerProps> = props => {
   return (
     <Trigger
       action={[trigger]}
-      popupVisible={oepnValue}
+      popupVisible={openValue}
       popup={<Panel {...props} />}
       popupPlacement={placement}
-      onPopupVisibleChange={setOepnValue}
+      onPopupVisibleChange={setOpenValue}
       popupClassName={classNames?.popup}
       popupStyle={style?.popup}
       builtinPlacements={builtinPlacements}

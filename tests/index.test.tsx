@@ -359,11 +359,11 @@ describe('ColorPicker', () => {
     fireEvent.click(container.querySelector('.trigger'));
     await waitFakeTimer();
     expect(container.querySelector('.rc-color-panel')).toBeTruthy();
-    expect(handleOpenChange).toHaveBeenCalledWith(true);
+    expect(handleOpenChange).toHaveBeenCalledWith(true, false);
 
     fireEvent.click(container.querySelector('.trigger'));
     await waitFakeTimer();
     expect(document.body.querySelector('.rc-color-hidden')).toBeTruthy();
-    expect(handleOpenChange).toHaveBeenCalledWith(false);
+    expect(handleOpenChange).toHaveBeenLastCalledWith(false, true);
   });
 });

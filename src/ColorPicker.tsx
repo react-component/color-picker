@@ -42,15 +42,9 @@ const ColorPicker: FC<ColorPickerProps> = props => {
 
   const [oepnValue, setOepnValue] = useMergedState(false, {
     value: open,
-    postState: openData => (!!disabled ? false : openData),
+    postState: openData => !disabled && openData,
+    onChange: onOpenChange,
   });
-
-  const handleOpenChange = (visible: boolean) => {
-    if (typeof open !== 'boolean') {
-      setOepnValue(visible);
-    }
-    onOpenChange?.(visible);
-  };
 
   return (
     <Trigger
@@ -58,7 +52,7 @@ const ColorPicker: FC<ColorPickerProps> = props => {
       popupVisible={oepnValue}
       popup={<Panel {...props} />}
       popupPlacement={placement}
-      onPopupVisibleChange={handleOpenChange}
+      onPopupVisibleChange={setOepnValue}
       popupClassName={classNames?.popup}
       popupStyle={style?.popup}
       builtinPlacements={builtinPlacements}

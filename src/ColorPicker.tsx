@@ -1,5 +1,6 @@
 import type { BuildInPlacements, TriggerProps } from '@rc-component/trigger';
 import Trigger from '@rc-component/trigger';
+import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import placements from './components/placements';
@@ -26,7 +27,8 @@ export interface ColorPickerProps extends PanelProps {
 const ColorPicker: FC<ColorPickerProps> = props => {
   const {
     open,
-    trigger = 'hover',
+    disabled,
+    trigger = 'click',
     children,
     onOpenChange,
     placement = 'bottomLeft',
@@ -38,13 +40,19 @@ const ColorPicker: FC<ColorPickerProps> = props => {
     ...resetProps
   } = props;
 
+  const [openValue, setOpenValue] = useMergedState(false, {
+    value: open,
+    postState: openData => !disabled && openData,
+    onChange: onOpenChange,
+  });
+
   return (
     <Trigger
       action={[trigger]}
-      popupVisible={open}
+      popupVisible={openValue}
       popup={<Panel {...props} />}
       popupPlacement={placement}
-      onPopupVisibleChange={onOpenChange}
+      onPopupVisibleChange={setOpenValue}
       popupClassName={classNames?.popup}
       popupStyle={style?.popup}
       builtinPlacements={builtinPlacements}

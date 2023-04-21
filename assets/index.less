@@ -21,7 +21,6 @@
   &-panel {
     display: flex;
     flex-direction: column;
-
     padding: @vertical-space;
     background-color: #fff;
     border-radius: @outer-border-radius;
@@ -37,6 +36,12 @@
       }
     }
     margin-bottom: @vertical-space;
+  }
+
+  &-saturation {
+    position: absolute;
+    border-radius: inherit;
+    inset: 0px;
   }
 
   &-handler {
@@ -71,17 +76,17 @@
       position: relative;
       overflow: hidden;
       border-radius: @inner-border-radius;
-      &-block {
-        width: 28px;
-        height: 28px;
-        background-image: url('./alpha.svg');
-        border: '1px solid rgba(0,0,0,0.06)';
-        border-radius: @inner-border-radius;
-      }
-      &-layer {
-        position: absolute;
-        inset: 0;
-      }
+    }
+    &-block {
+      width: 28px;
+      height: 28px;
+      background-image: url('./alpha.svg');
+      border: '1px solid rgba(0,0,0,0.06)';
+      border-radius: @inner-border-radius;
+    }
+    &-layer {
+      position: absolute;
+      inset: 0;
     }
   }
   &-slider-container {

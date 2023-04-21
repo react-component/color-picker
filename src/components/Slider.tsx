@@ -19,7 +19,7 @@ interface SliderProps extends BaseColorPickerProps {
 
 const Slider: FC<SliderProps> = ({
   gradientColors,
-  direction = 'to right',
+  direction,
   type = 'hue',
   color,
   value,

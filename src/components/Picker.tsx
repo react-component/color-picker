@@ -3,7 +3,6 @@ import useColorDrag from '../hooks/useColorDrag';
 import { BaseColorPickerProps } from '../interface';
 import { calculateColor, calculateOffset } from '../util';
 
-import Gradient from './Gradient';
 import Handler from './Handler';
 import Palette from './Palette';
 import Transform from './Transform';
@@ -41,22 +40,14 @@ const Picker: FC<PickerProps> = ({ color, onChange, prefixCls }) => {
         <Transform offset={offest} ref={transformRef}>
           <Handler color={color.toRgbString()} prefixCls={prefixCls} />
         </Transform>
-        <Gradient
-          colors={[`hsl(${color.toHsb().h},100%, 50%)`]}
-          prefixCls={prefixCls}
-        >
-          <Gradient
-            prefixCls={prefixCls}
-            colors={['rgb(255, 255, 255)', 'rgba(255, 255, 255, 0)']}
-            direction="to right"
-          >
-            <Gradient
-              prefixCls={prefixCls}
-              colors={['rgb(0, 0, 0)', 'rgba(0, 0, 0, 0)']}
-              direction="to top"
-            />
-          </Gradient>
-        </Gradient>
+        <div
+          className={`${prefixCls}-saturation`}
+          style={{
+            backgroundColor: `hsl(${color.toHsb().h},100%, 50%)`,
+            backgroundImage:
+              'linear-gradient(0deg, #000, transparent),linear-gradient(90deg, #fff, hsla(0, 0%, 100%, 0))',
+          }}
+        />
       </Palette>
     </div>
   );

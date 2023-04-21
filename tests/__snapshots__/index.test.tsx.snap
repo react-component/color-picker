@@ -28,19 +28,9 @@ exports[`ColorPicker Should component render correct 1`] = `
             />
           </div>
           <div
-            class="rc-color-gradient"
-            style="position: absolute; inset: 0; background: rgb(0, 106, 255);"
-          >
-            <div
-              class="rc-color-gradient"
-              style="position: absolute; inset: 0;"
-            >
-              <div
-                class="rc-color-gradient"
-                style="position: absolute; inset: 0;"
-              />
-            </div>
-          </div>
+            class="rc-color-saturation"
+            style="background-color: rgb(0, 0, 0);"
+          />
         </div>
       </div>
       <div
@@ -144,19 +134,9 @@ exports[`ColorPicker Should custom panel work 1`] = `
               />
             </div>
             <div
-              class="rc-color-gradient"
-              style="position: absolute; inset: 0; background: rgb(0, 106, 255);"
-            >
-              <div
-                class="rc-color-gradient"
-                style="position: absolute; inset: 0;"
-              >
-                <div
-                  class="rc-color-gradient"
-                  style="position: absolute; inset: 0;"
-                />
-              </div>
-            </div>
+              class="rc-color-saturation"
+              style="background-color: rgb(0, 0, 0);"
+            />
           </div>
         </div>
         <div
@@ -258,19 +238,9 @@ exports[`ColorPicker Should prefixCls work 1`] = `
             />
           </div>
           <div
-            class="test-prefixCls-gradient"
-            style="position: absolute; inset: 0; background: rgb(0, 106, 255);"
-          >
-            <div
-              class="test-prefixCls-gradient"
-              style="position: absolute; inset: 0;"
-            >
-              <div
-                class="test-prefixCls-gradient"
-                style="position: absolute; inset: 0;"
-              />
-            </div>
-          </div>
+            class="test-prefixCls-saturation"
+            style="background-color: rgb(0, 0, 0);"
+          />
         </div>
       </div>
       <div

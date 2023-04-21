@@ -39,6 +39,14 @@
     margin-bottom: @vertical-space;
   }
 
+  &-saturation {
+    position: absolute;
+    background-image: linear-gradient(0deg, #000, transparent),
+      linear-gradient(90deg, #fff, hsla(0, 0%, 100%, 0));
+    border-radius: inherit;
+    inset: 0px;
+  }
+
   &-handler {
     box-sizing: border-box;
     width: @default-handler-size;
@@ -71,17 +79,17 @@
       position: relative;
       overflow: hidden;
       border-radius: @inner-border-radius;
-      &-block {
-        width: 28px;
-        height: 28px;
-        background-image: url('./alpha.svg');
-        border: '1px solid rgba(0,0,0,0.06)';
-        border-radius: @inner-border-radius;
-      }
-      &-layer {
-        position: absolute;
-        inset: 0;
-      }
+    }
+    &-block {
+      width: 28px;
+      height: 28px;
+      background-image: url('./alpha.svg');
+      border: '1px solid rgba(0,0,0,0.06)';
+      border-radius: @inner-border-radius;
+    }
+    &-layer {
+      position: absolute;
+      inset: 0;
     }
   }
   &-slider-container {

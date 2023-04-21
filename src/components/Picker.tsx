@@ -44,6 +44,8 @@ const Picker: FC<PickerProps> = ({ color, onChange, prefixCls }) => {
           className={`${prefixCls}-saturation`}
           style={{
             backgroundColor: `hsl(${color.toHsb().h},100%, 50%)`,
+            backgroundImage:
+              'linear-gradient(0deg, #000, transparent),linear-gradient(90deg, #fff, hsla(0, 0%, 100%, 0))',
           }}
         />
       </Palette>

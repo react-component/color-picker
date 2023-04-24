@@ -21,7 +21,7 @@ export interface PanelProps extends BaseColorPickerProps {
   value?: ColorGenInput;
   defaultValue?: ColorGenInput;
   /** Get panel element  */
-  panelRender?: (penel: React.ReactElement) => React.ReactElement;
+  panelRender?: (panel: React.ReactElement) => React.ReactElement;
 }
 
 const Panel: FC<PanelProps> = ({

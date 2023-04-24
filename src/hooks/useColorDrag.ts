@@ -12,7 +12,7 @@ type EventHandle = (e: EventType) => void;
 
 interface useColorDragProps {
   color?: Color;
-  offest?: TransformOffset;
+  offset?: TransformOffset;
   containerRef: React.RefObject<HTMLDivElement>;
   targetRef: React.RefObject<HTMLDivElement>;
   direction?: 'x' | 'y';
@@ -39,7 +39,7 @@ function useColorDrag(
   props: useColorDragProps,
 ): [TransformOffset, EventHandle] {
   const {
-    offest,
+    offset,
     targetRef,
     containerRef,
     direction,
@@ -47,7 +47,7 @@ function useColorDrag(
     calculate,
     color,
   } = props;
-  const [offestValue, setOffsetValue] = useState(offest || { x: 0, y: 0 });
+  const [offsetValue, setOffsetValue] = useState(offset || { x: 0, y: 0 });
   const mouseMoveRef = useRef<(event: MouseEvent) => void>(null);
   const mouseUpRef = useRef<(event: MouseEvent) => void>(null);
   const dragRef = useRef({
@@ -56,9 +56,9 @@ function useColorDrag(
 
   useEffect(() => {
     if (dragRef.current.flag === false) {
-      const calcOffest = calculate?.(containerRef);
-      if (calcOffest) {
-        setOffsetValue(calcOffest);
+      const calcOffset = calculate?.(containerRef);
+      if (calcOffset) {
+        setOffsetValue(calcOffset);
       }
     }
   }, [color]);
@@ -95,7 +95,7 @@ function useColorDrag(
 
     const offset = {
       x: offsetX,
-      y: direction === 'x' ? offestValue.y : offsetY,
+      y: direction === 'x' ? offsetValue.y : offsetY,
     };
 
     // Exclusion of boundary cases
@@ -137,7 +137,7 @@ function useColorDrag(
     mouseUpRef.current = onDragStop;
   };
 
-  return [offestValue, onDragStart];
+  return [offsetValue, onDragStart];
 }
 
 export default useColorDrag;

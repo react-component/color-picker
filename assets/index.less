@@ -1,4 +1,4 @@
-@ColorPickerPrefixCls: rc-color;
+@ColorPickerPrefixCls: rc-color-picker;
 @font-size-base: 12px;
 @vertical-space: 12px;
 @inner-border-radius: 4px;
@@ -9,15 +9,16 @@
 @shadow-2-down:0px 3px 6px -4px rgba(0, 0, 0, 0.12),0px 6px 16px 0px rgba(0, 0, 0, 0.08),0px 9px 28px 8px rgba(0, 0, 0, 0.05);
 
 .@{ColorPickerPrefixCls} {
-  position: absolute;
-  display: block;
-  width: max-content;
-  min-width: 258px;
-  visibility: visible;
-  &-hidden {
-    display: none;
+  &-popup {
+    position: absolute;
+    display: block;
+    width: max-content;
+    min-width: 258px;
+    visibility: visible;
+    &-hidden {
+      display: none;
+    }
   }
-
   &-panel {
     display: flex;
     flex-direction: column;
@@ -26,7 +27,7 @@
     border-radius: @outer-border-radius;
     box-shadow: @shadow-2-down;
   }
-  &-picker {
+  &-select {
     .@{ColorPickerPrefixCls}-palette {
       min-height: 160px;
       overflow: hidden;

@@ -28,7 +28,7 @@ const Slider: FC<SliderProps> = ({
 }) => {
   const sliderRef = useRef();
   const transformRef = useRef();
-  const [offest, dragStartHandle] = useColorDrag({
+  const [offset, dragStartHandle] = useColorDrag({
     color,
     targetRef: transformRef,
     containerRef: sliderRef,
@@ -59,7 +59,7 @@ const Slider: FC<SliderProps> = ({
       onTouchStart={dragStartHandle}
     >
       <Palette prefixCls={prefixCls}>
-        <Transform offset={offest} ref={transformRef}>
+        <Transform offset={offset} ref={transformRef}>
           <Handler size="small" color={value} prefixCls={prefixCls} />
         </Transform>
         <Gradient

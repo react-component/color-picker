@@ -19,7 +19,12 @@ export async function waitFakeTimer(advanceTime = 1000, times = 20) {
   }
 }
 
-function doMouseMove(container, start, end, element = 'rc-color-handler') {
+function doMouseMove(
+  container,
+  start,
+  end,
+  element = 'rc-color-picker-handler',
+) {
   const mouseDown: any = createEvent.mouseDown(
     container.getElementsByClassName(element)[0],
   );
@@ -36,7 +41,12 @@ function doMouseMove(container, start, end, element = 'rc-color-handler') {
   const mouseUp = createEvent.mouseUp(document);
   fireEvent(document, mouseUp);
 }
-function doTouchMove(container, start, end, element = 'rc-color-handler') {
+function doTouchMove(
+  container,
+  start,
+  end,
+  element = 'rc-color-picker-handler',
+) {
   const touchStart: any = createEvent.touchStart(
     container.getElementsByClassName(element)[0],
     {
@@ -68,7 +78,7 @@ describe('ColorPicker', () => {
       </ColorPicker>,
     );
     expect(container).toMatchSnapshot();
-    expect(container.querySelector('.rc-color-panel')).toBeTruthy();
+    expect(container.querySelector('.rc-color-picker-panel')).toBeTruthy();
   });
 
   it('Should trigger work', () => {
@@ -78,11 +88,13 @@ describe('ColorPicker', () => {
       </ColorPicker>,
     );
     // click
-    expect(clickContainer.querySelector('.rc-color-panel')).toBeFalsy();
+    expect(clickContainer.querySelector('.rc-color-picker-panel')).toBeFalsy();
     fireEvent.click(clickContainer.querySelector('.trigger'));
-    expect(clickContainer.querySelector('.rc-color-panel')).toBeTruthy();
+    expect(clickContainer.querySelector('.rc-color-picker-panel')).toBeTruthy();
     fireEvent.click(clickContainer.querySelector('.trigger'));
-    expect(document.body.querySelector('.rc-color-hidden')).toBeTruthy();
+    expect(
+      document.body.querySelector('.rc-color-picker-popup-hidden'),
+    ).toBeTruthy();
 
     const { container: hoverContainer } = render(
       <ColorPicker trigger="hover">
@@ -91,11 +103,13 @@ describe('ColorPicker', () => {
     );
 
     // hover
-    expect(hoverContainer.querySelector('.rc-color-panel')).toBeFalsy();
+    expect(hoverContainer.querySelector('.rc-color-picker-panel')).toBeFalsy();
     fireEvent.mouseEnter(hoverContainer.querySelector('.trigger'));
-    expect(hoverContainer.querySelector('.rc-color-panel')).toBeTruthy();
+    expect(hoverContainer.querySelector('.rc-color-picker-panel')).toBeTruthy();
     fireEvent.mouseLeave(hoverContainer.querySelector('.trigger'));
-    expect(document.body.querySelector('.rc-color-hidden')).toBeTruthy();
+    expect(
+      document.body.querySelector('.rc-color-picker-popup-hidden'),
+    ).toBeTruthy();
   });
 
   it('Should pick color work by mouse', () => {
@@ -129,12 +143,20 @@ describe('ColorPicker', () => {
       'hsb(215, 100%, 0%)',
     );
 
-    doMouseMove(container.querySelector('.rc-color-slider-hue'), 0, 9999);
+    doMouseMove(
+      container.querySelector('.rc-color-picker-slider-hue'),
+      0,
+      9999,
+    );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsb(360, 100%, 0%)',
     );
 
-    doMouseMove(container.querySelector('.rc-color-slider-alpha'), 9999, 0);
+    doMouseMove(
+      container.querySelector('.rc-color-picker-slider-alpha'),
+      9999,
+      0,
+    );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsba(360, 100%, 0%, 0)',
     );
@@ -171,12 +193,20 @@ describe('ColorPicker', () => {
       'hsb(215, 100%, 0%)',
     );
 
-    doMouseMove(container.querySelector('.rc-color-slider-hue'), 0, 9999);
+    doMouseMove(
+      container.querySelector('.rc-color-picker-slider-hue'),
+      0,
+      9999,
+    );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsb(360, 100%, 0%)',
     );
 
-    doMouseMove(container.querySelector('.rc-color-slider-alpha'), 9999, 0);
+    doMouseMove(
+      container.querySelector('.rc-color-picker-slider-alpha'),
+      9999,
+      0,
+    );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsba(360, 100%, 0%, 0)',
     );
@@ -209,12 +239,20 @@ describe('ColorPicker', () => {
       'hsb(215, 100%, 0%)',
     );
 
-    doTouchMove(container.querySelector('.rc-color-slider-hue'), 0, 9999);
+    doTouchMove(
+      container.querySelector('.rc-color-picker-slider-hue'),
+      0,
+      9999,
+    );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsb(360, 100%, 0%)',
     );
 
-    doTouchMove(container.querySelector('.rc-color-slider-alpha'), 9999, 0);
+    doTouchMove(
+      container.querySelector('.rc-color-picker-slider-alpha'),
+      9999,
+      0,
+    );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsba(360, 100%, 0%, 0)',
     );
@@ -277,7 +315,7 @@ describe('ColorPicker', () => {
     );
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-handler').getAttribute('style'),
+      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
     ).toEqual('background-color: rgb(23, 120, 255);');
   });
 
@@ -289,7 +327,7 @@ describe('ColorPicker', () => {
     );
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-handler').getAttribute('style'),
+      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
     ).toEqual('background-color: rgb(23, 120, 255);');
   });
 
@@ -301,7 +339,7 @@ describe('ColorPicker', () => {
     );
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-handler').getAttribute('style'),
+      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
     ).toEqual('background-color: rgb(23, 120, 255);');
   });
 
@@ -313,7 +351,7 @@ describe('ColorPicker', () => {
     );
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-handler').getAttribute('style'),
+      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
     ).toEqual('background-color: rgb(23, 120, 255);');
   });
 
@@ -325,7 +363,7 @@ describe('ColorPicker', () => {
     );
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-handler').getAttribute('style'),
+      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
     ).toEqual('background-color: rgb(23, 120, 255);');
   });
 
@@ -339,7 +377,7 @@ describe('ColorPicker', () => {
 
     // click
     fireEvent.click(container.querySelector('.trigger'));
-    expect(container.querySelector('.rc-color-panel')).toBeFalsy();
+    expect(container.querySelector('.rc-color-picker-panel')).toBeFalsy();
   });
 
   it('Should component open work', async () => {
@@ -358,12 +396,14 @@ describe('ColorPicker', () => {
 
     fireEvent.click(container.querySelector('.trigger'));
     await waitFakeTimer();
-    expect(container.querySelector('.rc-color-panel')).toBeTruthy();
+    expect(container.querySelector('.rc-color-picker-panel')).toBeTruthy();
     expect(handleOpenChange).toHaveBeenCalledWith(true, false);
 
     fireEvent.click(container.querySelector('.trigger'));
     await waitFakeTimer();
-    expect(document.body.querySelector('.rc-color-hidden')).toBeTruthy();
+    expect(
+      document.body.querySelector('.rc-color-picker-popup-hidden'),
+    ).toBeTruthy();
     expect(handleOpenChange).toHaveBeenLastCalledWith(false, true);
   });
 
@@ -381,7 +421,9 @@ describe('ColorPicker', () => {
       </ColorPicker>
     );
     const { container } = render(<App />);
-    expect(container.querySelector('.rc-color').getAttribute('style')).toEqual(
+    expect(
+      container.querySelector('.rc-color-picker-popup').getAttribute('style'),
+    ).toEqual(
       'left: -1000vw; top: -1000vh; box-sizing: border-box; width: 500px;',
     );
   });

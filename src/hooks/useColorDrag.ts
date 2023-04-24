@@ -93,7 +93,7 @@ function useColorDrag(
     const offsetY =
       Math.max(0, Math.min(pageY - rectY, height)) - centerOffsetY;
 
-    const offset = {
+    const calcOffset = {
       x: offsetX,
       y: direction === 'x' ? offsetValue.y : offsetY,
     };
@@ -106,8 +106,8 @@ function useColorDrag(
       return false;
     }
 
-    setOffsetValue(offset);
-    onDragChange?.(offset);
+    setOffsetValue(calcOffset);
+    onDragChange?.(calcOffset);
   };
 
   const onDragMove: EventHandle = e => {

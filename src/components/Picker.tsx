@@ -12,7 +12,7 @@ export interface PickerProps extends BaseColorPickerProps {}
 const Picker: FC<PickerProps> = ({ color, onChange, prefixCls }) => {
   const pickerRef = useRef();
   const transformRef = useRef();
-  const [offest, dragStartHandle] = useColorDrag({
+  const [offset, dragStartHandle] = useColorDrag({
     color,
     containerRef: pickerRef,
     targetRef: transformRef,
@@ -32,12 +32,12 @@ const Picker: FC<PickerProps> = ({ color, onChange, prefixCls }) => {
   return (
     <div
       ref={pickerRef}
-      className={`${prefixCls}-picker`}
+      className={`${prefixCls}-select`}
       onMouseDown={dragStartHandle}
       onTouchStart={dragStartHandle}
     >
       <Palette prefixCls={prefixCls}>
-        <Transform offset={offest} ref={transformRef}>
+        <Transform offset={offset} ref={transformRef}>
           <Handler color={color.toRgbString()} prefixCls={prefixCls} />
         </Transform>
         <div

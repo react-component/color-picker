@@ -7,7 +7,7 @@ import type {
   TransformOffset,
 } from './interface';
 
-export const ColorPickerPrefixCls = 'rc-color';
+export const ColorPickerPrefixCls = 'rc-color-picker';
 
 export const getRoundNumber = (value: number) => Math.round(Number(value || 0));
 

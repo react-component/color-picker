@@ -366,4 +366,23 @@ describe('ColorPicker', () => {
     expect(document.body.querySelector('.rc-color-hidden')).toBeTruthy();
     expect(handleOpenChange).toHaveBeenLastCalledWith(false, true);
   });
+
+  it('Should styles work', async () => {
+    const App = () => (
+      <ColorPicker
+        styles={{
+          popup: {
+            width: 500,
+          },
+        }}
+        open
+      >
+        <div className="trigger">Color Picker</div>
+      </ColorPicker>
+    );
+    const { container } = render(<App />);
+    expect(container.querySelector('.rc-color').getAttribute('style')).toEqual(
+      'left: -1000vw; top: -1000vh; box-sizing: border-box; width: 500px;',
+    );
+  });
 });

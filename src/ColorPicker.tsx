@@ -57,7 +57,7 @@ const ColorPicker: FC<ColorPickerProps> = props => {
       popupStyle={styles?.popup}
       builtinPlacements={builtinPlacements}
       popupMotion={motion}
-      prefixCls={`${prefixCls}-popup`}
+      prefixCls={prefixCls}
       {...resetProps}
     >
       {children}

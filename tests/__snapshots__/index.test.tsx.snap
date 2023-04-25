@@ -6,7 +6,7 @@ exports[`ColorPicker Should component render correct 1`] = `
     Color Picker
   </div>
   <div
-    class="rc-color-picker-popup rc-color-picker-popup-placement-bottomLeft"
+    class="rc-color-picker rc-color-picker-placement-bottomLeft"
     style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
   >
     <div
@@ -109,7 +109,7 @@ exports[`ColorPicker Should custom panel work 1`] = `
     Color Picker
   </div>
   <div
-    class="rc-color-picker-popup rc-color-picker-popup-placement-bottomLeft"
+    class="rc-color-picker rc-color-picker-placement-bottomLeft"
     style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
   >
     <div
@@ -216,7 +216,7 @@ exports[`ColorPicker Should prefixCls work 1`] = `
     Color Picker
   </div>
   <div
-    class="test-prefixCls-popup test-prefixCls-popup-placement-bottomLeft"
+    class="test-prefixCls test-prefixCls-placement-bottomLeft"
     style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
   >
     <div

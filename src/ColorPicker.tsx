@@ -20,7 +20,7 @@ export interface ColorPickerProps extends PanelProps {
   classNames?: { popup?: string };
   styles?: { popup?: CSSProperties };
   builtinPlacements?: BuildInPlacements;
-  arrow?: boolean | { pointAtCenter: boolean };
+  arrow?: boolean;
   motion?: TriggerProps['popupMotion'];
 }
 

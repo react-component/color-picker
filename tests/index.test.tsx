@@ -92,9 +92,7 @@ describe('ColorPicker', () => {
     fireEvent.click(clickContainer.querySelector('.trigger'));
     expect(clickContainer.querySelector('.rc-color-picker-panel')).toBeTruthy();
     fireEvent.click(clickContainer.querySelector('.trigger'));
-    expect(
-      document.body.querySelector('.rc-color-picker-popup-hidden'),
-    ).toBeTruthy();
+    expect(document.body.querySelector('.rc-color-picker-hidden')).toBeTruthy();
 
     const { container: hoverContainer } = render(
       <ColorPicker trigger="hover">
@@ -107,9 +105,7 @@ describe('ColorPicker', () => {
     fireEvent.mouseEnter(hoverContainer.querySelector('.trigger'));
     expect(hoverContainer.querySelector('.rc-color-picker-panel')).toBeTruthy();
     fireEvent.mouseLeave(hoverContainer.querySelector('.trigger'));
-    expect(
-      document.body.querySelector('.rc-color-picker-popup-hidden'),
-    ).toBeTruthy();
+    expect(document.body.querySelector('.rc-color-picker-hidden')).toBeTruthy();
   });
 
   it('Should pick color work by mouse', () => {
@@ -401,9 +397,7 @@ describe('ColorPicker', () => {
 
     fireEvent.click(container.querySelector('.trigger'));
     await waitFakeTimer();
-    expect(
-      document.body.querySelector('.rc-color-picker-popup-hidden'),
-    ).toBeTruthy();
+    expect(document.body.querySelector('.rc-color-picker-hidden')).toBeTruthy();
     expect(handleOpenChange).toHaveBeenLastCalledWith(false, true);
   });
 
@@ -422,7 +416,7 @@ describe('ColorPicker', () => {
     );
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-popup').getAttribute('style'),
+      container.querySelector('.rc-color-picker').getAttribute('style'),
     ).toEqual(
       'left: -1000vw; top: -1000vh; box-sizing: border-box; width: 500px;',
     );

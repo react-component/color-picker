@@ -20,7 +20,7 @@ export interface ColorPickerProps extends PanelProps {
   classNames?: { popup?: string };
   styles?: { popup?: CSSProperties };
   builtinPlacements?: BuildInPlacements;
-  arrow?: boolean;
+  arrow?: boolean | { pointAtCenter: boolean };
   motion?: TriggerProps['popupMotion'];
 }
 
@@ -57,7 +57,7 @@ const ColorPicker: FC<ColorPickerProps> = props => {
       popupStyle={styles?.popup}
       builtinPlacements={builtinPlacements}
       popupMotion={motion}
-      prefixCls={`${prefixCls}-popup`}
+      prefixCls={prefixCls}
       {...resetProps}
     >
       {children}

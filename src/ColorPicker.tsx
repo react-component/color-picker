@@ -1,8 +1,7 @@
 import type { BuildInPlacements, TriggerProps } from '@rc-component/trigger';
 import Trigger from '@rc-component/trigger';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import type { CSSProperties, FC } from 'react';
-import React from 'react';
+import React, { CSSProperties, FC, useRef } from 'react';
 import placements from './components/placements';
 import { TriggerPlacement, TriggerType } from './interface';
 import type { PanelProps } from './Panel';
@@ -46,13 +45,32 @@ const ColorPicker: FC<ColorPickerProps> = props => {
     onChange: onOpenChange,
   });
 
+  const dragRef = useRef({
+    dragFlag: false,
+  });
+
   return (
     <Trigger
       action={[trigger]}
       popupVisible={openValue}
-      popup={<Panel {...props} />}
+      popup={
+        <Panel
+          {...props}
+          onDragStart={() => (dragRef.current.dragFlag = true)}
+          onDragStop={() => (
+            setTimeout(() => (dragRef.current.dragFlag = false)), 0
+          )}
+        />
+      }
       popupPlacement={placement}
-      onPopupVisibleChange={setOpenValue}
+      onPopupVisibleChange={visible => {
+        if (!dragRef.current.dragFlag) {
+          setOpenValue(visible);
+        }
+        if (dragRef.current.dragFlag) {
+          dragRef.current.dragFlag = !dragRef.current.dragFlag;
+        }
+      }}
       popupClassName={classNames?.popup}
       popupStyle={styles?.popup}
       builtinPlacements={builtinPlacements}

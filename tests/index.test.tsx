@@ -421,4 +421,39 @@ describe('ColorPicker', () => {
       'left: -1000vw; top: -1000vh; box-sizing: border-box; width: 500px;',
     );
   });
+
+  it('Should fix open misuse work', async () => {
+    spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        x: 0,
+        y: 100,
+        width: 100,
+        height: 100,
+      }),
+    });
+    const App = () => (
+      <ColorPicker
+        styles={{
+          popup: {
+            width: 500,
+          },
+        }}
+      >
+        <div className="trigger">Color Picker</div>
+      </ColorPicker>
+    );
+    const { container } = render(<App />);
+    fireEvent.click(container.querySelector('.trigger'));
+    await waitFakeTimer();
+    expect(container.querySelector('.rc-color-picker-panel')).toBeTruthy();
+    doMouseMove(container, 0, 9999);
+    doTouchMove(container, 0, 9999);
+    expect(document.body.querySelector('.rc-color-picker-hidden')).toBeFalsy();
+
+    fireEvent.click(container.querySelector('.trigger'));
+    await waitFakeTimer();
+    fireEvent.click(document);
+    await waitFakeTimer();
+    expect(document.body.querySelector('.rc-color-picker-hidden')).toBeTruthy();
+  });
 });

@@ -45,9 +45,7 @@ const ColorPicker: FC<ColorPickerProps> = props => {
     onChange: onOpenChange,
   });
 
-  const dragRef = useRef({
-    dragFlag: false,
-  });
+  const dragRef = useRef(false);
 
   return (
     <Trigger
@@ -56,19 +54,17 @@ const ColorPicker: FC<ColorPickerProps> = props => {
       popup={
         <Panel
           {...props}
-          onDragStart={() => (dragRef.current.dragFlag = true)}
-          onDragStop={() => (
-            setTimeout(() => (dragRef.current.dragFlag = false)), 0
-          )}
+          onDragStart={() => (dragRef.current = true)}
+          onDragStop={() => (setTimeout(() => (dragRef.current = false)), 0)}
         />
       }
       popupPlacement={placement}
       onPopupVisibleChange={visible => {
-        if (!dragRef.current.dragFlag) {
+        if (!dragRef.current) {
           setOpenValue(visible);
         }
-        if (dragRef.current.dragFlag) {
-          dragRef.current.dragFlag = !dragRef.current.dragFlag;
+        if (dragRef.current) {
+          dragRef.current = !dragRef.current;
         }
       }}
       popupClassName={classNames?.popup}

@@ -30,7 +30,8 @@ const Panel: FC<PanelProps> = ({
   prefixCls = ColorPickerPrefixCls,
   onChange,
   panelRender,
-  ...resets
+  onDragStart,
+  onDragStop,
 }) => {
   const [colorValue, setColorValue] = useColorState(defaultColor, {
     value,
@@ -57,7 +58,8 @@ const Panel: FC<PanelProps> = ({
           color={colorValue}
           onChange={handleChange}
           prefixCls={prefixCls}
-          {...resets}
+          onDragStart={onDragStart}
+          onDragStop={onDragStop}
         />
         <div className={`${prefixCls}-slider-container`}>
           <ColorDisplay color={colorValue} prefixCls={prefixCls} />
@@ -68,7 +70,8 @@ const Panel: FC<PanelProps> = ({
               color={colorValue}
               value={`hsl(${colorValue.toHsb().h},100%, 50%)`}
               onChange={handleChange}
-              {...resets}
+              onDragStart={onDragStart}
+              onDragStop={onDragStop}
             />
             <Slider
               type="alpha"
@@ -77,7 +80,8 @@ const Panel: FC<PanelProps> = ({
               color={colorValue}
               value={colorValue.toRgbString()}
               onChange={handleChange}
-              {...resets}
+              onDragStart={onDragStart}
+              onDragStop={onDragStop}
             />
           </div>
         </div>

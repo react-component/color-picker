@@ -50,6 +50,4 @@ export interface BaseColorPickerProps {
   color?: Color;
   prefixCls?: string;
   onChange?: (color: Color) => void;
-  onDragStart?: () => void;
-  onDragStop?: () => void;
 }

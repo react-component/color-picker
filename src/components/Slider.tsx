@@ -25,8 +25,6 @@ const Slider: FC<SliderProps> = ({
   value,
   onChange,
   prefixCls,
-  onDragStart,
-  onDragStop,
 }) => {
   const sliderRef = useRef();
   const transformRef = useRef();
@@ -48,8 +46,6 @@ const Slider: FC<SliderProps> = ({
       );
     },
     direction: 'x',
-    onDragStart,
-    onDragStop,
   });
 
   return (

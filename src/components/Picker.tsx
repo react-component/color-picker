@@ -9,13 +9,7 @@ import Transform from './Transform';
 
 export interface PickerProps extends BaseColorPickerProps {}
 
-const Picker: FC<PickerProps> = ({
-  color,
-  onChange,
-  prefixCls,
-  onDragStart,
-  onDragStop,
-}) => {
+const Picker: FC<PickerProps> = ({ color, onChange, prefixCls }) => {
   const pickerRef = useRef();
   const transformRef = useRef();
   const [offset, dragStartHandle] = useColorDrag({
@@ -33,8 +27,6 @@ const Picker: FC<PickerProps> = ({
           color,
         }),
       ),
-    onDragStart,
-    onDragStop,
   });
 
   return (

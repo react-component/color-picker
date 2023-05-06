@@ -3,12 +3,12 @@ import Trigger from '@rc-component/trigger';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
+import type { ColorPickerPanelProps } from './ColorPickerPanel';
+import ColorPickerPanel from './ColorPickerPanel';
 import placements from './components/placements';
 import { TriggerPlacement, TriggerType } from './interface';
-import type { PanelProps } from './Panel';
-import Panel from './Panel';
 import { ColorPickerPrefixCls } from './util';
-export interface ColorPickerProps extends PanelProps {
+export interface ColorPickerProps extends ColorPickerPanelProps {
   open?: boolean;
   trigger?: TriggerType;
   children: React.ReactElement;
@@ -50,7 +50,7 @@ const ColorPicker: FC<ColorPickerProps> = props => {
     <Trigger
       action={[trigger]}
       popupVisible={openValue}
-      popup={<Panel {...props} />}
+      popup={<ColorPickerPanel {...props} />}
       popupPlacement={placement}
       onPopupVisibleChange={setOpenValue}
       popupClassName={classNames?.popup}

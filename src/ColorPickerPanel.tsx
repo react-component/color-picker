@@ -17,14 +17,14 @@ const hueColor = [
   'rgb(255, 0, 0) 100%',
 ];
 
-export interface PanelProps extends BaseColorPickerProps {
+export interface ColorPickerPanelProps extends BaseColorPickerProps {
   value?: ColorGenInput;
   defaultValue?: ColorGenInput;
   /** Get panel element  */
   panelRender?: (panel: React.ReactElement) => React.ReactElement;
 }
 
-const Panel: FC<PanelProps> = ({
+const ColorPickerPanel: FC<ColorPickerPanelProps> = ({
   value,
   defaultValue,
   prefixCls = ColorPickerPrefixCls,
@@ -91,4 +91,4 @@ const Panel: FC<PanelProps> = ({
   );
 };
 
-export default Panel;
+export default ColorPickerPanel;

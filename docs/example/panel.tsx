@@ -7,6 +7,7 @@ export default () => {
 
   return (
     <div style={{ width: 240 }}>
+      <div>{value.toHsbString()}</div>
       <ColorPickerPanel color={value} onChange={setValue} />
     </div>
   );

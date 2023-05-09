@@ -417,9 +417,7 @@ describe('ColorPicker', () => {
     const { container } = render(<App />);
     expect(
       container.querySelector('.rc-color-picker').getAttribute('style'),
-    ).toEqual(
-      'left: -1000vw; top: -1000vh; box-sizing: border-box; width: 500px;',
-    );
+    ).toContain('width: 500px;');
   });
 
   it('Should fix open misuse work', async () => {

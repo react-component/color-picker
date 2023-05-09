@@ -69,23 +69,20 @@
     margin-bottom: @vertical-space;
   }
 
-  &-display {
-    margin-right: @vertical-space;
-    &-container {
-      position: relative;
-      overflow: hidden;
+  &-color-block {
+    width: 28px;
+    height: 28px;
+    background-image: url('./alpha.svg');
+    border-radius: @inner-border-radius;
+    position: relative;
+    overflow: hidden;
+    margin-left: 8px;
+    &-inner {
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-sizing: border-box;
       border-radius: @inner-border-radius;
-    }
-    &-block {
-      width: 28px;
-      height: 28px;
-      background-image: url('./alpha.svg');
-      border: '1px solid rgba(0,0,0,0.06)';
-      border-radius: @inner-border-radius;
-    }
-    &-layer {
-      position: absolute;
-      inset: 0;
     }
   }
   &-slider-container {

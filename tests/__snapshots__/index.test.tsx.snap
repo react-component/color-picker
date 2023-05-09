@@ -7,7 +7,7 @@ exports[`ColorPicker Should component render correct 1`] = `
   </div>
   <div
     class="rc-color-picker rc-color-picker-placement-bottomLeft"
-    style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
+    style="--arrow-x: 0px; --arrow-y: 0px; left: -1000vw; top: -1000vh; box-sizing: border-box;"
   >
     <div
       class="rc-color-picker-panel"
@@ -103,7 +103,7 @@ exports[`ColorPicker Should custom panel work 1`] = `
   </div>
   <div
     class="rc-color-picker rc-color-picker-placement-bottomLeft"
-    style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
+    style="--arrow-x: 0px; --arrow-y: 0px; left: -1000vw; top: -1000vh; box-sizing: border-box;"
   >
     <div
       class="rc-color-picker-panel"
@@ -203,7 +203,7 @@ exports[`ColorPicker Should prefixCls work 1`] = `
   </div>
   <div
     class="test-prefixCls test-prefixCls-placement-bottomLeft"
-    style="left: -1000vw; top: -1000vh; box-sizing: border-box;"
+    style="--arrow-x: 0px; --arrow-y: 0px; left: -1000vw; top: -1000vh; box-sizing: border-box;"
   >
     <div
       class="test-prefixCls-panel"

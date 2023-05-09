@@ -11,9 +11,9 @@ export async function waitFakeTimer(advanceTime = 1000, times = 20) {
       await Promise.resolve();
 
       if (advanceTime > 0) {
-        jest.advanceTimersByTime(advanceTime);
+        vi.advanceTimersByTime(advanceTime);
       } else {
-        jest.runAllTimers();
+        vi.runAllTimers();
       }
     });
   }
@@ -66,10 +66,10 @@ function doTouchMove(
 
 describe('ColorPicker', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
   it('Should component render correct', () => {
     const { container } = render(
@@ -377,7 +377,7 @@ describe('ColorPicker', () => {
   });
 
   it('Should component open work', async () => {
-    const handleOpenChange = jest.fn();
+    const handleOpenChange = vi.fn();
     const App = () => {
       const [open, setOpen] = useState(false);
       return (

@@ -1,10 +1,9 @@
 import classNames from 'classnames';
 import type { FC } from 'react';
 import React from 'react';
-import type { Color } from '../color';
 
 export type ColorBlockProps = {
-  color: Color;
+  color: string;
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
@@ -22,7 +21,7 @@ const ColorBlock: FC<ColorBlockProps> = ({
       <div
         className={`${colorBlockCls}-inner`}
         style={{
-          background: color.toRgbString(),
+          background: color,
         }}
       />
     </div>

@@ -75,7 +75,7 @@ const ColorPickerPanel: FC<ColorPickerPanelProps> = ({
               onChange={handleChange}
             />
           </div>
-          <ColorBlock color={colorValue} prefixCls={prefixCls} />
+          <ColorBlock color={colorValue.toRgbString()} prefixCls={prefixCls} />
         </div>
       </>
     ),

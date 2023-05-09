@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ColorPicker Should component render correct 1`] = `
+exports[`ColorPicker > Should component render correct 1`] = `
 <div>
   <div>
     Color Picker
@@ -96,7 +96,7 @@ exports[`ColorPicker Should component render correct 1`] = `
 </div>
 `;
 
-exports[`ColorPicker Should custom panel work 1`] = `
+exports[`ColorPicker > Should custom panel work 1`] = `
 <div>
   <div>
     Color Picker
@@ -196,7 +196,7 @@ exports[`ColorPicker Should custom panel work 1`] = `
 </div>
 `;
 
-exports[`ColorPicker Should prefixCls work 1`] = `
+exports[`ColorPicker > Should prefixCls work 1`] = `
 <div>
   <div>
     Color Picker

@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import ColorPicker from '../src';
 import { defaultColor } from '../src/util';
 
+vi.mock('@rc-component/trigger', async () => {
+  return await import('@rc-component/trigger/lib/mock');
+});
+
 export async function waitFakeTimer(advanceTime = 1000, times = 20) {
   for (let i = 0; i < times; i += 1) {
     // eslint-disable-next-line no-await-in-loop
@@ -11,9 +15,9 @@ export async function waitFakeTimer(advanceTime = 1000, times = 20) {
       await Promise.resolve();
 
       if (advanceTime > 0) {
-        jest.advanceTimersByTime(advanceTime);
+        vi.advanceTimersByTime(advanceTime);
       } else {
-        jest.runAllTimers();
+        vi.runAllTimers();
       }
     });
   }
@@ -25,22 +29,26 @@ function doMouseMove(
   end,
   element = 'rc-color-picker-handler',
 ) {
-  const mouseDown: any = createEvent.mouseDown(
+  const mouseDown = createEvent.mouseDown(
     container.getElementsByClassName(element)[0],
+    {
+      pageX: start,
+      pageY: start,
+    },
   );
-  mouseDown.pageX = start;
-  mouseDown.pageY = start;
   fireEvent(container.getElementsByClassName(element)[0], mouseDown);
 
   // Drag
-  const mouseMove: any = createEvent.mouseMove(document);
+  const mouseMove: any = new Event('mousemove');
   mouseMove.pageX = end;
   mouseMove.pageY = end;
+
   fireEvent(document, mouseMove);
 
   const mouseUp = createEvent.mouseUp(document);
   fireEvent(document, mouseUp);
 }
+
 function doTouchMove(
   container,
   start,
@@ -66,10 +74,10 @@ function doTouchMove(
 
 describe('ColorPicker', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
   it('Should component render correct', () => {
     const { container } = render(
@@ -134,7 +142,7 @@ describe('ColorPicker', () => {
       'hsb(215, 91%, 100%)',
     );
 
-    doMouseMove(container, 0, 9999);
+    doMouseMove(container, 0, 999);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsb(215, 100%, 0%)',
     );
@@ -377,7 +385,7 @@ describe('ColorPicker', () => {
   });
 
   it('Should component open work', async () => {
-    const handleOpenChange = jest.fn();
+    const handleOpenChange = vi.fn();
     const App = () => {
       const [open, setOpen] = useState(false);
       return (

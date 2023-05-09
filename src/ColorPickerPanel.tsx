@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
 
-import ColorDisplay from './components/ColorDisplay';
+import ColorBlock from './components/ColorBlock';
 import Picker from './components/Picker';
 import Slider from './components/Slider';
 import useColorState from './hooks/useColorState';
@@ -58,7 +58,6 @@ const ColorPickerPanel: FC<ColorPickerPanelProps> = ({
           prefixCls={prefixCls}
         />
         <div className={`${prefixCls}-slider-container`}>
-          <ColorDisplay color={colorValue} prefixCls={prefixCls} />
           <div className={`${prefixCls}-slider-group`}>
             <Slider
               gradientColors={hueColor}
@@ -76,6 +75,7 @@ const ColorPickerPanel: FC<ColorPickerPanelProps> = ({
               onChange={handleChange}
             />
           </div>
+          <ColorBlock color={colorValue} prefixCls={prefixCls} />
         </div>
       </>
     ),

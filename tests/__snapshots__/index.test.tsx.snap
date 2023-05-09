@@ -37,21 +37,6 @@ exports[`ColorPicker Should component render correct 1`] = `
         class="rc-color-picker-slider-container"
       >
         <div
-          class="rc-color-picker-display"
-        >
-          <div
-            class="rc-color-picker-display-container"
-          >
-            <div
-              class="rc-color-picker-display-block"
-            />
-            <div
-              class="rc-color-picker-display-layer"
-              style="background: rgb(22, 119, 255);"
-            />
-          </div>
-        </div>
-        <div
           class="rc-color-picker-slider-group"
         >
           <div
@@ -96,6 +81,14 @@ exports[`ColorPicker Should component render correct 1`] = `
               />
             </div>
           </div>
+        </div>
+        <div
+          class="rc-color-picker-color-block"
+        >
+          <div
+            class="rc-color-picker-color-block-inner"
+            style="background: rgb(22, 119, 255);"
+          />
         </div>
       </div>
     </div>
@@ -143,21 +136,6 @@ exports[`ColorPicker Should custom panel work 1`] = `
           class="rc-color-picker-slider-container"
         >
           <div
-            class="rc-color-picker-display"
-          >
-            <div
-              class="rc-color-picker-display-container"
-            >
-              <div
-                class="rc-color-picker-display-block"
-              />
-              <div
-                class="rc-color-picker-display-layer"
-                style="background: rgb(22, 119, 255);"
-              />
-            </div>
-          </div>
-          <div
             class="rc-color-picker-slider-group"
           >
             <div
@@ -203,6 +181,14 @@ exports[`ColorPicker Should custom panel work 1`] = `
               </div>
             </div>
           </div>
+          <div
+            class="rc-color-picker-color-block"
+          >
+            <div
+              class="rc-color-picker-color-block-inner"
+              style="background: rgb(22, 119, 255);"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -246,21 +232,6 @@ exports[`ColorPicker Should prefixCls work 1`] = `
       <div
         class="test-prefixCls-slider-container"
       >
-        <div
-          class="test-prefixCls-display"
-        >
-          <div
-            class="test-prefixCls-display-container"
-          >
-            <div
-              class="test-prefixCls-display-block"
-            />
-            <div
-              class="test-prefixCls-display-layer"
-              style="background: rgb(22, 119, 255);"
-            />
-          </div>
-        </div>
         <div
           class="test-prefixCls-slider-group"
         >
@@ -306,6 +277,14 @@ exports[`ColorPicker Should prefixCls work 1`] = `
               />
             </div>
           </div>
+        </div>
+        <div
+          class="test-prefixCls-color-block"
+        >
+          <div
+            class="test-prefixCls-color-block-inner"
+            style="background: rgb(22, 119, 255);"
+          />
         </div>
       </div>
     </div>

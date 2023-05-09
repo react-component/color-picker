@@ -7,6 +7,7 @@ export type ColorBlockProps = {
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 const ColorBlock: FC<ColorBlockProps> = ({
@@ -14,10 +15,15 @@ const ColorBlock: FC<ColorBlockProps> = ({
   prefixCls,
   className,
   style,
+  onClick,
 }) => {
   const colorBlockCls = `${prefixCls}-color-block`;
   return (
-    <div className={classNames(colorBlockCls, className)} style={style}>
+    <div
+      className={classNames(colorBlockCls, className)}
+      style={style}
+      onClick={onClick}
+    >
       <div
         className={`${colorBlockCls}-inner`}
         style={{

@@ -10,6 +10,7 @@
 
 .@{ColorPickerPrefixCls} {
   position: absolute;
+  z-index: 1;
   display: block;
   width: max-content;
   min-width: 258px;
@@ -70,18 +71,18 @@
   }
 
   &-color-block {
+    position: relative;
     width: 28px;
     height: 28px;
+    margin-left: 8px;
+    overflow: hidden;
     background-image: url('./alpha.svg');
     border-radius: @inner-border-radius;
-    position: relative;
-    overflow: hidden;
-    margin-left: 8px;
     &-inner {
+      box-sizing: border-box;
       width: 100%;
       height: 100%;
       border: 1px solid rgba(0, 0, 0, 0.06);
-      box-sizing: border-box;
       border-radius: @inner-border-radius;
     }
   }

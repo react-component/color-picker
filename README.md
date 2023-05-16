@@ -6,16 +6,16 @@ React Color Picker.
 
 [npm-image]: http://img.shields.io/npm/v/@rc-component/color-picker.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@rc-component/color-picker
-[github-actions-image]: https://github.com/react-component/table/workflows/CI/badge.svg
-[github-actions-url]: https://github.com/react-component/table/actions
-[coveralls-image]: https://img.shields.io/coveralls/react-component/table.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/react-component/table?branch=master
-[codecov-image]: https://img.shields.io/codecov/c/github/react-component/table/master.svg?style=flat-square
-[codecov-url]: https://codecov.io/gh/react-component/table/branch/master
-[david-url]: https://david-dm.org/react-component/table
-[david-image]: https://david-dm.org/react-component/table/status.svg?style=flat-square
-[david-dev-url]: https://david-dm.org/react-component/table?type=dev
-[david-dev-image]: https://david-dm.org/react-component/table/dev-status.svg?style=flat-square
+[github-actions-image]: https://github.com/react-component/color-picker/workflows/CI/badge.svg
+[github-actions-url]: https://github.com/react-component/color-picker/actions
+[coveralls-image]: https://img.shields.io/coveralls/react-component/color-picker.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/react-component/color-picker?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/react-component/color-picker/master.svg?style=flat-square
+[codecov-url]: https://codecov.io/gh/react-component/color-picker/branch/master
+[david-url]: https://david-dm.org/react-component/color-picker
+[david-image]: https://david-dm.org/react-component/color-picker/status.svg?style=flat-square
+[david-dev-url]: https://david-dm.org/react-component/color-picker?type=dev
+[david-dev-image]: https://david-dm.org/react-component/color-picker/dev-status.svg?style=flat-square
 [download-image]: https://img.shields.io/npm/dm/@rc-component/color-picker.svg?style=flat-square
 [download-url]: https://npmjs.org/package/@rc-component/color-picker
 [bundlephobia-url]: https://bundlephobia.com/result?p=@rc-component/color-picker

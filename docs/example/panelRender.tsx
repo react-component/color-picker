@@ -1,5 +1,5 @@
 import type { Color } from '@rc-component/color-picker';
-import { ColorPickerPanel } from '@rc-component/color-picker';
+import ColorPicker from '@rc-component/color-picker';
 import React, { useMemo, useState } from 'react';
 import '../../assets/index.less';
 
@@ -20,7 +20,7 @@ export default () => {
 
   return (
     <div style={{ width: 240 }}>
-      <ColorPickerPanel
+      <ColorPicker
         value={color}
         onChange={setValue}
         panelRender={panel => (

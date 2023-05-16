@@ -1,68 +1,99 @@
-import type { BuildInPlacements, TriggerProps } from '@rc-component/trigger';
-import Trigger from '@rc-component/trigger';
-import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import type { CSSProperties, FC } from 'react';
-import React from 'react';
-import type { ColorPickerPanelProps } from './ColorPickerPanel';
-import ColorPickerPanel from './ColorPickerPanel';
-import placements from './components/placements';
-import { TriggerPlacement, TriggerType } from './interface';
-import { ColorPickerPrefixCls } from './util';
-export interface ColorPickerProps extends ColorPickerPanelProps {
-  open?: boolean;
-  trigger?: TriggerType;
-  children: React.ReactElement;
-  disabled?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  /** Popup placement */
-  placement?: TriggerPlacement;
-  getPopupContainer?: (node: HTMLElement) => HTMLElement;
-  classNames?: { popup?: string };
-  styles?: { popup?: CSSProperties };
-  builtinPlacements?: BuildInPlacements;
-  arrow?: boolean;
-  motion?: TriggerProps['popupMotion'];
+import React, { CSSProperties, forwardRef, useMemo } from 'react';
+import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
+
+import classNames from 'classnames';
+import ColorBlock from './components/ColorBlock';
+import Picker from './components/Picker';
+import Slider from './components/Slider';
+import useColorState from './hooks/useColorState';
+import { BaseColorPickerProps, ColorGenInput } from './interface';
+
+const hueColor = [
+  'rgb(255, 0, 0) 0%',
+  'rgb(255, 255, 0) 17%',
+  'rgb(0, 255, 0) 33%',
+  'rgb(0, 255, 255) 50%',
+  'rgb(0, 0, 255) 67%',
+  'rgb(255, 0, 255) 83%',
+  'rgb(255, 0, 0) 100%',
+];
+
+export interface ColorPickerProps extends BaseColorPickerProps {
+  value?: ColorGenInput;
+  defaultValue?: ColorGenInput;
+  className?: string;
+  style?: CSSProperties;
+  /** Get panel element  */
+  panelRender?: (panel: React.ReactElement) => React.ReactElement;
 }
 
-const ColorPicker: FC<ColorPickerProps> = props => {
+export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
   const {
-    open,
-    disabled,
-    trigger = 'click',
-    children,
-    onOpenChange,
-    placement = 'bottomLeft',
-    classNames,
-    styles,
+    value,
+    defaultValue,
     prefixCls = ColorPickerPrefixCls,
-    builtinPlacements = placements,
-    motion,
-    ...resetProps
+    onChange,
+    className,
+    style,
+    panelRender,
   } = props;
-
-  const [openValue, setOpenValue] = useMergedState(false, {
-    value: open,
-    postState: openData => !disabled && openData,
-    onChange: onOpenChange,
+  const [colorValue, setColorValue] = useColorState(defaultColor, {
+    value,
+    defaultValue,
   });
+  const alphaColor = useMemo(() => {
+    const rgb = generateColor(colorValue.toRgbString());
+    // alpha color need equal 1 for base color
+    rgb.setAlpha(1);
+    return rgb.toRgbString();
+  }, [colorValue]);
+  const mergeCls = classNames(`${prefixCls}-panel`, className);
+
+  const handleChange: BaseColorPickerProps['onChange'] = data => {
+    if (!value) {
+      setColorValue(data);
+    }
+    onChange?.(data);
+  };
+
+  const panelElement = useMemo(
+    () => (
+      <>
+        <Picker
+          color={colorValue}
+          onChange={handleChange}
+          prefixCls={prefixCls}
+        />
+        <div className={`${prefixCls}-slider-container`}>
+          <div className={`${prefixCls}-slider-group`}>
+            <Slider
+              gradientColors={hueColor}
+              prefixCls={prefixCls}
+              color={colorValue}
+              value={`hsl(${colorValue.toHsb().h},100%, 50%)`}
+              onChange={handleChange}
+            />
+            <Slider
+              type="alpha"
+              gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
+              prefixCls={prefixCls}
+              color={colorValue}
+              value={colorValue.toRgbString()}
+              onChange={handleChange}
+            />
+          </div>
+          <ColorBlock color={colorValue.toRgbString()} prefixCls={prefixCls} />
+        </div>
+      </>
+    ),
+    [prefixCls, alphaColor, colorValue, handleChange],
+  );
 
   return (
-    <Trigger
-      action={[trigger]}
-      popupVisible={openValue}
-      popup={<ColorPickerPanel {...props} />}
-      popupPlacement={placement}
-      onPopupVisibleChange={setOpenValue}
-      popupClassName={classNames?.popup}
-      popupStyle={styles?.popup}
-      builtinPlacements={builtinPlacements}
-      popupMotion={motion}
-      prefixCls={prefixCls}
-      {...resetProps}
-    >
-      {children}
-    </Trigger>
+    <div className={mergeCls} style={style} ref={ref}>
+      {typeof panelRender === 'function'
+        ? panelRender(panelElement)
+        : panelElement}
+    </div>
   );
-};
-
-export default ColorPicker;
+});

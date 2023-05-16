@@ -52,13 +52,7 @@ export default () => <ColorPicker />;
 | value | Value of color | string \| `Color` | - |
 | defaultValue | Default value of color | string \| `Color` | - |
 | onChange | Callback when `value` is changed | `(value: Color, hex: string) => void` | - |
-| children | Trigger of ColorPicker | React.ReactNode | - |
-| trigger | ColorPicker trigger mode | `hover` \| `click` | `click` |
-| open | Whether to show popup | boolean | - |
-| onOpenChange | Callback when `open` is changed | `(open: boolean) => void` | - |
-| disabled | Disable ColorPicker | boolean | - |
-| placement | Placement of popup | `top` \| `topLeft` \| `topRight` \| `bottom` \| `bottomLeft` \| `bottomRight` | `bottomLeft` |
-| arrow | Configuration for popup arrow | `boolean \| { pointAtCenter: boolean }` | `true` | - |
+| panelRender | Custom panel render | `(panel: React.ReactElement) => React.ReactElement` | - |
 
 ### Color
 

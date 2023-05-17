@@ -17,7 +17,7 @@ const Handler: FC<{
       style={{
         backgroundColor: color,
       }}
-    ></div>
+    />
   );
 };
 

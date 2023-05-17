@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color } from '../color';
+import type { Color } from '../color';
 import type { TransformOffset } from '../interface';
 
 type EventType =

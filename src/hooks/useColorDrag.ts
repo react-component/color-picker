@@ -61,7 +61,7 @@ function useColorDrag(
         setOffsetValue(calcOffset);
       }
     }
-  }, [calculate, color, containerRef]);
+  }, [color, containerRef]);
 
   useEffect(
     () => () => {

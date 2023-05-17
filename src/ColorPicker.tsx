@@ -57,7 +57,7 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
     onChange?.(data);
   };
 
-  const panelEleRender = () => (
+  const defaultPanel = (
     <>
       <Picker
         color={colorValue}
@@ -90,8 +90,8 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
   return (
     <div className={mergeCls} style={style} ref={ref}>
       {typeof panelRender === 'function'
-        ? panelRender(panelEleRender())
-        : panelEleRender()}
+        ? panelRender(defaultPanel)
+        : defaultPanel}
     </div>
   );
 });

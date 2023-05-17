@@ -1,4 +1,5 @@
-import React, { CSSProperties, forwardRef, useMemo } from 'react';
+import type { CSSProperties } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
 
 import classNames from 'classnames';
@@ -6,7 +7,7 @@ import ColorBlock from './components/ColorBlock';
 import Picker from './components/Picker';
 import Slider from './components/Slider';
 import useColorState from './hooks/useColorState';
-import { BaseColorPickerProps, ColorGenInput } from './interface';
+import type { BaseColorPickerProps, ColorGenInput } from './interface';
 
 const hueColor = [
   'rgb(255, 0, 0) 0%',

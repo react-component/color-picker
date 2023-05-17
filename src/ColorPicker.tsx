@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef, useCallback, useMemo } from 'react';
 import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
 
 import classNames from 'classnames';
@@ -50,12 +50,15 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
   }, [colorValue]);
   const mergeCls = classNames(`${prefixCls}-panel`, className);
 
-  const handleChange: BaseColorPickerProps['onChange'] = data => {
-    if (!value) {
-      setColorValue(data);
-    }
-    onChange?.(data);
-  };
+  const handleChange: BaseColorPickerProps['onChange'] = useCallback(
+    data => {
+      if (!value) {
+        setColorValue(data);
+      }
+      onChange?.(data);
+    },
+    [onChange, value, setColorValue],
+  );
 
   const panelElement = useMemo(
     () => (

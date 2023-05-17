@@ -21,7 +21,7 @@ export default () => {
   return (
     <div style={{ width: 240 }}>
       <ColorPicker
-        value={color}
+        value={value}
         onChange={setValue}
         panelRender={panel => (
           <>
@@ -29,8 +29,8 @@ export default () => {
             <input
               value={color}
               onChange={e => {
-                const value = e.target.value;
-                setValue(toHexFormat(value));
+                const originValue = e.target.value;
+                setValue(toHexFormat(originValue));
               }}
             />
           </>

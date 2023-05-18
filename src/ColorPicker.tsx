@@ -57,44 +57,41 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
     onChange?.(data);
   };
 
-  const panelElement = useMemo(
-    () => (
-      <>
-        <Picker
-          color={colorValue}
-          onChange={handleChange}
-          prefixCls={prefixCls}
-        />
-        <div className={`${prefixCls}-slider-container`}>
-          <div className={`${prefixCls}-slider-group`}>
-            <Slider
-              gradientColors={hueColor}
-              prefixCls={prefixCls}
-              color={colorValue}
-              value={`hsl(${colorValue.toHsb().h},100%, 50%)`}
-              onChange={handleChange}
-            />
-            <Slider
-              type="alpha"
-              gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
-              prefixCls={prefixCls}
-              color={colorValue}
-              value={colorValue.toRgbString()}
-              onChange={handleChange}
-            />
-          </div>
-          <ColorBlock color={colorValue.toRgbString()} prefixCls={prefixCls} />
+  const defaultPanel = (
+    <>
+      <Picker
+        color={colorValue}
+        onChange={handleChange}
+        prefixCls={prefixCls}
+      />
+      <div className={`${prefixCls}-slider-container`}>
+        <div className={`${prefixCls}-slider-group`}>
+          <Slider
+            gradientColors={hueColor}
+            prefixCls={prefixCls}
+            color={colorValue}
+            value={`hsl(${colorValue.toHsb().h},100%, 50%)`}
+            onChange={handleChange}
+          />
+          <Slider
+            type="alpha"
+            gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
+            prefixCls={prefixCls}
+            color={colorValue}
+            value={colorValue.toRgbString()}
+            onChange={handleChange}
+          />
         </div>
-      </>
-    ),
-    [prefixCls, alphaColor, colorValue, handleChange],
+        <ColorBlock color={colorValue.toRgbString()} prefixCls={prefixCls} />
+      </div>
+    </>
   );
 
   return (
     <div className={mergeCls} style={style} ref={ref}>
       {typeof panelRender === 'function'
-        ? panelRender(panelElement)
-        : panelElement}
+        ? panelRender(defaultPanel)
+        : defaultPanel}
     </div>
   );
 });

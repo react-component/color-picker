@@ -50,11 +50,11 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
   }, [colorValue]);
   const mergeCls = classNames(`${prefixCls}-panel`, className);
 
-  const handleChange: BaseColorPickerProps['onChange'] = data => {
+  const handleChange: BaseColorPickerProps['onChange'] = (data, type) => {
     if (!value) {
       setColorValue(data);
     }
-    onChange?.(data);
+    onChange?.(data, type);
   };
 
   const defaultPanel = (
@@ -71,7 +71,7 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
             prefixCls={prefixCls}
             color={colorValue}
             value={`hsl(${colorValue.toHsb().h},100%, 50%)`}
-            onChange={handleChange}
+            onChange={color => handleChange(color, 'hue')}
           />
           <Slider
             type="alpha"
@@ -79,7 +79,7 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
             prefixCls={prefixCls}
             color={colorValue}
             value={colorValue.toRgbString()}
-            onChange={handleChange}
+            onChange={color => handleChange(color, 'alpha')}
           />
         </div>
         <ColorBlock color={colorValue.toRgbString()} prefixCls={prefixCls} />

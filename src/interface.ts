@@ -49,5 +49,5 @@ export type TriggerType = 'click' | 'hover';
 export interface BaseColorPickerProps {
   color?: Color;
   prefixCls?: string;
-  onChange?: (color: Color) => void;
+  onChange?: (color: Color, type?: HsbaColorType) => void;
 }

@@ -26,6 +26,8 @@ export interface ColorPickerProps extends BaseColorPickerProps {
   style?: CSSProperties;
   /** Get panel element  */
   panelRender?: (panel: React.ReactElement) => React.ReactElement;
+  /** Disabled alpha selection */
+  disabledAlpha?: boolean;
 }
 
 export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
@@ -34,9 +36,12 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
     defaultValue,
     prefixCls = ColorPickerPrefixCls,
     onChange,
+    onChangeComplete,
     className,
     style,
     panelRender,
+    disabledAlpha = false,
+    disabled = false,
   } = props;
   const [colorValue, setColorValue] = useColorState(defaultColor, {
     value,
@@ -48,7 +53,14 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
     rgb.setAlpha(1);
     return rgb.toRgbString();
   }, [colorValue]);
-  const mergeCls = classNames(`${prefixCls}-panel`, className);
+  const mergeCls = classNames(`${prefixCls}-panel`, className, {
+    [`${prefixCls}-panel-disabled`]: disabled,
+  });
+  const basicProps = {
+    prefixCls,
+    onChangeComplete,
+    disabled,
+  };
 
   const handleChange: BaseColorPickerProps['onChange'] = (data, type) => {
     if (!value) {
@@ -59,28 +71,30 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
 
   const defaultPanel = (
     <>
-      <Picker
-        color={colorValue}
-        onChange={handleChange}
-        prefixCls={prefixCls}
-      />
+      <Picker color={colorValue} onChange={handleChange} {...basicProps} />
       <div className={`${prefixCls}-slider-container`}>
-        <div className={`${prefixCls}-slider-group`}>
+        <div
+          className={classNames(`${prefixCls}-slider-group`, {
+            [`${prefixCls}-slider-group-disabled-alpha`]: disabledAlpha,
+          })}
+        >
           <Slider
             gradientColors={hueColor}
-            prefixCls={prefixCls}
             color={colorValue}
             value={`hsl(${colorValue.toHsb().h},100%, 50%)`}
             onChange={color => handleChange(color, 'hue')}
+            {...basicProps}
           />
-          <Slider
-            type="alpha"
-            gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
-            prefixCls={prefixCls}
-            color={colorValue}
-            value={colorValue.toRgbString()}
-            onChange={color => handleChange(color, 'alpha')}
-          />
+          {!disabledAlpha && (
+            <Slider
+              type="alpha"
+              gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
+              color={colorValue}
+              value={colorValue.toRgbString()}
+              onChange={color => handleChange(color, 'alpha')}
+              {...basicProps}
+            />
+          )}
         </div>
         <ColorBlock color={colorValue.toRgbString()} prefixCls={prefixCls} />
       </div>

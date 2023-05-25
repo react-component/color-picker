@@ -17,9 +17,12 @@ interface useColorDragProps {
   targetRef: React.RefObject<HTMLDivElement>;
   direction?: 'x' | 'y';
   onDragChange?: (offset: TransformOffset) => void;
+  onDragChangeComplete?: () => void;
   calculate?: (
     containerRef: React.RefObject<HTMLDivElement>,
   ) => TransformOffset;
+  /** Disabled drag */
+  disabledDrag?: boolean;
 }
 
 function getPosition(e: EventType) {
@@ -44,8 +47,10 @@ function useColorDrag(
     containerRef,
     direction,
     onDragChange,
+    onDragChangeComplete,
     calculate,
     color,
+    disabledDrag,
   } = props;
   const [offsetValue, setOffsetValue] = useState(offset || { x: 0, y: 0 });
   const mouseMoveRef = useRef<(event: MouseEvent) => void>(null);
@@ -124,9 +129,13 @@ function useColorDrag(
     document.removeEventListener('touchend', mouseUpRef.current);
     mouseMoveRef.current = null;
     mouseUpRef.current = null;
+    onDragChangeComplete?.();
   };
 
   const onDragStart: EventHandle = e => {
+    if (disabledDrag) {
+      return;
+    }
     updateOffset(e);
     dragRef.current.flag = true;
     document.addEventListener('mousemove', onDragMove);

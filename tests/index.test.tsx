@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-loop-func */
 import { act, createEvent, fireEvent, render } from '@testing-library/react';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import React, { useState } from 'react';
@@ -329,5 +330,60 @@ describe('ColorPicker', () => {
     expect(
       container.querySelector('.rc-color-picker-handler').getAttribute('style'),
     ).toEqual('background-color: rgb(23, 120, 255);');
+  });
+
+  it('Should disabled work', () => {
+    spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        x: 0,
+        y: 100,
+        width: 0,
+        height: 0,
+      }),
+    });
+    const handleChange = vi.fn();
+    const App = () => <ColorPicker disabled onChange={handleChange} />;
+    const { container } = render(<App />);
+    expect(
+      container.querySelector('.rc-color-picker-panel-disabled'),
+    ).toBeTruthy();
+    doMouseMove(container, 0, 9999);
+    expect(handleChange).toBeCalledTimes(0);
+  });
+
+  it('Should disabled alpha work', () => {
+    spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        x: 0,
+        y: 100,
+        width: 0,
+        height: 0,
+      }),
+    });
+    const App = () => <ColorPicker disabledAlpha />;
+    const { container } = render(<App />);
+    expect(
+      container.querySelector('.rc-color-picker-slider-alpha'),
+    ).toBeFalsy();
+    expect(container).toMatchSnapshot();
+  });
+
+  it('Should onChangeComplete work', () => {
+    const handleChange = vi.fn();
+    const App = () => <ColorPicker onChangeComplete={handleChange} />;
+    const { container } = render(<App />);
+    doMouseMove(container, 0, 9999);
+    doMouseMove(
+      container.querySelector('.rc-color-picker-slider-alpha'),
+      0,
+      9999,
+    );
+    doMouseMove(
+      container.querySelector('.rc-color-picker-slider-hue'),
+      0,
+      9999,
+    );
+    expect(handleChange).toBeCalledTimes(3);
+    expect(handleChange).toHaveBeenLastCalledWith('hue');
   });
 });

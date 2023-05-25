@@ -1,13 +1,5 @@
 import type { Color } from './color';
 
-export type TriggerPlacement =
-  | 'top'
-  | 'topLeft'
-  | 'topRight'
-  | 'bottom'
-  | 'bottomLeft'
-  | 'bottomRight';
-
 export interface HSB {
   h: number | string;
   s: number | string;
@@ -44,10 +36,10 @@ export type TransformOffset = {
   y: number;
 };
 
-export type TriggerType = 'click' | 'hover';
-
 export interface BaseColorPickerProps {
   color?: Color;
   prefixCls?: string;
+  disabled?: boolean;
   onChange?: (color: Color, type?: HsbaColorType) => void;
+  onChangeComplete?: (type?: HsbaColorType) => void;
 }

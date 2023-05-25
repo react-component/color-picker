@@ -2,7 +2,15 @@
 
 <code src="../example/basic.tsx"></code>
 
-## Custom render
+## Disabled
+
+<code src="../example/disabled.tsx"></code>
+
+## Disabled Alpha
+
+<code src="../example/disabledAlpha.tsx"></code>
+
+## Custom Render
 
 <code src="../example/panelRender.tsx"></code>
 

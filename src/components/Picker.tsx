@@ -34,9 +34,7 @@ const Picker: FC<PickerProps> = ({
           color,
         }),
       ),
-    onDragChangeComplete() {
-      onChangeComplete?.(color);
-    },
+    onDragChangeComplete: onChangeComplete,
     disabledDrag: disabled,
   });
 

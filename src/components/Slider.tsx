@@ -48,7 +48,7 @@ const Slider: FC<SliderProps> = ({
       );
     },
     onDragChangeComplete() {
-      onChangeComplete?.(color, type);
+      onChangeComplete?.(type);
     },
     direction: 'x',
     disabledDrag: disabled,

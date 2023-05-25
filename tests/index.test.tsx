@@ -384,5 +384,6 @@ describe('ColorPicker', () => {
       9999,
     );
     expect(handleChange).toBeCalledTimes(3);
+    expect(handleChange).toHaveBeenLastCalledWith('hue');
   });
 });

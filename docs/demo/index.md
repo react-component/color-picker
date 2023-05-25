@@ -14,7 +14,7 @@
 
 <code src="../example/panelRender.tsx"></code>
 
-## Work With Trigger
+## Work with Trigger
 
 <code src="../example/trigger.tsx"></code>
 

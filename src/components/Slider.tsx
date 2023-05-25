@@ -24,6 +24,8 @@ const Slider: FC<SliderProps> = ({
   color,
   value,
   onChange,
+  onChangeComplete,
+  disabled,
   prefixCls,
 }) => {
   const sliderRef = useRef();
@@ -45,7 +47,11 @@ const Slider: FC<SliderProps> = ({
         }),
       );
     },
+    onDragChangeComplete() {
+      onChangeComplete?.(color, type);
+    },
     direction: 'x',
+    disabledDrag: disabled,
   });
 
   return (

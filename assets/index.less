@@ -21,10 +21,14 @@
   &-panel {
     display: flex;
     flex-direction: column;
+    width: 258px;
     padding: @vertical-space;
     background-color: #fff;
     border-radius: @outer-border-radius;
     box-shadow: @shadow-2-down;
+    &-disabled {
+      cursor: not-allowed;
+    }
   }
   &-select {
     .@{ColorPickerPrefixCls}-palette {
@@ -58,6 +62,8 @@
   }
 
   &-slider {
+    width: 100%;
+    margin-bottom: @vertical-space;
     .@{ColorPickerPrefixCls}-palette {
       height: 8px;
     }
@@ -67,7 +73,6 @@
     &-alpha {
       background: url('./alpha.svg');
     }
-    margin-bottom: @vertical-space;
   }
 
   &-color-block {
@@ -90,6 +95,13 @@
     display: flex;
     .@{ColorPickerPrefixCls}-slider-group {
       flex: 1;
+      &-disabled-alpha {
+        display: flex;
+        align-items: center;
+        .@{ColorPickerPrefixCls}-slider{
+            margin-bottom: 0;
+        }
+      }
     }
   }
 }

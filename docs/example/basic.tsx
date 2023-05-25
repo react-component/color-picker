@@ -6,9 +6,24 @@ export default () => {
   const [value, setValue] = useState(new Color('#163cff'));
 
   return (
-    <div style={{ width: 240 }}>
-      <div>{value.toHsbString()}</div>
+    <>
       <ColorPicker color={value} onChange={setValue} />
-    </div>
+      <br />
+      <div
+        style={{
+          width: 258,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+        }}
+      >
+        <span>
+          hex:{' '}
+          {value.getAlpha() < 1 ? value.toHex8String() : value.toHexString()}
+        </span>
+        <span> rgb: {value.toRgbString()}</span>
+        <span> hsb: {value.toHsbString()}</span>
+      </div>
+    </>
   );
 };

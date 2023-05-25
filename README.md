@@ -52,6 +52,9 @@ export default () => <ColorPicker />;
 | value | Value of color | string \| `Color` | - |
 | defaultValue | Default value of color | string \| `Color` | - |
 | onChange | Callback when `value` is changed | `(value: Color, hex: string) => void` | - |
+| onChangeComplete | Callback when `drag` is stop | `(value: Color, hex: string) => void` | - |
+| disabled | disabled ColorPicker | boolean | false |
+| disabledAlpha | disabled alpha slider | boolean | false |
 | panelRender | Custom panel render | `(panel: React.ReactElement) => React.ReactElement` | - |
 
 ### Color

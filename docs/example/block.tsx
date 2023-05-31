@@ -33,7 +33,7 @@ export default () => {
       }}
     >
       {colorPresets.map(color => (
-        <ColorBlock color={color} prefixCls="rc-color-picker" />
+        <ColorBlock key={color} color={color} prefixCls="rc-color-picker" />
       ))}
     </div>
   );

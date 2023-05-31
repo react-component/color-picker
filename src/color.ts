@@ -2,7 +2,7 @@ import type { ColorInput, HSVA, Numberify } from '@ctrl/tinycolor';
 import { TinyColor } from '@ctrl/tinycolor';
 import type { ColorGenInput, HSB, HSBA } from './interface';
 
-const getRoundNumber = (value: number) => Math.round(Number(value || 0));
+export const getRoundNumber = (value: number) => Math.round(Number(value || 0));
 
 const convertHsb2Hsv = (color: ColorGenInput): ColorInput => {
   if (color && typeof color === 'object' && 'h' in color && 'b' in color) {

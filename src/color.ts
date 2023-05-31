@@ -1,7 +1,23 @@
-import type { HSVA, Numberify } from '@ctrl/tinycolor';
+import type { ColorInput, HSVA, Numberify } from '@ctrl/tinycolor';
 import { TinyColor } from '@ctrl/tinycolor';
-import type { ColorGenInput, HSBA } from './interface';
-import { convertHsb2Hsv, getRoundNumber } from './util';
+import type { ColorGenInput, HSB, HSBA } from './interface';
+
+const getRoundNumber = (value: number) => Math.round(Number(value || 0));
+
+const convertHsb2Hsv = (color: ColorGenInput): ColorInput => {
+  if (color && typeof color === 'object' && 'h' in color && 'b' in color) {
+    const { b, ...resets } = color as HSB;
+    return {
+      ...resets,
+      v: b,
+    };
+  }
+  if (typeof color === 'string' && /hsb/.test(color)) {
+    return color.replace(/hsb/, 'hsv');
+  }
+  return color as ColorInput;
+};
+
 export class Color extends TinyColor {
   constructor(color: ColorGenInput) {
     super(convertHsb2Hsv(color));

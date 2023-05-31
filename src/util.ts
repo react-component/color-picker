@@ -1,29 +1,11 @@
-import type { ColorInput } from '@ctrl/tinycolor';
 import { Color } from './color';
 import type {
   ColorGenInput,
-  HSB,
   HsbaColorType,
   TransformOffset,
 } from './interface';
 
 export const ColorPickerPrefixCls = 'rc-color-picker';
-
-export const getRoundNumber = (value: number) => Math.round(Number(value || 0));
-
-export const convertHsb2Hsv = (color: ColorGenInput): ColorInput => {
-  if (color && typeof color === 'object' && 'h' in color && 'b' in color) {
-    const { b, ...resets } = color as HSB;
-    return {
-      ...resets,
-      v: b,
-    };
-  }
-  if (typeof color === 'string' && /hsb/.test(color)) {
-    return color.replace(/hsb/, 'hsv');
-  }
-  return color as ColorInput;
-};
 
 export const generateColor = (color: ColorGenInput): Color => {
   if (color instanceof Color) {

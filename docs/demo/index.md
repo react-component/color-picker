@@ -18,6 +18,10 @@
 
 <code src="../example/trigger.tsx"></code>
 
+## Color change completed
+
+<code src="../example/changeComplete.tsx"></code>
+
 ## Color Block
 
 <code src="../example/block.tsx"></code>

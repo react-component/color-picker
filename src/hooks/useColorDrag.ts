@@ -133,6 +133,10 @@ function useColorDrag(
   };
 
   const onDragStart: EventHandle = e => {
+    // https://github.com/ant-design/ant-design/issues/43529
+    document.removeEventListener('mousemove', mouseMoveRef.current);
+    document.removeEventListener('mouseup', mouseUpRef.current);
+
     if (disabledDrag) {
       return;
     }

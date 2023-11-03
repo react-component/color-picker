@@ -25,7 +25,7 @@
     "lib"
   ],
   "scripts": {
-    "compile": "father build",
+    "compile": "father build && lessc assets/index.less assets/index.css",
     "coverage": "vitest run --coverage",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d .doc",
@@ -67,6 +67,7 @@
     "gh-pages": "^4.0.0",
     "husky": "^8.0.3",
     "jsdom": "^22.0.0",
+    "less": "^4.2.0",
     "lint-staged": "^13.1.0",
     "np": "^7.0.0",
     "prettier": "^2.0.5",

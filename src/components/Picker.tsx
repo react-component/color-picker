@@ -19,22 +19,24 @@ const Picker: FC<PickerProps> = ({
 }) => {
   const pickerRef = useRef();
   const transformRef = useRef();
+  const colorRef = useRef(color);
   const [offset, dragStartHandle] = useColorDrag({
     color,
     containerRef: pickerRef,
     targetRef: transformRef,
     calculate: containerRef =>
       calculateOffset(containerRef, transformRef, color),
-    onDragChange: offsetValue =>
-      onChange(
-        calculateColor({
-          offset: offsetValue,
-          targetRef: transformRef,
-          containerRef: pickerRef,
-          color,
-        }),
-      ),
-    onDragChangeComplete: onChangeComplete,
+    onDragChange: offsetValue => {
+      const calcColor = calculateColor({
+        offset: offsetValue,
+        targetRef: transformRef,
+        containerRef: pickerRef,
+        color,
+      });
+      colorRef.current = calcColor;
+      onChange(calcColor);
+    },
+    onDragChangeComplete: () => onChangeComplete?.(colorRef.current),
     disabledDrag: disabled,
   });
 

@@ -40,6 +40,7 @@ http://localhost:8000
 
 ```js
 import ColorPicker from '@rc-component/color-picker';
+import '@rc-component/color-picker/assets/index.css';
 
 export default () => <ColorPicker />;
 ```
@@ -52,7 +53,7 @@ export default () => <ColorPicker />;
 | value | Value of color | string \| `Color` | - |
 | defaultValue | Default value of color | string \| `Color` | - |
 | onChange | Callback when `value` is changed | `(value: Color, type: hue \| alpha) => void` | - |
-| onChangeComplete | Callback when `drag` is stop | `(type: hue \| alpha) => void` | - |
+| onChangeComplete | Callback when `drag` is stop | `(value: Color, type: hue \| alpha) => void` | - |
 | disabled | Disabled ColorPicker | boolean | false |
 | disabledAlpha | Disabled alpha slider | boolean | false |
 | panelRender | Custom panel render | `(panel: React.ReactElement) => React.ReactElement` | - |

@@ -30,6 +30,7 @@ const Slider: FC<SliderProps> = ({
 }) => {
   const sliderRef = useRef();
   const transformRef = useRef();
+  const colorRef = useRef(color);
   const [offset, dragStartHandle] = useColorDrag({
     color,
     targetRef: transformRef,
@@ -37,18 +38,18 @@ const Slider: FC<SliderProps> = ({
     calculate: containerRef =>
       calculateOffset(containerRef, transformRef, color, type),
     onDragChange: offsetValue => {
-      onChange(
-        calculateColor({
-          offset: offsetValue,
-          targetRef: transformRef,
-          containerRef: sliderRef,
-          color,
-          type,
-        }),
-      );
+      const calcColor = calculateColor({
+        offset: offsetValue,
+        targetRef: transformRef,
+        containerRef: sliderRef,
+        color,
+        type,
+      });
+      colorRef.current = calcColor;
+      onChange(calcColor);
     },
     onDragChangeComplete() {
-      onChangeComplete?.(type);
+      onChangeComplete?.(colorRef.current, type);
     },
     direction: 'x',
     disabledDrag: disabled,

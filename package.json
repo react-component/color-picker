@@ -45,10 +45,10 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime": "^7.10.1",
-    "@ctrl/tinycolor": "^3.6.0",
+    "@babel/runtime": "^7.23.6",
+    "@ctrl/tinycolor": "^4.0.2",
     "classnames": "^2.2.6",
-    "rc-util": "^5.30.0"
+    "rc-util": "^5.38.1"
   },
   "devDependencies": {
     "@rc-component/father-plugin": "^1.0.0",

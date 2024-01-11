@@ -20,8 +20,7 @@
   "main": "./lib/index",
   "module": "./es/index",
   "files": [
-    "assets/*.css",
-    "assets/*.svg",
+    "assets",
     "es",
     "lib"
   ],

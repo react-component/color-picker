@@ -21,6 +21,7 @@
   "module": "./es/index",
   "files": [
     "assets/*.css",
+    "assets/*.svg",
     "es",
     "lib"
   ],

@@ -2,10 +2,15 @@ import classNames from 'classnames';
 import type { FC } from 'react';
 import React, { useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
-import type { BaseColorPickerProps, HsbaColorType } from '../interface';
+import type {
+  BaseColorPickerProps,
+  HsbaColorType,
+  TransformOffset,
+} from '../interface';
 import { calculateColor, calculateOffset } from '../util';
 import Palette from './Palette';
 
+import { useEvent } from 'rc-util';
 import Gradient from './Gradient';
 import Handler from './Handler';
 import Transform from './Transform';
@@ -31,23 +36,26 @@ const Slider: FC<SliderProps> = ({
   const sliderRef = useRef();
   const transformRef = useRef();
   const colorRef = useRef(color);
+
+  const onDragChange = useEvent((offsetValue: TransformOffset) => {
+    const calcColor = calculateColor({
+      offset: offsetValue,
+      targetRef: transformRef,
+      containerRef: sliderRef,
+      color,
+      type,
+    });
+    colorRef.current = calcColor;
+    onChange(calcColor);
+  });
+
   const [offset, dragStartHandle] = useColorDrag({
     color,
     targetRef: transformRef,
     containerRef: sliderRef,
     calculate: containerRef =>
       calculateOffset(containerRef, transformRef, color, type),
-    onDragChange: offsetValue => {
-      const calcColor = calculateColor({
-        offset: offsetValue,
-        targetRef: transformRef,
-        containerRef: sliderRef,
-        color,
-        type,
-      });
-      colorRef.current = calcColor;
-      onChange(calcColor);
-    },
+    onDragChange,
     onDragChangeComplete() {
       onChangeComplete?.(colorRef.current, type);
     },

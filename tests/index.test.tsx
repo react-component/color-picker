@@ -388,6 +388,14 @@ describe('ColorPicker', () => {
   });
 
   it('onDragChange should respect value change', () => {
+    const spy = spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+      }),
+    });
     const onChange = vi.fn();
     const Demo = () => {
       const [value, setValue] = useState(new Color('#163cff'));
@@ -416,19 +424,24 @@ describe('ColorPicker', () => {
     );
     doMouseMove(
       container.querySelector('.rc-color-picker-slider-alpha'),
-      9999,
+      100,
       0,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsba(230, 91%, 100%, 0)',
+      'hsba(215, 91%, 100%, 0)',
+    );
+    doMouseMove(container.querySelector('.rc-color-picker-slider-hue'), 0, 50);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsb(180, 91%, 100%)',
     );
     doMouseMove(
       container.querySelector('.rc-color-picker-slider-hue'),
-      0,
-      9999,
+      50,
+      100,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsb(230, 91%, 100%)',
+      'hsb(360, 91%, 100%)',
     );
+    spy.mockRestore();
   });
 });

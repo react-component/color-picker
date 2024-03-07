@@ -2,7 +2,8 @@
 import { act, createEvent, fireEvent, render } from '@testing-library/react';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import React, { useState } from 'react';
-import ColorPicker from '../src';
+import { expect } from 'vitest';
+import ColorPicker, { Color } from '../src';
 import { defaultColor } from '../src/util';
 
 vi.mock('@rc-component/trigger', async () => {
@@ -384,5 +385,50 @@ describe('ColorPicker', () => {
       9999,
     );
     expect(handleChange).toBeCalledTimes(3);
+  });
+
+  it('onDragChange should respect value change', () => {
+    const onChange = vi.fn();
+    const Demo = () => {
+      const [value, setValue] = useState(new Color('#163cff'));
+
+      return (
+        <>
+          <div className="pick-color">{value.toHsbString()}</div>
+          <ColorPicker
+            color={value}
+            onChange={(color, type) => {
+              onChange(color, type);
+              if (type !== 'alpha') {
+                // bad case, color should be immutable
+                color.setAlpha(1);
+              }
+              setValue(color);
+            }}
+          />
+        </>
+      );
+    };
+
+    const { container } = render(<Demo />);
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsb(230, 91%, 100%)',
+    );
+    doMouseMove(
+      container.querySelector('.rc-color-picker-slider-alpha'),
+      9999,
+      0,
+    );
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsba(230, 91%, 100%, 0)',
+    );
+    doMouseMove(
+      container.querySelector('.rc-color-picker-slider-hue'),
+      0,
+      9999,
+    );
+    expect(container.querySelector('.pick-color').innerHTML).toBe(
+      'hsb(230, 91%, 100%)',
+    );
   });
 });

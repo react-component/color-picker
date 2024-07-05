@@ -52,9 +52,9 @@ function doMouseMove(
 }
 
 function doTouchMove(
-  container,
-  start,
-  end,
+  container: HTMLElement,
+  start: number,
+  end: number,
   element = 'rc-color-picker-handler',
 ) {
   const touchStart: any = createEvent.touchStart(
@@ -64,6 +64,7 @@ function doTouchMove(
     },
   );
   touchStart.touches[0].pageX = start;
+  touchStart.touches[0].pageY = 233;
   fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
   // Drag
@@ -71,6 +72,7 @@ function doTouchMove(
     touches: [{}],
   });
   touchMove.touches[0].pageX = end;
+  touchMove.touches[0].pageY = 233;
   fireEvent(document, touchMove);
 }
 
@@ -237,7 +239,7 @@ describe('ColorPicker', () => {
       9999,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsb(360, 100%, 0%)',
+      'hsb(0, 100%, 0%)',
     );
 
     doTouchMove(
@@ -246,7 +248,7 @@ describe('ColorPicker', () => {
       0,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsba(360, 100%, 0%, 0)',
+      'hsba(0, 100%, 0%, 0)',
     );
   });
 

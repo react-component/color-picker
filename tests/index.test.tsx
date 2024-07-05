@@ -171,7 +171,6 @@ describe('ColorPicker', () => {
           <ColorPicker value={value} onChange={setValue} />
           <div className="pick-color">{value.toHsbString()}</div>
           <div>{value.toHexString()}</div>
-          <div>{value.toHex8String()}</div>
         </>
       );
     };
@@ -191,7 +190,7 @@ describe('ColorPicker', () => {
       9999,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsb(360, 100%, 0%)',
+      'hsb(0, 100%, 0%)',
     );
 
     doMouseMove(
@@ -200,7 +199,7 @@ describe('ColorPicker', () => {
       0,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsba(360, 100%, 0%, 0)',
+      'hsba(0, 100%, 0%, 0)',
     );
   });
 

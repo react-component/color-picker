@@ -52,9 +52,9 @@ function doMouseMove(
 }
 
 function doTouchMove(
-  container,
-  start,
-  end,
+  container: HTMLElement,
+  start: number,
+  end: number,
   element = 'rc-color-picker-handler',
 ) {
   const touchStart: any = createEvent.touchStart(
@@ -64,6 +64,7 @@ function doTouchMove(
     },
   );
   touchStart.touches[0].pageX = start;
+  touchStart.touches[0].pageY = 233;
   fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
   // Drag
@@ -71,6 +72,7 @@ function doTouchMove(
     touches: [{}],
   });
   touchMove.touches[0].pageX = end;
+  touchMove.touches[0].pageY = 233;
   fireEvent(document, touchMove);
 }
 
@@ -89,7 +91,7 @@ describe('ColorPicker', () => {
   });
 
   it('Should component onChange work on no control mode', () => {
-    spyElementPrototypes(HTMLElement, {
+    const spyDom = spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
         x: 0,
         y: 100,
@@ -103,10 +105,12 @@ describe('ColorPicker', () => {
     expect(container.querySelector('.rc-color-picker-panel')).toBeTruthy();
     doMouseMove(container, 0, 999);
     expect(handleChange).toBeCalled();
+
+    spyDom.mockRestore();
   });
 
   it('Should pick color work by mouse', () => {
-    spyElementPrototypes(HTMLElement, {
+    const spyDom = spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
         x: 0,
         y: 100,
@@ -121,7 +125,6 @@ describe('ColorPicker', () => {
           <ColorPicker value={value} onChange={setValue} />
           <div className="pick-color">{value.toHsbString()}</div>
           <div>{value.toHexString()}</div>
-          <div>{value.toHex8String()}</div>
         </>
       );
     };
@@ -141,7 +144,7 @@ describe('ColorPicker', () => {
       9999,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsb(360, 100%, 0%)',
+      'hsb(0, 100%, 0%)',
     );
 
     doMouseMove(
@@ -150,12 +153,14 @@ describe('ColorPicker', () => {
       0,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsba(360, 100%, 0%, 0)',
+      'hsba(0, 100%, 0%, 0)',
     );
+
+    spyDom.mockRestore();
   });
 
   it('Should no control pick color work', () => {
-    spyElementPrototypes(HTMLElement, {
+    const spyDom = spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
         x: 0,
         y: 100,
@@ -170,7 +175,6 @@ describe('ColorPicker', () => {
           <ColorPicker value={value} onChange={setValue} />
           <div className="pick-color">{value.toHsbString()}</div>
           <div>{value.toHexString()}</div>
-          <div>{value.toHex8String()}</div>
         </>
       );
     };
@@ -190,7 +194,7 @@ describe('ColorPicker', () => {
       9999,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsb(360, 100%, 0%)',
+      'hsb(0, 100%, 0%)',
     );
 
     doMouseMove(
@@ -199,12 +203,14 @@ describe('ColorPicker', () => {
       0,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsba(360, 100%, 0%, 0)',
+      'hsba(0, 100%, 0%, 0)',
     );
+
+    spyDom.mockRestore();
   });
 
   it('Should pick color work by touch', () => {
-    spyElementPrototypes(HTMLElement, {
+    const spyDom = spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
         x: 0,
         y: 100,
@@ -237,7 +243,7 @@ describe('ColorPicker', () => {
       9999,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsb(360, 100%, 0%)',
+      'hsb(0, 100%, 0%)',
     );
 
     doTouchMove(
@@ -246,8 +252,10 @@ describe('ColorPicker', () => {
       0,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsba(360, 100%, 0%, 0)',
+      'hsba(0, 100%, 0%, 0)',
     );
+
+    spyDom.mockRestore();
   });
 
   it('Should custom panel work', () => {
@@ -266,7 +274,7 @@ describe('ColorPicker', () => {
   });
 
   it('Should drag boundary cases work', () => {
-    spyElementPrototypes(HTMLElement, {
+    const spyDom = spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
         x: 0,
         y: 100,
@@ -291,6 +299,8 @@ describe('ColorPicker', () => {
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsb(215, 91%, 100%)',
     );
+
+    spyDom.mockRestore();
   });
 
   it('Should hsb string work', () => {
@@ -334,7 +344,7 @@ describe('ColorPicker', () => {
   });
 
   it('Should disabled work', () => {
-    spyElementPrototypes(HTMLElement, {
+    const spyDom = spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
         x: 0,
         y: 100,
@@ -350,10 +360,12 @@ describe('ColorPicker', () => {
     ).toBeTruthy();
     doMouseMove(container, 0, 9999);
     expect(handleChange).toBeCalledTimes(0);
+
+    spyDom.mockRestore();
   });
 
   it('Should disabled alpha work', () => {
-    spyElementPrototypes(HTMLElement, {
+    const spyDom = spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
         x: 0,
         y: 100,
@@ -367,6 +379,8 @@ describe('ColorPicker', () => {
       container.querySelector('.rc-color-picker-slider-alpha'),
     ).toBeFalsy();
     expect(container).toMatchSnapshot();
+
+    spyDom.mockRestore();
   });
 
   it('Should onChangeComplete work', () => {
@@ -440,7 +454,7 @@ describe('ColorPicker', () => {
       100,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsb(360, 91%, 100%)',
+      'hsb(0, 91%, 100%)',
     );
     spy.mockRestore();
   });

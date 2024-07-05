@@ -40,7 +40,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
             style="position: relative;"
           >
             <div
-              style="position: absolute; left: 9.728183118741065px; top: -16.666666666666668px; z-index: 1;"
+              style="position: absolute; left: 9.722222222222221px; top: -16.666666666666668px; z-index: 1;"
             >
               <div
                 class="rc-color-picker-handler rc-color-picker-handler-sm"
@@ -192,7 +192,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
           style="position: relative;"
         >
           <div
-            style="position: absolute; left: 41.372549019607845px; top: -50px; z-index: 1;"
+            style="position: absolute; left: 0px; top: 0px; z-index: 1;"
           >
             <div
               class="rc-color-picker-handler"
@@ -219,7 +219,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
               style="position: relative;"
             >
               <div
-                style="position: absolute; left: 9.728183118741065px; top: -16.666666666666668px; z-index: 1;"
+                style="position: absolute; left: 0px; top: 0px; z-index: 1;"
               >
                 <div
                   class="rc-color-picker-handler rc-color-picker-handler-sm"
@@ -240,7 +240,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
               style="position: relative;"
             >
               <div
-                style="position: absolute; left: 50px; top: -16.666666666666668px; z-index: 1;"
+                style="position: absolute; left: 0px; top: 0px; z-index: 1;"
               >
                 <div
                   class="rc-color-picker-handler rc-color-picker-handler-sm"
@@ -348,7 +348,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
         style="position: relative;"
       >
         <div
-          style="position: absolute; left: 41.372549019607845px; top: -50px; z-index: 1;"
+          style="position: absolute; left: 0px; top: 0px; z-index: 1;"
         >
           <div
             class="test-prefixCls-handler"
@@ -375,7 +375,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
             style="position: relative;"
           >
             <div
-              style="position: absolute; left: 9.728183118741065px; top: -16.666666666666668px; z-index: 1;"
+              style="position: absolute; left: 0px; top: 0px; z-index: 1;"
             >
               <div
                 class="test-prefixCls-handler test-prefixCls-handler-sm"
@@ -396,7 +396,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
             style="position: relative;"
           >
             <div
-              style="position: absolute; left: 50px; top: -16.666666666666668px; z-index: 1;"
+              style="position: absolute; left: 0px; top: 0px; z-index: 1;"
             >
               <div
                 class="test-prefixCls-handler test-prefixCls-handler-sm"

@@ -440,7 +440,7 @@ describe('ColorPicker', () => {
       100,
     );
     expect(container.querySelector('.pick-color').innerHTML).toBe(
-      'hsb(360, 91%, 100%)',
+      'hsb(0, 91%, 100%)',
     );
     spy.mockRestore();
   });

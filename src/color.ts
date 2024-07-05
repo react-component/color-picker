@@ -1,6 +1,6 @@
-import type { ColorInput, HSVA, Numberify } from '@ctrl/tinycolor';
-import { TinyColor } from '@ctrl/tinycolor';
-import type { ColorGenInput, HSB, HSBA } from './interface';
+import type { ColorInput, HSV } from '@ant-design/fast-color';
+import { FastColor } from '@ant-design/fast-color';
+import type { ColorGenInput, HSB } from './interface';
 
 export const getRoundNumber = (value: number) => Math.round(Number(value || 0));
 
@@ -10,7 +10,7 @@ const convertHsb2Hsv = (color: ColorGenInput): ColorInput => {
     return {
       ...resets,
       v: b,
-    };
+    } as HSV;
   }
   if (typeof color === 'string' && /hsb/.test(color)) {
     return color.replace(/hsb/, 'hsv');
@@ -18,7 +18,7 @@ const convertHsb2Hsv = (color: ColorGenInput): ColorInput => {
   return color as ColorInput;
 };
 
-export class Color extends TinyColor {
+export class Color extends FastColor {
   constructor(color: ColorGenInput) {
     super(convertHsb2Hsv(color));
   }
@@ -36,18 +36,11 @@ export class Color extends TinyColor {
     return alpha === 1 ? hsbString : hsbaString;
   }
 
-  toHsb(): Numberify<HSBA> {
-    let hsv = this.toHsv();
-    if (typeof this.originalInput === 'object' && this.originalInput) {
-      if ('h' in this.originalInput) {
-        hsv = this.originalInput as Numberify<HSVA>;
-      }
-    }
-
-    const { v, ...resets } = hsv;
+  toHsb() {
+    const { v, ...resets } = this.toHsv();
     return {
       ...resets,
-      b: hsv.v,
+      b: v,
       a: this.a,
     };
   }

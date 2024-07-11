@@ -7,7 +7,7 @@ export default () => {
 
   return (
     <>
-      <ColorPicker color={value} onChange={setValue} />
+      <ColorPicker color={value} onChange={setValue} multiple />
       <br />
       <div
         style={{

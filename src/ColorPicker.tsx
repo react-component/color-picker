@@ -28,6 +28,8 @@ export interface ColorPickerProps extends BaseColorPickerProps {
   panelRender?: (panel: React.ReactElement) => React.ReactElement;
   /** Disabled alpha selection */
   disabledAlpha?: boolean;
+  /** Enabled to select multiple colors */
+  multiple?: boolean;
 }
 
 export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {

@@ -1,6 +1,6 @@
 import type { ColorInput, HSV } from '@ant-design/fast-color';
 import { FastColor } from '@ant-design/fast-color';
-import type { ColorGenInput, HSB } from './interface';
+import type { ColorGenInput, HSB, LinearColorGenInput } from './interface';
 
 export const getRoundNumber = (value: number) => Math.round(Number(value || 0));
 
@@ -19,8 +19,33 @@ const convertHsb2Hsv = (color: ColorGenInput): ColorInput => {
 };
 
 export class Color extends FastColor {
-  constructor(color: ColorGenInput) {
-    super(convertHsb2Hsv(color));
+  /** When multiple color, save inside */
+  private colors: {
+    ptg: number;
+    color: FastColor;
+  }[] = null;
+
+  constructor(color: ColorGenInput | LinearColorGenInput) {
+    // By default, always fill the single color
+    const isLinear = Array.isArray(color);
+    const singleColor = isLinear ? color[0].color : color;
+    super(convertHsb2Hsv(singleColor));
+
+    // Fill in the `colors`.
+    if (isLinear) {
+      this.colors = Array.from(color)
+        .sort((a, b) => a.position - b.position)
+        .map(info => ({
+          ptg: info.position,
+          color: new FastColor(convertHsb2Hsv(info.color)),
+        }));
+    } else if (color instanceof Color && color.isMultipleColor()) {
+      // Clone colors
+      this.colors = color.colors.map(({ ptg, color: c }) => ({
+        ptg,
+        color: new FastColor(c),
+      }));
+    }
   }
 
   toHsbString() {
@@ -43,5 +68,28 @@ export class Color extends FastColor {
       b: v,
       a: this.a,
     };
+  }
+
+  toColors(): {
+    color: Color;
+    position: number;
+  }[] {
+    if (!this.colors) {
+      return [
+        {
+          color: this,
+          position: 0,
+        },
+      ];
+    }
+
+    return this.colors.map(({ ptg, color }) => ({
+      color: new Color(color),
+      position: ptg,
+    }));
+  }
+
+  isMultipleColor() {
+    return !!this.colors;
   }
 }

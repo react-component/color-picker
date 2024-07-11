@@ -29,6 +29,11 @@ export type ColorGenInput<T = Color> =
   | HSBA
   | T;
 
+export type LinearColorGenInput<T = Color> = {
+  color: ColorGenInput<T>;
+  position: number;
+}[];
+
 export type HsbaColorType = 'hue' | 'alpha';
 
 export type TransformOffset = {

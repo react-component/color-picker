@@ -25,3 +25,7 @@
 ## Color Block
 
 <code src="../example/block.tsx"></code>
+
+## Linear Color
+
+<code src="../example/linear.tsx"></code>

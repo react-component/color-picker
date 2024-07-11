@@ -43,7 +43,7 @@ export class Color extends FastColor {
       // Clone colors
       this.colors = color.colors.map(({ ptg, color: c }) => ({
         ptg,
-        color: new FastColor(c),
+        color: c.clone(),
       }));
     }
   }

@@ -5,6 +5,10 @@ import type { ColorGenInput, HSB } from './interface';
 export const getRoundNumber = (value: number) => Math.round(Number(value || 0));
 
 const convertHsb2Hsv = (color: ColorGenInput): ColorInput => {
+  if (color instanceof FastColor) {
+    return color;
+  }
+
   if (color && typeof color === 'object' && 'h' in color && 'b' in color) {
     const { b, ...resets } = color as HSB;
     return {

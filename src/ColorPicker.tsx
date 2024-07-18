@@ -10,16 +10,6 @@ import useColorState from './hooks/useColorState';
 import useComponent, { type Components } from './hooks/useComponent';
 import type { BaseColorPickerProps, ColorGenInput } from './interface';
 
-const hueColor = [
-  'rgb(255, 0, 0) 0%',
-  'rgb(255, 255, 0) 17%',
-  'rgb(0, 255, 0) 33%',
-  'rgb(0, 255, 255) 50%',
-  'rgb(0, 0, 255) 67%',
-  'rgb(255, 0, 255) 83%',
-  'rgb(255, 0, 0) 100%',
-];
-
 const HUE_COLORS = [
   {
     color: 'rgb(255, 0, 0)',
@@ -141,12 +131,6 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
     [`${prefixCls}-panel-disabled`]: disabled,
   });
 
-  const basicProps = {
-    prefixCls,
-    onChangeComplete,
-    disabled,
-  };
-
   const sharedSliderProps = {
     prefixCls,
     disabled,
@@ -155,20 +139,17 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
 
   const defaultPanel = (
     <>
-      <Picker color={colorValue} onChange={handleChange} {...basicProps} />
+      <Picker
+        onChange={handleChange}
+        {...sharedSliderProps}
+        onChangeComplete={onChangeComplete}
+      />
       <div className={`${prefixCls}-slider-container`}>
         <div
           className={classNames(`${prefixCls}-slider-group`, {
             [`${prefixCls}-slider-group-disabled-alpha`]: disabledAlpha,
           })}
         >
-          {/* <Slider
-            gradientColors={hueColor}
-            color={colorValue}
-            value={`hsl(${colorValue.toHsb().h},100%, 50%)`}
-            onChange={color => handleChange(color, 'hue')}
-            {...basicProps}
-          /> */}
           <Slider
             {...sharedSliderProps}
             type="hue"
@@ -180,14 +161,6 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
             onChangeComplete={onHueChangeComplete}
           />
           {!disabledAlpha && (
-            // <Slider
-            //   type="alpha"
-            //   gradientColors={['rgba(255, 0, 4, 0) 0%', alphaColor]}
-            //   color={colorValue}
-            //   value={colorValue.toRgbString()}
-            //   onChange={color => handleChange(color, 'alpha')}
-            //   {...basicProps}
-            // />
             <Slider
               {...sharedSliderProps}
               type="alpha"

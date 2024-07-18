@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-loop-func */
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { expect } from 'vitest';
 import ColorPicker, { type BaseSliderProps } from '../src';
@@ -14,11 +14,18 @@ describe('ColorPicker.Components', () => {
   });
 
   it('Should component render correct', () => {
+    const onColorChange = vi.fn();
+
     const Slider = (props: BaseSliderProps) => {
-      const { type, min, max, value, prefixCls } = props;
+      const { type, min, max, value, prefixCls, onChange } = props;
 
       return (
-        <div className={`${prefixCls}-customize-${type}`}>
+        <div
+          className={`${prefixCls}-customize-${type}`}
+          onClick={() => {
+            onChange(33);
+          }}
+        >
           {`${min}/${max}/${value}`}
         </div>
       );
@@ -30,13 +37,23 @@ describe('ColorPicker.Components', () => {
         components={{
           slider: Slider,
         }}
+        onChange={onColorChange}
       />,
     );
-    expect(
-      container.querySelector('.rc-color-picker-customize-hue')?.textContent,
-    ).toBe('0/360/215');
-    expect(
-      container.querySelector('.rc-color-picker-customize-alpha')?.textContent,
-    ).toBe('0/100/100');
+
+    const hueEle = container.querySelector('.rc-color-picker-customize-hue');
+    const alphaEle = container.querySelector(
+      '.rc-color-picker-customize-alpha',
+    );
+
+    expect(hueEle.textContent).toBe('0/360/215');
+    expect(alphaEle.textContent).toBe('0/100/100');
+
+    // Change to trigger
+    fireEvent.click(hueEle);
+    expect(hueEle.textContent).toBe('0/360/33');
+
+    fireEvent.click(alphaEle);
+    expect(alphaEle.textContent).toBe('0/100/33');
   });
 });

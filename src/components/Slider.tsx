@@ -41,7 +41,7 @@ const Slider: FC<BaseSliderProps> = props => {
   const colorRef = useRef(color);
 
   const getValue = (c: Color) => {
-    return type === 'hue' ? c.getHue() : c.getAlpha();
+    return type === 'hue' ? c.getHue() : c.getAlpha() * 100;
   };
 
   const onDragChange = useEvent((offsetValue: TransformOffset) => {

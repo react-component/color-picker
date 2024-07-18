@@ -100,7 +100,7 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
 
   const getAlphaColor = (alpha: number) => {
     const hsb = colorValue.toHsb();
-    hsb.a = Math.round(alpha * 100) / 100;
+    hsb.a = Math.round(alpha) / 100;
     return new Color(hsb);
   };
 

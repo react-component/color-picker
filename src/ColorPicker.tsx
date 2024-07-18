@@ -7,6 +7,7 @@ import ColorBlock from './components/ColorBlock';
 import Picker from './components/Picker';
 import Slider from './components/Slider';
 import useColorState from './hooks/useColorState';
+import useComponent, { type Components } from './hooks/useComponent';
 import type { BaseColorPickerProps, ColorGenInput } from './interface';
 
 const hueColor = [
@@ -28,6 +29,7 @@ export interface ColorPickerProps extends BaseColorPickerProps {
   panelRender?: (panel: React.ReactElement) => React.ReactElement;
   /** Disabled alpha selection */
   disabledAlpha?: boolean;
+  components?: Components;
 }
 
 export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
@@ -42,7 +44,13 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
     panelRender,
     disabledAlpha = false,
     disabled = false,
+    components,
   } = props;
+
+  // ========================== Components ==========================
+  useComponent(components);
+
+  // ============================ Color =============================
   const [colorValue, setColorValue] = useColorState(defaultColor, {
     value,
     defaultValue,
@@ -53,20 +61,24 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
     rgb.setAlpha(1);
     return rgb.toRgbString();
   }, [colorValue]);
-  const mergeCls = classNames(`${prefixCls}-panel`, className, {
-    [`${prefixCls}-panel-disabled`]: disabled,
-  });
-  const basicProps = {
-    prefixCls,
-    onChangeComplete,
-    disabled,
-  };
 
+  // ============================ Events ============================
   const handleChange: BaseColorPickerProps['onChange'] = (data, type) => {
     if (!value) {
       setColorValue(data);
     }
     onChange?.(data, type);
+  };
+
+  // ============================ Render ============================
+  const mergeCls = classNames(`${prefixCls}-panel`, className, {
+    [`${prefixCls}-panel-disabled`]: disabled,
+  });
+
+  const basicProps = {
+    prefixCls,
+    onChangeComplete,
+    disabled,
   };
 
   const defaultPanel = (

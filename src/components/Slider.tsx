@@ -15,6 +15,16 @@ import Gradient from './Gradient';
 import Handler from './Handler';
 import Transform from './Transform';
 
+export interface BaseSliderProps {
+  prefixCls?: string;
+  colors: { percent: number; color: string }[];
+  min: number;
+  max: number;
+  /** Some component need multiple values */
+  values: number[];
+  editable?: boolean;
+}
+
 interface SliderProps extends BaseColorPickerProps {
   gradientColors: string[];
   direction?: string;

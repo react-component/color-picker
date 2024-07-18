@@ -25,3 +25,7 @@
 ## Color Block
 
 <code src="../example/block.tsx"></code>
+
+## Components
+
+<code src="../example/components.tsx"></code>

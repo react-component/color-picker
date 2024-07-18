@@ -44,7 +44,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
             >
               <div
                 class="rc-color-picker-handler rc-color-picker-handler-sm"
-                style="background-color: rgb(0, 0, 0);"
+                style="background-color: rgb(22, 119, 255);"
               />
             </div>
             <div
@@ -132,7 +132,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
             >
               <div
                 class="rc-color-picker-handler rc-color-picker-handler-sm"
-                style="background-color: rgb(0, 0, 0);"
+                style="background-color: rgb(22, 119, 255);"
               />
             </div>
             <div
@@ -223,7 +223,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
               >
                 <div
                   class="rc-color-picker-handler rc-color-picker-handler-sm"
-                  style="background-color: rgb(0, 0, 0);"
+                  style="background-color: rgb(22, 119, 255);"
                 />
               </div>
               <div
@@ -312,7 +312,7 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
             >
               <div
                 class="rc-color-picker-handler rc-color-picker-handler-sm"
-                style="background-color: rgb(0, 0, 0);"
+                style="background-color: rgb(22, 119, 255);"
               />
             </div>
             <div
@@ -379,7 +379,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
             >
               <div
                 class="test-prefixCls-handler test-prefixCls-handler-sm"
-                style="background-color: rgb(0, 0, 0);"
+                style="background-color: rgb(22, 119, 255);"
               />
             </div>
             <div

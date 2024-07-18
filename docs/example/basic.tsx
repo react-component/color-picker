@@ -17,10 +17,7 @@ export default () => {
           gap: 8,
         }}
       >
-        <span>
-          hex:{' '}
-          {value.getAlpha() < 1 ? value.toHex8String() : value.toHexString()}
-        </span>
+        <span>hex: {value.toHexString()}</span>
         <span> rgb: {value.toRgbString()}</span>
         <span> hsb: {value.toHsbString()}</span>
       </div>

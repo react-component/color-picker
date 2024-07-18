@@ -11,7 +11,7 @@ type EventType =
 type EventHandle = (e: EventType) => void;
 
 interface useColorDragProps {
-  color?: Color;
+  color: Color;
   offset?: TransformOffset;
   containerRef: React.RefObject<HTMLDivElement>;
   targetRef: React.RefObject<HTMLDivElement>;

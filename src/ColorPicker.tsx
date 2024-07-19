@@ -90,13 +90,7 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
   };
 
   // Convert
-  const getHueColor = (hue: number) => {
-    console.log('~~~~~~');
-    // debugger;
-    const c = new Color(colorValue.setHue(hue));
-    console.log('>>>', hue, colorValue, c);
-    return c;
-  };
+  const getHueColor = (hue: number) => new Color(colorValue.setHue(hue));
 
   const getAlphaColor = (alpha: number) =>
     new Color(colorValue.setA(alpha / 100));

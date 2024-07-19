@@ -7,7 +7,13 @@ export default () => {
 
   return (
     <>
-      <ColorPicker color={value} onChange={setValue} />
+      <ColorPicker
+        color={value}
+        onChange={nextValue => {
+          console.log('onChange', nextValue.toHsbString(), nextValue);
+          setValue(nextValue);
+        }}
+      />
       <br />
       <div
         style={{

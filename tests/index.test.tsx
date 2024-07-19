@@ -421,11 +421,13 @@ describe('ColorPicker', () => {
             color={value}
             onChange={(color, type) => {
               onChange(color, type);
+
+              let passedColor = color;
               if (type !== 'alpha') {
                 // bad case, color should be immutable
-                color.setAlpha(1);
+                passedColor = new Color(color.setA(1));
               }
-              setValue(color);
+              setValue(passedColor);
             }}
           />
         </>

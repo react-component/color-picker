@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import React, { forwardRef, useMemo } from 'react';
-import { ColorPickerPrefixCls, defaultColor, generateColor } from './util';
+import { ColorPickerPrefixCls, defaultColor } from './util';
 
 import classNames from 'classnames';
 import { Color } from './color';
@@ -76,12 +76,10 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
     value,
     defaultValue,
   });
-  const alphaColor = useMemo(() => {
-    const rgb = generateColor(colorValue.toRgbString());
-    // alpha color need equal 1 for base color
-    rgb.setAlpha(1);
-    return rgb.toRgbString();
-  }, [colorValue]);
+  const alphaColor = useMemo(
+    () => colorValue.setA(1).toRgbString(),
+    [colorValue],
+  );
 
   // ============================ Events ============================
   const handleChange: BaseColorPickerProps['onChange'] = (data, type) => {
@@ -92,17 +90,10 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
   };
 
   // Convert
-  const getHueColor = (hue: number) => {
-    const hsb = colorValue.toHsb();
-    hsb.h = hue;
-    return new Color(hsb);
-  };
+  const getHueColor = (hue: number) => new Color(colorValue.setHue(hue));
 
-  const getAlphaColor = (alpha: number) => {
-    const hsb = colorValue.toHsb();
-    hsb.a = Math.round(alpha) / 100;
-    return new Color(hsb);
-  };
+  const getAlphaColor = (alpha: number) =>
+    new Color(colorValue.setA(alpha / 100));
 
   // Slider change
   const onHueChange = (hue: number) => {
@@ -170,7 +161,7 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
               ]}
               min={0}
               max={100}
-              value={colorValue.getAlpha() * 100}
+              value={colorValue.a * 100}
               onChange={onAlphaChange}
               onChangeComplete={onAlphaChangeComplete}
             />

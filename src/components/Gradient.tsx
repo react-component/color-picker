@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React, { useMemo } from 'react';
-import type { Color } from '../color';
+import { Color } from '../color';
 import type { HsbaColorType } from '../interface';
 import { generateColor } from '../util';
 
@@ -15,9 +15,9 @@ const Gradient: FC<{
     () =>
       colors
         .map((color, idx) => {
-          const result = generateColor(color);
+          let result = generateColor(color);
           if (type === 'alpha' && idx === colors.length - 1) {
-            result.setAlpha(1);
+            result = new Color(result.setA(1));
           }
           return result.toRgbString();
         })

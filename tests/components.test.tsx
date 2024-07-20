@@ -46,12 +46,12 @@ describe('ColorPicker.Components', () => {
       '.rc-color-picker-customize-alpha',
     );
 
-    expect(hueEle.textContent).toBe('0/360/215');
+    expect(hueEle.textContent).toBe('0/359/215');
     expect(alphaEle.textContent).toBe('0/100/100');
 
     // Change to trigger
     fireEvent.click(hueEle);
-    expect(hueEle.textContent).toBe('0/360/33');
+    expect(hueEle.textContent).toBe('0/359/33');
 
     fireEvent.click(alphaEle);
     expect(alphaEle.textContent).toBe('0/100/33');

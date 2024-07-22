@@ -76,7 +76,7 @@ export const calculateOffset = (
     (targetWidth === 0 && targetHeight === 0) ||
     targetWidth !== targetHeight
   ) {
-    return;
+    return { x: 0, y: 0 };
   }
 
   if (type) {

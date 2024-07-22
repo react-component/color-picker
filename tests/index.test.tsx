@@ -109,6 +109,32 @@ describe('ColorPicker', () => {
     spyDom.mockRestore();
   });
 
+  it('Should not move position when control locked', () => {
+    const spyDom = spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        x: 0,
+        y: 100,
+        width: 100,
+        height: 100,
+      }),
+    });
+    const handleChange = vi.fn();
+    const { container } = render(
+      <ColorPicker value="#939393" onChange={handleChange} />,
+    );
+
+    const offsetHandleEle = container.querySelector('.rc-color-picker-palette')
+      .firstChild as HTMLDivElement;
+    const { left, top } = offsetHandleEle.style;
+
+    doMouseMove(container, 0, 999);
+    expect(handleChange).toHaveBeenCalled();
+    expect(offsetHandleEle.style.left).toBe(left);
+    expect(offsetHandleEle.style.top).toBe(top);
+
+    spyDom.mockRestore();
+  });
+
   it('Should pick color work by mouse', () => {
     const spyDom = spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({

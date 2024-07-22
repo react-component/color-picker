@@ -12,7 +12,6 @@ type EventHandle = (e: EventType) => void;
 
 interface useColorDragProps {
   color: Color;
-  offset?: TransformOffset;
   containerRef: React.RefObject<HTMLDivElement>;
   targetRef: React.RefObject<HTMLDivElement>;
   direction?: 'x' | 'y';
@@ -42,7 +41,6 @@ function useColorDrag(
   props: useColorDragProps,
 ): [TransformOffset, EventHandle] {
   const {
-    offset,
     targetRef,
     containerRef,
     direction,
@@ -52,21 +50,16 @@ function useColorDrag(
     color,
     disabledDrag,
   } = props;
-  const [offsetValue, setOffsetValue] = useState(offset || { x: 0, y: 0 });
+  const [offsetValue, setOffsetValue] = useState({ x: 0, y: 0 });
   const mouseMoveRef = useRef<(event: MouseEvent) => void>(null);
   const mouseUpRef = useRef<(event: MouseEvent) => void>(null);
-  const dragRef = useRef({
-    flag: false,
-  });
 
+  // Always get position from `color`
   useEffect(() => {
-    if (dragRef.current.flag === false) {
-      const calcOffset = calculate?.(containerRef);
-      if (calcOffset) {
-        setOffsetValue(calcOffset);
-      }
+    if (containerRef.current) {
+      setOffsetValue(calculate(containerRef));
     }
-  }, [color, containerRef]);
+  }, [color]);
 
   useEffect(
     () => () => {
@@ -111,7 +104,7 @@ function useColorDrag(
       return false;
     }
 
-    setOffsetValue(calcOffset);
+    // setOffsetValue(calcOffset);
     onDragChange?.(calcOffset);
   };
 
@@ -122,7 +115,6 @@ function useColorDrag(
 
   const onDragStop: EventHandle = e => {
     e.preventDefault();
-    dragRef.current.flag = false;
     document.removeEventListener('mousemove', mouseMoveRef.current);
     document.removeEventListener('mouseup', mouseUpRef.current);
     document.removeEventListener('touchmove', mouseMoveRef.current);
@@ -141,7 +133,6 @@ function useColorDrag(
       return;
     }
     updateOffset(e);
-    dragRef.current.flag = true;
     document.addEventListener('mousemove', onDragMove);
     document.addEventListener('mouseup', onDragStop);
     document.addEventListener('touchmove', onDragMove);

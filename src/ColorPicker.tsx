@@ -41,7 +41,7 @@ const HUE_COLORS = [
   },
 ];
 
-export interface ColorPickerProps extends BaseColorPickerProps {
+export interface ColorPickerProps extends Omit<BaseColorPickerProps, 'color'> {
   value?: ColorGenInput;
   defaultValue?: ColorGenInput;
   className?: string;
@@ -53,130 +53,138 @@ export interface ColorPickerProps extends BaseColorPickerProps {
   components?: Components;
 }
 
-export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
-  const {
-    value,
-    defaultValue,
-    prefixCls = ColorPickerPrefixCls,
-    onChange,
-    onChangeComplete,
-    className,
-    style,
-    panelRender,
-    disabledAlpha = false,
-    disabled = false,
-    components,
-  } = props;
+const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
+  (props, ref) => {
+    const {
+      value,
+      defaultValue,
+      prefixCls = ColorPickerPrefixCls,
+      onChange,
+      onChangeComplete,
+      className,
+      style,
+      panelRender,
+      disabledAlpha = false,
+      disabled = false,
+      components,
+    } = props;
 
-  // ========================== Components ==========================
-  const [Slider] = useComponent(components);
+    // ========================== Components ==========================
+    const [Slider] = useComponent(components);
 
-  // ============================ Color =============================
-  const [colorValue, setColorValue] = useColorState(
-    defaultValue || defaultColor,
-    value,
-  );
-  const alphaColor = useMemo(
-    () => colorValue.setA(1).toRgbString(),
-    [colorValue],
-  );
+    // ============================ Color =============================
+    const [colorValue, setColorValue] = useColorState(
+      defaultValue || defaultColor,
+      value,
+    );
+    const alphaColor = useMemo(
+      () => colorValue.setA(1).toRgbString(),
+      [colorValue],
+    );
 
-  // ============================ Events ============================
-  const handleChange: BaseColorPickerProps['onChange'] = (data, type) => {
-    if (!value) {
-      setColorValue(data);
-    }
-    onChange?.(data, type);
-  };
+    // ============================ Events ============================
+    const handleChange: BaseColorPickerProps['onChange'] = (data, type) => {
+      if (!value) {
+        setColorValue(data);
+      }
+      onChange?.(data, type);
+    };
 
-  // Convert
-  const getHueColor = (hue: number) => new Color(colorValue.setHue(hue));
+    // Convert
+    const getHueColor = (hue: number) => new Color(colorValue.setHue(hue));
 
-  const getAlphaColor = (alpha: number) =>
-    new Color(colorValue.setA(alpha / 100));
+    const getAlphaColor = (alpha: number) =>
+      new Color(colorValue.setA(alpha / 100));
 
-  // Slider change
-  const onHueChange = (hue: number) => {
-    handleChange(getHueColor(hue), 'hue');
-  };
+    // Slider change
+    const onHueChange = (hue: number) => {
+      handleChange(getHueColor(hue), 'hue');
+    };
 
-  const onAlphaChange = (alpha: number) => {
-    handleChange(getAlphaColor(alpha), 'alpha');
-  };
+    const onAlphaChange = (alpha: number) => {
+      handleChange(getAlphaColor(alpha), 'alpha');
+    };
 
-  // Complete
-  const onHueChangeComplete = (hue: number) => {
-    if (onChangeComplete) {
-      onChangeComplete(getHueColor(hue));
-    }
-  };
+    // Complete
+    const onHueChangeComplete = (hue: number) => {
+      if (onChangeComplete) {
+        onChangeComplete(getHueColor(hue));
+      }
+    };
 
-  const onAlphaChangeComplete = (alpha: number) => {
-    if (onChangeComplete) {
-      onChangeComplete(getAlphaColor(alpha));
-    }
-  };
+    const onAlphaChangeComplete = (alpha: number) => {
+      if (onChangeComplete) {
+        onChangeComplete(getAlphaColor(alpha));
+      }
+    };
 
-  // ============================ Render ============================
-  const mergeCls = classNames(`${prefixCls}-panel`, className, {
-    [`${prefixCls}-panel-disabled`]: disabled,
-  });
+    // ============================ Render ============================
+    const mergeCls = classNames(`${prefixCls}-panel`, className, {
+      [`${prefixCls}-panel-disabled`]: disabled,
+    });
 
-  const sharedSliderProps = {
-    prefixCls,
-    disabled,
-    color: colorValue,
-  };
+    const sharedSliderProps = {
+      prefixCls,
+      disabled,
+      color: colorValue,
+    };
 
-  const defaultPanel = (
-    <>
-      <Picker
-        onChange={handleChange}
-        {...sharedSliderProps}
-        onChangeComplete={onChangeComplete}
-      />
-      <div className={`${prefixCls}-slider-container`}>
-        <div
-          className={classNames(`${prefixCls}-slider-group`, {
-            [`${prefixCls}-slider-group-disabled-alpha`]: disabledAlpha,
-          })}
-        >
-          <Slider
-            {...sharedSliderProps}
-            type="hue"
-            colors={HUE_COLORS}
-            min={0}
-            max={359}
-            value={colorValue.getHue()}
-            onChange={onHueChange}
-            onChangeComplete={onHueChangeComplete}
-          />
-          {!disabledAlpha && (
+    const defaultPanel = (
+      <>
+        <Picker
+          onChange={handleChange}
+          {...sharedSliderProps}
+          onChangeComplete={onChangeComplete}
+        />
+        <div className={`${prefixCls}-slider-container`}>
+          <div
+            className={classNames(`${prefixCls}-slider-group`, {
+              [`${prefixCls}-slider-group-disabled-alpha`]: disabledAlpha,
+            })}
+          >
             <Slider
               {...sharedSliderProps}
-              type="alpha"
-              colors={[
-                { percent: 0, color: 'rgba(255, 0, 4, 0)' },
-                { percent: 100, color: alphaColor },
-              ]}
+              type="hue"
+              colors={HUE_COLORS}
               min={0}
-              max={100}
-              value={colorValue.a * 100}
-              onChange={onAlphaChange}
-              onChangeComplete={onAlphaChangeComplete}
+              max={359}
+              value={colorValue.getHue()}
+              onChange={onHueChange}
+              onChangeComplete={onHueChangeComplete}
             />
-          )}
+            {!disabledAlpha && (
+              <Slider
+                {...sharedSliderProps}
+                type="alpha"
+                colors={[
+                  { percent: 0, color: 'rgba(255, 0, 4, 0)' },
+                  { percent: 100, color: alphaColor },
+                ]}
+                min={0}
+                max={100}
+                value={colorValue.a * 100}
+                onChange={onAlphaChange}
+                onChangeComplete={onAlphaChangeComplete}
+              />
+            )}
+          </div>
+          <ColorBlock color={colorValue.toRgbString()} prefixCls={prefixCls} />
         </div>
-        <ColorBlock color={colorValue.toRgbString()} prefixCls={prefixCls} />
-      </div>
-    </>
-  );
+      </>
+    );
 
-  return (
-    <div className={mergeCls} style={style} ref={ref}>
-      {typeof panelRender === 'function'
-        ? panelRender(defaultPanel)
-        : defaultPanel}
-    </div>
-  );
-});
+    return (
+      <div className={mergeCls} style={style} ref={ref}>
+        {typeof panelRender === 'function'
+          ? panelRender(defaultPanel)
+          : defaultPanel}
+      </div>
+    );
+  },
+);
+
+if (process.env.NODE_ENV !== 'production') {
+  ColorPicker.displayName = 'ColorPicker';
+}
+
+export default ColorPicker;

@@ -74,7 +74,9 @@ const Slider: FC<BaseSliderProps> = props => {
   const handleColor = React.useMemo(() => {
     if (type === 'hue') {
       const hsb = color.toHsb();
+      hsb.s = 1;
       hsb.b = 1;
+      hsb.a = 1;
 
       const lightColor = new Color(hsb);
       return lightColor;

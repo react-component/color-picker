@@ -2,16 +2,24 @@ import ColorPicker, { Color } from '@rc-component/color-picker';
 import React, { useState } from 'react';
 import '../../assets/index.less';
 
+let start = true;
+
 export default () => {
-  const [value, setValue] = useState(new Color('#163cff'));
+  const [value, setValue] = useState(new Color('rgba(255,0,0,0)'));
 
   return (
     <>
       <ColorPicker
-        color={value}
+        value={value}
         onChange={nextValue => {
-          console.log('onChange', nextValue.toHsbString(), nextValue);
-          setValue(nextValue);
+          let proxyValue = nextValue;
+
+          if (start) {
+            start = false;
+            proxyValue = nextValue.setA(1);
+          }
+
+          setValue(proxyValue);
         }}
       />
       <br />

@@ -72,10 +72,10 @@ export default forwardRef<HTMLDivElement, ColorPickerProps>((props, ref) => {
   const [Slider] = useComponent(components);
 
   // ============================ Color =============================
-  const [colorValue, setColorValue] = useColorState(defaultColor, {
+  const [colorValue, setColorValue] = useColorState(
+    defaultValue || defaultColor,
     value,
-    defaultValue,
-  });
+  );
   const alphaColor = useMemo(
     () => colorValue.setA(1).toRgbString(),
     [colorValue],

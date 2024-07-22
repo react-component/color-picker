@@ -6,7 +6,7 @@ import Palette from './Palette';
 
 import classNames from 'classnames';
 import { useEvent } from 'rc-util';
-import type { Color } from '../color';
+import { Color } from '../color';
 import { calculateColor, calculateOffset } from '../util';
 import Gradient from './Gradient';
 import Handler from './Handler';
@@ -71,6 +71,18 @@ const Slider: FC<BaseSliderProps> = props => {
     disabledDrag: disabled,
   });
 
+  const handleColor = React.useMemo(() => {
+    if (type === 'hue') {
+      const hsb = color.toHsb();
+      hsb.b = 1;
+
+      const lightColor = new Color(hsb);
+      return lightColor;
+    }
+
+    return color;
+  }, [color, type]);
+
   // ========================= Gradient =========================
   const gradientList = React.useMemo(
     () => colors.map(info => `${info.color} ${info.percent}%`),
@@ -92,7 +104,7 @@ const Slider: FC<BaseSliderProps> = props => {
         <Transform offset={offset} ref={transformRef}>
           <Handler
             size="small"
-            color={color.toHexString()}
+            color={handleColor.toHexString()}
             prefixCls={prefixCls}
           />
         </Transform>

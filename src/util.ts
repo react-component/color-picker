@@ -70,6 +70,7 @@ export const calculateOffset = (
   const centerOffsetX = targetWidth / 2;
   const centerOffsetY = targetHeight / 2;
   const hsb = color.toHsb();
+  const hsv = color.toHsv();
 
   // Exclusion of boundary cases
   if (
@@ -83,18 +84,19 @@ export const calculateOffset = (
     switch (type) {
       case 'hue':
         return {
-          x: (hsb.h / 360) * width - centerOffsetX,
+          x: ((hsv.h || hsb.h) / 360) * width - centerOffsetX,
           y: -centerOffsetY / 3,
         };
       case 'alpha':
         return {
-          x: (hsb.a / 1) * width - centerOffsetX,
+          x: (hsv.a / 1) * width - centerOffsetX,
           y: -centerOffsetY / 3,
         };
     }
   }
+
   return {
-    x: hsb.s * width - centerOffsetX,
-    y: (1 - hsb.b) * height - centerOffsetY,
+    x: hsv.s * width - centerOffsetX,
+    y: (1 - hsv.v) * height - centerOffsetY,
   };
 };

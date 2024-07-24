@@ -58,43 +58,26 @@ export const calculateColor = (props: {
   });
 };
 
-export const calculateOffset = (
-  containerRef: React.RefObject<HTMLDivElement>,
-  targetRef: React.RefObject<HTMLDivElement>,
-  color?: Color,
-  type?: HsbaColorType,
-): TransformOffset => {
-  const { width, height } = containerRef.current.getBoundingClientRect();
-  const { width: targetWidth, height: targetHeight } =
-    targetRef.current.getBoundingClientRect();
-  const centerOffsetX = targetWidth / 2;
-  const centerOffsetY = targetHeight / 2;
+export const calcOffset = (color: Color, type?: HsbaColorType) => {
   const hsb = color.toHsb();
 
-  // Exclusion of boundary cases
-  if (
-    (targetWidth === 0 && targetHeight === 0) ||
-    targetWidth !== targetHeight
-  ) {
-    return { x: 0, y: 0 };
-  }
+  switch (type) {
+    case 'hue':
+      return {
+        x: (hsb.h / 360) * 100,
+        y: 50,
+      };
+    case 'alpha':
+      return {
+        x: color.a * 100,
+        y: 50,
+      };
 
-  if (type) {
-    switch (type) {
-      case 'hue':
-        return {
-          x: (hsb.h / 360) * width - centerOffsetX,
-          y: -centerOffsetY / 3,
-        };
-      case 'alpha':
-        return {
-          x: (hsb.a / 1) * width - centerOffsetX,
-          y: -centerOffsetY / 3,
-        };
-    }
+    // Picker panel
+    default:
+      return {
+        x: hsb.s * 100,
+        y: (1 - hsb.b) * 100,
+      };
   }
-  return {
-    x: hsb.s * width - centerOffsetX,
-    y: (1 - hsb.b) * height - centerOffsetY,
-  };
 };

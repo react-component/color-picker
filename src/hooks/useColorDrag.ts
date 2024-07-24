@@ -17,9 +17,7 @@ interface useColorDragProps {
   direction?: 'x' | 'y';
   onDragChange?: (offset: TransformOffset) => void;
   onDragChangeComplete?: () => void;
-  calculate?: (
-    containerRef: React.RefObject<HTMLDivElement>,
-  ) => TransformOffset;
+  calculate?: () => TransformOffset;
   /** Disabled drag */
   disabledDrag?: boolean;
 }
@@ -56,9 +54,7 @@ function useColorDrag(
 
   // Always get position from `color`
   useEffect(() => {
-    if (containerRef.current) {
-      setOffsetValue(calculate(containerRef));
-    }
+    setOffsetValue(calculate());
   }, [color]);
 
   useEffect(
@@ -104,7 +100,6 @@ function useColorDrag(
       return false;
     }
 
-    // setOffsetValue(calcOffset);
     onDragChange?.(calcOffset);
   };
 

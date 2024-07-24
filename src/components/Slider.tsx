@@ -7,7 +7,7 @@ import Palette from './Palette';
 import classNames from 'classnames';
 import { useEvent } from 'rc-util';
 import { Color } from '../color';
-import { calculateColor, calculateOffset } from '../util';
+import { calcOffset, calculateColor } from '../util';
 import Gradient from './Gradient';
 import Handler from './Handler';
 import Transform from './Transform';
@@ -61,8 +61,7 @@ const Slider: FC<BaseSliderProps> = props => {
     color,
     targetRef: transformRef,
     containerRef: sliderRef,
-    calculate: containerRef =>
-      calculateOffset(containerRef, transformRef, color, type),
+    calculate: () => calcOffset(color, type),
     onDragChange,
     onDragChangeComplete() {
       onChangeComplete(getValue(colorRef.current));
@@ -103,7 +102,7 @@ const Slider: FC<BaseSliderProps> = props => {
       onTouchStart={dragStartHandle}
     >
       <Palette prefixCls={prefixCls}>
-        <Transform offset={offset} ref={transformRef}>
+        <Transform x={offset.x} y={offset.y} ref={transformRef}>
           <Handler
             size="small"
             color={handleColor.toHexString()}

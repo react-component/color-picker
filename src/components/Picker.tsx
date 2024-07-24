@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import React, { useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
 import type { BaseColorPickerProps, TransformOffset } from '../interface';
-import { calculateColor, calculateOffset } from '../util';
+import { calcOffset, calculateColor } from '../util';
 
 import { useEvent } from 'rc-util';
 import Handler from './Handler';
@@ -37,8 +37,7 @@ const Picker: FC<PickerProps> = ({
     color,
     containerRef: pickerRef,
     targetRef: transformRef,
-    calculate: containerRef =>
-      calculateOffset(containerRef, transformRef, color),
+    calculate: () => calcOffset(color),
     onDragChange,
     onDragChangeComplete: () => onChangeComplete?.(colorRef.current),
     disabledDrag: disabled,
@@ -52,7 +51,7 @@ const Picker: FC<PickerProps> = ({
       onTouchStart={dragStartHandle}
     >
       <Palette prefixCls={prefixCls}>
-        <Transform offset={offset} ref={transformRef}>
+        <Transform x={offset.x} y={offset.y} ref={transformRef}>
           <Handler color={color.toRgbString()} prefixCls={prefixCls} />
         </Transform>
         <div

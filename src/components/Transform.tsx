@@ -1,22 +1,23 @@
 import React, { forwardRef } from 'react';
-import type { TransformOffset } from '../interface';
 
 const Transform = forwardRef<
   HTMLDivElement,
   {
-    offset?: TransformOffset;
-    children?: React.ReactNode;
+    x: number;
+    y: number;
+    children: React.ReactNode;
   }
 >((props, ref) => {
-  const { children, offset } = props;
+  const { children, x, y } = props;
   return (
     <div
       ref={ref}
       style={{
         position: 'absolute',
-        left: offset.x,
-        top: offset.y,
+        left: `${x}%`,
+        top: `${y}%`,
         zIndex: 1,
+        transform: 'translate(-50%, -50%)',
       }}
     >
       {children}

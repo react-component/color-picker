@@ -436,6 +436,8 @@ describe('ColorPicker', () => {
         height: 100,
       }),
     });
+
+    let changeInfo: any;
     const onChange = vi.fn();
     const Demo = () => {
       const [value, setValue] = useState(new Color('#163cff'));
@@ -445,11 +447,13 @@ describe('ColorPicker', () => {
           <div className="pick-color">{value.toHsbString()}</div>
           <ColorPicker
             color={value}
-            onChange={(color, type) => {
-              onChange(color, type);
+            onChange={(color, info) => {
+              changeInfo = info;
+
+              onChange(color, info);
 
               let passedColor = color;
-              if (type !== 'alpha') {
+              if (info.type !== 'alpha') {
                 // bad case, color should be immutable
                 passedColor = new Color(color.setA(1));
               }
@@ -464,6 +468,7 @@ describe('ColorPicker', () => {
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsb(230, 91%, 100%)',
     );
+
     doMouseMove(
       container.querySelector('.rc-color-picker-slider-alpha'),
       100,
@@ -472,10 +477,14 @@ describe('ColorPicker', () => {
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsba(215, 91%, 100%, 0)',
     );
+    expect(changeInfo).toEqual({ type: 'alpha', value: 0 });
+
     doMouseMove(container.querySelector('.rc-color-picker-slider-hue'), 0, 50);
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsb(180, 91%, 100%)',
     );
+    expect(changeInfo).toEqual({ type: 'hue', value: 180 });
+
     doMouseMove(
       container.querySelector('.rc-color-picker-slider-hue'),
       50,
@@ -484,6 +493,8 @@ describe('ColorPicker', () => {
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsb(0, 91%, 100%)',
     );
+    expect(changeInfo).toEqual({ type: 'hue', value: 0 });
+
     spy.mockRestore();
   });
 });

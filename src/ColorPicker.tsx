@@ -98,11 +98,11 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
 
     // Slider change
     const onHueChange = (hue: number) => {
-      handleChange(getHueColor(hue), 'hue');
+      handleChange(getHueColor(hue), { type: 'hue', value: hue });
     };
 
     const onAlphaChange = (alpha: number) => {
-      handleChange(getAlphaColor(alpha), 'alpha');
+      handleChange(getAlphaColor(alpha), { type: 'alpha', value: alpha });
     };
 
     // Complete

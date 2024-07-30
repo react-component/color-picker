@@ -40,6 +40,12 @@ export interface BaseColorPickerProps {
   color?: Color;
   prefixCls?: string;
   disabled?: boolean;
-  onChange?: (color: Color, type?: HsbaColorType) => void;
-  onChangeComplete?: (value: Color, type?: HsbaColorType) => void;
+  onChange?: (
+    color: Color,
+    info?: { type?: HsbaColorType; value?: number },
+  ) => void;
+  onChangeComplete?: (
+    value: Color,
+    info?: { type?: HsbaColorType; value?: number },
+  ) => void;
 }

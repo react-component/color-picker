@@ -20,7 +20,6 @@ export default () => {
   return (
     <>
       <ColorPicker
-        color={value}
         onChange={setValue}
         components={{
           slider: Slider,

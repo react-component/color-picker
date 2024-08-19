@@ -446,7 +446,6 @@ describe('ColorPicker', () => {
         <>
           <div className="pick-color">{value.toHsbString()}</div>
           <ColorPicker
-            color={value}
             onChange={(color, info) => {
               changeInfo = info;
 
@@ -474,6 +473,7 @@ describe('ColorPicker', () => {
       100,
       0,
     );
+
     expect(container.querySelector('.pick-color').innerHTML).toBe(
       'hsba(215, 91%, 100%, 0)',
     );

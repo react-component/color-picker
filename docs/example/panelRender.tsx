@@ -12,8 +12,8 @@ export default () => {
     () =>
       typeof value === 'string'
         ? value
-        : value.getAlpha() < 1
-        ? value.toHex8String()
+        : value.a < 1
+        ? value.toHexString()
         : value.toHexString(),
     [value],
   );

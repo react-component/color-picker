@@ -42,3 +42,5 @@ tsconfig.test.json
 .dumi/tmp
 .dumi/tmp-test
 .dumi/tmp-production
+
+bun.lockb

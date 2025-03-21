@@ -4,7 +4,7 @@ import useColorDrag from '../hooks/useColorDrag';
 import type { BaseColorPickerProps, TransformOffset } from '../interface';
 import { calcOffset, calculateColor } from '../util';
 
-import { useEvent } from 'rc-util';
+import { useEvent } from '@rc-component/util';
 import Handler from './Handler';
 import Palette from './Palette';
 import Transform from './Transform';

@@ -4,8 +4,8 @@ import useColorDrag from '../hooks/useColorDrag';
 import type { HsbaColorType, TransformOffset } from '../interface';
 import Palette from './Palette';
 
+import { useEvent } from '@rc-component/util';
 import classNames from 'classnames';
-import { useEvent } from 'rc-util';
 import { Color } from '../color';
 import { calcOffset, calculateColor } from '../util';
 import Gradient from './Gradient';

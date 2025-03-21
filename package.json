@@ -1,6 +1,6 @@
 {
   "name": "@rc-component/color-picker",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "React Color Picker",
   "keywords": [
     "react",
@@ -33,7 +33,7 @@
     "gh-pages": "npm run docs:build && npm run docs:deploy",
     "lint": "eslint src/ --ext .tsx,.ts",
     "prepare": "husky install",
-    "prepublishOnly": "npm run compile && np --yolo --no-publish",
+    "prepublishOnly": "npm run compile && rc-np",
     "postpublish": "npm run gh-pages",
     "start": "dumi dev",
     "test": "vitest run"
@@ -45,13 +45,13 @@
     ]
   },
   "dependencies": {
-    "@ant-design/fast-color": "^2.0.6",
-    "@babel/runtime": "^7.23.6",
-    "classnames": "^2.2.6",
-    "rc-util": "^5.38.1"
+    "@ant-design/fast-color": "^3.0.0",
+    "@rc-component/util": "^1.2.1",
+    "classnames": "^2.2.6"
   },
   "devDependencies": {
-    "@rc-component/father-plugin": "^1.0.0",
+    "@rc-component/father-plugin": "^2.0.4",
+    "@rc-component/np": "^1.0.0",
     "@rc-component/trigger": "^1.13.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -71,7 +71,6 @@
     "jsdom": "^22.0.0",
     "less": "^4.2.0",
     "lint-staged": "^13.1.0",
-    "np": "^7.0.0",
     "prettier": "^2.0.5",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

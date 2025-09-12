@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@ant-design/fast-color": "^3.0.0",
-    "@rc-component/util": "^1.2.1",
+    "@rc-component/util": "^1.3.0",
     "classnames": "^2.2.6"
   },
   "devDependencies": {

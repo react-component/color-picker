@@ -1,4 +1,4 @@
-import { useMergedState } from '@rc-component/util';
+import { useControlledState } from '@rc-component/util';
 import { useMemo } from 'react';
 import type { Color } from '../color';
 import type { ColorGenInput } from '../interface';
@@ -10,7 +10,7 @@ const useColorState = (
   defaultValue: ColorValue,
   value?: ColorValue,
 ): [Color, React.Dispatch<React.SetStateAction<Color>>] => {
-  const [mergedValue, setValue] = useMergedState(defaultValue, { value });
+  const [mergedValue, setValue] = useControlledState(defaultValue, value);
 
   const color = useMemo(() => generateColor(mergedValue), [mergedValue]);
 

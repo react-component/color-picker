@@ -1,5 +1,4 @@
-import classNames from 'classnames';
-import type { FC } from 'react';
+import { clsx } from 'clsx';
 import React from 'react';
 
 export type ColorBlockProps = {
@@ -10,7 +9,7 @@ export type ColorBlockProps = {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
-const ColorBlock: FC<ColorBlockProps> = ({
+const ColorBlock: React.FC<ColorBlockProps> = ({
   color,
   prefixCls,
   className,
@@ -20,16 +19,11 @@ const ColorBlock: FC<ColorBlockProps> = ({
   const colorBlockCls = `${prefixCls}-color-block`;
   return (
     <div
-      className={classNames(colorBlockCls, className)}
+      className={clsx(colorBlockCls, className)}
       style={style}
       onClick={onClick}
     >
-      <div
-        className={`${colorBlockCls}-inner`}
-        style={{
-          background: color,
-        }}
-      />
+      <div className={`${colorBlockCls}-inner`} style={{ background: color }} />
     </div>
   );
 };

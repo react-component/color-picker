@@ -31,6 +31,7 @@ yarn.lock
 storybook/
 es/
 package-lock.json
+pnpm-lock.yaml
 src/*.js
 src/*.map
 tslint.json

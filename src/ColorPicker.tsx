@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import React, { forwardRef, useMemo } from 'react';
 import { ColorPickerPrefixCls, defaultColor } from './util';
 
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 import { Color } from './color';
 import ColorBlock from './components/ColorBlock';
 import Picker from './components/Picker';
@@ -119,7 +119,7 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
     };
 
     // ============================ Render ============================
-    const mergeCls = classNames(`${prefixCls}-panel`, className, {
+    const mergeCls = clsx(`${prefixCls}-panel`, className, {
       [`${prefixCls}-panel-disabled`]: disabled,
     });
 
@@ -138,7 +138,7 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
         />
         <div className={`${prefixCls}-slider-container`}>
           <div
-            className={classNames(`${prefixCls}-slider-group`, {
+            className={clsx(`${prefixCls}-slider-group`, {
               [`${prefixCls}-slider-group-disabled-alpha`]: disabledAlpha,
             })}
           >

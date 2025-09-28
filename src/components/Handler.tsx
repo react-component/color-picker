@@ -1,22 +1,19 @@
-import classNames from 'classnames';
-import type { FC } from 'react';
+import { clsx } from 'clsx';
 import React from 'react';
 
 type HandlerSize = 'default' | 'small';
 
-const Handler: FC<{
+const Handler: React.FC<{
   size?: HandlerSize;
   color?: string;
   prefixCls?: string;
 }> = ({ size = 'default', color, prefixCls }) => {
   return (
     <div
-      className={classNames(`${prefixCls}-handler`, {
+      className={clsx(`${prefixCls}-handler`, {
         [`${prefixCls}-handler-sm`]: size === 'small',
       })}
-      style={{
-        backgroundColor: color,
-      }}
+      style={{ backgroundColor: color }}
     />
   );
 };

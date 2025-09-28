@@ -1,11 +1,10 @@
-import type { FC } from 'react';
 import React, { useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
 import type { HsbaColorType, TransformOffset } from '../interface';
 import Palette from './Palette';
 
 import { useEvent } from '@rc-component/util';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 import { Color } from '../color';
 import { calcOffset, calculateColor } from '../util';
 import Gradient from './Gradient';
@@ -25,7 +24,7 @@ export interface BaseSliderProps {
   color: Color;
 }
 
-const Slider: FC<BaseSliderProps> = props => {
+const Slider: React.FC<BaseSliderProps> = props => {
   const {
     prefixCls,
     colors,
@@ -36,9 +35,9 @@ const Slider: FC<BaseSliderProps> = props => {
     type,
   } = props;
 
-  const sliderRef = useRef();
-  const transformRef = useRef();
-  const colorRef = useRef(color);
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const transformRef = useRef<HTMLDivElement>(null);
+  const colorRef = useRef<Color>(color);
 
   const getValue = (c: Color) => {
     return type === 'hue' ? c.getHue() : c.a * 100;
@@ -94,10 +93,7 @@ const Slider: FC<BaseSliderProps> = props => {
   return (
     <div
       ref={sliderRef}
-      className={classNames(
-        `${prefixCls}-slider`,
-        `${prefixCls}-slider-${type}`,
-      )}
+      className={clsx(`${prefixCls}-slider`, `${prefixCls}-slider-${type}`)}
       onMouseDown={dragStartHandle}
       onTouchStart={dragStartHandle}
     >

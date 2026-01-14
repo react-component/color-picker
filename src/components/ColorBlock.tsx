@@ -6,6 +6,10 @@ export type ColorBlockProps = {
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
+  /** Internal usage. Only used in antd ColorPicker semantic structure only */
+  innerClassName?: string;
+  /** Internal usage. Only used in antd ColorPicker semantic structure only */
+  innerStyle?: React.CSSProperties;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
@@ -14,6 +18,8 @@ const ColorBlock: React.FC<ColorBlockProps> = ({
   prefixCls,
   className,
   style,
+  innerClassName,
+  innerStyle,
   onClick,
 }) => {
   const colorBlockCls = `${prefixCls}-color-block`;
@@ -23,7 +29,10 @@ const ColorBlock: React.FC<ColorBlockProps> = ({
       style={style}
       onClick={onClick}
     >
-      <div className={`${colorBlockCls}-inner`} style={{ background: color }} />
+      <div
+        className={clsx(`${colorBlockCls}-inner`, innerClassName)}
+        style={{ background: color, ...innerStyle }}
+      />
     </div>
   );
 };

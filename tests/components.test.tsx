@@ -2,7 +2,7 @@
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { expect } from 'vitest';
-import ColorPicker, { type BaseSliderProps } from '../src';
+import ColorPicker, { ColorBlock, type BaseSliderProps } from '../src';
 import { defaultColor } from '../src/util';
 
 describe('ColorPicker.Components', () => {
@@ -55,5 +55,20 @@ describe('ColorPicker.Components', () => {
 
     fireEvent.click(alphaEle);
     expect(alphaEle.textContent).toBe('0/100/33');
+  });
+
+  it('ColorBlock support innerClassName and innerStyle', () => {
+    const { container } = render(
+      <ColorBlock
+        prefixCls="test"
+        color="red"
+        innerClassName="my-inner-class"
+        innerStyle={{ color: '#903' }}
+      />,
+    );
+
+    const innerDiv = container.querySelector('.test-color-block-inner');
+    expect(innerDiv).toHaveClass('my-inner-class');
+    expect(innerDiv).toHaveStyle({ color: '#903' });
   });
 });

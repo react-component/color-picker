@@ -8,7 +8,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "module": "ESNext",
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
     "paths": {
       "@@/*": [".dumi/tmp/*"],
       "@rc-component/color-picker": ["src/index.tsx"]

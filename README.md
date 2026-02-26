@@ -2,12 +2,17 @@
 
 React Color Picker.
 
-[![NPM version][npm-image]][npm-url] [![dumi](https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square)](https://github.com/umijs/dumi) [![build status][github-actions-image]][github-actions-url] [![Test coverage][codecov-image]][codecov-url] [![npm download][download-image]][download-url] [![bundle size][bundlephobia-image]][bundlephobia-url]
+[![NPM version][npm-image]][npm-url]
+[![npm download][download-image]][download-url]
+[![build status][github-actions-image]][github-actions-url]
+[![Test coverage][codecov-image]][codecov-url]
+[![bundle size][bundlephobia-image]][bundlephobia-url]
+[![dumi](https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square)](https://github.com/umijs/dumi) 
 
 [npm-image]: http://img.shields.io/npm/v/@rc-component/color-picker.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@rc-component/color-picker
-[github-actions-image]: https://github.com/react-component/color-picker/workflows/CI/badge.svg
-[github-actions-url]: https://github.com/react-component/color-picker/actions
+[github-actions-image]: https://github.com/react-component/color-picker/actions/workflows/main.yml/badge.svg
+[github-actions-url]: https://github.com/react-component/color-picker/actions/workflows/main.yml
 [coveralls-image]: https://img.shields.io/coveralls/react-component/color-picker.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/react-component/color-picker?branch=master
 [codecov-image]: https://img.shields.io/codecov/c/github/react-component/color-picker/master.svg?style=flat-square

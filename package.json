@@ -63,7 +63,7 @@
     "@vitest/coverage-c8": "^0.31.0",
     "dumi": "^2.0.18",
     "eslint": "^8.54.0",
-    "eslint-plugin-jest": "^27.6.0",
+    "eslint-plugin-jest": "^29.15.0",
     "eslint-plugin-unicorn": "^49.0.0",
     "father": "^4.0.0",
     "gh-pages": "^4.0.0",

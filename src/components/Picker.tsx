@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import React, { useRef } from 'react';
 import useColorDrag from '../hooks/useColorDrag';
 import type { BaseColorPickerProps, TransformOffset } from '../interface';
-import { calcOffset, calculateColor } from '../util';
+import { calcOffset, calculateColor, generateColor } from '../util';
 
 import { useEvent } from '@rc-component/util';
 import Handler from './Handler';
@@ -17,6 +17,7 @@ const Picker: FC<PickerProps> = ({
   prefixCls,
   onChangeComplete,
   disabled,
+  locale,
 }) => {
   const pickerRef = useRef();
   const transformRef = useRef();
@@ -43,6 +44,16 @@ const Picker: FC<PickerProps> = ({
     disabledDrag: disabled,
   });
 
+  // ===================== Keyboard (2-D handler) =====================
+  const hsb = color.toHsb();
+
+  // Build a new color from the current one with a single HSB channel changed.
+  const changeColor = (channel: 's' | 'b', percent: number) => {
+    const next = generateColor({ ...hsb, [channel]: percent / 100 });
+    colorRef.current = next;
+    onChange(next);
+  };
+
   return (
     <div
       ref={pickerRef}
@@ -52,7 +63,30 @@ const Picker: FC<PickerProps> = ({
     >
       <Palette prefixCls={prefixCls}>
         <Transform x={offset.x} y={offset.y} ref={transformRef}>
-          <Handler color={color.toRgbString()} prefixCls={prefixCls} />
+          <Handler
+            color={color.toRgbString()}
+            prefixCls={prefixCls}
+            disabled={disabled}
+            x={{
+              'aria-label': locale.picker,
+              'aria-roledescription': locale.pickerDescription,
+              'aria-valuetext': `${locale.saturation} ${Math.round(
+                hsb.s * 100,
+              )}%, ${locale.brightness} ${Math.round(hsb.b * 100)}%`,
+              min: 0,
+              max: 100,
+              value: hsb.s * 100,
+              onChange: percent => changeColor('s', percent),
+              onChangeComplete: () => onChangeComplete?.(colorRef.current),
+            }}
+            y={{
+              min: 0,
+              max: 100,
+              value: hsb.b * 100,
+              onChange: percent => changeColor('b', percent),
+              onChangeComplete: () => onChangeComplete?.(colorRef.current),
+            }}
+          />
         </Transform>
         <div
           className={`${prefixCls}-saturation`}

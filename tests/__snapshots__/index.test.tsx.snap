@@ -17,8 +17,21 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
         >
           <div
             class="rc-color-picker-handler"
-            style="background-color: rgb(22, 119, 255);"
-          />
+            style="position: relative; background-color: rgb(22, 119, 255);"
+          >
+            <input
+              aria-label="Color picker"
+              aria-roledescription="2D slider"
+              aria-valuetext="Saturation 91%, Brightness 100%"
+              class="rc-color-picker-handler-range"
+              max="100"
+              min="0"
+              step="1"
+              style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              type="range"
+              value="91.37254901960785"
+            />
+          </div>
         </div>
         <div
           class="rc-color-picker-saturation"
@@ -44,8 +57,19 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
             >
               <div
                 class="rc-color-picker-handler rc-color-picker-handler-sm"
-                style="background-color: rgb(0, 106, 255);"
-              />
+                style="position: relative; background-color: rgb(0, 106, 255);"
+              >
+                <input
+                  aria-label="Hue"
+                  class="rc-color-picker-handler-range"
+                  max="359"
+                  min="0"
+                  step="1"
+                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  type="range"
+                  value="215"
+                />
+              </div>
             </div>
             <div
               class="rc-color-picker-gradient"
@@ -65,8 +89,19 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
             >
               <div
                 class="rc-color-picker-handler rc-color-picker-handler-sm"
-                style="background-color: rgb(22, 119, 255);"
-              />
+                style="position: relative; background-color: rgb(22, 119, 255);"
+              >
+                <input
+                  aria-label="Alpha"
+                  class="rc-color-picker-handler-range"
+                  max="100"
+                  min="0"
+                  step="1"
+                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  type="range"
+                  value="100"
+                />
+              </div>
             </div>
             <div
               class="rc-color-picker-gradient"
@@ -105,8 +140,21 @@ exports[`ColorPicker > Should component render correct 1`] = `
         >
           <div
             class="rc-color-picker-handler"
-            style="background-color: rgb(22, 119, 255);"
-          />
+            style="position: relative; background-color: rgb(22, 119, 255);"
+          >
+            <input
+              aria-label="Color picker"
+              aria-roledescription="2D slider"
+              aria-valuetext="Saturation 91%, Brightness 100%"
+              class="rc-color-picker-handler-range"
+              max="100"
+              min="0"
+              step="1"
+              style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              type="range"
+              value="91.37254901960785"
+            />
+          </div>
         </div>
         <div
           class="rc-color-picker-saturation"
@@ -132,8 +180,19 @@ exports[`ColorPicker > Should component render correct 1`] = `
             >
               <div
                 class="rc-color-picker-handler rc-color-picker-handler-sm"
-                style="background-color: rgb(0, 106, 255);"
-              />
+                style="position: relative; background-color: rgb(0, 106, 255);"
+              >
+                <input
+                  aria-label="Hue"
+                  class="rc-color-picker-handler-range"
+                  max="359"
+                  min="0"
+                  step="1"
+                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  type="range"
+                  value="215"
+                />
+              </div>
             </div>
             <div
               class="rc-color-picker-gradient"
@@ -153,8 +212,19 @@ exports[`ColorPicker > Should component render correct 1`] = `
             >
               <div
                 class="rc-color-picker-handler rc-color-picker-handler-sm"
-                style="background-color: rgb(22, 119, 255);"
-              />
+                style="position: relative; background-color: rgb(22, 119, 255);"
+              >
+                <input
+                  aria-label="Alpha"
+                  class="rc-color-picker-handler-range"
+                  max="100"
+                  min="0"
+                  step="1"
+                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  type="range"
+                  value="100"
+                />
+              </div>
             </div>
             <div
               class="rc-color-picker-gradient"
@@ -196,8 +266,21 @@ exports[`ColorPicker > Should custom panel work 1`] = `
           >
             <div
               class="rc-color-picker-handler"
-              style="background-color: rgb(22, 119, 255);"
-            />
+              style="position: relative; background-color: rgb(22, 119, 255);"
+            >
+              <input
+                aria-label="Color picker"
+                aria-roledescription="2D slider"
+                aria-valuetext="Saturation 91%, Brightness 100%"
+                class="rc-color-picker-handler-range"
+                max="100"
+                min="0"
+                step="1"
+                style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                type="range"
+                value="91.37254901960785"
+              />
+            </div>
           </div>
           <div
             class="rc-color-picker-saturation"
@@ -223,8 +306,19 @@ exports[`ColorPicker > Should custom panel work 1`] = `
               >
                 <div
                   class="rc-color-picker-handler rc-color-picker-handler-sm"
-                  style="background-color: rgb(0, 106, 255);"
-                />
+                  style="position: relative; background-color: rgb(0, 106, 255);"
+                >
+                  <input
+                    aria-label="Hue"
+                    class="rc-color-picker-handler-range"
+                    max="359"
+                    min="0"
+                    step="1"
+                    style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                    type="range"
+                    value="215"
+                  />
+                </div>
               </div>
               <div
                 class="rc-color-picker-gradient"
@@ -244,8 +338,19 @@ exports[`ColorPicker > Should custom panel work 1`] = `
               >
                 <div
                   class="rc-color-picker-handler rc-color-picker-handler-sm"
-                  style="background-color: rgb(22, 119, 255);"
-                />
+                  style="position: relative; background-color: rgb(22, 119, 255);"
+                >
+                  <input
+                    aria-label="Alpha"
+                    class="rc-color-picker-handler-range"
+                    max="100"
+                    min="0"
+                    step="1"
+                    style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                    type="range"
+                    value="100"
+                  />
+                </div>
               </div>
               <div
                 class="rc-color-picker-gradient"
@@ -285,8 +390,21 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
         >
           <div
             class="rc-color-picker-handler"
-            style="background-color: rgb(22, 119, 255);"
-          />
+            style="position: relative; background-color: rgb(22, 119, 255);"
+          >
+            <input
+              aria-label="Color picker"
+              aria-roledescription="2D slider"
+              aria-valuetext="Saturation 91%, Brightness 100%"
+              class="rc-color-picker-handler-range"
+              max="100"
+              min="0"
+              step="1"
+              style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              type="range"
+              value="91.37254901960785"
+            />
+          </div>
         </div>
         <div
           class="rc-color-picker-saturation"
@@ -312,8 +430,19 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
             >
               <div
                 class="rc-color-picker-handler rc-color-picker-handler-sm"
-                style="background-color: rgb(0, 106, 255);"
-              />
+                style="position: relative; background-color: rgb(0, 106, 255);"
+              >
+                <input
+                  aria-label="Hue"
+                  class="rc-color-picker-handler-range"
+                  max="359"
+                  min="0"
+                  step="1"
+                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  type="range"
+                  value="215"
+                />
+              </div>
             </div>
             <div
               class="rc-color-picker-gradient"
@@ -352,8 +481,21 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
         >
           <div
             class="test-prefixCls-handler"
-            style="background-color: rgb(22, 119, 255);"
-          />
+            style="position: relative; background-color: rgb(22, 119, 255);"
+          >
+            <input
+              aria-label="Color picker"
+              aria-roledescription="2D slider"
+              aria-valuetext="Saturation 91%, Brightness 100%"
+              class="test-prefixCls-handler-range"
+              max="100"
+              min="0"
+              step="1"
+              style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              type="range"
+              value="91.37254901960785"
+            />
+          </div>
         </div>
         <div
           class="test-prefixCls-saturation"
@@ -379,8 +521,19 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
             >
               <div
                 class="test-prefixCls-handler test-prefixCls-handler-sm"
-                style="background-color: rgb(0, 106, 255);"
-              />
+                style="position: relative; background-color: rgb(0, 106, 255);"
+              >
+                <input
+                  aria-label="Hue"
+                  class="test-prefixCls-handler-range"
+                  max="359"
+                  min="0"
+                  step="1"
+                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  type="range"
+                  value="215"
+                />
+              </div>
             </div>
             <div
               class="test-prefixCls-gradient"
@@ -400,8 +553,19 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
             >
               <div
                 class="test-prefixCls-handler test-prefixCls-handler-sm"
-                style="background-color: rgb(22, 119, 255);"
-              />
+                style="position: relative; background-color: rgb(22, 119, 255);"
+              >
+                <input
+                  aria-label="Alpha"
+                  class="test-prefixCls-handler-range"
+                  max="100"
+                  min="0"
+                  step="1"
+                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  type="range"
+                  value="100"
+                />
+              </div>
             </div>
             <div
               class="test-prefixCls-gradient"

@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-loop-func */
 import { spyElementPrototypes } from '@rc-component/util/lib/test/domHook';
-import { act, createEvent, fireEvent, render } from '@testing-library/react';
+import {
+  act,
+  createEvent,
+  fireEvent,
+  render,
+  screen,
+} from '@testing-library/react';
 import React, { useState } from 'react';
 import { expect } from 'vitest';
 import ColorPicker, { Color } from '../src';
@@ -333,40 +339,45 @@ describe('ColorPicker', () => {
     const App = () => <ColorPicker value={'hsb(215, 91%, 100%)'} />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should rgb string work', () => {
     const App = () => <ColorPicker value={'rgb(23, 120, 255)'} />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should hex string work', () => {
     const App = () => <ColorPicker value="#1778ff" />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should hsb obj work', () => {
     const App = () => <ColorPicker value={{ h: 215, s: 0.91, b: 1 }} />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should rgb obj work', () => {
     const App = () => <ColorPicker value={{ r: 23, g: 120, b: 255 }} />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should disabled work', () => {
@@ -496,5 +507,138 @@ describe('ColorPicker', () => {
     expect(changeInfo).toEqual({ type: 'hue', value: 0 });
 
     spy.mockRestore();
+  });
+
+  describe('Accessibility tests', () => {
+    const Controlled = (props: Record<string, unknown>) => {
+      const [value, setValue] = useState(defaultColor);
+      return (
+        <>
+          <ColorPicker value={value} onChange={setValue} {...props} />
+          <div className="pick-color">{value.toHsbString()}</div>
+        </>
+      );
+    };
+
+    it('Should expose default aria-labels on the handles', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      expect(screen.getByLabelText('Color picker')).toBeTruthy();
+      expect(screen.getByLabelText('Hue')).toBeTruthy();
+      expect(screen.getByLabelText('Alpha')).toBeTruthy();
+    });
+
+    it('Should describe saturation & brightness via aria-valuetext by default', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      expect(screen.getByLabelText('Color picker')).toHaveAttribute(
+        'aria-valuetext',
+        'Saturation 91%, Brightness 100%',
+      );
+    });
+
+    it('Should override the aria-labels through the locale prop', () => {
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          locale={{
+            picker: 'Sélecteur',
+            hue: 'Teinte',
+            alpha: 'Transparence',
+            saturation: 'Sat',
+            brightness: 'Lum',
+          }}
+        />,
+      );
+
+      expect(screen.getByLabelText('Sélecteur')).toBeTruthy();
+      expect(screen.getByLabelText('Teinte')).toBeTruthy();
+      expect(screen.getByLabelText('Transparence')).toBeTruthy();
+      expect(screen.getByLabelText('Sélecteur')).toHaveAttribute(
+        'aria-valuetext',
+        'Sat 91%, Lum 100%',
+      );
+    });
+
+    it('Should change brightness with the Down arrow on the picker handle', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const picker = screen.getByLabelText('Color picker');
+      fireEvent.keyDown(picker, { key: 'ArrowDown' });
+      fireEvent.keyUp(picker, { key: 'ArrowDown' });
+
+      // brightness starts at 100% and steps down to 99%
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 99%)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should clamp brightness at 100% when pressing the Up arrow', () => {
+      render(<Controlled />);
+
+      const picker = screen.getByLabelText('Color picker');
+      fireEvent.keyDown(picker, { key: 'ArrowUp' });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 100%)',
+      );
+    });
+
+    it('Should increase saturation on the picker (Arrow Right)', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const picker = screen.getByLabelText('Color picker');
+      fireEvent.change(picker, { target: { value: '92' } });
+      fireEvent.keyUp(picker, { key: 'ArrowRight' });
+
+      // saturation starts at 91% and steps up to 92%
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 92%, 100%)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should decrease saturation on the picker (Arrow Left)', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const picker = screen.getByLabelText('Color picker');
+      fireEvent.change(picker, { target: { value: '90' } });
+      fireEvent.keyUp(picker, { key: 'ArrowLeft' });
+
+      // saturation starts at 91% and steps down to 90%
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 90%, 100%)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should change hue when the hue slider value changes via keyboard', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const hue = screen.getByLabelText('Hue');
+      fireEvent.change(hue, { target: { value: '100' } });
+      fireEvent.keyUp(hue, { key: 'ArrowRight' });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(100, 91%, 100%)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should change alpha when the alpha slider value changes via keyboard', () => {
+      render(<Controlled />);
+
+      const alpha = screen.getByLabelText('Alpha');
+      fireEvent.change(alpha, { target: { value: '50' } });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsba(215, 91%, 100%, 0.50)',
+      );
+    });
   });
 });

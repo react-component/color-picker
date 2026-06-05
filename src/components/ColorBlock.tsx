@@ -1,34 +1,26 @@
 import { clsx } from 'clsx';
 import React from 'react';
 
-export type ColorBlockProps = {
+export type ColorBlockProps = React.HTMLAttributes<HTMLDivElement> & {
   color: string;
   prefixCls?: string;
-  className?: string;
-  style?: React.CSSProperties;
   /** Internal usage. Only used in antd ColorPicker semantic structure only */
   innerClassName?: string;
   /** Internal usage. Only used in antd ColorPicker semantic structure only */
   innerStyle?: React.CSSProperties;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 const ColorBlock: React.FC<ColorBlockProps> = ({
   color,
   prefixCls,
   className,
-  style,
   innerClassName,
   innerStyle,
-  onClick,
+  ...props
 }) => {
   const colorBlockCls = `${prefixCls}-color-block`;
   return (
-    <div
-      className={clsx(colorBlockCls, className)}
-      style={style}
-      onClick={onClick}
-    >
+    <div {...props} className={clsx(colorBlockCls, className)}>
       <div
         className={clsx(`${colorBlockCls}-inner`, innerClassName)}
         style={{ background: color, ...innerStyle }}

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-loop-func */
-import { spyElementPrototypes } from '@rc-component/util/lib/test/domHook';
+import { spyElementPrototypes } from '@rc-component/util';
 import { act, createEvent, fireEvent, render } from '@testing-library/react';
 import React, { useState } from 'react';
 import { expect } from 'vitest';

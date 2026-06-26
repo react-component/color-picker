@@ -13,5 +13,6 @@
       "@@/*": [".dumi/tmp/*"],
       "@rc-component/color-picker": ["src/index.tsx"]
     }
-  }
+  },
+  "include": [".dumirc.ts", "docs", "src", "tests"]
 }

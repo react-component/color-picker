@@ -1,87 +1,123 @@
-# @rc-component/color-picker
+<div align="center">
+  <h1>@rc-component/color-picker</h1>
+  <p>🎨 A compact color picker panel for React.</p>
 
-React Color Picker.
+  <a href="https://ant.design">
+    <img width="32" height="32" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="Ant Design" />
+  </a>
+
+  <p>Part of the Ant Design ecosystem.</p>
 
 [![NPM version][npm-image]][npm-url]
 [![npm download][download-image]][download-url]
 [![build status][github-actions-image]][github-actions-url]
-[![Test coverage][codecov-image]][codecov-url]
+[![Codecov][codecov-image]][codecov-url]
 [![bundle size][bundlephobia-image]][bundlephobia-url]
-[![dumi](https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square)](https://github.com/umijs/dumi) 
+[![dumi][dumi-image]][dumi-url]
 
-[npm-image]: http://img.shields.io/npm/v/@rc-component/color-picker.svg?style=flat-square
-[npm-url]: http://npmjs.org/package/@rc-component/color-picker
+</div>
+
+[npm-image]: https://img.shields.io/npm/v/@rc-component/color-picker.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/@rc-component/color-picker
 [github-actions-image]: https://github.com/react-component/color-picker/actions/workflows/main.yml/badge.svg
 [github-actions-url]: https://github.com/react-component/color-picker/actions/workflows/main.yml
-[coveralls-image]: https://img.shields.io/coveralls/react-component/color-picker.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/react-component/color-picker?branch=master
 [codecov-image]: https://img.shields.io/codecov/c/github/react-component/color-picker/master.svg?style=flat-square
 [codecov-url]: https://codecov.io/gh/react-component/color-picker/branch/master
-[david-url]: https://david-dm.org/react-component/color-picker
-[david-image]: https://david-dm.org/react-component/color-picker/status.svg?style=flat-square
-[david-dev-url]: https://david-dm.org/react-component/color-picker?type=dev
-[david-dev-image]: https://david-dm.org/react-component/color-picker/dev-status.svg?style=flat-square
 [download-image]: https://img.shields.io/npm/dm/@rc-component/color-picker.svg?style=flat-square
 [download-url]: https://npmjs.org/package/@rc-component/color-picker
-[bundlephobia-url]: https://bundlephobia.com/result?p=@rc-component/color-picker
-[bundlephobia-image]: https://badgen.net/bundlephobia/minzip/@rc-component/color-picker
+[bundlephobia-image]: https://img.shields.io/bundlephobia/minzip/%40rc-component%2Fcolor-picker?style=flat-square
+[bundlephobia-url]: https://bundlephobia.com/package/@rc-component/color-picker
+[dumi-image]: https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square
+[dumi-url]: https://github.com/umijs/dumi
 
-## install
+## Highlights
 
-[![@rc-component/color-picker](https://nodei.co/npm/@rc-component/color-picker.png)](https://npmjs.org/package/@rc-component/color-picker)
+- Supports controlled and uncontrolled color values.
+- Accepts string, number, RGB, RGBA, HSB, HSBA, and `Color` inputs.
+- Provides hue and alpha controls with change and drag-complete callbacks.
+- Exposes `Color` helpers for hex, RGB, and HSB conversions.
 
-## Development
+## Install
 
+```bash
+npm install @rc-component/color-picker
 ```
+
+## Usage
+
+```tsx | pure
+import ColorPicker from '@rc-component/color-picker';
+import '@rc-component/color-picker/assets/index.css';
+
+export default function App() {
+  return (
+    <ColorPicker
+      defaultValue="#1677ff"
+      onChange={(color, info) => {
+        console.log(color.toHexString(), info?.type);
+      }}
+    />
+  );
+}
+```
+
+## Examples
+
+```bash
 npm install
 npm start
 ```
 
-## Example
-
-http://localhost:8000
-
-## Usage
-
-```js
-import ColorPicker from '@rc-component/color-picker';
-import '@rc-component/color-picker/assets/index.css';
-
-export default () => <ColorPicker />;
-```
+Then open `http://localhost:8000`.
 
 ## API
 
-<!-- prettier-ignore -->
-| Property | Description | Type | Default |
-| :-- | :-- | :-- | :-- |
-| value | Value of color | string \| `Color` | - |
-| defaultValue | Default value of color | string \| `Color` | - |
-| onChange | Callback when `value` is changed | `(value: Color, type: hue \| alpha) => void` | - |
-| onChangeComplete | Callback when `drag` is stop | `(value: Color, type: hue \| alpha) => void` | - |
-| disabled | Disabled ColorPicker | boolean | false |
-| disabledAlpha | Disabled alpha slider | boolean | false |
-| panelRender | Custom panel render | `(panel: React.ReactElement) => React.ReactElement` | - |
+### ColorPicker
+
+| Property         | Description                             | Type                                                                         | Default           |
+| ---------------- | --------------------------------------- | ---------------------------------------------------------------------------- | ----------------- |
+| defaultValue     | Default color value                     | `ColorGenInput`                                                              | -                 |
+| disabled         | Whether the color picker is disabled    | boolean                                                                      | false             |
+| disabledAlpha    | Whether to hide the alpha slider        | boolean                                                                      | false             |
+| panelRender      | Custom panel renderer                   | `(panel: React.ReactElement) => React.ReactElement`                          | -                 |
+| prefixCls        | Component class name prefix             | string                                                                       | `rc-color-picker` |
+| value            | Current color value                     | `ColorGenInput`                                                              | -                 |
+| onChange         | Callback when color changes             | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
+| onChangeComplete | Callback when a drag operation finishes | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
 
 ### Color
 
-<!-- prettier-ignore -->
-| Property | Description | Type | Default |
-| :-- | :-- | :-- | :-- |
-| toHexString | Convert to `hex` format color string, like `#ffffff` | `() => string` | - |
-| toHsb | Convert to `hsb` object, like `{ h: 0, s: 0, b: 0, a: 0 }`  | `() => ({ h: number, s: number, b: number, a number })` | - |
-| toHsbString | Convert to `hsb` format color string, like `hsba(0, 0%, 0%, 0)` | `() => string` | - |
-| toRgb | Convert to `rgb` object,  like `{ r: 0, g: 0, b: 0, a: 0 }` | `() => ({ r: number, g: number, b: number, a number })` | - |
-| toRgbString | Convert to `rgb` format color string, like `rgba(0, 0, 0, 0)` | `() => string` | - |
+| Method      | Description                 | Type                                                   |
+| ----------- | --------------------------- | ------------------------------------------------------ |
+| toHexString | Convert to hex color string | `() => string`                                         |
+| toHsb       | Convert to HSB object       | `() => { h: number; s: number; b: number; a: number }` |
+| toHsbString | Convert to HSB color string | `() => string`                                         |
+| toRgb       | Convert to RGB object       | `() => { r: number; g: number; b: number; a: number }` |
+| toRgbString | Convert to RGB color string | `() => string`                                         |
 
-## Test Case
+## Development
 
+```bash
+npm install
+npm start
 ```
+
+```bash
 npm test
-or
-npm run coverage
+npm run tsc
+npm run lint
+npm run compile
+npm run build
 ```
+
+## Release
+
+```bash
+npm run prepublishOnly
+```
+
+The release script compiles the package and runs `rc-np`.
 
 ## License
 
-@rc-component/color-picker is released under the MIT license.
+`@rc-component/color-picker` is released under the MIT license.

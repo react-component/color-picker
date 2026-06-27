@@ -23,6 +23,7 @@
     "ignoreDeprecations": "5.0"
   },
   "include": [
+    ".fatherrc.ts",
     ".dumirc.ts",
     "docs",
     "src",

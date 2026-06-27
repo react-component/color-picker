@@ -1,13 +1,9 @@
 <div align="center">
   <h1>@rc-component/color-picker</h1>
+  <p><sub>Part of the Ant Design ecosystem.</sub></p>
   <p>🎨 A compact color picker panel for React.</p>
-
-  <a href="https://ant.design">
-    <img width="32" height="32" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="Ant Design" />
-  </a>
-
-  <p>Part of the Ant Design ecosystem.</p>
 </div>
+
 
 <div align="center">
 

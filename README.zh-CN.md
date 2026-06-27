@@ -1,10 +1,10 @@
 <div align="center">
   <h1>@rc-component/color-picker</h1>
-  <p><sub>Part of the Ant Design ecosystem.</sub></p>
-  <p>🎨 A compact color picker panel for React.</p>
+  <p><sub>Ant Design 生态的一部分。</sub></p>
+  <p>🎨 紧凑的 React 颜色选择面板。</p>
 </div>
 
-<p align="center">English | <a href="./README.zh-CN.md">简体中文</a></p>
+<p align="center"><a href="./README.md">English</a> | 简体中文</p>
 
 
 <div align="center">
@@ -31,20 +31,20 @@
 [dumi-image]: https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square
 [dumi-url]: https://github.com/umijs/dumi
 
-## Highlights
+## 特性
 
-- Supports controlled and uncontrolled color values.
-- Accepts string, number, RGB, RGBA, HSB, HSBA, and `Color` inputs.
-- Provides hue and alpha controls with change and drag-complete callbacks.
-- Exposes `Color` helpers for hex, RGB, and HSB conversions.
+- 支持 controlled and uncontrolled color values.
+- 支持字符串、数字、RGB、RGBA、HSB、HSBA 和 `Color` 输入。
+- 提供 hue and alpha controls with change and drag-complete callbacks.
+- 暴露 `Color` helpers for hex, RGB, and HSB conversions.
 
-## Install
+## 安装
 
 ```bash
 npm install @rc-component/color-picker
 ```
 
-## Usage
+## 使用
 
 ```tsx | pure
 import ColorPicker from '@rc-component/color-picker';
@@ -62,20 +62,20 @@ export default function App() {
 }
 ```
 
-## Examples
+## 示例
 
 ```bash
 npm install
 npm start
 ```
 
-Then open `http://localhost:8000`.
+然后打开 `http://localhost:8000`。
 
 ## API
 
 ### ColorPicker
 
-| Property         | Description                             | Type                                                                         | Default           |
+| 参数 | 说明 | 类型 | 默认值 |
 | ---------------- | --------------------------------------- | ---------------------------------------------------------------------------- | ----------------- |
 | defaultValue     | Default color value                     | `ColorGenInput`                                                              | -                 |
 | disabled         | Whether the color picker is disabled    | boolean                                                                      | false             |
@@ -88,7 +88,7 @@ Then open `http://localhost:8000`.
 
 ### Color
 
-| Method      | Description                 | Type                                                   |
+| Method      | 说明                 | 类型                                                   |
 | ----------- | --------------------------- | ------------------------------------------------------ |
 | toHexString | Convert to hex color string | `() => string`                                         |
 | toHsb       | Convert to HSB object       | `() => { h: number; s: number; b: number; a: number }` |
@@ -96,7 +96,7 @@ Then open `http://localhost:8000`.
 | toRgb       | Convert to RGB object       | `() => { r: number; g: number; b: number; a: number }` |
 | toRgbString | Convert to RGB color string | `() => string`                                         |
 
-## Development
+## 本地开发
 
 ```bash
 npm install
@@ -111,7 +111,7 @@ npm run compile
 npm run build
 ```
 
-## Release
+## 发布
 
 ```bash
 npm run prepublishOnly
@@ -119,6 +119,6 @@ npm run prepublishOnly
 
 The release flow is handled by `@rc-component/np` through the `rc-np` command after the package build.
 
-## License
+## 许可证
 
 @rc-component/color-picker is released under the [MIT](./LICENSE.md) license.

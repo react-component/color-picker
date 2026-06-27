@@ -36,7 +36,7 @@
 - 支持受控和非受控颜色值。
 - 支持字符串、数字、RGB、RGBA、HSB、HSBA 和 `Color` 输入。
 - 提供带有更改和拖动完成回调的色调和 alpha 控件。
-- 暴露 `Color` helpers for hex, RGB, and HSB conversions.
+- 暴露 `Color` 辅助方法，用于 hex、RGB 和 HSB 转换。
 
 ## 安装
 
@@ -81,10 +81,10 @@ npm start
 | ---------------- | --------------------------------------- | ---------------------------------------------------------------------------- | ----------------- |
 | defaultValue     | 默认颜色值                     | `ColorGenInput`                                                              | -                 |
 | disabled         | 颜色选择器是否禁用    | boolean                                                                      | false             |
-| disabledAlpha    | 是否隐藏alpha滑块        | boolean                                                                      | false             |
+| disabledAlpha    | 是否隐藏 alpha 滑块        | boolean                                                                      | false             |
 | panelRender      | 自定义面板渲染器                   | `(panel: React.ReactElement) => React.ReactElement`                          | -                 |
-| prefixCls        | 组件className前缀             | string                                                                       | `rc-color-picker` |
-| 价值            | 当前颜色值                     | `ColorGenInput`                                                              | -                 |
+| prefixCls        | 组件 className 前缀             | string                                                                       | `rc-color-picker` |
+| value            | 当前颜色值                     | `ColorGenInput`                                                              | -                 |
 | onChange         | 颜色变化时的回调             | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
 | onChangeComplete | 拖动操作完成时的回调 | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
 
@@ -92,11 +92,11 @@ npm start
 
 | Method      | 说明                 | 类型                                                   |
 | ----------- | --------------------------- | ------------------------------------------------------ |
-| toHexString | Convert to hex color string | `() => string`                                         |
-| toHsb       | Convert to HSB object       | `() => { h: number; s: number; b: number; a: number }` |
-| toHsbString | Convert to HSB color string | `() => string`                                         |
-| toRgb       | Convert to RGB object       | `() => { r: number; g: number; b: number; a: number }` |
-| toRgbString | Convert to RGB color string | `() => string`                                         |
+| toHexString | 转换为 hex 颜色字符串 | `() => string`                                         |
+| toHsb       | 转换为 HSB 对象       | `() => { h: number; s: number; b: number; a: number }` |
+| toHsbString | 转换为 HSB 颜色字符串 | `() => string`                                         |
+| toRgb       | 转换为 RGB 对象       | `() => { r: number; g: number; b: number; a: number }` |
+| toRgbString | 转换为 RGB 颜色字符串 | `() => string`                                         |
 
 ## 本地开发
 

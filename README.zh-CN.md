@@ -1,7 +1,6 @@
 <div align="center">
   <h1>@rc-component/color-picker</h1>
-  <p><sub>Ant Design 生态的一部分。</sub></p>
-  <img alt="Ant Design" height="32" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+  <p><sub><img alt="Ant Design" height="14" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" style="vertical-align: -0.125em;" /> Ant Design 生态的一部分。</sub></p>
   <p>🎨 紧凑的 React 颜色选择面板。</p>
 </div>
 
@@ -34,9 +33,9 @@
 
 ## 特性
 
-- 支持 controlled and uncontrolled color values.
+- 支持受控和非受控颜色值。
 - 支持字符串、数字、RGB、RGBA、HSB、HSBA 和 `Color` 输入。
-- 提供 hue and alpha controls with change and drag-complete callbacks.
+- 提供带有更改和拖动完成回调的色调和 alpha 控件。
 - 暴露 `Color` helpers for hex, RGB, and HSB conversions.
 
 ## 安装
@@ -78,14 +77,14 @@ npm start
 
 | 参数 | 说明 | 类型 | 默认值 |
 | ---------------- | --------------------------------------- | ---------------------------------------------------------------------------- | ----------------- |
-| defaultValue     | Default color value                     | `ColorGenInput`                                                              | -                 |
-| disabled         | Whether the color picker is disabled    | boolean                                                                      | false             |
-| disabledAlpha    | Whether to hide the alpha slider        | boolean                                                                      | false             |
-| panelRender      | Custom panel renderer                   | `(panel: React.ReactElement) => React.ReactElement`                          | -                 |
-| prefixCls        | Component class name prefix             | string                                                                       | `rc-color-picker` |
-| value            | Current color value                     | `ColorGenInput`                                                              | -                 |
-| onChange         | Callback when color changes             | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
-| onChangeComplete | Callback when a drag operation finishes | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
+| defaultValue     | 默认颜色值                     | `ColorGenInput`                                                              | -                 |
+| disabled         | 颜色选择器是否禁用    | boolean                                                                      | false             |
+| disabledAlpha    | 是否隐藏alpha滑块        | boolean                                                                      | false             |
+| panelRender      | 自定义面板渲染器                   | `(panel: React.ReactElement) => React.ReactElement`                          | -                 |
+| prefixCls        | 组件className前缀             | string                                                                       | `rc-color-picker` |
+| 价值            | 当前颜色值                     | `ColorGenInput`                                                              | -                 |
+| onChange         | 颜色变化时的回调             | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
+| onChangeComplete | 拖动操作完成时的回调 | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
 
 ### Color
 
@@ -118,8 +117,8 @@ npm run build
 npm run prepublishOnly
 ```
 
-The release flow is handled by `@rc-component/np` through the `rc-np` command after the package build.
+包构建完成后，发布流程由 `@rc-component/np` 通过 `rc-np` 命令处理。
 
 ## 许可证
 
-@rc-component/color-picker is released under the [MIT](./LICENSE.md) license.
+@rc-component/color-picker 基于 [MIT](./LICENSE.md) 许可证发布。

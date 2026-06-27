@@ -8,11 +8,24 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "module": "ESNext",
-    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "types": [
+      "vitest/globals",
+      "@testing-library/jest-dom"
+    ],
     "paths": {
-      "@@/*": [".dumi/tmp/*"],
-      "@rc-component/color-picker": ["src/index.tsx"]
-    }
+      "@@/*": [
+        ".dumi/tmp/*"
+      ],
+      "@rc-component/color-picker": [
+        "src/index.tsx"
+      ]
+    },
+    "ignoreDeprecations": "5.0"
   },
-  "include": [".dumirc.ts", "docs", "src", "tests"]
+  "include": [
+    ".dumirc.ts",
+    "docs",
+    "src",
+    "tests"
+  ]
 }

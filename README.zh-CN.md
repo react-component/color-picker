@@ -64,6 +64,8 @@ export default function App() {
 
 ## 示例
 
+运行本地 dumi 站点：
+
 ```bash
 npm install
 npm start

@@ -1,13 +1,8 @@
 // more config: https://d.umijs.org/config
 import { defineConfig } from 'dumi';
 
-const isProdSite =
-  // 不是预览模式 同时是生产环境
-  process.env.PREVIEW !== 'true' &&
-  process.env.VERCEL !== '1' &&
-  process.env.NODE_ENV === 'production';
-
-const name = 'color-picker';
+const basePath = process.env.GH_PAGES ? '/color-picker/' : '/';
+const publicPath = basePath;
 
 export default defineConfig({
   favicons: ['https://avatars0.githubusercontent.com/u/9441414?s=200&v=4'],
@@ -15,10 +10,10 @@ export default defineConfig({
     name: 'color-picker',
     logo: 'https://avatars0.githubusercontent.com/u/9441414?s=200&v=4',
   },
-  outputPath: '.doc',
+  outputPath: 'docs-dist',
   exportStatic: {},
-  base: isProdSite ? `/${name}/` : '/',
-  publicPath: isProdSite ? `/${name}/` : '/',
+  base: basePath,
+  publicPath,
   styles: [
     `
       .markdown table {

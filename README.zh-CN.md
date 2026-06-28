@@ -6,7 +6,6 @@
 
 <p align="center"><a href="./README.md">English</a> | 简体中文</p>
 
-
 <div align="center">
 
 [![NPM version][npm-image]][npm-url]
@@ -77,21 +76,21 @@ npm start
 
 ### ColorPicker
 
-| 参数 | 说明 | 类型 | 默认值 |
-| ---------------- | --------------------------------------- | ---------------------------------------------------------------------------- | ----------------- |
-| defaultValue     | 默认颜色值                     | `ColorGenInput`                                                              | -                 |
-| disabled         | 颜色选择器是否禁用    | boolean                                                                      | false             |
-| disabledAlpha    | 是否隐藏 alpha 滑块        | boolean                                                                      | false             |
-| panelRender      | 自定义面板渲染器                   | `(panel: React.ReactElement) => React.ReactElement`                          | -                 |
-| prefixCls        | 组件 className 前缀             | string                                                                       | `rc-color-picker` |
-| value            | 当前颜色值                     | `ColorGenInput`                                                              | -                 |
-| onChange         | 颜色变化时的回调             | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
+| 参数             | 说明                 | 类型                                                                         | 默认值            |
+| ---------------- | -------------------- | ---------------------------------------------------------------------------- | ----------------- |
+| defaultValue     | 默认颜色值           | `ColorGenInput`                                                              | -                 |
+| disabled         | 颜色选择器是否禁用   | boolean                                                                      | false             |
+| disabledAlpha    | 是否隐藏 alpha 滑块  | boolean                                                                      | false             |
+| panelRender      | 自定义面板渲染器     | `(panel: React.ReactElement) => React.ReactElement`                          | -                 |
+| prefixCls        | 组件 className 前缀  | string                                                                       | `rc-color-picker` |
+| value            | 当前颜色值           | `ColorGenInput`                                                              | -                 |
+| onChange         | 颜色变化时的回调     | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
 | onChangeComplete | 拖动操作完成时的回调 | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
 
 ### Color
 
-| Method      | 说明                 | 类型                                                   |
-| ----------- | --------------------------- | ------------------------------------------------------ |
+| Method      | 说明                  | 类型                                                   |
+| ----------- | --------------------- | ------------------------------------------------------ |
 | toHexString | 转换为 hex 颜色字符串 | `() => string`                                         |
 | toHsb       | 转换为 HSB 对象       | `() => { h: number; s: number; b: number; a: number }` |
 | toHsbString | 转换为 HSB 颜色字符串 | `() => string`                                         |
@@ -104,6 +103,8 @@ npm start
 npm install
 npm start
 ```
+
+dumi 站点默认运行在 `http://localhost:8000`。
 
 ```bash
 npm test

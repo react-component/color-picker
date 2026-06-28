@@ -8,13 +8,13 @@
     "react-mentions",
     "color-picker"
   ],
-  "homepage": "http://github.com/react-component/color-picker",
+  "homepage": "https://react-component.github.io/color-picker",
   "bugs": {
-    "url": "http://github.com/react-component/color-picker/issues"
+    "url": "https://github.com/react-component/color-picker/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/color-picker.git"
+    "url": "https://github.com/react-component/color-picker.git"
   },
   "license": "MIT",
   "main": "./lib/index",
@@ -83,5 +83,8 @@
   "peerDependencies": {
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -7,13 +7,14 @@
     <a href="https://npmjs.org/package/@rc-component/color-picker"><img alt="NPM version" src="https://img.shields.io/npm/v/@rc-component/color-picker.svg?style=flat-square"></a>
     <a href="https://npmjs.org/package/@rc-component/color-picker"><img alt="npm downloads" src="https://img.shields.io/npm/dm/@rc-component/color-picker.svg?style=flat-square"></a>
     <a href="https://github.com/react-component/color-picker/actions/workflows/main.yml"><img alt="build status" src="https://github.com/react-component/color-picker/actions/workflows/main.yml/badge.svg"></a>
-    <a href="https://codecov.io/gh/react-component/color-picker/branch/master"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/react-component/color-picker/master.svg?style=flat-square"></a>
+    <a href="https://app.codecov.io/gh/react-component/color-picker"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/react-component/color-picker/master.svg?style=flat-square"></a>
     <a href="https://bundlephobia.com/package/@rc-component/color-picker"><img alt="bundle size" src="https://img.shields.io/bundlephobia/minzip/@rc-component/color-picker?style=flat-square"></a>
     <a href="https://github.com/umijs/dumi"><img alt="dumi" src="https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square"></a>
   </p>
 </div>
 
 <p align="center">English | <a href="./README.zh-CN.md">简体中文</a></p>
+
 ## Highlights
 
 - Supports controlled and uncontrolled color values.

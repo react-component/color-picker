@@ -33,7 +33,7 @@
     "docs:preview": "PREVIEW=true dumi build",
     "gh-pages": "npm run docs:build:gh-pages && npm run docs:deploy",
     "lint": "eslint src/ --ext .tsx,.ts",
-    "prepare": "husky install",
+    "prepare": "husky",
     "prepublishOnly": "npm run compile && rc-np",
     "prettier": "prettier --write --ignore-unknown .",
     "postpublish": "npm run gh-pages",
@@ -43,9 +43,7 @@
     "docs:build:gh-pages": "GH_PAGES=1 npm run docs:build"
   },
   "lint-staged": {
-    "**/*.{js,jsx,tsx,ts,md,json}": [
-      "prettier --write --ignore-unknown"
-    ]
+    "*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
     "@ant-design/fast-color": "^3.0.1",

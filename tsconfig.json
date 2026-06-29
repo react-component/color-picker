@@ -8,21 +8,22 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "module": "ESNext",
-    "types": [
-      "vitest/globals",
-      "@testing-library/jest-dom"
-    ],
     "paths": {
-      "@@/*": [
-        ".dumi/tmp/*"
-      ],
-      "@rc-component/color-picker": [
-        "src/index.tsx"
-      ]
+      "@@/*": [".dumi/tmp/*"],
+      "@rc-component/color-picker": ["src/index.tsx"]
     },
-    "ignoreDeprecations": "5.0"
+    "ignoreDeprecations": "6.0",
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "strictFunctionTypes": false,
+    "strict": false,
+    "noImplicitThis": false,
+    "strictBindCallApply": false
   },
   "include": [
+    "react-compat.d.ts",
+    "global.d.ts",
     ".fatherrc.ts",
     ".dumirc.ts",
     "docs",

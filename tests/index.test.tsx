@@ -616,6 +616,72 @@ describe('ColorPicker', () => {
       expect(onChangeComplete).toHaveBeenCalled();
     });
 
+    it('Should step from the latest value on rapid saturation presses', () => {
+      render(<Controlled />);
+
+      const picker = screen.getByLabelText('Color picker') as HTMLInputElement;
+
+      // Two Left presses dispatched in the same batch (before the parent
+      // re-renders). Reading the stale prop would step 91% -> 90% twice; the
+      // latest-value ref keeps them stepping 91% -> 89%.
+      act(() => {
+        picker.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
+        );
+        picker.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
+        );
+      });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 89%, 100%)',
+      );
+    });
+
+    it('Should step from the latest value on rapid brightness presses', () => {
+      render(<Controlled />);
+
+      const picker = screen.getByLabelText('Color picker') as HTMLInputElement;
+
+      // Two Down presses dispatched in the same batch (before the parent
+      // re-renders). Reading the stale prop would step 100% -> 99% twice; the
+      // latest-value ref keeps them stepping 100% -> 98%.
+      act(() => {
+        picker.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
+        );
+        picker.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
+        );
+      });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 98%)',
+      );
+    });
+
+    it('Should step from the latest value on rapid saturation and brightness presses', () => {
+      render(<Controlled />);
+
+      const picker = screen.getByLabelText('Color picker') as HTMLInputElement;
+
+      // One Down (brightness 100% -> 99%) and one Left (saturation 91% -> 90%)
+      // dispatched in the same batch. Deriving the second change from the stale
+      // prop would revert the first axis; the refs keep both.
+      act(() => {
+        picker.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
+        );
+        picker.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
+        );
+      });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 90%, 99%)',
+      );
+    });
+
     it('Should change hue when the hue slider value changes via keyboard', () => {
       const onChangeComplete = vi.fn();
       render(<Controlled onChangeComplete={onChangeComplete} />);
@@ -638,6 +704,54 @@ describe('ColorPicker', () => {
 
       expect(document.querySelector('.pick-color').innerHTML).toBe(
         'hsba(215, 91%, 100%, 0.50)',
+      );
+    });
+
+    it('Should ignore keys that do not change the value', () => {
+      const onChange = vi.fn();
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const picker = screen.getByLabelText('Color picker');
+      // A non-value key (e.g. Tab) must neither step (keydown) nor commit (keyup).
+      fireEvent.keyDown(picker, { key: 'Tab' });
+      fireEvent.keyUp(picker, { key: 'Tab' });
+
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onChangeComplete).not.toHaveBeenCalled();
+    });
+
+    it('Should increase saturation with the Right arrow on the picker', () => {
+      render(<Controlled />);
+
+      const picker = screen.getByLabelText('Color picker');
+      fireEvent.keyDown(picker, { key: 'ArrowRight' });
+
+      // saturation steps 91% -> 92%
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 92%, 100%)',
+      );
+    });
+
+    it('Should step a 1-D slider with the Up/Down arrows', () => {
+      render(<Controlled />);
+
+      const hue = screen.getByLabelText('Hue');
+      // No vertical axis on a slider, so Up/Down drive its single (hue) axis.
+      fireEvent.keyDown(hue, { key: 'ArrowUp' });
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(216, 91%, 100%)',
+      );
+
+      fireEvent.keyDown(hue, { key: 'ArrowDown' });
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 100%)',
       );
     });
   });

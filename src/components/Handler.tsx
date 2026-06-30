@@ -34,11 +34,10 @@ const RANGE_INPUT_STYLE: React.CSSProperties = {
   pointerEvents: 'none',
 };
 
-interface HandlerAxis
-  extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    'size' | 'value' | 'onChange'
-  > {
+interface HandlerAxis extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'size' | 'value' | 'onChange'
+> {
   value: number;
   onChange: (value: number) => void;
   onChangeComplete: (value: number) => void;
@@ -61,18 +60,65 @@ const Handler: React.FC<HandlerProps> = ({
   x,
   y,
 }) => {
-  // The browser ignores Up/Down on a horizontal range, so the vertical axis is
-  // handled here: clamp to its own [min, max] and emit through its callbacks.
+  const xValueRef = React.useRef(x.value);
+  xValueRef.current = x.value;
+  const yValueRef = React.useRef(y?.value);
+  yValueRef.current = y?.value;
+
+  const stepAxis = (
+    axis: HandlerAxis,
+    ref: React.MutableRefObject<number | undefined>,
+    direction: 1 | -1,
+  ) => {
+    const stepSize = Number(axis.step ?? 1) || 1;
+    const min = Number(axis.min ?? 0);
+    const max = Number(axis.max ?? 100);
+    const current = ref.current ?? axis.value;
+    const next = Math.min(max, Math.max(min, current + direction * stepSize));
+    ref.current = next;
+    axis.onChange(next);
+  };
+
+  // Left/Right drives the horizontal axis; Up/Down the vertical one (or the
+  // horizontal one for 1-D sliders). We handle these instead of the native range
+  // so behaviour is deterministic across browsers and safe under rapid presses.
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!y || !isVerticalKey(event.key)) {
-      return;
+    switch (event.key) {
+      case 'ArrowRight':
+        stepAxis(x, xValueRef, 1);
+        break;
+      case 'ArrowLeft':
+        stepAxis(x, xValueRef, -1);
+        break;
+      case 'ArrowUp':
+        if (y) {
+          stepAxis(y, yValueRef, 1);
+        } else {
+          stepAxis(x, xValueRef, 1);
+        }
+        break;
+      case 'ArrowDown':
+        if (y) {
+          stepAxis(y, yValueRef, -1);
+        } else {
+          stepAxis(x, xValueRef, -1);
+        }
+        break;
+      default:
+        return;
     }
     event.preventDefault();
-    const step = Number(y.step ?? 1) || 1;
-    const min = Number(y.min ?? 0);
-    const max = Number(y.max ?? 100);
-    const delta = event.key === 'ArrowUp' ? step : -step;
-    y.onChange(Math.min(max, Math.max(min, y.value + delta)));
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!VALUE_KEYS.includes(event.key)) {
+      return;
+    }
+    if (y && isVerticalKey(event.key)) {
+      y.onChangeComplete(yValueRef.current ?? y.value);
+    } else {
+      x.onChangeComplete(xValueRef.current ?? x.value);
+    }
   };
 
   return (
@@ -90,17 +136,8 @@ const Handler: React.FC<HandlerProps> = ({
         style={RANGE_INPUT_STYLE}
         disabled={disabled}
         onChange={event => x.onChange(Number(event.target.value))}
-        onKeyDown={y ? handleKeyDown : undefined}
-        onKeyUp={event => {
-          if (!VALUE_KEYS.includes(event.key)) {
-            return;
-          }
-          if (y && isVerticalKey(event.key)) {
-            y.onChangeComplete(y.value);
-          } else {
-            x.onChangeComplete(Number(event.currentTarget.value));
-          }
-        }}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
       />
     </div>
   );

@@ -27,7 +27,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
               max="100"
               min="0"
               step="1"
-              style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
               type="range"
               value="91.37254901960785"
             />
@@ -65,7 +65,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
                   max="359"
                   min="0"
                   step="1"
-                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                   type="range"
                   value="215"
                 />
@@ -97,7 +97,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
                   max="100"
                   min="0"
                   step="1"
-                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                   type="range"
                   value="100"
                 />
@@ -150,7 +150,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
               max="100"
               min="0"
               step="1"
-              style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
               type="range"
               value="91.37254901960785"
             />
@@ -188,7 +188,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
                   max="359"
                   min="0"
                   step="1"
-                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                   type="range"
                   value="215"
                 />
@@ -220,7 +220,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
                   max="100"
                   min="0"
                   step="1"
-                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                   type="range"
                   value="100"
                 />
@@ -276,7 +276,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
                 max="100"
                 min="0"
                 step="1"
-                style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                 type="range"
                 value="91.37254901960785"
               />
@@ -314,7 +314,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
                     max="359"
                     min="0"
                     step="1"
-                    style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                    style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                     type="range"
                     value="215"
                   />
@@ -346,7 +346,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
                     max="100"
                     min="0"
                     step="1"
-                    style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                    style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                     type="range"
                     value="100"
                   />
@@ -400,7 +400,7 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
               max="100"
               min="0"
               step="1"
-              style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
               type="range"
               value="91.37254901960785"
             />
@@ -438,7 +438,7 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
                   max="359"
                   min="0"
                   step="1"
-                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                   type="range"
                   value="215"
                 />
@@ -491,7 +491,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
               max="100"
               min="0"
               step="1"
-              style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
               type="range"
               value="91.37254901960785"
             />
@@ -529,7 +529,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
                   max="359"
                   min="0"
                   step="1"
-                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                   type="range"
                   value="215"
                 />
@@ -561,7 +561,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
                   max="100"
                   min="0"
                   step="1"
-                  style="position: absolute; inset: 0; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                   type="range"
                   value="100"
                 />

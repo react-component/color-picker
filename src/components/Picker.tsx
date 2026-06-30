@@ -22,6 +22,10 @@ const Picker: FC<PickerProps> = ({
   const pickerRef = useRef();
   const transformRef = useRef();
   const colorRef = useRef(color);
+  // Keep the ref synced with the controlled color so the keyboard handlers below
+  // always read the latest value — even when several presses (across both axes)
+  // fire before the parent re-renders, so one axis can't overwrite the other.
+  colorRef.current = color;
 
   const onDragChange = useEvent((offsetValue: TransformOffset) => {
     const calcColor = calculateColor({
@@ -43,13 +47,15 @@ const Picker: FC<PickerProps> = ({
     onDragChangeComplete: () => onChangeComplete?.(colorRef.current),
     disabledDrag: disabled,
   });
-
   // ===================== Keyboard (2-D handler) =====================
   const hsb = color.toHsb();
 
-  // Build a new color from the current one with a single HSB channel changed.
+  // Build a new color from the *latest* one (the ref, not the render-time prop)
   const changeColor = (channel: 's' | 'b', percent: number) => {
-    const next = generateColor({ ...hsb, [channel]: percent / 100 });
+    const next = generateColor({
+      ...colorRef.current.toHsb(),
+      [channel]: percent / 100,
+    });
     colorRef.current = next;
     onChange(next);
   };
@@ -91,7 +97,7 @@ const Picker: FC<PickerProps> = ({
         <div
           className={`${prefixCls}-saturation`}
           style={{
-            backgroundColor: `hsl(${color.toHsb().h},100%, 50%)`,
+            backgroundColor: `hsl(${hsb.h},100%, 50%)`,
             backgroundImage:
               'linear-gradient(0deg, #000, transparent),linear-gradient(90deg, #fff, hsla(0, 0%, 100%, 0))',
           }}

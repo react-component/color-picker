@@ -8,13 +8,13 @@
     "react-mentions",
     "color-picker"
   ],
-  "homepage": "http://github.com/react-component/color-picker",
+  "homepage": "https://react-component.github.io/color-picker",
   "bugs": {
-    "url": "http://github.com/react-component/color-picker/issues"
+    "url": "https://github.com/react-component/color-picker/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/color-picker.git"
+    "url": "https://github.com/react-component/color-picker.git"
   },
   "license": "MIT",
   "main": "./lib/index",
@@ -25,24 +25,25 @@
     "lib"
   ],
   "scripts": {
+    "build": "npm run docs:build",
     "compile": "father build && lessc assets/index.less assets/index.css",
     "coverage": "vitest run --coverage",
     "docs:build": "dumi build",
-    "docs:deploy": "gh-pages -d .doc",
+    "docs:deploy": "gh-pages -d docs-dist",
     "docs:preview": "PREVIEW=true dumi build",
-    "gh-pages": "npm run docs:build && npm run docs:deploy",
+    "gh-pages": "npm run docs:build:gh-pages && npm run docs:deploy",
     "lint": "eslint src/ --ext .tsx,.ts",
-    "prepare": "husky install",
+    "prepare": "husky",
     "prepublishOnly": "npm run compile && rc-np",
+    "prettier": "prettier --write --ignore-unknown .",
     "postpublish": "npm run gh-pages",
     "start": "dumi dev",
-    "test": "vitest run"
+    "test": "vitest run",
+    "tsc": "tsc --noEmit",
+    "docs:build:gh-pages": "GH_PAGES=1 npm run docs:build"
   },
   "lint-staged": {
-    "**/*.{js,jsx,tsx,ts,md,json}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
     "@ant-design/fast-color": "^3.0.1",
@@ -51,34 +52,38 @@
   },
   "devDependencies": {
     "@rc-component/father-plugin": "^2.2.0",
-    "@rc-component/np": "^1.0.0",
+    "@rc-component/np": "^1.0.4",
     "@rc-component/trigger": "^1.13.0",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@types/node": "^24.5.2",
-    "@types/react": "^18.0.8",
-    "@types/react-dom": "^18.0.3",
-    "@types/warning": "^3.0.0",
-    "@umijs/fabric": "^3.0.0",
-    "@vitest/coverage-c8": "^0.31.0",
-    "dumi": "^2.0.18",
-    "eslint": "^8.54.0",
-    "eslint-plugin-jest": "^27.6.0",
-    "eslint-plugin-unicorn": "^49.0.0",
-    "father": "^4.0.0",
-    "gh-pages": "^4.0.0",
-    "husky": "^8.0.3",
-    "jsdom": "^22.0.0",
-    "less": "^4.2.0",
-    "lint-staged": "^13.1.0",
-    "prettier": "^2.0.5",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "typescript": "^5.1.3",
-    "vitest": "^0.31.0"
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^15.0.7",
+    "@types/node": "^26.0.1",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@types/warning": "^3.0.4",
+    "@umijs/fabric": "^4.0.1",
+    "@vitest/coverage-v8": "^4.1.9",
+    "dumi": "^2.4.35",
+    "eslint": "^8.57.1",
+    "eslint-plugin-jest": "^27.9.0",
+    "eslint-plugin-unicorn": "^56.0.1",
+    "father": "^4.6.23",
+    "gh-pages": "^6.3.0",
+    "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
+    "less": "^4.6.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.9.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.9"
   },
   "peerDependencies": {
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "./es/index.d.ts"
 }

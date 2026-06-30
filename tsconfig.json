@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "moduleResolution": "node",
-    "baseUrl": "./",
+    "moduleResolution": "bundler",
     "jsx": "react",
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "module": "ESNext",
     "paths": {
-      "@@/*": [".dumi/tmp/*"],
-      "@rc-component/color-picker": ["src/index.tsx"]
+      "@@/*": ["./.dumi/tmp/*"],
+      "@rc-component/color-picker": ["./src/index.tsx"]
     },
-    "ignoreDeprecations": "6.0",
     "noImplicitAny": false,
     "strictNullChecks": false,
     "strictPropertyInitialization": false,

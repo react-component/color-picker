@@ -1,6 +1,5 @@
-import { fireEvent } from '@testing-library/dom';
 /* eslint-disable @typescript-eslint/no-loop-func */
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { expect } from 'vitest';
 import ColorPicker, { ColorBlock, type BaseSliderProps } from '../src';

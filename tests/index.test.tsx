@@ -1,7 +1,6 @@
-import { createEvent, fireEvent } from '@testing-library/dom';
 /* eslint-disable @typescript-eslint/no-loop-func */
 import { spyElementPrototypes } from '@rc-component/util';
-import { act, render } from '@testing-library/react';
+import { act, createEvent, fireEvent, render } from '@testing-library/react';
 import React, { useState } from 'react';
 import { expect } from 'vitest';
 import ColorPicker, { Color } from '../src';

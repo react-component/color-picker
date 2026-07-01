@@ -11,13 +11,7 @@
       "@@/*": ["./.dumi/tmp/*"],
       "@rc-component/color-picker": ["./src/index.tsx"]
     },
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "strictPropertyInitialization": false,
-    "strictFunctionTypes": false,
-    "strict": false,
-    "noImplicitThis": false,
-    "strictBindCallApply": false
+    "strict": false
   },
   "include": [
     "global.d.ts",

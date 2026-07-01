@@ -20,7 +20,6 @@
     "strictBindCallApply": false
   },
   "include": [
-    "react-compat.d.ts",
     "global.d.ts",
     ".fatherrc.ts",
     ".dumirc.ts",

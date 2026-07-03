@@ -18,8 +18,8 @@ const Picker: FC<PickerProps> = ({
   onChangeComplete,
   disabled,
 }) => {
-  const pickerRef = useRef<HTMLDivElement>(null!);
-  const transformRef = useRef<HTMLDivElement>(null!);
+  const pickerRef = useRef<HTMLDivElement>(null);
+  const transformRef = useRef<HTMLDivElement>(null);
   const colorRef = useRef(color);
 
   const onDragChange = useEvent((offsetValue: TransformOffset) => {

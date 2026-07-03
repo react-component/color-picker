@@ -1,28 +1,20 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "moduleResolution": "node",
-    "baseUrl": "./",
+    "moduleResolution": "bundler",
     "jsx": "react",
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "module": "ESNext",
-    "types": [
-      "vitest/globals",
-      "@testing-library/jest-dom"
-    ],
     "paths": {
-      "@@/*": [
-        ".dumi/tmp/*"
-      ],
-      "@rc-component/color-picker": [
-        "src/index.tsx"
-      ]
+      "@@/*": ["./.dumi/tmp/*"],
+      "@rc-component/color-picker": ["./src/index.tsx"]
     },
-    "ignoreDeprecations": "5.0"
+    "strict": false
   },
   "include": [
+    "global.d.ts",
     ".fatherrc.ts",
     ".dumirc.ts",
     "docs",

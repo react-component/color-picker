@@ -4,6 +4,6 @@ export type { ColorPickerProps } from './ColorPicker';
 export { default as ColorBlock } from './components/ColorBlock';
 export type { ColorBlockProps } from './components/ColorBlock';
 export type { BaseSliderProps } from './components/Slider';
-export * from './interface';
+export type * from './interface';
 
 export default ColorPicker;

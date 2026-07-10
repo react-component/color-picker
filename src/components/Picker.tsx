@@ -19,8 +19,8 @@ const Picker: FC<PickerProps> = ({
   disabled,
   locale,
 }) => {
-  const pickerRef = useRef();
-  const transformRef = useRef();
+  const pickerRef = useRef<HTMLDivElement>(null);
+  const transformRef = useRef<HTMLDivElement>(null);
   const colorRef = useRef(color);
   // Keep the ref synced with the controlled color so the keyboard handlers below
   // always read the latest value — even when several presses (across both axes)

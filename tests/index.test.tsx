@@ -520,20 +520,80 @@ describe('ColorPicker', () => {
       );
     };
 
+    // The two picker axes share the control name (aria-label); each input is
+    // distinguished by its axis via aria-valuetext (the react-aria ColorArea
+    // pattern), so the tests grab them positionally: [saturation, brightness].
+    const getSaturation = () => screen.getAllByLabelText('Color picker')[0];
+    const getBrightness = () => screen.getAllByLabelText('Color picker')[1];
+
     it('Should expose default aria-labels on the handles', () => {
       render(<ColorPicker defaultValue={defaultColor} />);
 
-      expect(screen.getByLabelText('Color picker')).toBeTruthy();
+      // Both picker axes share the "Color picker" name; the axis is conveyed
+      // through aria-valuetext rather than a distinct label.
+      expect(screen.getAllByLabelText('Color picker')).toHaveLength(2);
       expect(screen.getByLabelText('Hue')).toBeTruthy();
       expect(screen.getByLabelText('Alpha')).toBeTruthy();
+    });
+
+    it('Should expose saturation and brightness as separate range inputs', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      // Two separately operable native ranges, each describing its own axis via
+      // aria-valuetext and sharing the 2-D slider role description, so AT can
+      // adjust each one on its own.
+      const [saturation, brightness] = screen.getAllByLabelText('Color picker');
+      expect(saturation).toHaveAttribute('aria-valuetext', 'Saturation: 91%');
+      expect(saturation).toHaveAttribute('aria-roledescription', '2D slider');
+      expect(brightness).toHaveAttribute('aria-valuetext', 'Brightness: 100%');
+      expect(brightness).toHaveAttribute('aria-roledescription', '2D slider');
+      expect(brightness).toHaveAttribute('aria-orientation', 'vertical');
+    });
+
+    it('Should adjust brightness with Up/Down while on the saturation axis', () => {
+      render(<Controlled />);
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+      saturation.focus();
+
+      // The two inputs act as one 2-D control: Up/Down drives brightness even
+      // while the saturation input is the focused one.
+      fireEvent.keyDown(saturation, { key: 'ArrowDown' });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 99%)',
+      );
+      // Focus follows the axis that changed.
+      expect(brightness).toHaveFocus();
+    });
+
+    it('Should keep the 2-D picker a single tab stop (roving tabindex)', () => {
+      render(<Controlled />);
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+
+      // Only one axis is in the tab order at a time.
+      expect(saturation).toHaveAttribute('tabindex', '0');
+      expect(brightness).toHaveAttribute('tabindex', '-1');
+
+      // Switching direction moves the tab stop onto the adjusted axis.
+      fireEvent.keyDown(saturation, { key: 'ArrowDown' });
+      expect(brightness).toHaveAttribute('tabindex', '0');
+      expect(saturation).toHaveAttribute('tabindex', '-1');
     });
 
     it('Should describe saturation & brightness via aria-valuetext by default', () => {
       render(<ColorPicker defaultValue={defaultColor} />);
 
-      expect(screen.getByLabelText('Color picker')).toHaveAttribute(
+      expect(getSaturation()).toHaveAttribute(
         'aria-valuetext',
-        'Saturation 91%, Brightness 100%',
+        'Saturation: 91%',
+      );
+      expect(getBrightness()).toHaveAttribute(
+        'aria-valuetext',
+        'Brightness: 100%',
       );
     });
 
@@ -551,22 +611,21 @@ describe('ColorPicker', () => {
         />,
       );
 
-      expect(screen.getByLabelText('Sélecteur')).toBeTruthy();
+      const [saturation, brightness] = screen.getAllByLabelText('Sélecteur');
+      expect(screen.getAllByLabelText('Sélecteur')).toHaveLength(2);
       expect(screen.getByLabelText('Teinte')).toBeTruthy();
       expect(screen.getByLabelText('Transparence')).toBeTruthy();
-      expect(screen.getByLabelText('Sélecteur')).toHaveAttribute(
-        'aria-valuetext',
-        'Sat 91%, Lum 100%',
-      );
+      expect(saturation).toHaveAttribute('aria-valuetext', 'Sat: 91%');
+      expect(brightness).toHaveAttribute('aria-valuetext', 'Lum: 100%');
     });
 
-    it('Should change brightness with the Down arrow on the picker handle', () => {
+    it('Should change brightness with the Down arrow on the brightness axis', () => {
       const onChangeComplete = vi.fn();
       render(<Controlled onChangeComplete={onChangeComplete} />);
 
-      const picker = screen.getByLabelText('Color picker');
-      fireEvent.keyDown(picker, { key: 'ArrowDown' });
-      fireEvent.keyUp(picker, { key: 'ArrowDown' });
+      const brightness = getBrightness();
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      fireEvent.keyUp(brightness, { key: 'ArrowDown' });
 
       // brightness starts at 100% and steps down to 99%
       expect(document.querySelector('.pick-color').innerHTML).toBe(
@@ -575,24 +634,50 @@ describe('ColorPicker', () => {
       expect(onChangeComplete).toHaveBeenCalled();
     });
 
-    it('Should clamp brightness at 100% when pressing the Up arrow', () => {
-      render(<Controlled />);
+    it('Should operate brightness through its native range control', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
 
-      const picker = screen.getByLabelText('Color picker');
-      fireEvent.keyDown(picker, { key: 'ArrowUp' });
+      const brightness = getBrightness();
+      // Emulate an assistive-technology set-value action on the native range,
+      // then complete the interaction on key up.
+      fireEvent.change(brightness, { target: { value: '80' } });
+      fireEvent.keyUp(brightness, { key: 'ArrowDown' });
 
       expect(document.querySelector('.pick-color').innerHTML).toBe(
-        'hsb(215, 91%, 100%)',
+        'hsb(215, 91%, 80%)',
       );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should not emit changes when the arrow key clamps at a bound', () => {
+      const onChange = vi.fn();
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const brightness = getBrightness();
+      // brightness is already at 100%, so Up cannot step further.
+      fireEvent.keyDown(brightness, { key: 'ArrowUp' });
+      fireEvent.keyUp(brightness, { key: 'ArrowUp' });
+
+      // A clamped press must not fire onChange (no value moved) nor complete.
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onChangeComplete).not.toHaveBeenCalled();
     });
 
     it('Should increase saturation on the picker (Arrow Right)', () => {
       const onChangeComplete = vi.fn();
       render(<Controlled onChangeComplete={onChangeComplete} />);
 
-      const picker = screen.getByLabelText('Color picker');
-      fireEvent.change(picker, { target: { value: '92' } });
-      fireEvent.keyUp(picker, { key: 'ArrowRight' });
+      const saturation = getSaturation();
+      fireEvent.change(saturation, { target: { value: '92' } });
+      fireEvent.keyUp(saturation, { key: 'ArrowRight' });
 
       // saturation starts at 91% and steps up to 92%
       expect(document.querySelector('.pick-color').innerHTML).toBe(
@@ -605,9 +690,9 @@ describe('ColorPicker', () => {
       const onChangeComplete = vi.fn();
       render(<Controlled onChangeComplete={onChangeComplete} />);
 
-      const picker = screen.getByLabelText('Color picker');
-      fireEvent.change(picker, { target: { value: '90' } });
-      fireEvent.keyUp(picker, { key: 'ArrowLeft' });
+      const saturation = getSaturation();
+      fireEvent.change(saturation, { target: { value: '90' } });
+      fireEvent.keyUp(saturation, { key: 'ArrowLeft' });
 
       // saturation starts at 91% and steps down to 90%
       expect(document.querySelector('.pick-color').innerHTML).toBe(
@@ -616,19 +701,60 @@ describe('ColorPicker', () => {
       expect(onChangeComplete).toHaveBeenCalled();
     });
 
+    // A controlled parent that keeps the color pinned while still re-rendering
+    // (validation, debouncing, an unrelated state update) reproduces the race
+    // where the stale prop echoes back mid-interaction.
+    const StalePinned = ({ onChangeComplete }: Record<string, unknown>) => {
+      const [, force] = useState(0);
+      return (
+        <ColorPicker
+          value={defaultColor}
+          onChange={() => force(n => n + 1)}
+          onChangeComplete={onChangeComplete as (color: Color) => void}
+        />
+      );
+    };
+
+    it('Should complete the picker with the latest value despite a stale re-render', () => {
+      const onChangeComplete = vi.fn();
+      render(<StalePinned onChangeComplete={onChangeComplete} />);
+
+      const saturation = getSaturation();
+      // ArrowRight steps 91% -> 92% and triggers a re-render that echoes the
+      // stale 91% prop before key up. Completion must still report 92%.
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+      fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+
+      const [completedColor] = onChangeComplete.mock.calls.at(-1);
+      expect(completedColor.toHsbString()).toBe('hsb(215, 92%, 100%)');
+    });
+
+    it('Should complete a slider with the latest value despite a stale re-render', () => {
+      const onChangeComplete = vi.fn();
+      render(<StalePinned onChangeComplete={onChangeComplete} />);
+
+      const hue = screen.getByLabelText('Hue');
+      // ArrowRight steps hue 215 -> 216 while the prop is pinned at 215.
+      fireEvent.keyDown(hue, { key: 'ArrowRight' });
+      fireEvent.keyUp(hue, { key: 'ArrowRight' });
+
+      const [completedColor] = onChangeComplete.mock.calls.at(-1);
+      expect(completedColor.getHue()).toBe(216);
+    });
+
     it('Should step from the latest value on rapid saturation presses', () => {
       render(<Controlled />);
 
-      const picker = screen.getByLabelText('Color picker') as HTMLInputElement;
+      const saturation = getSaturation();
 
       // Two Left presses dispatched in the same batch (before the parent
       // re-renders). Reading the stale prop would step 91% -> 90% twice; the
       // latest-value ref keeps them stepping 91% -> 89%.
       act(() => {
-        picker.dispatchEvent(
+        saturation.dispatchEvent(
           new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
         );
-        picker.dispatchEvent(
+        saturation.dispatchEvent(
           new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
         );
       });
@@ -641,16 +767,16 @@ describe('ColorPicker', () => {
     it('Should step from the latest value on rapid brightness presses', () => {
       render(<Controlled />);
 
-      const picker = screen.getByLabelText('Color picker') as HTMLInputElement;
+      const brightness = getBrightness();
 
       // Two Down presses dispatched in the same batch (before the parent
       // re-renders). Reading the stale prop would step 100% -> 99% twice; the
       // latest-value ref keeps them stepping 100% -> 98%.
       act(() => {
-        picker.dispatchEvent(
+        brightness.dispatchEvent(
           new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
         );
-        picker.dispatchEvent(
+        brightness.dispatchEvent(
           new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
         );
       });
@@ -663,16 +789,17 @@ describe('ColorPicker', () => {
     it('Should step from the latest value on rapid saturation and brightness presses', () => {
       render(<Controlled />);
 
-      const picker = screen.getByLabelText('Color picker') as HTMLInputElement;
+      const saturation = getSaturation();
+      const brightness = getBrightness();
 
       // One Down (brightness 100% -> 99%) and one Left (saturation 91% -> 90%)
       // dispatched in the same batch. Deriving the second change from the stale
-      // prop would revert the first axis; the refs keep both.
+      // prop would revert the first axis; the shared color ref keeps both.
       act(() => {
-        picker.dispatchEvent(
+        brightness.dispatchEvent(
           new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
         );
-        picker.dispatchEvent(
+        saturation.dispatchEvent(
           new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
         );
       });
@@ -718,10 +845,10 @@ describe('ColorPicker', () => {
         />,
       );
 
-      const picker = screen.getByLabelText('Color picker');
+      const saturation = getSaturation();
       // A non-value key (e.g. Tab) must neither step (keydown) nor commit (keyup).
-      fireEvent.keyDown(picker, { key: 'Tab' });
-      fireEvent.keyUp(picker, { key: 'Tab' });
+      fireEvent.keyDown(saturation, { key: 'Tab' });
+      fireEvent.keyUp(saturation, { key: 'Tab' });
 
       expect(onChange).not.toHaveBeenCalled();
       expect(onChangeComplete).not.toHaveBeenCalled();
@@ -730,8 +857,8 @@ describe('ColorPicker', () => {
     it('Should increase saturation with the Right arrow on the picker', () => {
       render(<Controlled />);
 
-      const picker = screen.getByLabelText('Color picker');
-      fireEvent.keyDown(picker, { key: 'ArrowRight' });
+      const saturation = getSaturation();
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
 
       // saturation steps 91% -> 92%
       expect(document.querySelector('.pick-color').innerHTML).toBe(

@@ -16,8 +16,6 @@ const VALUE_KEYS = [
   'PageDown',
 ];
 
-const isVerticalKey = (key: string) => key === 'ArrowUp' || key === 'ArrowDown';
-
 // The range input is a keyboard / screen-reader proxy only — the visible thumb
 // is the wrapping <div>. It must stay focusable and in the a11y tree, so it is
 // hidden with `opacity` (not `display`/`visibility`). These styles are inlined
@@ -52,6 +50,9 @@ export interface HandlerProps {
   y?: HandlerAxis;
 }
 
+type ValueRef = React.RefObject<number>;
+type ChangedRef = React.RefObject<boolean>;
+
 const Handler: React.FC<HandlerProps> = ({
   size = 'default',
   color,
@@ -60,48 +61,98 @@ const Handler: React.FC<HandlerProps> = ({
   x,
   y,
 }) => {
+  const is2D = !!y;
+
+  // Per-axis interaction state. Each input owns the value it is adjusting so a
+  // controlled parent re-rendering with a stale value mid-interaction cannot
+  // reset it. The `y` refs are inert for 1-D sliders.
   const xValueRef = React.useRef(x.value);
-  xValueRef.current = x.value;
-  const yValueRef = React.useRef(y?.value);
-  yValueRef.current = y?.value;
+  const xPrevRef = React.useRef(x.value);
+  const xChangedRef = React.useRef(false);
+  const xInputRef = React.useRef<HTMLInputElement>(null);
+
+  const yValueRef = React.useRef(y?.value ?? 0);
+  const yPrevRef = React.useRef(y?.value ?? 0);
+  const yChangedRef = React.useRef(false);
+  const yInputRef = React.useRef<HTMLInputElement>(null);
+
+  // Roving tab index: the 2-D picker is a single tab stop whose focus moves
+  // between the two axis inputs as the user switches direction, so it reads as
+  // one control while each axis stays independently operable by AT.
+  const [activeAxis, setActiveAxis] = React.useState<'x' | 'y'>('x');
+
+  // Preserve the in-progress value across re-renders; only resync when the
+  // controlled prop *genuinely* changes, so a stale echo of the pre-interaction
+  // value cannot clobber what the user is currently adjusting.
+  if (x.value !== xPrevRef.current) {
+    xPrevRef.current = x.value;
+    xValueRef.current = x.value;
+  }
+  if (y && y.value !== yPrevRef.current) {
+    yPrevRef.current = y.value;
+    yValueRef.current = y.value;
+  }
 
   const stepAxis = (
     axis: HandlerAxis,
-    ref: React.MutableRefObject<number | undefined>,
+    valueRef: ValueRef,
+    changedRef: ChangedRef,
     direction: 1 | -1,
   ) => {
     const stepSize = Number(axis.step ?? 1) || 1;
     const min = Number(axis.min ?? 0);
     const max = Number(axis.max ?? 100);
-    const current = ref.current ?? axis.value;
+    const current = valueRef.current;
     const next = Math.min(max, Math.max(min, current + direction * stepSize));
-    ref.current = next;
+    // Clamped against a bound — nothing changed, so stay silent like a native
+    // range instead of emitting a redundant onChange.
+    if (next === current) {
+      return;
+    }
+    valueRef.current = next;
+    changedRef.current = true;
     axis.onChange(next);
   };
 
-  // Left/Right drives the horizontal axis; Up/Down the vertical one (or the
-  // horizontal one for 1-D sliders). We handle these instead of the native range
-  // so behaviour is deterministic across browsers and safe under rapid presses.
+  // Move DOM focus (and the roving tab stop) onto the axis being adjusted so
+  // the screen reader tracks and announces the value that actually changed.
+  const focusAxis = (axis: 'x' | 'y') => {
+    setActiveAxis(axis);
+    const input = axis === 'y' ? yInputRef.current : xInputRef.current;
+    if (input && document.activeElement !== input) {
+      input.focus();
+    }
+  };
+
+  // Left/Right always drives the x axis, Up/Down the y axis (or the single x
+  // axis on a 1-D slider). preventDefault stops the browser from also moving
+  // the focused input's native value.
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.key) {
       case 'ArrowRight':
-        stepAxis(x, xValueRef, 1);
+        focusAxis('x');
+        stepAxis(x, xValueRef, xChangedRef, 1);
         break;
       case 'ArrowLeft':
-        stepAxis(x, xValueRef, -1);
+        focusAxis('x');
+        stepAxis(x, xValueRef, xChangedRef, -1);
         break;
       case 'ArrowUp':
         if (y) {
-          stepAxis(y, yValueRef, 1);
+          focusAxis('y');
+          stepAxis(y, yValueRef, yChangedRef, 1);
         } else {
-          stepAxis(x, xValueRef, 1);
+          focusAxis('x');
+          stepAxis(x, xValueRef, xChangedRef, 1);
         }
         break;
       case 'ArrowDown':
         if (y) {
-          stepAxis(y, yValueRef, -1);
+          focusAxis('y');
+          stepAxis(y, yValueRef, yChangedRef, -1);
         } else {
-          stepAxis(x, xValueRef, -1);
+          focusAxis('x');
+          stepAxis(x, xValueRef, xChangedRef, -1);
         }
         break;
       default:
@@ -110,16 +161,28 @@ const Handler: React.FC<HandlerProps> = ({
     event.preventDefault();
   };
 
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!VALUE_KEYS.includes(event.key)) {
-      return;
-    }
-    if (y && isVerticalKey(event.key)) {
-      y.onChangeComplete(yValueRef.current ?? y.value);
-    } else {
-      x.onChangeComplete(xValueRef.current ?? x.value);
-    }
-  };
+  // Each input completes its own axis. Because focus follows the adjusted axis,
+  // key up fires on the input whose value just changed.
+  const completeAxis =
+    (axis: HandlerAxis, valueRef: ValueRef, changedRef: ChangedRef) =>
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (!VALUE_KEYS.includes(event.key) || !changedRef.current) {
+        return;
+      }
+      changedRef.current = false;
+      axis.onChangeComplete(valueRef.current);
+    };
+
+  // Native value changes (Home/End/PageUp/PageDown and AT set-value / increment
+  // actions) feed the same interaction value for the input's own axis.
+  const changeAxis =
+    (axis: HandlerAxis, valueRef: ValueRef, changedRef: ChangedRef) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const next = Number(event.target.value);
+      valueRef.current = next;
+      changedRef.current = true;
+      axis.onChange(next);
+    };
 
   return (
     <div
@@ -129,16 +192,36 @@ const Handler: React.FC<HandlerProps> = ({
       style={{ position: 'relative', backgroundColor: color }}
     >
       <input
+        ref={xInputRef}
         step={1}
-        {...omit(x, ['onChangeComplete'])}
+        {...omit(x, ['onChange', 'onChangeComplete'])}
         type="range"
+        tabIndex={is2D ? (activeAxis === 'x' ? 0 : -1) : undefined}
         className={`${prefixCls}-handler-range`}
         style={RANGE_INPUT_STYLE}
         disabled={disabled}
-        onChange={event => x.onChange(Number(event.target.value))}
+        onChange={changeAxis(x, xValueRef, xChangedRef)}
         onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
+        onKeyUp={completeAxis(x, xValueRef, xChangedRef)}
+        onFocus={is2D ? () => setActiveAxis('x') : undefined}
       />
+      {y && (
+        <input
+          ref={yInputRef}
+          step={1}
+          {...omit(y, ['onChange', 'onChangeComplete'])}
+          type="range"
+          aria-orientation="vertical"
+          tabIndex={activeAxis === 'y' ? 0 : -1}
+          className={`${prefixCls}-handler-range`}
+          style={RANGE_INPUT_STYLE}
+          disabled={disabled}
+          onChange={changeAxis(y, yValueRef, yChangedRef)}
+          onKeyDown={handleKeyDown}
+          onKeyUp={completeAxis(y, yValueRef, yChangedRef)}
+          onFocus={() => setActiveAxis('y')}
+        />
+      )}
     </div>
   );
 };

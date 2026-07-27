@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import React, { useRef } from 'react';
+import type { Color } from '../color';
 import useColorDrag from '../hooks/useColorDrag';
 import type { BaseColorPickerProps, TransformOffset } from '../interface';
 import { calcOffset, calculateColor, generateColor } from '../util';
@@ -11,6 +12,13 @@ import Transform from './Transform';
 
 export type PickerProps = BaseColorPickerProps;
 
+// A stable string identity for a color, used to tell a genuinely new controlled
+// value apart from a stale echo of the same value.
+const getColorKey = (color: Color) => {
+  const { h, s, b, a } = color.toHsb();
+  return `${h},${s},${b},${a}`;
+};
+
 const Picker: FC<PickerProps> = ({
   color,
   onChange,
@@ -21,11 +29,20 @@ const Picker: FC<PickerProps> = ({
 }) => {
   const pickerRef = useRef<HTMLDivElement>(null);
   const transformRef = useRef<HTMLDivElement>(null);
+  // Candidate color for the active keyboard/drag interaction. Consulted on
+  // completion so the *latest* value is reported, even across several presses.
   const colorRef = useRef(color);
-  // Keep the ref synced with the controlled color so the keyboard handlers below
-  // always read the latest value — even when several presses (across both axes)
-  // fire before the parent re-renders, so one axis can't overwrite the other.
-  colorRef.current = color;
+  // Key of the controlled color seen on the previous render. Used to accept a
+  // genuinely new controlled color while ignoring a stale echo of the
+  // pre-interaction color that a controlled parent may re-render with before
+  // key up (validation, debouncing, an unrelated state update). Overwriting the
+  // ref with that stale value would make completion report the old color.
+  const prevColorKeyRef = useRef(getColorKey(color));
+  const nextColorKey = getColorKey(color);
+  if (nextColorKey !== prevColorKeyRef.current) {
+    prevColorKeyRef.current = nextColorKey;
+    colorRef.current = color;
+  }
 
   const onDragChange = useEvent((offsetValue: TransformOffset) => {
     const calcColor = calculateColor({
@@ -76,9 +93,7 @@ const Picker: FC<PickerProps> = ({
             x={{
               'aria-label': locale.picker,
               'aria-roledescription': locale.pickerDescription,
-              'aria-valuetext': `${locale.saturation} ${Math.round(
-                hsb.s * 100,
-              )}%, ${locale.brightness} ${Math.round(hsb.b * 100)}%`,
+              'aria-valuetext': `${locale.saturation}: ${Math.round(hsb.s * 100)}%`,
               min: 0,
               max: 100,
               value: hsb.s * 100,
@@ -86,6 +101,9 @@ const Picker: FC<PickerProps> = ({
               onChangeComplete: () => onChangeComplete?.(colorRef.current),
             }}
             y={{
+              'aria-label': locale.picker,
+              'aria-roledescription': locale.pickerDescription,
+              'aria-valuetext': `${locale.brightness}: ${Math.round(hsb.b * 100)}%`,
               min: 0,
               max: 100,
               value: hsb.b * 100,

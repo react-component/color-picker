@@ -22,14 +22,29 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
             <input
               aria-label="Color picker"
               aria-roledescription="2D slider"
-              aria-valuetext="Saturation 91%, Brightness 100%"
+              aria-valuetext="Saturation: 91%"
               class="rc-color-picker-handler-range"
               max="100"
               min="0"
               step="1"
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="0"
               type="range"
               value="91.37254901960785"
+            />
+            <input
+              aria-label="Color picker"
+              aria-orientation="vertical"
+              aria-roledescription="2D slider"
+              aria-valuetext="Brightness: 100%"
+              class="rc-color-picker-handler-range"
+              max="100"
+              min="0"
+              step="1"
+              style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="-1"
+              type="range"
+              value="100"
             />
           </div>
         </div>
@@ -145,14 +160,29 @@ exports[`ColorPicker > Should component render correct 1`] = `
             <input
               aria-label="Color picker"
               aria-roledescription="2D slider"
-              aria-valuetext="Saturation 91%, Brightness 100%"
+              aria-valuetext="Saturation: 91%"
               class="rc-color-picker-handler-range"
               max="100"
               min="0"
               step="1"
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="0"
               type="range"
               value="91.37254901960785"
+            />
+            <input
+              aria-label="Color picker"
+              aria-orientation="vertical"
+              aria-roledescription="2D slider"
+              aria-valuetext="Brightness: 100%"
+              class="rc-color-picker-handler-range"
+              max="100"
+              min="0"
+              step="1"
+              style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="-1"
+              type="range"
+              value="100"
             />
           </div>
         </div>
@@ -271,14 +301,29 @@ exports[`ColorPicker > Should custom panel work 1`] = `
               <input
                 aria-label="Color picker"
                 aria-roledescription="2D slider"
-                aria-valuetext="Saturation 91%, Brightness 100%"
+                aria-valuetext="Saturation: 91%"
                 class="rc-color-picker-handler-range"
                 max="100"
                 min="0"
                 step="1"
                 style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                tabindex="0"
                 type="range"
                 value="91.37254901960785"
+              />
+              <input
+                aria-label="Color picker"
+                aria-orientation="vertical"
+                aria-roledescription="2D slider"
+                aria-valuetext="Brightness: 100%"
+                class="rc-color-picker-handler-range"
+                max="100"
+                min="0"
+                step="1"
+                style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                tabindex="-1"
+                type="range"
+                value="100"
               />
             </div>
           </div>
@@ -395,14 +440,29 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
             <input
               aria-label="Color picker"
               aria-roledescription="2D slider"
-              aria-valuetext="Saturation 91%, Brightness 100%"
+              aria-valuetext="Saturation: 91%"
               class="rc-color-picker-handler-range"
               max="100"
               min="0"
               step="1"
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="0"
               type="range"
               value="91.37254901960785"
+            />
+            <input
+              aria-label="Color picker"
+              aria-orientation="vertical"
+              aria-roledescription="2D slider"
+              aria-valuetext="Brightness: 100%"
+              class="rc-color-picker-handler-range"
+              max="100"
+              min="0"
+              step="1"
+              style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="-1"
+              type="range"
+              value="100"
             />
           </div>
         </div>
@@ -486,14 +546,29 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
             <input
               aria-label="Color picker"
               aria-roledescription="2D slider"
-              aria-valuetext="Saturation 91%, Brightness 100%"
+              aria-valuetext="Saturation: 91%"
               class="test-prefixCls-handler-range"
               max="100"
               min="0"
               step="1"
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="0"
               type="range"
               value="91.37254901960785"
+            />
+            <input
+              aria-label="Color picker"
+              aria-orientation="vertical"
+              aria-roledescription="2D slider"
+              aria-valuetext="Brightness: 100%"
+              class="test-prefixCls-handler-range"
+              max="100"
+              min="0"
+              step="1"
+              style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="-1"
+              type="range"
+              value="100"
             />
           </div>
         </div>

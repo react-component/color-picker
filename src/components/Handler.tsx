@@ -193,9 +193,9 @@ const Handler: React.FC<HandlerProps> = ({
     >
       <input
         ref={xInputRef}
-        step={1}
         {...omit(x, ['onChange', 'onChangeComplete'])}
         type="range"
+        step={1}
         tabIndex={is2D ? (activeAxis === 'x' ? 0 : -1) : undefined}
         className={`${prefixCls}-handler-range`}
         style={RANGE_INPUT_STYLE}
@@ -208,9 +208,9 @@ const Handler: React.FC<HandlerProps> = ({
       {y && (
         <input
           ref={yInputRef}
-          step={1}
           {...omit(y, ['onChange', 'onChangeComplete'])}
           type="range"
+          step={1}
           aria-orientation="vertical"
           tabIndex={activeAxis === 'y' ? 0 : -1}
           className={`${prefixCls}-handler-range`}

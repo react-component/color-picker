@@ -30,7 +30,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
               tabindex="0"
               type="range"
-              value="91.37254901960785"
+              value="91"
             />
             <input
               aria-label="Color picker"
@@ -168,7 +168,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
               tabindex="0"
               type="range"
-              value="91.37254901960785"
+              value="91"
             />
             <input
               aria-label="Color picker"
@@ -309,7 +309,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
                 style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
                 tabindex="0"
                 type="range"
-                value="91.37254901960785"
+                value="91"
               />
               <input
                 aria-label="Color picker"
@@ -448,7 +448,7 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
               tabindex="0"
               type="range"
-              value="91.37254901960785"
+              value="91"
             />
             <input
               aria-label="Color picker"
@@ -554,7 +554,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
               tabindex="0"
               type="range"
-              value="91.37254901960785"
+              value="91"
             />
             <input
               aria-label="Color picker"

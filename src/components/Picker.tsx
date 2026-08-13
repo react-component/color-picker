@@ -96,7 +96,7 @@ const Picker: FC<PickerProps> = ({
               'aria-valuetext': `${locale.saturation}: ${Math.round(hsb.s * 100)}%`,
               min: 0,
               max: 100,
-              value: hsb.s * 100,
+              value: Math.round(hsb.s * 100),
               onChange: percent => changeColor('s', percent),
               onChangeComplete: () => onChangeComplete?.(colorRef.current),
             }}
@@ -106,7 +106,7 @@ const Picker: FC<PickerProps> = ({
               'aria-valuetext': `${locale.brightness}: ${Math.round(hsb.b * 100)}%`,
               min: 0,
               max: 100,
-              value: hsb.b * 100,
+              value: Math.round(hsb.b * 100),
               onChange: percent => changeColor('b', percent),
               onChangeComplete: () => onChangeComplete?.(colorRef.current),
             }}

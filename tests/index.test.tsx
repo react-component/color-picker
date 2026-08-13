@@ -824,14 +824,17 @@ describe('ColorPicker', () => {
     });
 
     it('Should change alpha when the alpha slider value changes via keyboard', () => {
-      render(<Controlled />);
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
 
       const alpha = screen.getByLabelText('Alpha');
       fireEvent.change(alpha, { target: { value: '50' } });
+      fireEvent.keyUp(alpha, { key: 'ArrowRight' });
 
       expect(document.querySelector('.pick-color').innerHTML).toBe(
         'hsba(215, 91%, 100%, 0.50)',
       );
+      expect(onChangeComplete).toHaveBeenCalled();
     });
 
     it('Should ignore keys that do not change the value', () => {

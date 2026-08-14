@@ -34,7 +34,7 @@ const RANGE_INPUT_STYLE: React.CSSProperties = {
 
 interface HandlerAxis extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  'size' | 'value' | 'onChange'
+  'size' | 'value' | 'onChange' | 'onKeyDown' | 'onKeyUp' | 'onFocus'
 > {
   value: number;
   onChange: (value: number) => void;
@@ -195,7 +195,7 @@ const Handler: React.FC<HandlerProps> = ({
         ref={xInputRef}
         {...omit(x, ['onChange', 'onChangeComplete'])}
         type="range"
-        step={1}
+        step={x.step ?? 1}
         tabIndex={is2D ? (activeAxis === 'x' ? 0 : -1) : undefined}
         className={`${prefixCls}-handler-range`}
         style={RANGE_INPUT_STYLE}
@@ -210,7 +210,7 @@ const Handler: React.FC<HandlerProps> = ({
           ref={yInputRef}
           {...omit(y, ['onChange', 'onChangeComplete'])}
           type="range"
-          step={1}
+          step={y.step ?? 1}
           aria-orientation="vertical"
           tabIndex={activeAxis === 'y' ? 0 : -1}
           className={`${prefixCls}-handler-range`}

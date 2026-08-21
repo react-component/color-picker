@@ -1,6 +1,5 @@
 import type { FC } from 'react';
 import React, { useRef } from 'react';
-import type { Color } from '../color';
 import useColorDrag from '../hooks/useColorDrag';
 import type { BaseColorPickerProps, TransformOffset } from '../interface';
 import { calcOffset, calculateColor, generateColor } from '../util';
@@ -12,13 +11,6 @@ import Transform from './Transform';
 
 export type PickerProps = BaseColorPickerProps;
 
-// A stable string identity for a color, used to tell a genuinely new controlled
-// value apart from a stale echo of the same value.
-const getColorKey = (color: Color) => {
-  const { h, s, b, a } = color.toHsb();
-  return `${h},${s},${b},${a}`;
-};
-
 const Picker: FC<PickerProps> = ({
   color,
   onChange,
@@ -29,20 +21,26 @@ const Picker: FC<PickerProps> = ({
 }) => {
   const pickerRef = useRef<HTMLDivElement>(null);
   const transformRef = useRef<HTMLDivElement>(null);
-  // Candidate color for the active keyboard/drag interaction. Consulted on
+  // Candidate color for the keyboard/drag interaction in flight. Consulted on
   // completion so the *latest* value is reported, even across several presses.
   const colorRef = useRef(color);
-  // Key of the controlled color seen on the previous render. Used to accept a
-  // genuinely new controlled color while ignoring a stale echo of the
-  // pre-interaction color that a controlled parent may re-render with before
-  // key up (validation, debouncing, an unrelated state update). Overwriting the
-  // ref with that stale value would make completion report the old color.
-  const prevColorKeyRef = useRef(getColorKey(color));
-  const nextColorKey = getColorKey(color);
-  if (nextColorKey !== prevColorKeyRef.current) {
-    prevColorKeyRef.current = nextColorKey;
-    colorRef.current = color;
-  }
+  // Whether `colorRef` currently holds such a candidate. Outside an interaction
+  // the controlled `color` prop is the source of truth, so the ref is never
+  // synced during render: a stale echo of the pre-interaction color has nothing
+  // to clobber, and nothing is written from a render that concurrent React may
+  // abandon.
+  const activeRef = useRef(false);
+
+  // The in-flight candidate while interacting, otherwise the controlled prop.
+  const getLatestColor = () => (activeRef.current ? colorRef.current : color);
+
+  // Report the latest value, then hand authority back to the controlled prop so
+  // the next interaction starts from what the parent committed.
+  const completeColor = () => {
+    const latest = getLatestColor();
+    activeRef.current = false;
+    onChangeComplete?.(latest);
+  };
 
   const onDragChange = useEvent((offsetValue: TransformOffset) => {
     const calcColor = calculateColor({
@@ -52,6 +50,7 @@ const Picker: FC<PickerProps> = ({
       color,
     });
     colorRef.current = calcColor;
+    activeRef.current = true;
     onChange(calcColor);
   });
 
@@ -61,19 +60,21 @@ const Picker: FC<PickerProps> = ({
     targetRef: transformRef,
     calculate: () => calcOffset(color),
     onDragChange,
-    onDragChangeComplete: () => onChangeComplete?.(colorRef.current),
+    onDragChangeComplete: completeColor,
     disabledDrag: disabled,
   });
   // ===================== Keyboard (2-D handler) =====================
   const hsb = color.toHsb();
 
-  // Build a new color from the *latest* one (the ref, not the render-time prop)
+  // Build a new color from the *latest* one, so presses batched before the
+  // parent re-renders still chain off each other.
   const changeColor = (channel: 's' | 'b', percent: number) => {
     const next = generateColor({
-      ...colorRef.current.toHsb(),
+      ...getLatestColor().toHsb(),
       [channel]: percent / 100,
     });
     colorRef.current = next;
+    activeRef.current = true;
     onChange(next);
   };
 
@@ -98,7 +99,7 @@ const Picker: FC<PickerProps> = ({
               max: 100,
               value: Math.round(hsb.s * 100),
               onChange: percent => changeColor('s', percent),
-              onChangeComplete: () => onChangeComplete?.(colorRef.current),
+              onChangeComplete: completeColor,
             }}
             y={{
               'aria-label': locale.picker,
@@ -108,7 +109,7 @@ const Picker: FC<PickerProps> = ({
               max: 100,
               value: Math.round(hsb.b * 100),
               onChange: percent => changeColor('b', percent),
-              onChangeComplete: () => onChangeComplete?.(colorRef.current),
+              onChangeComplete: completeColor,
             }}
           />
         </Transform>

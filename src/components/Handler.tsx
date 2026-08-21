@@ -4,6 +4,9 @@ import React from 'react';
 
 type HandlerSize = 'default' | 'small';
 
+/** Tolerance for treating a value as sitting on the step grid despite float drift. */
+const STEP_EPSILON = 1e-9;
+
 /** Keyboard keys (handled natively by `<input type="range">`) that mutate the value. */
 const VALUE_KEYS = [
   'ArrowLeft',
@@ -63,35 +66,36 @@ const Handler: React.FC<HandlerProps> = ({
 }) => {
   const is2D = !!y;
 
-  // Per-axis interaction state. Each input owns the value it is adjusting so a
-  // controlled parent re-rendering with a stale value mid-interaction cannot
-  // reset it. The `y` refs are inert for 1-D sliders.
+  // Per-axis interaction state. `valueRef` is the value the axis is being
+  // adjusted to, and is authoritative only while `changedRef` marks an
+  // interaction as in flight. Between interactions the controlled prop is the
+  // source of truth, so neither ref is ever synced during render: a parent that
+  // rejects a change simply gets the next press restarted from the value it
+  // committed, the way a native range snaps back, and nothing is written from a
+  // render that concurrent React may abandon. The `y` refs are inert for 1-D
+  // sliders.
   const xValueRef = React.useRef(x.value);
-  const xPrevRef = React.useRef(x.value);
   const xChangedRef = React.useRef(false);
   const xInputRef = React.useRef<HTMLInputElement>(null);
 
   const yValueRef = React.useRef(y?.value ?? 0);
-  const yPrevRef = React.useRef(y?.value ?? 0);
   const yChangedRef = React.useRef(false);
   const yInputRef = React.useRef<HTMLInputElement>(null);
 
+  // Whether a value key is currently held on this control. Tells the first
+  // press of a new interaction (restart from the prop) apart from a key repeat
+  // or a second axis within the same one (chain off `valueRef`).
+  const keyHeldRef = React.useRef(false);
+
   // Roving tab index: the 2-D picker is a single tab stop whose focus moves
   // between the two axis inputs as the user switches direction, so it reads as
-  // one control while each axis stays independently operable by AT.
-  const [activeAxis, setActiveAxis] = React.useState<'x' | 'y'>('x');
-
-  // Preserve the in-progress value across re-renders; only resync when the
-  // controlled prop *genuinely* changes, so a stale echo of the pre-interaction
-  // value cannot clobber what the user is currently adjusting.
-  if (x.value !== xPrevRef.current) {
-    xPrevRef.current = x.value;
-    xValueRef.current = x.value;
-  }
-  if (y && y.value !== yPrevRef.current) {
-    yPrevRef.current = y.value;
-    yValueRef.current = y.value;
-  }
+  // one control while each axis stays independently operable by AT. `null`
+  // until the control is first used, when the x axis holds the tab stop.
+  const [activeAxis, setActiveAxis] = React.useState<'x' | 'y' | null>(null);
+  // Whether the keyboard has moved a value since focus entered the control.
+  // Reveals both axes for the duration of the interaction — see the a11y-tree
+  // note below.
+  const [valueChangedViaKey, setValueChangedViaKey] = React.useState(false);
 
   const stepAxis = (
     axis: HandlerAxis,
@@ -102,8 +106,23 @@ const Handler: React.FC<HandlerProps> = ({
     const stepSize = Number(axis.step ?? 1) || 1;
     const min = Number(axis.min ?? 0);
     const max = Number(axis.max ?? 100);
-    const current = valueRef.current;
-    const next = Math.min(max, Math.max(min, current + direction * stepSize));
+    const current = changedRef.current ? valueRef.current : axis.value;
+
+    // A native range only allows values on the `min + n * step` grid. Per the
+    // stepUp()/stepDown() algorithm, a value off that grid — a color channel
+    // that doesn't land on a whole percent — snaps to the neighbouring grid
+    // value in the direction of travel, and that snap *is* the step; only an
+    // already-aligned value advances by a full step.
+    const steps = (current - min) / stepSize;
+    const nearest = Math.round(steps);
+    const nextSteps =
+      Math.abs(steps - nearest) < STEP_EPSILON
+        ? nearest + direction
+        : direction > 0
+          ? Math.ceil(steps)
+          : Math.floor(steps);
+    const next = Math.min(max, Math.max(min, min + nextSteps * stepSize));
+
     // Clamped against a bound — nothing changed, so stay silent like a native
     // range instead of emitting a redundant onChange.
     if (next === current) {
@@ -111,6 +130,7 @@ const Handler: React.FC<HandlerProps> = ({
     }
     valueRef.current = next;
     changedRef.current = true;
+    setValueChangedViaKey(true);
     axis.onChange(next);
   };
 
@@ -128,6 +148,19 @@ const Handler: React.FC<HandlerProps> = ({
   // axis on a 1-D slider). preventDefault stops the browser from also moving
   // the focused input's native value.
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!VALUE_KEYS.includes(event.key)) {
+      return;
+    }
+
+    // A press with no key already held opens a fresh interaction: drop the
+    // previous one's in-flight values so stepping restarts from what the parent
+    // actually committed.
+    if (!keyHeldRef.current) {
+      xChangedRef.current = false;
+      yChangedRef.current = false;
+    }
+    keyHeldRef.current = true;
+
     switch (event.key) {
       case 'ArrowRight':
         focusAxis('x');
@@ -156,6 +189,8 @@ const Handler: React.FC<HandlerProps> = ({
         }
         break;
       default:
+        // Home/End/PageUp/PageDown: let the native range move the value and
+        // pick it up from the resulting change event.
         return;
     }
     event.preventDefault();
@@ -166,23 +201,61 @@ const Handler: React.FC<HandlerProps> = ({
   const completeAxis =
     (axis: HandlerAxis, valueRef: ValueRef, changedRef: ChangedRef) =>
     (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (!VALUE_KEYS.includes(event.key) || !changedRef.current) {
+      if (!VALUE_KEYS.includes(event.key)) {
         return;
       }
+      keyHeldRef.current = false;
+      if (!changedRef.current) {
+        return;
+      }
+      // Closing the interaction hands authority back to the controlled prop, so
+      // the next press starts from the value the parent committed.
       changedRef.current = false;
       axis.onChangeComplete(valueRef.current);
     };
 
-  // Native value changes (Home/End/PageUp/PageDown and AT set-value / increment
-  // actions) feed the same interaction value for the input's own axis.
+  // Native value changes for the input's own axis, from two distinct sources.
   const changeAxis =
     (axis: HandlerAxis, valueRef: ValueRef, changedRef: ChangedRef) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const next = Number(event.target.value);
-      valueRef.current = next;
-      changedRef.current = true;
+
+      if (keyHeldRef.current) {
+        // Part of a keyboard interaction: Home/End/PageUp/PageDown are left to
+        // the native range, so their value arrives here and key up commits it.
+        valueRef.current = next;
+        changedRef.current = true;
+        setValueChangedViaKey(true);
+        axis.onChange(next);
+        return;
+      }
+
+      // An AT set-value / increment action fires `change` with no key press
+      // around it, so no key up will follow to commit it. It is a whole
+      // interaction on its own: report and complete it here, leaving nothing
+      // in flight for an unrelated later key up to pick up.
+      changedRef.current = false;
       axis.onChange(next);
+      axis.onChangeComplete(next);
     };
+
+  // Focus leaving the control altogether — as opposed to moving between its two
+  // axes — ends the keyboard interaction.
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      return;
+    }
+    setValueChangedViaKey(false);
+  };
+
+  // A screen reader listing the form controls should find one "2D slider", not
+  // two identically named ones, so the axis without focus is hidden from the
+  // accessibility tree. While the keyboard is driving the value both axes are
+  // revealed, so the roving focus never lands on a hidden input and AT can read
+  // either channel. Mirrors react-aria's useColorArea, which likewise gives
+  // both axes the same name and separates them by aria-valuetext.
+  const xActive = !activeAxis || activeAxis === 'x';
+  const yActive = activeAxis === 'y';
 
   return (
     <div
@@ -190,13 +263,15 @@ const Handler: React.FC<HandlerProps> = ({
         [`${prefixCls}-handler-sm`]: size === 'small',
       })}
       style={{ position: 'relative', backgroundColor: color }}
+      onBlur={handleBlur}
     >
       <input
         ref={xInputRef}
         {...omit(x, ['onChange', 'onChangeComplete'])}
         type="range"
         step={x.step ?? 1}
-        tabIndex={is2D ? (activeAxis === 'x' ? 0 : -1) : undefined}
+        tabIndex={xActive ? undefined : -1}
+        aria-hidden={xActive || valueChangedViaKey ? undefined : 'true'}
         className={`${prefixCls}-handler-range`}
         style={RANGE_INPUT_STYLE}
         disabled={disabled}
@@ -212,7 +287,8 @@ const Handler: React.FC<HandlerProps> = ({
           type="range"
           step={y.step ?? 1}
           aria-orientation="vertical"
-          tabIndex={activeAxis === 'y' ? 0 : -1}
+          tabIndex={yActive ? undefined : -1}
+          aria-hidden={yActive || valueChangedViaKey ? undefined : 'true'}
           className={`${prefixCls}-handler-range`}
           style={RANGE_INPUT_STYLE}
           disabled={disabled}

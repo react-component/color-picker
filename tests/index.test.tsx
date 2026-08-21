@@ -520,11 +520,60 @@ describe('ColorPicker', () => {
       );
     };
 
-    // The two picker axes share the control name (aria-label); each input is
-    // distinguished by its axis via aria-valuetext (the react-aria ColorArea
-    // pattern), so the tests grab them positionally: [saturation, brightness].
+    // The two picker axes share the control name (aria-label) and are
+    // distinguished by aria-valuetext, following react-aria's ColorArea; only
+    // one of them is exposed to the accessibility tree at a time. These queries
+    // match on the label attribute rather than the a11y tree, so they find both
+    // regardless of aria-hidden, and grab them positionally: [sat, brightness].
     const getSaturation = () => screen.getAllByLabelText('Color picker')[0];
     const getBrightness = () => screen.getAllByLabelText('Color picker')[1];
+
+    it('Should expose only the focused picker axis to the a11y tree', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      const [saturation, brightness] = screen.getAllByLabelText('Color picker');
+
+      // Untouched, the x axis is the tab stop and the only axis a screen reader
+      // can see, so listing the form controls turns up a single "2D slider"
+      // rather than two identically named ones.
+      expect(saturation).not.toHaveAttribute('tabindex');
+      expect(saturation).not.toHaveAttribute('aria-hidden');
+      expect(brightness).toHaveAttribute('tabindex', '-1');
+      expect(brightness).toHaveAttribute('aria-hidden', 'true');
+
+      // Once the keyboard drives a value both axes are revealed, so the roving
+      // focus never lands on a hidden input and AT can read either channel.
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+      expect(brightness).not.toHaveAttribute('aria-hidden');
+      fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+
+      // Switching axis hands the tab stop to the y axis. The switch moves DOM
+      // focus within the control, which must not end the interaction.
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      expect(brightness).not.toHaveAttribute('tabindex');
+      expect(saturation).toHaveAttribute('tabindex', '-1');
+      expect(saturation).not.toHaveAttribute('aria-hidden');
+
+      // Focus leaving the control ends it, hiding whichever axis is no longer
+      // the active one.
+      fireEvent.focusOut(brightness, { relatedTarget: document.body });
+      expect(saturation).toHaveAttribute('aria-hidden', 'true');
+      expect(brightness).not.toHaveAttribute('aria-hidden');
+    });
+
+    it('Should not hide or untab a 1-D slider', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      // The exposure dance only applies to the 2-D picker; a lone hue/alpha
+      // range stays a plain tab stop throughout.
+      const hue = screen.getByLabelText('Hue');
+      expect(hue).not.toHaveAttribute('tabindex');
+      expect(hue).not.toHaveAttribute('aria-hidden');
+
+      fireEvent.keyDown(hue, { key: 'ArrowRight' });
+      expect(hue).not.toHaveAttribute('tabindex');
+      expect(hue).not.toHaveAttribute('aria-hidden');
+    });
 
     it('Should expose default aria-labels on the handles', () => {
       render(<ColorPicker defaultValue={defaultColor} />);
@@ -574,13 +623,15 @@ describe('ColorPicker', () => {
       const saturation = getSaturation();
       const brightness = getBrightness();
 
-      // Only one axis is in the tab order at a time.
-      expect(saturation).toHaveAttribute('tabindex', '0');
+      // Only one axis is in the tab order at a time. The active one carries no
+      // tabindex at all — a range input is natively focusable — so the picker
+      // keeps its place in document order instead of being forced to 0.
+      expect(saturation).not.toHaveAttribute('tabindex');
       expect(brightness).toHaveAttribute('tabindex', '-1');
 
       // Switching direction moves the tab stop onto the adjusted axis.
       fireEvent.keyDown(saturation, { key: 'ArrowDown' });
-      expect(brightness).toHaveAttribute('tabindex', '0');
+      expect(brightness).not.toHaveAttribute('tabindex');
       expect(saturation).toHaveAttribute('tabindex', '-1');
     });
 
@@ -669,6 +720,114 @@ describe('ColorPicker', () => {
       // A clamped press must not fire onChange (no value moved) nor complete.
       expect(onChange).not.toHaveBeenCalled();
       expect(onChangeComplete).not.toHaveBeenCalled();
+    });
+
+    it('Should restart a new press from the value a rejecting parent committed', () => {
+      const onChange = vi.fn();
+      render(<ColorPicker value={defaultColor} onChange={onChange} />);
+
+      const saturation = getSaturation();
+      // Each press is its own interaction (key up in between). A parent that
+      // never accepts the change leaves the committed value at 91%, so every
+      // press re-emits 92% rather than drifting 92% -> 93% -> 94% off a value
+      // the parent rejected — the way a native range snaps back.
+      for (let i = 0; i < 3; i += 1) {
+        fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+        fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+      }
+
+      expect(
+        onChange.mock.calls.map(([color]) => Math.round(color.toHsb().s * 100)),
+      ).toEqual([92, 92, 92]);
+    });
+
+    it('Should advance across separate presses when the parent accepts them', () => {
+      render(<Controlled />);
+
+      const saturation = getSaturation();
+      // Same three separate interactions, but each one is committed, so they
+      // step 91% -> 92% -> 93% -> 94%.
+      for (let i = 0; i < 3; i += 1) {
+        fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+        fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+      }
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 94%, 100%)',
+      );
+    });
+
+    it('Should complete an AT set-value action and leave nothing in flight', () => {
+      const onChange = vi.fn();
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const alpha = screen.getByLabelText('Alpha');
+      // An AT set-value action fires `change` with no key press around it, so
+      // no key up will follow: it has to commit on its own.
+      fireEvent.change(alpha, { target: { value: '0' } });
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].a).toBe(0);
+
+      onChange.mockClear();
+      onChangeComplete.mockClear();
+      // ...and it must leave nothing in flight: the next press is clamped at
+      // min, so it stays silent instead of re-committing the earlier change.
+      fireEvent.keyDown(alpha, { key: 'ArrowLeft' });
+      fireEvent.keyUp(alpha, { key: 'ArrowLeft' });
+
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onChangeComplete).not.toHaveBeenCalled();
+    });
+
+    it('Should complete a native Home key change once, on key up', () => {
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const alpha = screen.getByLabelText('Alpha');
+      // Home is left to the native range, so the value arrives as a change
+      // event mid-press. Key up commits it — once, not twice.
+      fireEvent.keyDown(alpha, { key: 'Home' });
+      fireEvent.change(alpha, { target: { value: '0' } });
+      fireEvent.keyUp(alpha, { key: 'Home' });
+
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].a).toBe(0);
+    });
+
+    it('Should snap an unaligned value onto the native step grid', () => {
+      const onChange = vi.fn();
+      // 50.5% alpha sits off the `min + n * step` grid a native range allows.
+      const unaligned = new Color({ h: 215, s: 0.91, b: 1, a: 0.505 });
+      render(<ColorPicker value={unaligned} onChange={onChange} />);
+
+      const alpha = screen.getByLabelText('Alpha');
+      // Stepping up snaps to the next grid value (51%) rather than adding a
+      // whole step to the unaligned one (51.5%), matching stepUp().
+      fireEvent.keyDown(alpha, { key: 'ArrowRight' });
+      fireEvent.keyUp(alpha, { key: 'ArrowRight' });
+      expect(onChange.mock.calls.at(-1)[1]).toEqual({
+        type: 'alpha',
+        value: 51,
+      });
+
+      // ...and stepping down snaps to the previous one (50%), not 49.5%.
+      fireEvent.keyDown(alpha, { key: 'ArrowLeft' });
+      expect(onChange.mock.calls.at(-1)[1]).toEqual({
+        type: 'alpha',
+        value: 50,
+      });
     });
 
     it('Should increase saturation on the picker (Arrow Right)', () => {

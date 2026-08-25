@@ -246,6 +246,25 @@ const Handler: React.FC<HandlerProps> = ({
       return;
     }
     setValueChangedViaKey(false);
+
+    // Focus can leave mid-press — a click elsewhere, or AT moving on — so no key
+    // up will follow to close the interaction. Commit whatever is in flight and
+    // drop it here instead: otherwise the parent never hears the interaction
+    // ended, and the value stays live for the next press to chain off, drifting
+    // away from what the parent actually committed. Both axes of the picker
+    // report the same color, so the axis last adjusted completes for the pair.
+    const pending =
+      y && yChangedRef.current && (activeAxis === 'y' || !xChangedRef.current)
+        ? { axis: y, value: yValueRef.current }
+        : xChangedRef.current
+          ? { axis: x, value: xValueRef.current }
+          : null;
+
+    keyHeldRef.current = false;
+    xChangedRef.current = false;
+    yChangedRef.current = false;
+
+    pending?.axis.onChangeComplete(pending.value);
   };
 
   // A screen reader listing the form controls should find one "2D slider", not

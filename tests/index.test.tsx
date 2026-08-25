@@ -670,6 +670,28 @@ describe('ColorPicker', () => {
       expect(brightness).toHaveAttribute('aria-valuetext', 'Lum: 100%');
     });
 
+    it('Should expose default aria-labels if locale values are undefined', () => {
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          locale={{
+            picker: undefined,
+            hue: undefined,
+            alpha: undefined,
+            saturation: undefined,
+            brightness: undefined,
+          }}
+        />,
+      );
+
+      const [saturation, brightness] = screen.getAllByLabelText('Color picker');
+      expect(screen.getAllByLabelText('Color picker')).toHaveLength(2);
+      expect(screen.getByLabelText('Hue')).toBeTruthy();
+      expect(screen.getByLabelText('Alpha')).toBeTruthy();
+      expect(saturation).toHaveAttribute('aria-valuetext', 'Saturation: 91%');
+      expect(brightness).toHaveAttribute('aria-valuetext', 'Brightness: 100%');
+    });
+
     it('Should change brightness with the Down arrow on the brightness axis', () => {
       const onChangeComplete = vi.fn();
       render(<Controlled onChangeComplete={onChangeComplete} />);
@@ -804,6 +826,87 @@ describe('ColorPicker', () => {
 
       expect(onChangeComplete).toHaveBeenCalledTimes(1);
       expect(onChangeComplete.mock.calls.at(-1)[0].a).toBe(0);
+    });
+
+    it('Should complete and reset the interaction when focus leaves mid-press', () => {
+      const onChange = vi.fn();
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const saturation = getSaturation();
+      // Focus can leave before key up — a click elsewhere, or AT moving on. The
+      // interaction still has to be committed...
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+      fireEvent.focusOut(saturation, { relatedTarget: document.body });
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+
+      // ...and dropped, so the next press restarts from the 91% this rejecting
+      // parent committed rather than chaining off the abandoned 92%.
+      fireEvent.focus(saturation);
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+      fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+
+      expect(
+        onChange.mock.calls.map(([color]) => Math.round(color.toHsb().s * 100)),
+      ).toEqual([92, 92]);
+      expect(
+        onChangeComplete.mock.calls.map(([color]) =>
+          Math.round(color.toHsb().s * 100),
+        ),
+      ).toEqual([92, 92]);
+    });
+
+    it('Should not complete on blur when nothing is in flight', () => {
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const brightness = getBrightness();
+      // Brightness is already at 100%, so this press moves nothing — leaving the
+      // control must not manufacture a completion.
+      fireEvent.keyDown(brightness, { key: 'ArrowUp' });
+      fireEvent.focusOut(brightness, { relatedTarget: document.body });
+
+      // Nor should a plain focus/blur with no press at all.
+      fireEvent.focus(brightness);
+      fireEvent.focusOut(brightness, { relatedTarget: document.body });
+
+      expect(onChangeComplete).not.toHaveBeenCalled();
+    });
+
+    it('Should complete once on blur when both axes are in flight', () => {
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+      // Both axes adjusted inside one interaction (no key up between), then
+      // focus leaves. The two axes describe one color, so a single completion
+      // carries both changes — completing each would report the second off a
+      // color already handed back to the parent.
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      fireEvent.keyDown(saturation, { key: 'ArrowLeft' });
+      fireEvent.focusOut(saturation, { relatedTarget: document.body });
+
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].toHsbString()).toBe(
+        'hsb(215, 90%, 99%)',
+      );
     });
 
     it('Should snap an unaligned value onto the native step grid', () => {

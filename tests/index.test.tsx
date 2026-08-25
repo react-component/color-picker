@@ -909,6 +909,60 @@ describe('ColorPicker', () => {
       );
     });
 
+    it('Should complete both axes once when key up ends a 2-D interaction', () => {
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+      // Both axes adjusted inside one interaction, then key up on the axis that
+      // has focus. It completes the pair...
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      fireEvent.keyDown(saturation, { key: 'ArrowLeft' });
+      fireEvent.keyUp(saturation, { key: 'ArrowLeft' });
+
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].toHsbString()).toBe(
+        'hsb(215, 90%, 99%)',
+      );
+
+      // ...and leaves nothing behind, so blurring cannot complete the same
+      // interaction a second time off a color already handed back.
+      fireEvent.focusOut(saturation, { relatedTarget: document.body });
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should complete a pending axis when the key up axis was clamped', () => {
+      const onChangeComplete = vi.fn();
+      // Saturation pinned at 0%, so Left cannot step.
+      const pinned = new Color({ h: 215, s: 0, b: 1, a: 1 });
+      render(
+        <ColorPicker value={pinned} onChangeComplete={onChangeComplete} />,
+      );
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+      // Brightness moves, then a clamped Left press takes focus to the x axis.
+      // Key up fires there, on the axis that did *not* change — the brightness
+      // change still has to be committed rather than left for a later blur.
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      fireEvent.keyDown(saturation, { key: 'ArrowLeft' });
+      fireEvent.keyUp(saturation, { key: 'ArrowLeft' });
+
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].toHsbString()).toBe(
+        'hsb(215, 0%, 99%)',
+      );
+
+      fireEvent.focusOut(saturation, { relatedTarget: document.body });
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+    });
+
     it('Should snap an unaligned value onto the native step grid', () => {
       const onChange = vi.fn();
       // 50.5% alpha sits off the `min + n * step` grid a native range allows.

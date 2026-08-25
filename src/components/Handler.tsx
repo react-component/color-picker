@@ -196,22 +196,45 @@ const Handler: React.FC<HandlerProps> = ({
     event.preventDefault();
   };
 
-  // Each input completes its own axis. Because focus follows the adjusted axis,
-  // key up fires on the input whose value just changed.
+  const getAxisState = (axis: 'x' | 'y') =>
+    axis === 'y'
+      ? { axis: y, valueRef: yValueRef, changedRef: yChangedRef }
+      : { axis: x, valueRef: xValueRef, changedRef: xChangedRef };
+
+  // Both axes form a single 2-D interaction, so it completes once and both are
+  // dropped together — clearing only the axis that reported would leave the
+  // other pending for a later key up or blur to complete the same interaction a
+  // second time, off a color already handed back to the parent. Conversely, the
+  // axis the event fired on may not be the one that moved (a press clamped at a
+  // bound after the other axis changed), so a pending axis still completes even
+  // when it isn't the preferred one. Closing the interaction hands authority
+  // back to the controlled prop, so the next press starts from what the parent
+  // committed.
+  const completeInteraction = (preferred: 'x' | 'y') => {
+    const first = getAxisState(preferred);
+    const second = getAxisState(preferred === 'y' ? 'x' : 'y');
+    const pending =
+      first.axis && first.changedRef.current
+        ? first
+        : second.axis && second.changedRef.current
+          ? second
+          : null;
+
+    keyHeldRef.current = false;
+    xChangedRef.current = false;
+    yChangedRef.current = false;
+
+    pending?.axis.onChangeComplete(pending.valueRef.current);
+  };
+
+  // Key up on either input closes the shared interaction. Because focus follows
+  // the adjusted axis, it fires on the input the user was last driving.
   const completeAxis =
-    (axis: HandlerAxis, valueRef: ValueRef, changedRef: ChangedRef) =>
-    (event: React.KeyboardEvent<HTMLInputElement>) => {
+    (axis: 'x' | 'y') => (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (!VALUE_KEYS.includes(event.key)) {
         return;
       }
-      keyHeldRef.current = false;
-      if (!changedRef.current) {
-        return;
-      }
-      // Closing the interaction hands authority back to the controlled prop, so
-      // the next press starts from the value the parent committed.
-      changedRef.current = false;
-      axis.onChangeComplete(valueRef.current);
+      completeInteraction(axis);
     };
 
   // Native value changes for the input's own axis, from two distinct sources.
@@ -248,23 +271,10 @@ const Handler: React.FC<HandlerProps> = ({
     setValueChangedViaKey(false);
 
     // Focus can leave mid-press — a click elsewhere, or AT moving on — so no key
-    // up will follow to close the interaction. Commit whatever is in flight and
-    // drop it here instead: otherwise the parent never hears the interaction
-    // ended, and the value stays live for the next press to chain off, drifting
-    // away from what the parent actually committed. Both axes of the picker
-    // report the same color, so the axis last adjusted completes for the pair.
-    const pending =
-      y && yChangedRef.current && (activeAxis === 'y' || !xChangedRef.current)
-        ? { axis: y, value: yValueRef.current }
-        : xChangedRef.current
-          ? { axis: x, value: xValueRef.current }
-          : null;
-
-    keyHeldRef.current = false;
-    xChangedRef.current = false;
-    yChangedRef.current = false;
-
-    pending?.axis.onChangeComplete(pending.value);
+    // up will follow to close the interaction. Commit it here instead: otherwise
+    // the parent never hears the interaction ended, and the value stays live for
+    // the next press to chain off, drifting away from what the parent committed.
+    completeInteraction(activeAxis ?? 'x');
   };
 
   // A screen reader listing the form controls should find one "2D slider", not
@@ -296,7 +306,7 @@ const Handler: React.FC<HandlerProps> = ({
         disabled={disabled}
         onChange={changeAxis(x, xValueRef, xChangedRef)}
         onKeyDown={handleKeyDown}
-        onKeyUp={completeAxis(x, xValueRef, xChangedRef)}
+        onKeyUp={completeAxis('x')}
         onFocus={is2D ? () => setActiveAxis('x') : undefined}
       />
       {y && (
@@ -313,7 +323,7 @@ const Handler: React.FC<HandlerProps> = ({
           disabled={disabled}
           onChange={changeAxis(y, yValueRef, yChangedRef)}
           onKeyDown={handleKeyDown}
-          onKeyUp={completeAxis(y, yValueRef, yChangedRef)}
+          onKeyUp={completeAxis('y')}
           onFocus={() => setActiveAxis('y')}
         />
       )}

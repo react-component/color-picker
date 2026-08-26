@@ -561,6 +561,38 @@ describe('ColorPicker', () => {
       expect(brightness).not.toHaveAttribute('aria-hidden');
     });
 
+    it('Should reveal an axis before moving focus onto it', () => {
+      render(<ColorPicker value={defaultColor} />);
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+
+      // What focus actually lands on, as the DOM looked at that moment. The
+      // state update that reveals an axis is batched, so revealing it has to
+      // happen before focus moves — otherwise AT is handed a control that is
+      // still aria-hidden.
+      const hiddenOnFocus: (string | null)[] = [];
+      const record = (event: Event) =>
+        hiddenOnFocus.push(
+          (event.target as HTMLElement).getAttribute('aria-hidden'),
+        );
+      document.addEventListener('focusin', record);
+
+      try {
+        // Onto the y axis, which starts hidden.
+        fireEvent.keyDown(saturation, { key: 'ArrowDown' });
+        fireEvent.keyUp(saturation, { key: 'ArrowDown' });
+        // Leaving hides the x axis; stepping it again focuses it back.
+        fireEvent.focusOut(brightness, { relatedTarget: document.body });
+        fireEvent.keyDown(brightness, { key: 'ArrowRight' });
+      } finally {
+        document.removeEventListener('focusin', record);
+      }
+
+      expect(hiddenOnFocus).toEqual([null, null]);
+      expect(saturation).toHaveFocus();
+    });
+
     it('Should not hide or untab a 1-D slider', () => {
       render(<ColorPicker defaultValue={defaultColor} />);
 

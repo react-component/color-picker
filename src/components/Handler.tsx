@@ -140,6 +140,13 @@ const Handler: React.FC<HandlerProps> = ({
     setActiveAxis(axis);
     const input = axis === 'y' ? yInputRef.current : xInputRef.current;
     if (input && document.activeElement !== input) {
+      // The state update above is batched, so the input is still carrying the
+      // aria-hidden it last rendered with. Reveal it here rather than letting
+      // the commit do it, so focus never lands on a control that is hidden from
+      // the accessibility tree. Safe to do imperatively: the axis being focused
+      // is by definition the active one, so the pending render drops the
+      // attribute too and lands on the same value.
+      input.removeAttribute('aria-hidden');
       input.focus();
     }
   };

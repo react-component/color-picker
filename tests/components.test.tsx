@@ -67,8 +67,38 @@ describe('ColorPicker.Components', () => {
       />,
     );
 
+    const colorBlock = container.querySelector('.test-color-block');
     const innerDiv = container.querySelector('.test-color-block-inner');
+    expect(colorBlock).not.toHaveAttribute('role');
+    expect(colorBlock).not.toHaveAttribute('tabindex');
+    expect(colorBlock).not.toHaveAttribute('aria-label');
     expect(innerDiv).toHaveClass('my-inner-class');
     expect(innerDiv).toHaveStyle({ color: '#903' });
+  });
+
+  it('makes clickable ColorBlock keyboard accessible', () => {
+    const onClick = vi.fn();
+    const { getByRole } = render(
+      <ColorBlock
+        prefixCls="test"
+        color="#ff0000"
+        aria-label="Brand red"
+        onClick={onClick}
+      />,
+    );
+    const button = getByRole('button', { name: 'Brand red' });
+
+    fireEvent.keyDown(button, { key: 'Enter' });
+    fireEvent.keyDown(button, { key: ' ' });
+
+    expect(onClick).toHaveBeenCalledTimes(2);
+  });
+
+  it('uses the color value as the default name for clickable ColorBlock', () => {
+    const { getByRole } = render(
+      <ColorBlock prefixCls="test" color="#ff0000" onClick={() => {}} />,
+    );
+
+    expect(getByRole('button', { name: '#ff0000' })).toBeInTheDocument();
   });
 });

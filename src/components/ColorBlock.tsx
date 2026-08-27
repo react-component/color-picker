@@ -10,6 +10,7 @@ export type ColorBlockProps = {
   innerClassName?: string;
   /** Internal usage. Only used in antd ColorPicker semantic structure only */
   innerStyle?: React.CSSProperties;
+  'aria-label'?: string;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
@@ -20,14 +21,29 @@ const ColorBlock: React.FC<ColorBlockProps> = ({
   style,
   innerClassName,
   innerStyle,
+  'aria-label': ariaLabel,
   onClick,
 }) => {
   const colorBlockCls = `${prefixCls}-color-block`;
+  const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> | undefined =
+    onClick
+      ? event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            event.currentTarget.click();
+          }
+        }
+      : undefined;
+
   return (
     <div
+      aria-label={onClick ? (ariaLabel ?? color) : undefined}
       className={clsx(colorBlockCls, className)}
       style={style}
       onClick={onClick}
+      onKeyDown={onKeyDown}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
     >
       <div
         className={clsx(`${colorBlockCls}-inner`, innerClassName)}

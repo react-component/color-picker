@@ -137,6 +137,8 @@ import { ColorBlock } from '@rc-component/color-picker';
 
 `ColorBlockProps` extends `React.HTMLAttributes<HTMLDivElement>`, so any standard div attribute or event handler — `onClick`, `title`, `role`, `tabIndex`, `data-*`, `aria-*` — reaches the outer element. `innerClassName` and `innerStyle` also exist on the type, but they are internal to antd's semantic structure; treat them as private.
 
+Passing `onClick` also makes the swatch a keyboard-accessible button: it receives `role="button"` and `tabIndex={0}`, and `Enter` / `Space` activate it just like a pointer click. Your own `role` or `tabIndex` still wins over those defaults. Without `onClick` the swatch stays a plain, non-focusable `div`.
+
 ## Development
 
 ```bash

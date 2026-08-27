@@ -90,6 +90,7 @@ describe('ColorPicker.Components', () => {
 
     fireEvent.keyDown(button, { key: 'Enter' });
     fireEvent.keyDown(button, { key: ' ' });
+    fireEvent.keyDown(button, { key: 'Enter', repeat: true });
 
     expect(onClick).toHaveBeenCalledTimes(2);
   });

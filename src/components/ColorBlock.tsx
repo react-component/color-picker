@@ -1,33 +1,48 @@
 import { clsx } from 'clsx';
 import React from 'react';
 
-export type ColorBlockProps = {
+export type ColorBlockProps = React.HTMLAttributes<HTMLDivElement> & {
   color: string;
   prefixCls?: string;
-  className?: string;
-  style?: React.CSSProperties;
   /** Internal usage. Only used in antd ColorPicker semantic structure only */
   innerClassName?: string;
   /** Internal usage. Only used in antd ColorPicker semantic structure only */
   innerStyle?: React.CSSProperties;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 const ColorBlock: React.FC<ColorBlockProps> = ({
   color,
   prefixCls,
   className,
-  style,
   innerClassName,
   innerStyle,
-  onClick,
+  ...props
 }) => {
   const colorBlockCls = `${prefixCls}-color-block`;
+
+  const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = event => {
+    // Compose instead of replace: a consumer handler still runs, and cancelling the event
+    // opts out of activation the same way it does on a native button.
+    props.onKeyDown?.(event);
+
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      event.currentTarget.click();
+    }
+  };
+
   return (
     <div
+      {...(props.onClick
+        ? { role: 'button', tabIndex: 0, 'aria-label': color }
+        : {})}
+      {...props}
+      {...(props.onClick ? { onKeyDown } : {})}
       className={clsx(colorBlockCls, className)}
-      style={style}
-      onClick={onClick}
     >
       <div
         className={clsx(`${colorBlockCls}-inner`, innerClassName)}

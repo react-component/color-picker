@@ -22,6 +22,7 @@ export interface BaseSliderProps {
   onChangeComplete: (value: number) => void;
   type: HsbaColorType;
   color: Color;
+  'aria-label'?: string;
 }
 
 const Slider: React.FC<BaseSliderProps> = props => {
@@ -33,6 +34,10 @@ const Slider: React.FC<BaseSliderProps> = props => {
     onChangeComplete,
     color,
     type,
+    min,
+    max,
+    value,
+    'aria-label': ariaLabel,
   } = props;
 
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -103,6 +108,15 @@ const Slider: React.FC<BaseSliderProps> = props => {
             size="small"
             color={handleColor.toHexString()}
             prefixCls={prefixCls}
+            disabled={disabled}
+            x={{
+              'aria-label': ariaLabel,
+              min,
+              max,
+              value,
+              onChange,
+              onChangeComplete,
+            }}
           />
         </Transform>
         <Gradient colors={gradientList} type={type} prefixCls={prefixCls} />

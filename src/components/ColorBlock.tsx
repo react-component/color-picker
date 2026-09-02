@@ -21,6 +21,14 @@ const ColorBlock: React.FC<ColorBlockProps> = ({
   const colorBlockCls = `${prefixCls}-color-block`;
 
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = event => {
+    // Compose instead of replace: a consumer handler still runs, and cancelling the event
+    // opts out of activation the same way it does on a native button.
+    props.onKeyDown?.(event);
+
+    if (event.defaultPrevented) {
+      return;
+    }
+
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       event.currentTarget.click();
@@ -29,8 +37,11 @@ const ColorBlock: React.FC<ColorBlockProps> = ({
 
   return (
     <div
-      {...(props.onClick ? { role: 'button', tabIndex: 0, onKeyDown } : {})}
+      {...(props.onClick
+        ? { role: 'button', tabIndex: 0, 'aria-label': color }
+        : {})}
       {...props}
+      {...(props.onClick ? { onKeyDown } : {})}
       className={clsx(colorBlockCls, className)}
     >
       <div

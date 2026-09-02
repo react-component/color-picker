@@ -137,7 +137,7 @@ import { ColorBlock } from '@rc-component/color-picker';
 
 `ColorBlockProps` 继承 `React.HTMLAttributes<HTMLDivElement>`，因此任意标准 div 属性或事件处理器（`onClick`、`title`、`role`、`tabIndex`、`data-*`、`aria-*`）都会透传到最外层元素。类型上还存在 `innerClassName` 与 `innerStyle`，但它们是 antd 语义化结构的内部实现，请视为私有。
 
-传入 `onClick` 时，色块还会变成可通过键盘操作的按钮：自动带上 `role="button"` 与 `tabIndex={0}`，并且 `Enter` / `Space` 与鼠标点击等效。你自行传入的 `role` 或 `tabIndex` 仍会覆盖这些默认值。未传 `onClick` 时，色块保持为普通的、不可聚焦的 `div`。
+传入 `onClick` 时，色块还会变成可通过键盘操作的按钮：自动带上 `role="button"`、`tabIndex={0}`、默认取 `color` 的 `aria-label`，并且 `Enter` / `Space` 与鼠标点击等效。你自行传入的 `role`、`tabIndex` 或 `aria-label` 仍会覆盖这些默认值；你的 `onKeyDown` 会与内置的键盘激活组合执行，而不会将其替换——若要阻止激活，可在其中调用 `event.preventDefault()`，与原生按钮的行为一致。未传 `onClick` 时，色块保持为普通的、不可聚焦且无无障碍名称的 `div`。
 
 ## 本地开发
 

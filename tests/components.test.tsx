@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-loop-func */
 import { createEvent, fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { expect } from 'vitest';
@@ -151,6 +150,95 @@ describe('ColorPicker.Components', () => {
       const block = container.querySelector('.test-color-block');
       expect(block).toHaveAttribute('role', 'menuitem');
       expect(block).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('should compose a customized onKeyDown with keyboard activation', () => {
+      const onClick = vi.fn();
+      const onKeyDown = vi.fn();
+
+      const { container } = render(
+        <ColorBlock
+          prefixCls="test"
+          color="red"
+          onClick={onClick}
+          onKeyDown={onKeyDown}
+        />,
+      );
+
+      const block = container.querySelector('.test-color-block');
+      fireEvent.keyDown(block, { key: 'Enter' });
+
+      expect(onKeyDown).toHaveBeenCalledTimes(1);
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('should let a customized onKeyDown cancel keyboard activation', () => {
+      const onClick = vi.fn();
+      const onKeyDown = vi.fn((event: React.KeyboardEvent<HTMLDivElement>) => {
+        event.preventDefault();
+      });
+
+      const { container } = render(
+        <ColorBlock
+          prefixCls="test"
+          color="red"
+          onClick={onClick}
+          onKeyDown={onKeyDown}
+        />,
+      );
+
+      const block = container.querySelector('.test-color-block');
+      fireEvent.keyDown(block, { key: 'Enter' });
+
+      expect(onKeyDown).toHaveBeenCalledTimes(1);
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it('should still forward onKeyDown when onClick is not passed', () => {
+      const onKeyDown = vi.fn();
+
+      const { container } = render(
+        <ColorBlock prefixCls="test" color="red" onKeyDown={onKeyDown} />,
+      );
+
+      fireEvent.keyDown(container.querySelector('.test-color-block'), {
+        key: 'Enter',
+      });
+
+      expect(onKeyDown).toHaveBeenCalledTimes(1);
+    });
+
+    it('should fall back to the color as accessible name', () => {
+      const { container } = render(
+        <ColorBlock prefixCls="test" color="red" onClick={vi.fn()} />,
+      );
+
+      expect(container.querySelector('.test-color-block')).toHaveAccessibleName(
+        'red',
+      );
+    });
+
+    it('should keep the customized aria-label as accessible name', () => {
+      const { container } = render(
+        <ColorBlock
+          prefixCls="test"
+          color="red"
+          aria-label="Brand red"
+          onClick={vi.fn()}
+        />,
+      );
+
+      expect(container.querySelector('.test-color-block')).toHaveAccessibleName(
+        'Brand red',
+      );
+    });
+
+    it('should not name a block without onClick', () => {
+      const { container } = render(<ColorBlock prefixCls="test" color="red" />);
+
+      expect(container.querySelector('.test-color-block')).not.toHaveAttribute(
+        'aria-label',
+      );
     });
   });
 });

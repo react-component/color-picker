@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-loop-func */
 import { spyElementPrototypes } from '@rc-component/util';
+import useMobile from '@rc-component/util/lib/hooks/useMobile';
 import {
   act,
   createEvent,
@@ -15,6 +16,12 @@ import { defaultColor } from '../src/util';
 vi.mock('@rc-component/trigger', async () => {
   return await import('@rc-component/trigger/lib/mock');
 });
+
+// The underlying `isMobile` caches its first answer, so platforms are simulated
+// by mocking the hook rather than the user agent.
+vi.mock('@rc-component/util/lib/hooks/useMobile', () => ({
+  default: vi.fn(() => false),
+}));
 
 export async function waitFakeTimer(advanceTime = 1000, times = 20) {
   for (let i = 0; i < times; i += 1) {
@@ -591,6 +598,29 @@ describe('ColorPicker', () => {
 
       expect(hiddenOnFocus).toEqual([null, null]);
       expect(saturation).toHaveFocus();
+    });
+
+    it('Should expose both picker axes to touch screen readers on mobile', () => {
+      vi.mocked(useMobile).mockReturnValue(true);
+
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      // VoiceOver / TalkBack users swipe between controls with no keyboard
+      // to switch axes, so neither axis may be hidden from them.
+      const [saturation, brightness] = screen.getAllByLabelText('Color picker');
+      expect(saturation).not.toHaveAttribute('aria-hidden');
+      expect(brightness).not.toHaveAttribute('aria-hidden');
+
+      // An AT increment on the brightness axis lands like any other.
+      fireEvent.change(brightness, { target: { value: '10' } });
+      expect(brightness).toHaveValue('10');
+
+      // Nor does the end of an interaction hide either one again.
+      fireEvent.focusOut(brightness, { relatedTarget: document.body });
+      expect(saturation).not.toHaveAttribute('aria-hidden');
+      expect(brightness).not.toHaveAttribute('aria-hidden');
+
+      vi.mocked(useMobile).mockReturnValue(false);
     });
 
     it('Should not hide or untab a 1-D slider', () => {

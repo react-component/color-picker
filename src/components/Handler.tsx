@@ -1,4 +1,5 @@
 import { omit } from '@rc-component/util';
+import useMobile from '@rc-component/util/lib/hooks/useMobile';
 import { clsx } from 'clsx';
 import React from 'react';
 
@@ -96,6 +97,10 @@ const Handler: React.FC<HandlerProps> = ({
   // Reveals both axes for the duration of the interaction — see the a11y-tree
   // note below.
   const [valueChangedViaKey, setValueChangedViaKey] = React.useState(false);
+  // Whether both axes stay in the accessibility tree for good — see the
+  // a11y-tree note below. Detected after mount, so the server and the first
+  // client render produce the same markup.
+  const exposeBothAxes = useMobile();
 
   const stepAxis = (
     axis: HandlerAxis,
@@ -288,10 +293,15 @@ const Handler: React.FC<HandlerProps> = ({
   // two identically named ones, so the axis without focus is hidden from the
   // accessibility tree. While the keyboard is driving the value both axes are
   // revealed, so the roving focus never lands on a hidden input and AT can read
-  // either channel. Mirrors react-aria's useColorArea, which likewise gives
-  // both axes the same name and separates them by aria-valuetext.
+  // either channel. Touch screen readers (VoiceOver, TalkBack) have no keyboard
+  // to switch axes: users swipe from control to control, so a hidden axis
+  // could never be found or adjusted, and on those platforms both axes stay
+  // exposed. Mirrors react-aria's useColorArea, which likewise gives both axes
+  // the same name, separates them by aria-valuetext, and makes the same
+  // iOS/Android exception.
   const xActive = !activeAxis || activeAxis === 'x';
   const yActive = activeAxis === 'y';
+  const revealBothAxes = exposeBothAxes || valueChangedViaKey;
 
   return (
     <div
@@ -307,7 +317,7 @@ const Handler: React.FC<HandlerProps> = ({
         type="range"
         step={x.step ?? 1}
         tabIndex={xActive ? undefined : -1}
-        aria-hidden={xActive || valueChangedViaKey ? undefined : 'true'}
+        aria-hidden={xActive || revealBothAxes ? undefined : 'true'}
         className={`${prefixCls}-handler-range`}
         style={RANGE_INPUT_STYLE}
         disabled={disabled}
@@ -324,7 +334,7 @@ const Handler: React.FC<HandlerProps> = ({
           step={y.step ?? 1}
           aria-orientation="vertical"
           tabIndex={yActive ? undefined : -1}
-          aria-hidden={yActive || valueChangedViaKey ? undefined : 'true'}
+          aria-hidden={yActive || revealBothAxes ? undefined : 'true'}
           className={`${prefixCls}-handler-range`}
           style={RANGE_INPUT_STYLE}
           disabled={disabled}

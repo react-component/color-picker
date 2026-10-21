@@ -40,6 +40,14 @@ export interface BaseColorPickerProps {
   color?: Color;
   prefixCls?: string;
   disabled?: boolean;
+  locale?: {
+    picker?: string;
+    pickerDescription?: string;
+    hue?: string;
+    alpha?: string;
+    saturation?: string;
+    brightness?: string;
+  };
   onChange?: (
     color: Color,
     info?: { type?: HsbaColorType; value?: number },

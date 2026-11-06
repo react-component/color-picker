@@ -1,5 +1,4 @@
-import { omit } from '@rc-component/util';
-import useMobile from '@rc-component/util/lib/hooks/useMobile';
+import { omit, useMobile } from '@rc-component/util';
 import { clsx } from 'clsx';
 import React from 'react';
 

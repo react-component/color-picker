@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-loop-func */
-import { spyElementPrototypes } from '@rc-component/util';
-import useMobile from '@rc-component/util/lib/hooks/useMobile';
+import { spyElementPrototypes, useMobile } from '@rc-component/util';
 import {
   act,
   createEvent,
@@ -19,9 +18,13 @@ vi.mock('@rc-component/trigger', async () => {
 
 // The underlying `isMobile` caches its first answer, so platforms are simulated
 // by mocking the hook rather than the user agent.
-vi.mock('@rc-component/util/lib/hooks/useMobile', () => ({
-  default: vi.fn(() => false),
-}));
+vi.mock('@rc-component/util', async importOriginal => {
+  const util = await importOriginal<typeof import('@rc-component/util')>();
+  return {
+    ...util,
+    useMobile: vi.fn(() => false),
+  };
+});
 
 export async function waitFakeTimer(advanceTime = 1000, times = 20) {
   for (let i = 0; i < times; i += 1) {

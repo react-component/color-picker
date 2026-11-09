@@ -300,6 +300,50 @@ describe('ColorPicker', () => {
     spyDom.mockRestore();
   });
 
+  it('Should stop dragging on touch cancel without completing the change', () => {
+    const spyDom = spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        x: 0,
+        y: 100,
+        width: 100,
+        height: 100,
+      }),
+    });
+    const onChange = vi.fn();
+    const onChangeComplete = vi.fn();
+
+    try {
+      const { container } = render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      doTouchMove(container, 0, 75);
+      expect(onChange).toHaveBeenCalled();
+      onChange.mockClear();
+      fireEvent.touchCancel(document);
+
+      const outsideMove = createEvent.touchMove(document.body, {
+        touches: [{ pageX: 25, pageY: 125 }],
+      });
+      fireEvent(document.body, outsideMove);
+      fireEvent.touchEnd(document.body);
+      expect(outsideMove.defaultPrevented).toBe(false);
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onChangeComplete).not.toHaveBeenCalled();
+
+      doTouchMove(container, 0, 50);
+      fireEvent.touchEnd(document);
+      expect(onChange).toHaveBeenCalled();
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+    } finally {
+      spyDom.mockRestore();
+    }
+  });
+
   it('Should custom panel work', () => {
     const { container } = render(
       <ColorPicker

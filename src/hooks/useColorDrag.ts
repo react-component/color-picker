@@ -49,25 +49,14 @@ function useColorDrag(
     disabledDrag,
   } = props;
   const [offsetValue, setOffsetValue] = useState({ x: 0, y: 0 });
-  const mouseMoveRef = useRef<(event: MouseEvent) => void>(null);
-  const mouseUpRef = useRef<(event: MouseEvent) => void>(null);
+  const cleanupDragRef = useRef<() => void>(null);
 
   // Always get position from `color`
   useEffect(() => {
     setOffsetValue(calculate());
   }, [color]);
 
-  useEffect(
-    () => () => {
-      document.removeEventListener('mousemove', mouseMoveRef.current);
-      document.removeEventListener('mouseup', mouseUpRef.current);
-      document.removeEventListener('touchmove', mouseMoveRef.current);
-      document.removeEventListener('touchend', mouseUpRef.current);
-      mouseMoveRef.current = null;
-      mouseUpRef.current = null;
-    },
-    [],
-  );
+  useEffect(() => () => cleanupDragRef.current?.(), []);
 
   const updateOffset: EventHandle = e => {
     const { pageX, pageY } = getPosition(e);
@@ -110,19 +99,17 @@ function useColorDrag(
 
   const onDragStop: EventHandle = e => {
     e.preventDefault();
-    document.removeEventListener('mousemove', mouseMoveRef.current);
-    document.removeEventListener('mouseup', mouseUpRef.current);
-    document.removeEventListener('touchmove', mouseMoveRef.current);
-    document.removeEventListener('touchend', mouseUpRef.current);
-    mouseMoveRef.current = null;
-    mouseUpRef.current = null;
+    cleanupDragRef.current?.();
     onDragChangeComplete?.();
+  };
+
+  const onDragCancel = () => {
+    cleanupDragRef.current?.();
   };
 
   const onDragStart: EventHandle = e => {
     // https://github.com/ant-design/ant-design/issues/43529
-    document.removeEventListener('mousemove', mouseMoveRef.current);
-    document.removeEventListener('mouseup', mouseUpRef.current);
+    cleanupDragRef.current?.();
 
     if (disabledDrag) {
       return;
@@ -136,8 +123,15 @@ function useColorDrag(
     // out of passive costs nothing for normal scrolling.
     document.addEventListener('touchmove', onDragMove, { passive: false });
     document.addEventListener('touchend', onDragStop);
-    mouseMoveRef.current = onDragMove;
-    mouseUpRef.current = onDragStop;
+    document.addEventListener('touchcancel', onDragCancel);
+    cleanupDragRef.current = () => {
+      document.removeEventListener('mousemove', onDragMove);
+      document.removeEventListener('mouseup', onDragStop);
+      document.removeEventListener('touchmove', onDragMove);
+      document.removeEventListener('touchend', onDragStop);
+      document.removeEventListener('touchcancel', onDragCancel);
+      cleanupDragRef.current = null;
+    };
   };
 
   return [offsetValue, onDragStart];

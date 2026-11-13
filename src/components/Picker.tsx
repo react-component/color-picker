@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import React, { useRef } from 'react';
+import type { Color } from '../color';
 import useColorDrag from '../hooks/useColorDrag';
 import type { BaseColorPickerProps, TransformOffset } from '../interface';
 import { calcOffset, calculateColor, generateColor } from '../util';
@@ -21,24 +22,18 @@ const Picker: FC<PickerProps> = ({
 }) => {
   const pickerRef = useRef<HTMLDivElement>(null);
   const transformRef = useRef<HTMLDivElement>(null);
-  // Candidate color for the keyboard/drag interaction in flight. Consulted on
-  // completion so the *latest* value is reported, even across several presses.
-  const colorRef = useRef(color);
-  // Whether `colorRef` currently holds such a candidate. Outside an interaction
-  // the controlled `color` prop is the source of truth, so the ref is never
-  // synced during render: a stale echo of the pre-interaction color has nothing
-  // to clobber, and nothing is written from a render that concurrent React may
-  // abandon.
-  const activeRef = useRef(false);
+  // Candidate color for the keyboard/drag interaction in flight, or null between
+  // interactions so the controlled prop remains the source of truth.
+  const colorRef = useRef<Color | null>(null);
 
   // The in-flight candidate while interacting, otherwise the controlled prop.
-  const getLatestColor = () => (activeRef.current ? colorRef.current : color);
+  const getLatestColor = () => colorRef.current ?? color;
 
   // Report the latest value, then hand authority back to the controlled prop so
   // the next interaction starts from what the parent committed.
   const completeColor = () => {
     const latest = getLatestColor();
-    activeRef.current = false;
+    colorRef.current = null;
     onChangeComplete?.(latest);
   };
 
@@ -50,7 +45,6 @@ const Picker: FC<PickerProps> = ({
       color,
     });
     colorRef.current = calcColor;
-    activeRef.current = true;
     onChange(calcColor);
   });
 
@@ -74,7 +68,6 @@ const Picker: FC<PickerProps> = ({
       [channel]: percent / 100,
     });
     colorRef.current = next;
-    activeRef.current = true;
     onChange(next);
   };
 

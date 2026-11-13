@@ -21,6 +21,7 @@
 - Accepts string, number, RGB, RGBA, HSB, HSBA, and `Color` inputs.
 - Provides hue and alpha controls with change and drag-complete callbacks.
 - Exposes `Color` helpers for hex, RGB, and HSB conversions.
+- Exposes keyboard-operable, screen-reader-labelled controls with overridable strings.
 
 ## Install
 
@@ -61,16 +62,45 @@ Then open `http://localhost:8000`.
 
 ### ColorPicker
 
-| Property         | Description                             | Type                                                                         | Default           |
-| ---------------- | --------------------------------------- | ---------------------------------------------------------------------------- | ----------------- |
-| defaultValue     | Default color value                     | `ColorGenInput`                                                              | -                 |
-| disabled         | Whether the color picker is disabled    | boolean                                                                      | false             |
-| disabledAlpha    | Whether to hide the alpha slider        | boolean                                                                      | false             |
-| panelRender      | Custom panel renderer                   | `(panel: React.ReactElement) => React.ReactElement`                          | -                 |
-| prefixCls        | Component class name prefix             | string                                                                       | `rc-color-picker` |
-| value            | Current color value                     | `ColorGenInput`                                                              | -                 |
-| onChange         | Callback when color changes             | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
-| onChangeComplete | Callback when a drag operation finishes | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
+| Property         | Description                                  | Type                                                                         | Default           |
+| ---------------- | -------------------------------------------- | ---------------------------------------------------------------------------- | ----------------- |
+| defaultValue     | Default color value                          | `ColorGenInput`                                                              | -                 |
+| disabled         | Whether the color picker is disabled         | boolean                                                                      | false             |
+| disabledAlpha    | Whether to hide the alpha slider             | boolean                                                                      | false             |
+| locale           | Accessible labels for the picker and sliders | [`Locale`](#locale)                                                          | -                 |
+| panelRender      | Custom panel renderer                        | `(panel: React.ReactElement) => React.ReactElement`                          | -                 |
+| prefixCls        | Component class name prefix                  | string                                                                       | `rc-color-picker` |
+| value            | Current color value                          | `ColorGenInput`                                                              | -                 |
+| onChange         | Callback when color changes                  | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
+| onChangeComplete | Callback when a drag operation finishes      | `(color: Color, info?: { type?: 'hue' \| 'alpha'; value?: number }) => void` | -                 |
+
+### Locale
+
+Overrides the accessible names the controls expose to assistive technology. Every key is optional and falls back to its default, so pass only the strings you need to translate.
+
+| Property          | Description                                                   | Type   | Default        |
+| ----------------- | ------------------------------------------------------------- | ------ | -------------- |
+| alpha             | `aria-label` of the alpha slider                              | string | `Alpha`        |
+| brightness        | Channel name in the brightness axis `aria-valuetext`          | string | `Brightness`   |
+| hue               | `aria-label` of the hue slider                                | string | `Hue`          |
+| picker            | `aria-label` of both saturation and brightness axes           | string | `Color picker` |
+| pickerDescription | `aria-roledescription` of both saturation and brightness axes | string | `2D slider`    |
+| saturation        | Channel name in the saturation axis `aria-valuetext`          | string | `Saturation`   |
+
+```tsx | pure
+<ColorPicker
+  locale={{
+    picker: 'Sélecteur de couleur',
+    pickerDescription: 'Curseur 2D',
+    hue: 'Teinte',
+    alpha: 'Transparence',
+    saturation: 'Saturation',
+    brightness: 'Luminosité',
+  }}
+/>
+```
+
+The 2-D area renders one range input per axis. Both share the `picker` name and the `pickerDescription` role description, while each announces its own channel through `aria-valuetext` — `Saturation: 91%` and `Brightness: 100%` — so `saturation` and `brightness` are channel names rather than whole labels.
 
 ### Color
 
@@ -81,6 +111,33 @@ Then open `http://localhost:8000`.
 | toHsbString | Convert to HSB color string | `() => string`                                         |
 | toRgb       | Convert to RGB object       | `() => { r: number; g: number; b: number; a: number }` |
 | toRgbString | Convert to RGB color string | `() => string`                                         |
+
+### ColorBlock
+
+A standalone swatch, exported for building custom triggers and panels.
+
+```tsx | pure
+import { ColorBlock } from '@rc-component/color-picker';
+
+<ColorBlock
+  color="#1677ff"
+  prefixCls="rc-color-picker"
+  title="Current color"
+  onClick={handleClick}
+/>;
+```
+
+| Property  | Description                     | Type                                   | Default |
+| --------- | ------------------------------- | -------------------------------------- | ------- |
+| color     | Color used to fill the swatch   | string                                 | -       |
+| prefixCls | Component class name prefix     | string                                 | -       |
+| className | Class name of the outer element | string                                 | -       |
+| style     | Style of the outer element      | `React.CSSProperties`                  | -       |
+| ...rest   | Forwarded to the outer `div`    | `React.HTMLAttributes<HTMLDivElement>` | -       |
+
+`ColorBlockProps` extends `React.HTMLAttributes<HTMLDivElement>`, so any standard div attribute or event handler — `onClick`, `title`, `role`, `tabIndex`, `data-*`, `aria-*` — reaches the outer element. `innerClassName` and `innerStyle` also exist on the type, but they are internal to antd's semantic structure; treat them as private.
+
+Passing `onClick` also makes the swatch a keyboard-accessible button: it receives `role="button"`, `tabIndex={0}`, an `aria-label` defaulting to `color`, and `Enter` / `Space` activate it just like a pointer click. Your own `role`, `tabIndex` or `aria-label` still wins over those defaults, and your `onKeyDown` is composed with the built-in activation rather than replacing it — call `event.preventDefault()` in it to suppress activation, as you would on a native button. Without `onClick` the swatch stays a plain, non-focusable, unlabelled `div`.
 
 ## Development
 

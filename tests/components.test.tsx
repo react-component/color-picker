@@ -1,4 +1,4 @@
-import { createEvent, fireEvent, render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { expect } from 'vitest';
 import ColorPicker, { ColorBlock, type BaseSliderProps } from '../src';
@@ -82,6 +82,7 @@ describe('ColorPicker.Components', () => {
       );
 
       const block = container.querySelector('.test-color-block');
+      expect(block.tagName).toBe('DIV');
       expect(block).not.toHaveAttribute('role');
       expect(block).not.toHaveAttribute('tabindex');
 
@@ -99,27 +100,45 @@ describe('ColorPicker.Components', () => {
       );
 
       const block = container.querySelector('.test-color-block');
-      expect(block).toHaveAttribute('role', 'button');
-      expect(block).toHaveAttribute('tabindex', '0');
+      expect(block.tagName).toBe('BUTTON');
+      expect(block).toHaveAttribute('type', 'button');
+      expect((block as HTMLButtonElement).tabIndex).toBe(0);
 
       fireEvent.click(block);
       expect(onClick).toHaveBeenCalledTimes(1);
     });
 
-    it.each(['Enter', ' '])('should trigger onClick when pressing %s', key => {
+    it('should forward custom button styles', () => {
+      const { container } = render(
+        <ColorBlock
+          prefixCls="test"
+          color="red"
+          onClick={vi.fn()}
+          style={{ padding: 4 }}
+        />,
+      );
+
+      expect(container.querySelector('button')).toHaveStyle({ padding: '4px' });
+      expect(container.querySelector('.test-color-block-inner')).toHaveStyle({
+        background: 'red',
+      });
+    });
+
+    it('should not submit a containing form', () => {
       const onClick = vi.fn();
+      const onSubmit = vi.fn(event => event.preventDefault());
 
       const { container } = render(
-        <ColorBlock prefixCls="test" color="red" onClick={onClick} />,
+        <form onSubmit={onSubmit}>
+          <ColorBlock prefixCls="test" color="red" onClick={onClick} />
+        </form>,
       );
 
       const block = container.querySelector('.test-color-block');
-      const event = createEvent.keyDown(block, { key });
-      fireEvent(block, event);
+      fireEvent.click(block);
 
       expect(onClick).toHaveBeenCalledTimes(1);
-      // Prevent page scroll on Space and form submit on Enter
-      expect(event.defaultPrevented).toBe(true);
+      expect(onSubmit).not.toHaveBeenCalled();
     });
 
     it('should not trigger onClick for other keys', () => {
@@ -152,7 +171,7 @@ describe('ColorPicker.Components', () => {
       expect(block).toHaveAttribute('tabindex', '-1');
     });
 
-    it('should compose a customized onKeyDown with keyboard activation', () => {
+    it('should forward onKeyDown to the native button', () => {
       const onClick = vi.fn();
       const onKeyDown = vi.fn();
 
@@ -169,29 +188,6 @@ describe('ColorPicker.Components', () => {
       fireEvent.keyDown(block, { key: 'Enter' });
 
       expect(onKeyDown).toHaveBeenCalledTimes(1);
-      expect(onClick).toHaveBeenCalledTimes(1);
-    });
-
-    it('should let a customized onKeyDown cancel keyboard activation', () => {
-      const onClick = vi.fn();
-      const onKeyDown = vi.fn((event: React.KeyboardEvent<HTMLDivElement>) => {
-        event.preventDefault();
-      });
-
-      const { container } = render(
-        <ColorBlock
-          prefixCls="test"
-          color="red"
-          onClick={onClick}
-          onKeyDown={onKeyDown}
-        />,
-      );
-
-      const block = container.querySelector('.test-color-block');
-      fireEvent.keyDown(block, { key: 'Enter' });
-
-      expect(onKeyDown).toHaveBeenCalledTimes(1);
-      expect(onClick).not.toHaveBeenCalled();
     });
 
     it('should still forward onKeyDown when onClick is not passed', () => {

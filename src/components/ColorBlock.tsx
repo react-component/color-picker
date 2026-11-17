@@ -1,7 +1,9 @@
 import { clsx } from 'clsx';
 import React from 'react';
 
-export type ColorBlockProps = React.HTMLAttributes<HTMLDivElement> & {
+export type ColorBlockProps = React.HTMLAttributes<
+  HTMLDivElement | HTMLButtonElement
+> & {
   color: string;
   prefixCls?: string;
   /** Internal usage. Only used in antd ColorPicker semantic structure only */
@@ -19,37 +21,23 @@ const ColorBlock: React.FC<ColorBlockProps> = ({
   ...props
 }) => {
   const colorBlockCls = `${prefixCls}-color-block`;
-
-  // ======================= Keyboard Events ========================
-  const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = event => {
-    // Let consumers prevent keyboard activation.
-    props.onKeyDown?.(event);
-
-    if (event.defaultPrevented) {
-      return;
-    }
-
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      event.currentTarget.click();
-    }
-  };
+  const interactive = !!props.onClick;
+  const Tag = interactive ? 'button' : 'div';
+  const InnerTag = interactive ? 'span' : 'div';
 
   // ============================ Render ============================
   return (
-    <div
-      {...(props.onClick
-        ? { role: 'button', tabIndex: 0, 'aria-label': color }
-        : {})}
+    <Tag
+      type={interactive ? 'button' : undefined}
+      aria-label={interactive ? color : undefined}
       {...props}
-      {...(props.onClick ? { onKeyDown } : {})}
       className={clsx(colorBlockCls, className)}
     >
-      <div
+      <InnerTag
         className={clsx(`${colorBlockCls}-inner`, innerClassName)}
         style={{ background: color, ...innerStyle }}
       />
-    </div>
+    </Tag>
   );
 };
 

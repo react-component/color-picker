@@ -127,17 +127,17 @@ import { ColorBlock } from '@rc-component/color-picker';
 />;
 ```
 
-| Property  | Description                     | Type                                   | Default |
-| --------- | ------------------------------- | -------------------------------------- | ------- |
-| color     | Color used to fill the swatch   | string                                 | -       |
-| prefixCls | Component class name prefix     | string                                 | -       |
-| className | Class name of the outer element | string                                 | -       |
-| style     | Style of the outer element      | `React.CSSProperties`                  | -       |
-| ...rest   | Forwarded to the outer `div`    | `React.HTMLAttributes<HTMLDivElement>` | -       |
+| Property  | Description                     | Type                                                        | Default |
+| --------- | ------------------------------- | ----------------------------------------------------------- | ------- |
+| color     | Color used to fill the swatch   | string                                                      | -       |
+| prefixCls | Component class name prefix     | string                                                      | -       |
+| className | Class name of the outer element | string                                                      | -       |
+| style     | Style of the outer element      | `React.CSSProperties`                                       | -       |
+| ...rest   | Forwarded to the outer element  | `React.HTMLAttributes<HTMLDivElement \| HTMLButtonElement>` | -       |
 
-`ColorBlockProps` extends `React.HTMLAttributes<HTMLDivElement>`, so any standard div attribute or event handler — `onClick`, `title`, `role`, `tabIndex`, `data-*`, `aria-*` — reaches the outer element. `innerClassName` and `innerStyle` also exist on the type, but they are internal to antd's semantic structure; treat them as private.
+`ColorBlockProps` extends `React.HTMLAttributes<HTMLDivElement | HTMLButtonElement>`, so standard attributes and event handlers reach the outer element. `innerClassName` and `innerStyle` are internal to antd's semantic structure; treat them as private.
 
-Passing `onClick` also makes the swatch a keyboard-accessible button: it receives `role="button"`, `tabIndex={0}`, an `aria-label` defaulting to `color`, and `Enter` / `Space` activate it just like a pointer click. Your own `role`, `tabIndex` or `aria-label` still wins over those defaults, and your `onKeyDown` is composed with the built-in activation rather than replacing it — call `event.preventDefault()` in it to suppress activation, as you would on a native button. Without `onClick` the swatch stays a plain, non-focusable, unlabelled `div`.
+Passing `onClick` renders a native `<button type="button">` with an `aria-label` defaulting to `color`. Enter and Space activation is handled by the browser. Your own `role`, `tabIndex`, `aria-label` and `onKeyDown` are forwarded. Without `onClick`, the swatch stays a plain `div`.
 
 ## Development
 

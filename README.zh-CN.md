@@ -127,17 +127,17 @@ import { ColorBlock } from '@rc-component/color-picker';
 />;
 ```
 
-| 参数      | 说明                   | 类型                                   | 默认值 |
-| --------- | ---------------------- | -------------------------------------- | ------ |
-| color     | 用于填充色块的颜色     | string                                 | -      |
-| prefixCls | 组件 className 前缀    | string                                 | -      |
-| className | 最外层元素的 className | string                                 | -      |
-| style     | 最外层元素的样式       | `React.CSSProperties`                  | -      |
-| ...rest   | 透传到最外层 `div`     | `React.HTMLAttributes<HTMLDivElement>` | -      |
+| 参数      | 说明                   | 类型                                                        | 默认值 |
+| --------- | ---------------------- | ----------------------------------------------------------- | ------ |
+| color     | 用于填充色块的颜色     | string                                                      | -      |
+| prefixCls | 组件 className 前缀    | string                                                      | -      |
+| className | 最外层元素的 className | string                                                      | -      |
+| style     | 最外层元素的样式       | `React.CSSProperties`                                       | -      |
+| ...rest   | 透传到最外层元素       | `React.HTMLAttributes<HTMLDivElement \| HTMLButtonElement>` | -      |
 
-`ColorBlockProps` 继承 `React.HTMLAttributes<HTMLDivElement>`，因此任意标准 div 属性或事件处理器（`onClick`、`title`、`role`、`tabIndex`、`data-*`、`aria-*`）都会透传到最外层元素。类型上还存在 `innerClassName` 与 `innerStyle`，但它们是 antd 语义化结构的内部实现，请视为私有。
+`ColorBlockProps` 继承 `React.HTMLAttributes<HTMLDivElement | HTMLButtonElement>`，标准属性和事件处理器会透传到最外层元素。`innerClassName` 与 `innerStyle` 是 antd 语义化结构的内部实现，请视为私有。
 
-传入 `onClick` 时，色块还会变成可通过键盘操作的按钮：自动带上 `role="button"`、`tabIndex={0}`、默认取 `color` 的 `aria-label`，并且 `Enter` / `Space` 与鼠标点击等效。你自行传入的 `role`、`tabIndex` 或 `aria-label` 仍会覆盖这些默认值；你的 `onKeyDown` 会与内置的键盘激活组合执行，而不会将其替换——若要阻止激活，可在其中调用 `event.preventDefault()`，与原生按钮的行为一致。未传 `onClick` 时，色块保持为普通的、不可聚焦且无无障碍名称的 `div`。
+传入 `onClick` 时渲染原生 `<button type="button">`，`aria-label` 默认取 `color`，Enter 和空格激活由浏览器处理。自定义的 `role`、`tabIndex`、`aria-label` 和 `onKeyDown` 会透传。未传 `onClick` 时仍渲染普通 div。
 
 ## 本地开发
 

@@ -16,8 +16,7 @@ vi.mock('@rc-component/trigger', async () => {
   return await import('@rc-component/trigger/lib/mock');
 });
 
-// The underlying `isMobile` caches its first answer, so platforms are simulated
-// by mocking the hook rather than the user agent.
+// Mock the hook because isMobile caches its result.
 vi.mock('@rc-component/util', async importOriginal => {
   const util = await importOriginal<typeof import('@rc-component/util')>();
   return {
@@ -574,11 +573,7 @@ describe('ColorPicker', () => {
       );
     };
 
-    // The two picker axes share the control name (aria-label) and are
-    // distinguished by aria-valuetext, following react-aria's ColorArea; only
-    // one of them is exposed to the accessibility tree at a time. These queries
-    // match on the label attribute rather than the a11y tree, so they find both
-    // regardless of aria-hidden, and grab them positionally: [sat, brightness].
+    // Query by label to find both axes, including the aria-hidden input.
     const getSaturation = () => screen.getAllByLabelText('Color picker')[0];
     const getBrightness = () => screen.getAllByLabelText('Color picker')[1];
 
@@ -587,31 +582,26 @@ describe('ColorPicker', () => {
 
       const [saturation, brightness] = screen.getAllByLabelText('Color picker');
 
-      // Untouched, the x axis is the tab stop and the only axis a screen reader
-      // can see, so listing the form controls turns up a single "2D slider"
-      // rather than two identically named ones.
+      // Initially only x is tabbable and exposed to screen readers.
       expect(saturation).toHaveAttribute('tabindex', '0');
       expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
       expect(brightness).toHaveAttribute('tabindex', '-1');
       expect(brightness).toHaveAttribute('aria-hidden', 'true');
 
-      // While a value key is held both axes are revealed, so the roving
-      // focus never lands on a hidden input and AT can read either channel.
+      // Value keys temporarily expose both axes.
       fireEvent.keyDown(saturation, { key: 'ArrowRight' });
       expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
       fireEvent.keyUp(saturation, { key: 'ArrowRight' });
       expect(brightness).toHaveAttribute('aria-hidden', 'true');
       expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
 
-      // Switching axis hands the tab stop to the y axis. The switch moves DOM
-      // focus within the control, which must not end the interaction.
+      // Switching axes moves focus without completing the interaction.
       fireEvent.keyDown(brightness, { key: 'ArrowDown' });
       expect(brightness).toHaveAttribute('tabindex', '0');
       expect(saturation).toHaveAttribute('tabindex', '-1');
       expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
 
-      // Focus leaving the control ends it, hiding whichever axis is no longer
-      // the active one.
+      // Blur hides the inactive axis.
       fireEvent.focusOut(brightness, { relatedTarget: document.body });
       expect(saturation).toHaveAttribute('aria-hidden', 'true');
       expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
@@ -651,8 +641,7 @@ describe('ColorPicker', () => {
 
       render(<ColorPicker defaultValue={defaultColor} />);
 
-      // VoiceOver / TalkBack users swipe between controls with no keyboard
-      // to switch axes, so neither axis may be hidden from them.
+      // Mobile screen readers need both axes exposed.
       const [saturation, brightness] = screen.getAllByLabelText('Color picker');
       expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
       expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
@@ -672,8 +661,7 @@ describe('ColorPicker', () => {
     it('Should not hide or untab a 1-D slider', () => {
       render(<ColorPicker defaultValue={defaultColor} />);
 
-      // The exposure dance only applies to the 2-D picker; a lone hue/alpha
-      // range stays a plain tab stop throughout.
+      // A single-axis slider stays tabbable and exposed.
       const hue = screen.getByLabelText('Hue');
       expect(hue).toHaveAttribute('tabindex', '0');
       expect(hue).not.toHaveAttribute('aria-hidden', 'true');
@@ -686,8 +674,7 @@ describe('ColorPicker', () => {
     it('Should expose default aria-labels on the handles', () => {
       render(<ColorPicker defaultValue={defaultColor} />);
 
-      // Both picker axes share the "Color picker" name; the axis is conveyed
-      // through aria-valuetext rather than a distinct label.
+      // aria-valuetext distinguishes axes with the same accessible name.
       expect(screen.getAllByLabelText('Color picker')).toHaveLength(2);
       expect(screen.getByLabelText('Hue')).toBeTruthy();
       expect(screen.getByLabelText('Alpha')).toBeTruthy();
@@ -696,9 +683,7 @@ describe('ColorPicker', () => {
     it('Should expose saturation and brightness as separate range inputs', () => {
       render(<ColorPicker defaultValue={defaultColor} />);
 
-      // Two separately operable native ranges, each describing its own axis via
-      // aria-valuetext and sharing the 2-D slider role description, so AT can
-      // adjust each one on its own.
+      // Each range exposes its axis value independently.
       const [saturation, brightness] = screen.getAllByLabelText('Color picker');
       expect(saturation).toHaveAttribute('aria-valuetext', 'Saturation: 91%');
       expect(saturation).toHaveAttribute('aria-roledescription', '2D slider');
@@ -715,8 +700,7 @@ describe('ColorPicker', () => {
       const brightness = getBrightness();
       saturation.focus();
 
-      // The two inputs act as one 2-D control: Up/Down drives brightness even
-      // while the saturation input is the focused one.
+      // Vertical keys adjust brightness even when saturation has focus.
       fireEvent.keyDown(saturation, { key: 'ArrowDown' });
 
       expect(document.querySelector('.pick-color').innerHTML).toBe(
@@ -732,8 +716,7 @@ describe('ColorPicker', () => {
       const saturation = getSaturation();
       const brightness = getBrightness();
 
-      // Only one axis is in the tab order at a time: the active axis has
-      // tabindex 0 and the inactive axis has tabindex -1.
+      // Only the active axis is tabbable.
       expect(saturation).toHaveAttribute('tabindex', '0');
       expect(brightness).toHaveAttribute('tabindex', '-1');
 
@@ -820,8 +803,7 @@ describe('ColorPicker', () => {
       render(<Controlled onChangeComplete={onChangeComplete} />);
 
       const brightness = getBrightness();
-      // Emulate an assistive-technology set-value action on the native range,
-      // then complete the interaction on key up.
+      // Simulate an AT value change without keydown.
       fireEvent.change(brightness, { target: { value: '80' } });
       fireEvent.keyUp(brightness, { key: 'ArrowDown' });
 
@@ -847,7 +829,7 @@ describe('ColorPicker', () => {
       fireEvent.keyDown(brightness, { key: 'ArrowUp' });
       fireEvent.keyUp(brightness, { key: 'ArrowUp' });
 
-      // A clamped press must not fire onChange (no value moved) nor complete.
+      // A clamped press emits neither change nor completion.
       expect(onChange).not.toHaveBeenCalled();
       expect(onChangeComplete).not.toHaveBeenCalled();
     });
@@ -857,10 +839,7 @@ describe('ColorPicker', () => {
       render(<ColorPicker value={defaultColor} onChange={onChange} />);
 
       const saturation = getSaturation();
-      // Each press is its own interaction (key up in between). A parent that
-      // never accepts the change leaves the committed value at 91%, so every
-      // press re-emits 92% rather than drifting 92% -> 93% -> 94% off a value
-      // the parent rejected — the way a native range snaps back.
+      // A rejecting parent makes each new press restart from 91%.
       for (let i = 0; i < 3; i += 1) {
         fireEvent.keyDown(saturation, { key: 'ArrowRight' });
         fireEvent.keyUp(saturation, { key: 'ArrowRight' });
@@ -875,8 +854,7 @@ describe('ColorPicker', () => {
       render(<Controlled />);
 
       const saturation = getSaturation();
-      // Same three separate interactions, but each one is committed, so they
-      // step 91% -> 92% -> 93% -> 94%.
+      // An accepting parent advances across separate presses.
       for (let i = 0; i < 3; i += 1) {
         fireEvent.keyDown(saturation, { key: 'ArrowRight' });
         fireEvent.keyUp(saturation, { key: 'ArrowRight' });
@@ -899,16 +877,14 @@ describe('ColorPicker', () => {
       );
 
       const alpha = screen.getByLabelText('Alpha');
-      // An AT set-value action fires `change` with no key press around it, so
-      // no key up will follow: it has to commit on its own.
+      // AT changes complete immediately because no keyup follows.
       fireEvent.change(alpha, { target: { value: '0' } });
       expect(onChangeComplete).toHaveBeenCalledTimes(1);
       expect(onChangeComplete.mock.calls.at(-1)[0].a).toBe(0);
 
       onChange.mockClear();
       onChangeComplete.mockClear();
-      // ...and it must leave nothing in flight: the next press is clamped at
-      // min, so it stays silent instead of re-committing the earlier change.
+      // A later clamped press must not complete the previous AT change again.
       fireEvent.keyDown(alpha, { key: 'ArrowLeft' });
       fireEvent.keyUp(alpha, { key: 'ArrowLeft' });
 
@@ -926,8 +902,7 @@ describe('ColorPicker', () => {
       );
 
       const alpha = screen.getByLabelText('Alpha');
-      // Home is left to the native range, so the value arrives as a change
-      // event mid-press. Key up commits it — once, not twice.
+      // Simulate the native Home change before keyup.
       fireEvent.keyDown(alpha, { key: 'Home' });
       fireEvent.change(alpha, { target: { value: '0' } });
       fireEvent.keyUp(alpha, { key: 'Home' });
@@ -948,14 +923,12 @@ describe('ColorPicker', () => {
       );
 
       const saturation = getSaturation();
-      // Focus can leave before key up — a click elsewhere, or AT moving on. The
-      // interaction still has to be committed...
+      // Blur must complete an interrupted key press.
       fireEvent.keyDown(saturation, { key: 'ArrowRight' });
       fireEvent.focusOut(saturation, { relatedTarget: document.body });
       expect(onChangeComplete).toHaveBeenCalledTimes(1);
 
-      // ...and dropped, so the next press restarts from the 91% this rejecting
-      // parent committed rather than chaining off the abandoned 92%.
+      // The next press must restart from the controlled 91%.
       fireEvent.focus(saturation);
       fireEvent.keyDown(saturation, { key: 'ArrowRight' });
       fireEvent.keyUp(saturation, { key: 'ArrowRight' });
@@ -980,8 +953,7 @@ describe('ColorPicker', () => {
       );
 
       const brightness = getBrightness();
-      // Brightness is already at 100%, so this press moves nothing — leaving the
-      // control must not manufacture a completion.
+      // A clamped press followed by blur must not complete.
       fireEvent.keyDown(brightness, { key: 'ArrowUp' });
       fireEvent.focusOut(brightness, { relatedTarget: document.body });
 
@@ -1003,10 +975,7 @@ describe('ColorPicker', () => {
 
       const saturation = getSaturation();
       const brightness = getBrightness();
-      // Both axes adjusted inside one interaction (no key up between), then
-      // focus leaves. The two axes describe one color, so a single completion
-      // carries both changes — completing each would report the second off a
-      // color already handed back to the parent.
+      // Both axes form one color and must complete only once.
       fireEvent.keyDown(brightness, { key: 'ArrowDown' });
       fireEvent.keyDown(saturation, { key: 'ArrowLeft' });
       fireEvent.focusOut(saturation, { relatedTarget: document.body });
@@ -1028,8 +997,7 @@ describe('ColorPicker', () => {
 
       const saturation = getSaturation();
       const brightness = getBrightness();
-      // Both axes adjusted inside one interaction, then key up on the axis that
-      // has focus. It completes the pair...
+      // Keyup completes both axes together.
       fireEvent.keyDown(brightness, { key: 'ArrowDown' });
       fireEvent.keyDown(saturation, { key: 'ArrowLeft' });
       fireEvent.keyUp(saturation, { key: 'ArrowLeft' });
@@ -1039,8 +1007,7 @@ describe('ColorPicker', () => {
         'hsb(215, 90%, 99%)',
       );
 
-      // ...and leaves nothing behind, so blurring cannot complete the same
-      // interaction a second time off a color already handed back.
+      // A subsequent blur must not complete again.
       fireEvent.focusOut(saturation, { relatedTarget: document.body });
       expect(onChangeComplete).toHaveBeenCalledTimes(1);
     });
@@ -1055,9 +1022,7 @@ describe('ColorPicker', () => {
 
       const saturation = getSaturation();
       const brightness = getBrightness();
-      // Brightness moves, then a clamped Left press takes focus to the x axis.
-      // Key up fires there, on the axis that did *not* change — the brightness
-      // change still has to be committed rather than left for a later blur.
+      // Complete the pending brightness change even when the focused axis is clamped.
       fireEvent.keyDown(brightness, { key: 'ArrowDown' });
       fireEvent.keyDown(saturation, { key: 'ArrowLeft' });
       fireEvent.keyUp(saturation, { key: 'ArrowLeft' });
@@ -1121,9 +1086,7 @@ describe('ColorPicker', () => {
       expect(onChangeComplete).toHaveBeenCalled();
     });
 
-    // A controlled parent that keeps the color pinned while still re-rendering
-    // (validation, debouncing, an unrelated state update) reproduces the race
-    // where the stale prop echoes back mid-interaction.
+    // Re-render with a stale controlled value during an interaction.
     const StalePinned = ({ onChangeComplete }: Record<string, unknown>) => {
       const [, force] = useState(0);
       return (
@@ -1140,8 +1103,7 @@ describe('ColorPicker', () => {
       render(<StalePinned onChangeComplete={onChangeComplete} />);
 
       const saturation = getSaturation();
-      // ArrowRight steps 91% -> 92% and triggers a re-render that echoes the
-      // stale 91% prop before key up. Completion must still report 92%.
+      // Completion must retain 92% after a stale 91% re-render.
       fireEvent.keyDown(saturation, { key: 'ArrowRight' });
       fireEvent.keyUp(saturation, { key: 'ArrowRight' });
 
@@ -1167,9 +1129,7 @@ describe('ColorPicker', () => {
 
       const saturation = getSaturation();
 
-      // Two Left presses dispatched in the same batch (before the parent
-      // re-renders). Reading the stale prop would step 91% -> 90% twice; the
-      // latest-value ref keeps them stepping 91% -> 89%.
+      // Batched presses must accumulate: 91% -> 89%.
       act(() => {
         saturation.dispatchEvent(
           new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
@@ -1189,9 +1149,7 @@ describe('ColorPicker', () => {
 
       const brightness = getBrightness();
 
-      // Two Down presses dispatched in the same batch (before the parent
-      // re-renders). Reading the stale prop would step 100% -> 99% twice; the
-      // latest-value ref keeps them stepping 100% -> 98%.
+      // Batched presses must accumulate: 100% -> 98%.
       act(() => {
         brightness.dispatchEvent(
           new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
@@ -1212,9 +1170,7 @@ describe('ColorPicker', () => {
       const saturation = getSaturation();
       const brightness = getBrightness();
 
-      // One Down (brightness 100% -> 99%) and one Left (saturation 91% -> 90%)
-      // dispatched in the same batch. Deriving the second change from the stale
-      // prop would revert the first axis; the shared color ref keeps both.
+      // Batched changes must preserve both axes.
       act(() => {
         brightness.dispatchEvent(
           new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),

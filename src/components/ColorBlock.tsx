@@ -20,9 +20,9 @@ const ColorBlock: React.FC<ColorBlockProps> = ({
 }) => {
   const colorBlockCls = `${prefixCls}-color-block`;
 
+  // ======================= Keyboard Events ========================
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = event => {
-    // Compose instead of replace: a consumer handler still runs, and cancelling the event
-    // opts out of activation the same way it does on a native button.
+    // Let consumers prevent keyboard activation.
     props.onKeyDown?.(event);
 
     if (event.defaultPrevented) {
@@ -35,6 +35,7 @@ const ColorBlock: React.FC<ColorBlockProps> = ({
     }
   };
 
+  // ============================ Render ============================
   return (
     <div
       {...(props.onClick

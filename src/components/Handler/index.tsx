@@ -66,7 +66,6 @@ const Handler: React.FC<HandlerProps> = ({
   // Only the active axis is in the tab order; x is the initial axis.
   const [activeAxis, setActiveAxis] = React.useState<'x' | 'y' | null>(null);
 
-  // Determine if the device is mobile to expose both axes accordingly.
   const exposeBothAxes = useMobile();
 
   // ========================= Axis Helpers =========================

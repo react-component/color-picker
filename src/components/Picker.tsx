@@ -20,23 +20,22 @@ const Picker: FC<PickerProps> = ({
   disabled,
   locale,
 }) => {
+  // ============================ State =============================
   const pickerRef = useRef<HTMLDivElement>(null);
   const transformRef = useRef<HTMLDivElement>(null);
-  // Candidate color for the keyboard/drag interaction in flight, or null between
-  // interactions so the controlled prop remains the source of truth.
+  // Pending color during an interaction; null restores the controlled value.
   const colorRef = useRef<Color | null>(null);
 
-  // The in-flight candidate while interacting, otherwise the controlled prop.
+  // ============================ Color =============================
   const getLatestColor = () => colorRef.current ?? color;
 
-  // Report the latest value, then hand authority back to the controlled prop so
-  // the next interaction starts from what the parent committed.
   const completeColor = () => {
     const latest = getLatestColor();
     colorRef.current = null;
     onChangeComplete?.(latest);
   };
 
+  // ============================= Drag =============================
   const onDragChange = useEvent((offsetValue: TransformOffset) => {
     const calcColor = calculateColor({
       offset: offsetValue,
@@ -57,11 +56,10 @@ const Picker: FC<PickerProps> = ({
     onDragChangeComplete: completeColor,
     disabledDrag: disabled,
   });
-  // ===================== Keyboard (2-D handler) =====================
+  // =========================== Keyboard ===========================
   const hsb = color.toHsb();
 
-  // Build a new color from the *latest* one, so presses batched before the
-  // parent re-renders still chain off each other.
+  // Preserve both axes when key presses precede the parent's next render.
   const changeColor = (channel: 's' | 'b', percent: number) => {
     const next = generateColor({
       ...getLatestColor().toHsb(),
@@ -71,6 +69,7 @@ const Picker: FC<PickerProps> = ({
     onChange(next);
   };
 
+  // ============================ Render ============================
   return (
     <div
       ref={pickerRef}

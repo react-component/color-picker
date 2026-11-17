@@ -34,8 +34,8 @@ const Slider: React.FC<BaseSliderProps> = props => {
     onChangeComplete,
     color,
     type,
-    min = 0,
-    max = 100,
+    min,
+    max,
     value,
     'aria-label': ariaLabel,
   } = props;

@@ -16,7 +16,7 @@ describe('ColorPicker.Components', () => {
     const onColorChange = vi.fn();
 
     const Slider = (props: BaseSliderProps) => {
-      const { type, min, max, value, prefixCls, onChange } = props;
+      const { type, min = 0, max = 100, value, prefixCls, onChange } = props;
 
       return (
         <div

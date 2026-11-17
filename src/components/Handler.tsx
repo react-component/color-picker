@@ -314,6 +314,8 @@ const Handler: React.FC<HandlerProps> = ({
         ref={xInputRef}
         {...omit(x, ['onChange', 'onChangeComplete'])}
         type="range"
+        min={x.min ?? 0}
+        max={x.max ?? 100}
         step={x.step ?? 1}
         tabIndex={xActive ? undefined : -1}
         aria-hidden={xActive || revealBothAxes ? undefined : 'true'}
@@ -330,6 +332,8 @@ const Handler: React.FC<HandlerProps> = ({
           ref={yInputRef}
           {...omit(y, ['onChange', 'onChangeComplete'])}
           type="range"
+          min={y.min ?? 0}
+          max={y.max ?? 100}
           step={y.step ?? 1}
           aria-orientation="vertical"
           tabIndex={yActive ? undefined : -1}

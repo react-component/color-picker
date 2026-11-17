@@ -14,8 +14,8 @@ import Transform from './Transform';
 export interface BaseSliderProps {
   prefixCls: string;
   colors: { percent: number; color: string }[];
-  min: number;
-  max: number;
+  min?: number;
+  max?: number;
   value: number;
   disabled: boolean;
   onChange: (value: number) => void;
@@ -34,8 +34,8 @@ const Slider: React.FC<BaseSliderProps> = props => {
     onChangeComplete,
     color,
     type,
-    min,
-    max,
+    min = 0,
+    max = 100,
     value,
     'aria-label': ariaLabel,
   } = props;

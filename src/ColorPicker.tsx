@@ -168,7 +168,6 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
               {...sharedSliderProps}
               type="hue"
               colors={HUE_COLORS}
-              min={0}
               max={359}
               value={colorValue.getHue()}
               onChange={onHueChange}
@@ -183,8 +182,6 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
                   { percent: 0, color: 'rgba(255, 0, 4, 0)' },
                   { percent: 100, color: alphaColor },
                 ]}
-                min={0}
-                max={100}
                 value={colorValue.a * 100}
                 onChange={onAlphaChange}
                 onChangeComplete={onAlphaChangeComplete}

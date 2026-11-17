@@ -302,6 +302,37 @@ const Handler: React.FC<HandlerProps> = ({
   const yActive = activeAxis === 'y';
   const revealBothAxes = exposeBothAxes || valueChangedViaKey;
 
+  const renderHelpInput = (axisName: 'x' | 'y') => {
+    const { axis, valueRef, changedRef } = getAxisState(axisName);
+    if (!axis) {
+      return null;
+    }
+
+    const isYAxis = axisName === 'y';
+    const active = isYAxis ? yActive : xActive;
+
+    return (
+      <input
+        ref={isYAxis ? yInputRef : xInputRef}
+        {...omit(axis, ['onChange', 'onChangeComplete'])}
+        type="range"
+        min={axis.min ?? 0}
+        max={axis.max ?? 100}
+        step={axis.step ?? 1}
+        aria-orientation={isYAxis ? 'vertical' : axis['aria-orientation']}
+        tabIndex={active ? undefined : -1}
+        aria-hidden={active || revealBothAxes ? undefined : 'true'}
+        className={`${prefixCls}-handler-range`}
+        style={RANGE_INPUT_STYLE}
+        disabled={disabled}
+        onChange={changeAxis(axis, valueRef, changedRef)}
+        onKeyDown={handleKeyDown}
+        onKeyUp={completeAxis(axisName)}
+        onFocus={is2D ? () => setActiveAxis(axisName) : undefined}
+      />
+    );
+  };
+
   return (
     <div
       className={clsx(`${prefixCls}-handler`, {
@@ -310,43 +341,8 @@ const Handler: React.FC<HandlerProps> = ({
       style={{ position: 'relative', backgroundColor: color }}
       onBlur={handleBlur}
     >
-      <input
-        ref={xInputRef}
-        {...omit(x, ['onChange', 'onChangeComplete'])}
-        type="range"
-        min={x.min ?? 0}
-        max={x.max ?? 100}
-        step={x.step ?? 1}
-        tabIndex={xActive ? undefined : -1}
-        aria-hidden={xActive || revealBothAxes ? undefined : 'true'}
-        className={`${prefixCls}-handler-range`}
-        style={RANGE_INPUT_STYLE}
-        disabled={disabled}
-        onChange={changeAxis(x, xValueRef, xChangedRef)}
-        onKeyDown={handleKeyDown}
-        onKeyUp={completeAxis('x')}
-        onFocus={is2D ? () => setActiveAxis('x') : undefined}
-      />
-      {y && (
-        <input
-          ref={yInputRef}
-          {...omit(y, ['onChange', 'onChangeComplete'])}
-          type="range"
-          min={y.min ?? 0}
-          max={y.max ?? 100}
-          step={y.step ?? 1}
-          aria-orientation="vertical"
-          tabIndex={yActive ? undefined : -1}
-          aria-hidden={yActive || revealBothAxes ? undefined : 'true'}
-          className={`${prefixCls}-handler-range`}
-          style={RANGE_INPUT_STYLE}
-          disabled={disabled}
-          onChange={changeAxis(y, yValueRef, yChangedRef)}
-          onKeyDown={handleKeyDown}
-          onKeyUp={completeAxis('y')}
-          onFocus={() => setActiveAxis('y')}
-        />
-      )}
+      {renderHelpInput('x')}
+      {renderHelpInput('y')}
     </div>
   );
 };

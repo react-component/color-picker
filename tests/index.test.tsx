@@ -590,21 +590,23 @@ describe('ColorPicker', () => {
       // Untouched, the x axis is the tab stop and the only axis a screen reader
       // can see, so listing the form controls turns up a single "2D slider"
       // rather than two identically named ones.
-      expect(saturation).not.toHaveAttribute('tabindex');
+      expect(saturation).toHaveAttribute('tabindex', '0');
       expect(saturation).not.toHaveAttribute('aria-hidden');
       expect(brightness).toHaveAttribute('tabindex', '-1');
       expect(brightness).toHaveAttribute('aria-hidden', 'true');
 
-      // Once the keyboard drives a value both axes are revealed, so the roving
+      // While a value key is held both axes are revealed, so the roving
       // focus never lands on a hidden input and AT can read either channel.
       fireEvent.keyDown(saturation, { key: 'ArrowRight' });
       expect(brightness).not.toHaveAttribute('aria-hidden');
       fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+      expect(brightness).toHaveAttribute('aria-hidden', 'true');
+      expect(saturation).not.toHaveAttribute('aria-hidden');
 
       // Switching axis hands the tab stop to the y axis. The switch moves DOM
       // focus within the control, which must not end the interaction.
       fireEvent.keyDown(brightness, { key: 'ArrowDown' });
-      expect(brightness).not.toHaveAttribute('tabindex');
+      expect(brightness).toHaveAttribute('tabindex', '0');
       expect(saturation).toHaveAttribute('tabindex', '-1');
       expect(saturation).not.toHaveAttribute('aria-hidden');
 
@@ -676,11 +678,11 @@ describe('ColorPicker', () => {
       // The exposure dance only applies to the 2-D picker; a lone hue/alpha
       // range stays a plain tab stop throughout.
       const hue = screen.getByLabelText('Hue');
-      expect(hue).not.toHaveAttribute('tabindex');
+      expect(hue).toHaveAttribute('tabindex', '0');
       expect(hue).not.toHaveAttribute('aria-hidden');
 
       fireEvent.keyDown(hue, { key: 'ArrowRight' });
-      expect(hue).not.toHaveAttribute('tabindex');
+      expect(hue).toHaveAttribute('tabindex', '0');
       expect(hue).not.toHaveAttribute('aria-hidden');
     });
 
@@ -703,6 +705,7 @@ describe('ColorPicker', () => {
       const [saturation, brightness] = screen.getAllByLabelText('Color picker');
       expect(saturation).toHaveAttribute('aria-valuetext', 'Saturation: 91%');
       expect(saturation).toHaveAttribute('aria-roledescription', '2D slider');
+      expect(saturation).toHaveAttribute('aria-orientation', 'horizontal');
       expect(brightness).toHaveAttribute('aria-valuetext', 'Brightness: 100%');
       expect(brightness).toHaveAttribute('aria-roledescription', '2D slider');
       expect(brightness).toHaveAttribute('aria-orientation', 'vertical');
@@ -732,15 +735,14 @@ describe('ColorPicker', () => {
       const saturation = getSaturation();
       const brightness = getBrightness();
 
-      // Only one axis is in the tab order at a time. The active one carries no
-      // tabindex at all — a range input is natively focusable — so the picker
-      // keeps its place in document order instead of being forced to 0.
-      expect(saturation).not.toHaveAttribute('tabindex');
+      // Only one axis is in the tab order at a time: the active axis has
+      // tabindex 0 and the inactive axis has tabindex -1.
+      expect(saturation).toHaveAttribute('tabindex', '0');
       expect(brightness).toHaveAttribute('tabindex', '-1');
 
       // Switching direction moves the tab stop onto the adjusted axis.
       fireEvent.keyDown(saturation, { key: 'ArrowDown' });
-      expect(brightness).not.toHaveAttribute('tabindex');
+      expect(brightness).toHaveAttribute('tabindex', '0');
       expect(saturation).toHaveAttribute('tabindex', '-1');
     });
 

@@ -21,6 +21,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
           >
             <input
               aria-label="Color picker"
+              aria-orientation="horizontal"
               aria-roledescription="2D slider"
               aria-valuetext="Saturation: 91%"
               class="rc-color-picker-handler-range"
@@ -28,6 +29,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
               min="0"
               step="1"
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="0"
               type="range"
               value="91"
             />
@@ -76,11 +78,13 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
               >
                 <input
                   aria-label="Hue"
+                  aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
                   max="359"
                   min="0"
                   step="1"
                   style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  tabindex="0"
                   type="range"
                   value="215"
                 />
@@ -108,11 +112,13 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
               >
                 <input
                   aria-label="Alpha"
+                  aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
                   max="100"
                   min="0"
                   step="1"
                   style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  tabindex="0"
                   type="range"
                   value="100"
                 />
@@ -159,6 +165,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
           >
             <input
               aria-label="Color picker"
+              aria-orientation="horizontal"
               aria-roledescription="2D slider"
               aria-valuetext="Saturation: 91%"
               class="rc-color-picker-handler-range"
@@ -166,6 +173,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
               min="0"
               step="1"
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="0"
               type="range"
               value="91"
             />
@@ -214,11 +222,13 @@ exports[`ColorPicker > Should component render correct 1`] = `
               >
                 <input
                   aria-label="Hue"
+                  aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
                   max="359"
                   min="0"
                   step="1"
                   style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  tabindex="0"
                   type="range"
                   value="215"
                 />
@@ -246,11 +256,13 @@ exports[`ColorPicker > Should component render correct 1`] = `
               >
                 <input
                   aria-label="Alpha"
+                  aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
                   max="100"
                   min="0"
                   step="1"
                   style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  tabindex="0"
                   type="range"
                   value="100"
                 />
@@ -300,6 +312,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
             >
               <input
                 aria-label="Color picker"
+                aria-orientation="horizontal"
                 aria-roledescription="2D slider"
                 aria-valuetext="Saturation: 91%"
                 class="rc-color-picker-handler-range"
@@ -307,6 +320,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
                 min="0"
                 step="1"
                 style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                tabindex="0"
                 type="range"
                 value="91"
               />
@@ -355,11 +369,13 @@ exports[`ColorPicker > Should custom panel work 1`] = `
                 >
                   <input
                     aria-label="Hue"
+                    aria-orientation="horizontal"
                     class="rc-color-picker-handler-range"
                     max="359"
                     min="0"
                     step="1"
                     style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                    tabindex="0"
                     type="range"
                     value="215"
                   />
@@ -387,11 +403,13 @@ exports[`ColorPicker > Should custom panel work 1`] = `
                 >
                   <input
                     aria-label="Alpha"
+                    aria-orientation="horizontal"
                     class="rc-color-picker-handler-range"
                     max="100"
                     min="0"
                     step="1"
                     style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                    tabindex="0"
                     type="range"
                     value="100"
                   />
@@ -439,6 +457,7 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
           >
             <input
               aria-label="Color picker"
+              aria-orientation="horizontal"
               aria-roledescription="2D slider"
               aria-valuetext="Saturation: 91%"
               class="rc-color-picker-handler-range"
@@ -446,6 +465,7 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
               min="0"
               step="1"
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="0"
               type="range"
               value="91"
             />
@@ -494,11 +514,13 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
               >
                 <input
                   aria-label="Hue"
+                  aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
                   max="359"
                   min="0"
                   step="1"
                   style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  tabindex="0"
                   type="range"
                   value="215"
                 />
@@ -545,6 +567,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
           >
             <input
               aria-label="Color picker"
+              aria-orientation="horizontal"
               aria-roledescription="2D slider"
               aria-valuetext="Saturation: 91%"
               class="test-prefixCls-handler-range"
@@ -552,6 +575,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
               min="0"
               step="1"
               style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+              tabindex="0"
               type="range"
               value="91"
             />
@@ -600,11 +624,13 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
               >
                 <input
                   aria-label="Hue"
+                  aria-orientation="horizontal"
                   class="test-prefixCls-handler-range"
                   max="359"
                   min="0"
                   step="1"
                   style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  tabindex="0"
                   type="range"
                   value="215"
                 />
@@ -632,11 +658,13 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
               >
                 <input
                   aria-label="Alpha"
+                  aria-orientation="horizontal"
                   class="test-prefixCls-handler-range"
                   max="100"
                   min="0"
                   step="1"
                   style="position: absolute; inset: 0px; width: 100%; height: 100%; margin: 0px; padding: 0px; opacity: 0; pointer-events: none;"
+                  tabindex="0"
                   type="range"
                   value="100"
                 />

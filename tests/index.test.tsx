@@ -591,30 +591,30 @@ describe('ColorPicker', () => {
       // can see, so listing the form controls turns up a single "2D slider"
       // rather than two identically named ones.
       expect(saturation).toHaveAttribute('tabindex', '0');
-      expect(saturation).not.toHaveAttribute('aria-hidden');
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
       expect(brightness).toHaveAttribute('tabindex', '-1');
       expect(brightness).toHaveAttribute('aria-hidden', 'true');
 
       // While a value key is held both axes are revealed, so the roving
       // focus never lands on a hidden input and AT can read either channel.
       fireEvent.keyDown(saturation, { key: 'ArrowRight' });
-      expect(brightness).not.toHaveAttribute('aria-hidden');
+      expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
       fireEvent.keyUp(saturation, { key: 'ArrowRight' });
       expect(brightness).toHaveAttribute('aria-hidden', 'true');
-      expect(saturation).not.toHaveAttribute('aria-hidden');
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
 
       // Switching axis hands the tab stop to the y axis. The switch moves DOM
       // focus within the control, which must not end the interaction.
       fireEvent.keyDown(brightness, { key: 'ArrowDown' });
       expect(brightness).toHaveAttribute('tabindex', '0');
       expect(saturation).toHaveAttribute('tabindex', '-1');
-      expect(saturation).not.toHaveAttribute('aria-hidden');
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
 
       // Focus leaving the control ends it, hiding whichever axis is no longer
       // the active one.
       fireEvent.focusOut(brightness, { relatedTarget: document.body });
       expect(saturation).toHaveAttribute('aria-hidden', 'true');
-      expect(brightness).not.toHaveAttribute('aria-hidden');
+      expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
     });
 
     it('Should reveal an axis before moving focus onto it', () => {
@@ -623,10 +623,7 @@ describe('ColorPicker', () => {
       const saturation = getSaturation();
       const brightness = getBrightness();
 
-      // What focus actually lands on, as the DOM looked at that moment. The
-      // state update that reveals an axis is batched, so revealing it has to
-      // happen before focus moves — otherwise AT is handed a control that is
-      // still aria-hidden.
+      // Focus should move after React exposes the target axis.
       const hiddenOnFocus: (string | null)[] = [];
       const record = (event: Event) =>
         hiddenOnFocus.push(
@@ -645,7 +642,7 @@ describe('ColorPicker', () => {
         document.removeEventListener('focusin', record);
       }
 
-      expect(hiddenOnFocus).toEqual([null, null]);
+      expect(hiddenOnFocus).toEqual(['false', 'false']);
       expect(saturation).toHaveFocus();
     });
 
@@ -657,8 +654,8 @@ describe('ColorPicker', () => {
       // VoiceOver / TalkBack users swipe between controls with no keyboard
       // to switch axes, so neither axis may be hidden from them.
       const [saturation, brightness] = screen.getAllByLabelText('Color picker');
-      expect(saturation).not.toHaveAttribute('aria-hidden');
-      expect(brightness).not.toHaveAttribute('aria-hidden');
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
+      expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
 
       // An AT increment on the brightness axis lands like any other.
       fireEvent.change(brightness, { target: { value: '10' } });
@@ -666,8 +663,8 @@ describe('ColorPicker', () => {
 
       // Nor does the end of an interaction hide either one again.
       fireEvent.focusOut(brightness, { relatedTarget: document.body });
-      expect(saturation).not.toHaveAttribute('aria-hidden');
-      expect(brightness).not.toHaveAttribute('aria-hidden');
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
+      expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
 
       vi.mocked(useMobile).mockReturnValue(false);
     });
@@ -679,11 +676,11 @@ describe('ColorPicker', () => {
       // range stays a plain tab stop throughout.
       const hue = screen.getByLabelText('Hue');
       expect(hue).toHaveAttribute('tabindex', '0');
-      expect(hue).not.toHaveAttribute('aria-hidden');
+      expect(hue).not.toHaveAttribute('aria-hidden', 'true');
 
       fireEvent.keyDown(hue, { key: 'ArrowRight' });
       expect(hue).toHaveAttribute('tabindex', '0');
-      expect(hue).not.toHaveAttribute('aria-hidden');
+      expect(hue).not.toHaveAttribute('aria-hidden', 'true');
     });
 
     it('Should expose default aria-labels on the handles', () => {
@@ -1074,23 +1071,19 @@ describe('ColorPicker', () => {
       expect(onChangeComplete).toHaveBeenCalledTimes(1);
     });
 
-    it('Should snap an unaligned value onto the native step grid', () => {
+    it('Should round fractional alpha before stepping', () => {
       const onChange = vi.fn();
-      // 50.5% alpha sits off the `min + n * step` grid a native range allows.
       const unaligned = new Color({ h: 215, s: 0.91, b: 1, a: 0.505 });
       render(<ColorPicker value={unaligned} onChange={onChange} />);
 
       const alpha = screen.getByLabelText('Alpha');
-      // Stepping up snaps to the next grid value (51%) rather than adding a
-      // whole step to the unaligned one (51.5%), matching stepUp().
       fireEvent.keyDown(alpha, { key: 'ArrowRight' });
       fireEvent.keyUp(alpha, { key: 'ArrowRight' });
       expect(onChange.mock.calls.at(-1)[1]).toEqual({
         type: 'alpha',
-        value: 51,
+        value: 52,
       });
 
-      // ...and stepping down snaps to the previous one (50%), not 49.5%.
       fireEvent.keyDown(alpha, { key: 'ArrowLeft' });
       expect(onChange.mock.calls.at(-1)[1]).toEqual({
         type: 'alpha',

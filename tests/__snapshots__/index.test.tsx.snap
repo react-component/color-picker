@@ -20,6 +20,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
             style="position: relative; background-color: rgb(22, 119, 255);"
           >
             <input
+              aria-hidden="false"
               aria-label="Color picker"
               aria-orientation="horizontal"
               aria-roledescription="2D slider"
@@ -77,6 +78,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
                 style="position: relative; background-color: rgb(0, 106, 255);"
               >
                 <input
+                  aria-hidden="false"
                   aria-label="Hue"
                   aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
@@ -111,6 +113,7 @@ exports[`ColorPicker > Should component onChange work on no control mode 1`] = `
                 style="position: relative; background-color: rgb(22, 119, 255);"
               >
                 <input
+                  aria-hidden="false"
                   aria-label="Alpha"
                   aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
@@ -164,6 +167,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
             style="position: relative; background-color: rgb(22, 119, 255);"
           >
             <input
+              aria-hidden="false"
               aria-label="Color picker"
               aria-orientation="horizontal"
               aria-roledescription="2D slider"
@@ -221,6 +225,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
                 style="position: relative; background-color: rgb(0, 106, 255);"
               >
                 <input
+                  aria-hidden="false"
                   aria-label="Hue"
                   aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
@@ -255,6 +260,7 @@ exports[`ColorPicker > Should component render correct 1`] = `
                 style="position: relative; background-color: rgb(22, 119, 255);"
               >
                 <input
+                  aria-hidden="false"
                   aria-label="Alpha"
                   aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
@@ -311,6 +317,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
               style="position: relative; background-color: rgb(22, 119, 255);"
             >
               <input
+                aria-hidden="false"
                 aria-label="Color picker"
                 aria-orientation="horizontal"
                 aria-roledescription="2D slider"
@@ -368,6 +375,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
                   style="position: relative; background-color: rgb(0, 106, 255);"
                 >
                   <input
+                    aria-hidden="false"
                     aria-label="Hue"
                     aria-orientation="horizontal"
                     class="rc-color-picker-handler-range"
@@ -402,6 +410,7 @@ exports[`ColorPicker > Should custom panel work 1`] = `
                   style="position: relative; background-color: rgb(22, 119, 255);"
                 >
                   <input
+                    aria-hidden="false"
                     aria-label="Alpha"
                     aria-orientation="horizontal"
                     class="rc-color-picker-handler-range"
@@ -456,6 +465,7 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
             style="position: relative; background-color: rgb(22, 119, 255);"
           >
             <input
+              aria-hidden="false"
               aria-label="Color picker"
               aria-orientation="horizontal"
               aria-roledescription="2D slider"
@@ -513,6 +523,7 @@ exports[`ColorPicker > Should disabled alpha work 1`] = `
                 style="position: relative; background-color: rgb(0, 106, 255);"
               >
                 <input
+                  aria-hidden="false"
                   aria-label="Hue"
                   aria-orientation="horizontal"
                   class="rc-color-picker-handler-range"
@@ -566,6 +577,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
             style="position: relative; background-color: rgb(22, 119, 255);"
           >
             <input
+              aria-hidden="false"
               aria-label="Color picker"
               aria-orientation="horizontal"
               aria-roledescription="2D slider"
@@ -623,6 +635,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
                 style="position: relative; background-color: rgb(0, 106, 255);"
               >
                 <input
+                  aria-hidden="false"
                   aria-label="Hue"
                   aria-orientation="horizontal"
                   class="test-prefixCls-handler-range"
@@ -657,6 +670,7 @@ exports[`ColorPicker > Should prefixCls work 1`] = `
                 style="position: relative; background-color: rgb(22, 119, 255);"
               >
                 <input
+                  aria-hidden="false"
                   aria-label="Alpha"
                   aria-orientation="horizontal"
                   class="test-prefixCls-handler-range"

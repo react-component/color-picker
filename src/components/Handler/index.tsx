@@ -5,9 +5,6 @@ import React from 'react';
 import Input from './Input';
 
 // =========================== Constants ===========================
-// Treat near-integer steps as aligned despite floating-point error.
-const STEP_EPSILON = 1e-9;
-
 const VALUE_KEYS = [
   'ArrowLeft',
   'ArrowRight',
@@ -40,8 +37,6 @@ export interface HandlerProps {
   y?: HandlerAxis;
 }
 
-type ValueRef = React.RefObject<number | null>;
-
 // ============================= Hooks =============================
 // A null value means this axis has not changed in the current interaction.
 const useValEntity = () => {
@@ -70,29 +65,19 @@ const Handler: React.FC<HandlerProps> = ({
 
   // Only the active axis is in the tab order; x is the initial axis.
   const [activeAxis, setActiveAxis] = React.useState<'x' | 'y' | null>(null);
+
+  // Determine if the device is mobile to expose both axes accordingly.
   const exposeBothAxes = useMobile();
 
   // ========================= Axis Helpers =========================
-  const stepAxis = (
-    axis: HandlerAxis,
-    valueRef: ValueRef,
-    direction: 1 | -1,
-  ) => {
+  const stepAxis = (axisName: 'x' | 'y', direction: 1 | -1) => {
+    const axis = axisName === 'x' ? x : y;
+    const valueRef = axisName === 'x' ? xValueRef : yValueRef;
     const min = Number(axis.min ?? 0);
     const max = Number(axis.max ?? 100);
     const current = valueRef.current ?? axis.value;
 
-    // Snap fractional values to the neighbouring whole step in the direction
-    // of travel; values already on the grid advance by one.
-    const steps = current - min;
-    const nearest = Math.round(steps);
-    const nextSteps =
-      Math.abs(steps - nearest) < STEP_EPSILON
-        ? nearest + direction
-        : direction > 0
-          ? Math.ceil(steps)
-          : Math.floor(steps);
-    const next = Math.min(max, Math.max(min, min + nextSteps));
+    const next = Math.min(max, Math.max(min, Math.round(current) + direction));
 
     if (next === current) {
       return;
@@ -101,31 +86,36 @@ const Handler: React.FC<HandlerProps> = ({
     axis.onChange(next);
   };
 
-  const focusAxis = (axis: 'x' | 'y') => {
-    setActiveAxis(axis);
-    const input = axis === 'y' ? yInputRef.current : xInputRef.current;
-    if (input && document.activeElement !== input) {
-      // Reveal before focusing: the state update has not committed yet.
-      input.removeAttribute('aria-hidden');
-      input.focus();
-    }
-  };
-
   // Clear both candidates before notifying consumers to avoid duplicate completion.
   const completeInteraction = () => {
     const xValue = xValueRef.current;
     const yValue = yValueRef.current;
-    const pending =
-      y && yValue !== null && (activeAxis === 'y' || xValue === null)
-        ? { axis: y, value: yValue }
-        : xValue !== null
-          ? { axis: x, value: xValue }
-          : null;
-
     xValueRef.current = null;
     yValueRef.current = null;
 
-    pending?.axis.onChangeComplete(pending.value);
+    if (xValue !== null) {
+      x.onChangeComplete(xValue);
+    } else if (yValue !== null) {
+      y.onChangeComplete(yValue);
+    }
+  };
+
+  // ============================ Focus =============================
+  React.useEffect(() => {
+    if (activeAxis) {
+      const input = activeAxis === 'y' ? yInputRef.current : xInputRef.current;
+      input?.focus();
+    }
+  }, [activeAxis, xInputRef, yInputRef]);
+
+  const onBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      return;
+    }
+    setKeyPressing(false);
+
+    // Blur can interrupt a key press before keyup.
+    completeInteraction();
   };
 
   // ======================= Keyboard Events ========================
@@ -139,29 +129,29 @@ const Handler: React.FC<HandlerProps> = ({
 
     switch (event.key) {
       case 'ArrowRight':
-        focusAxis('x');
-        stepAxis(x, xValueRef, 1);
+        setActiveAxis('x');
+        stepAxis('x', 1);
         break;
       case 'ArrowLeft':
-        focusAxis('x');
-        stepAxis(x, xValueRef, -1);
+        setActiveAxis('x');
+        stepAxis('x', -1);
         break;
       case 'ArrowUp':
         if (y) {
-          focusAxis('y');
-          stepAxis(y, yValueRef, 1);
+          setActiveAxis('y');
+          stepAxis('y', 1);
         } else {
-          focusAxis('x');
-          stepAxis(x, xValueRef, 1);
+          setActiveAxis('x');
+          stepAxis('x', 1);
         }
         break;
       case 'ArrowDown':
         if (y) {
-          focusAxis('y');
-          stepAxis(y, yValueRef, -1);
+          setActiveAxis('y');
+          stepAxis('y', -1);
         } else {
-          focusAxis('x');
-          stepAxis(x, xValueRef, -1);
+          setActiveAxis('x');
+          stepAxis('x', -1);
         }
         break;
       default:
@@ -198,16 +188,6 @@ const Handler: React.FC<HandlerProps> = ({
     axisEntity.onChange(next);
     axisEntity.onChangeComplete(next);
   };
-  // ============================ Focus =============================
-  const onBlur = (event: React.FocusEvent<HTMLDivElement>) => {
-    if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
-      return;
-    }
-    setKeyPressing(false);
-
-    // Blur can interrupt a key press before keyup.
-    completeInteraction();
-  };
 
   // ======================== Accessibility =========================
   // Touch screen readers need both axes exposed without keyboard navigation.
@@ -239,7 +219,7 @@ const Handler: React.FC<HandlerProps> = ({
         {...sharedInputProps}
         aria-orientation="horizontal"
         tabIndex={xActive ? 0 : -1}
-        aria-hidden={xActive || revealBothAxes ? undefined : 'true'}
+        aria-hidden={!xActive && !revealBothAxes}
         onChange={onInputChange}
         onFocus={setActiveAxis}
       />
@@ -251,7 +231,7 @@ const Handler: React.FC<HandlerProps> = ({
           {...sharedInputProps}
           aria-orientation="vertical"
           tabIndex={yActive ? 0 : -1}
-          aria-hidden={yActive || revealBothAxes ? undefined : 'true'}
+          aria-hidden={!yActive && !revealBothAxes}
           onChange={onInputChange}
           onFocus={setActiveAxis}
         />

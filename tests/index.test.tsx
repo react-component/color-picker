@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-loop-func */
-import { spyElementPrototypes } from '@rc-component/util';
-import { act, createEvent, fireEvent, render } from '@testing-library/react';
+import { spyElementPrototypes, useMobile } from '@rc-component/util';
+import {
+  act,
+  createEvent,
+  fireEvent,
+  render,
+  screen,
+} from '@testing-library/react';
 import React, { useState } from 'react';
 import { expect } from 'vitest';
 import ColorPicker, { Color } from '../src';
@@ -8,6 +14,15 @@ import { defaultColor } from '../src/util';
 
 vi.mock('@rc-component/trigger', async () => {
   return await import('@rc-component/trigger/lib/mock');
+});
+
+// Mock the hook because isMobile caches its result.
+vi.mock('@rc-component/util', async importOriginal => {
+  const util = await importOriginal<typeof import('@rc-component/util')>();
+  return {
+    ...util,
+    useMobile: vi.fn(() => false),
+  };
 });
 
 export async function waitFakeTimer(advanceTime = 1000, times = 20) {
@@ -377,40 +392,45 @@ describe('ColorPicker', () => {
     const App = () => <ColorPicker value={'hsb(215, 91%, 100%)'} />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should rgb string work', () => {
     const App = () => <ColorPicker value={'rgb(23, 120, 255)'} />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should hex string work', () => {
     const App = () => <ColorPicker value="#1778ff" />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should hsb obj work', () => {
     const App = () => <ColorPicker value={{ h: 215, s: 0.91, b: 1 }} />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should rgb obj work', () => {
     const App = () => <ColorPicker value={{ r: 23, g: 120, b: 255 }} />;
     const { container } = render(<App />);
     expect(
-      container.querySelector('.rc-color-picker-handler').getAttribute('style'),
-    ).toEqual('background-color: rgb(23, 120, 255);');
+      (container.querySelector('.rc-color-picker-handler') as HTMLElement).style
+        .backgroundColor,
+    ).toEqual('rgb(23, 120, 255)');
   });
 
   it('Should disabled work', () => {
@@ -540,5 +560,705 @@ describe('ColorPicker', () => {
     expect(changeInfo).toEqual({ type: 'hue', value: 0 });
 
     spy.mockRestore();
+  });
+
+  describe('Accessibility tests', () => {
+    const Controlled = (props: Record<string, unknown>) => {
+      const [value, setValue] = useState(defaultColor);
+      return (
+        <>
+          <ColorPicker value={value} onChange={setValue} {...props} />
+          <div className="pick-color">{value.toHsbString()}</div>
+        </>
+      );
+    };
+
+    // Query by label to find both axes, including the aria-hidden input.
+    const getSaturation = () => screen.getAllByLabelText('Color picker')[0];
+    const getBrightness = () => screen.getAllByLabelText('Color picker')[1];
+
+    it('Should expose only the focused picker axis to the a11y tree', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      const [saturation, brightness] = screen.getAllByLabelText('Color picker');
+
+      // Initially only x is tabbable and exposed to screen readers.
+      expect(saturation).toHaveAttribute('tabindex', '0');
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
+      expect(brightness).toHaveAttribute('tabindex', '-1');
+      expect(brightness).toHaveAttribute('aria-hidden', 'true');
+
+      // Value keys temporarily expose both axes.
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+      expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
+      fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+      expect(brightness).toHaveAttribute('aria-hidden', 'true');
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
+
+      // Switching axes moves focus without completing the interaction.
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      expect(brightness).toHaveAttribute('tabindex', '0');
+      expect(saturation).toHaveAttribute('tabindex', '-1');
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
+
+      // Blur hides the inactive axis.
+      fireEvent.focusOut(brightness, { relatedTarget: document.body });
+      expect(saturation).toHaveAttribute('aria-hidden', 'true');
+      expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
+    });
+
+    it('Should reveal an axis before moving focus onto it', () => {
+      render(<ColorPicker value={defaultColor} />);
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+
+      // Focus should move after React exposes the target axis.
+      const hiddenOnFocus: (string | null)[] = [];
+      const record = (event: Event) =>
+        hiddenOnFocus.push(
+          (event.target as HTMLElement).getAttribute('aria-hidden'),
+        );
+      document.addEventListener('focusin', record);
+
+      try {
+        // Onto the y axis, which starts hidden.
+        fireEvent.keyDown(saturation, { key: 'ArrowDown' });
+        fireEvent.keyUp(saturation, { key: 'ArrowDown' });
+        // Leaving hides the x axis; stepping it again focuses it back.
+        fireEvent.focusOut(brightness, { relatedTarget: document.body });
+        fireEvent.keyDown(brightness, { key: 'ArrowRight' });
+      } finally {
+        document.removeEventListener('focusin', record);
+      }
+
+      expect(hiddenOnFocus).toEqual(['false', 'false']);
+      expect(saturation).toHaveFocus();
+    });
+
+    it('Should expose both picker axes to touch screen readers on mobile', () => {
+      vi.mocked(useMobile).mockReturnValue(true);
+
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      // Mobile screen readers need both axes exposed.
+      const [saturation, brightness] = screen.getAllByLabelText('Color picker');
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
+      expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
+
+      // An AT increment on the brightness axis lands like any other.
+      fireEvent.change(brightness, { target: { value: '10' } });
+      expect(brightness).toHaveValue('10');
+
+      // Nor does the end of an interaction hide either one again.
+      fireEvent.focusOut(brightness, { relatedTarget: document.body });
+      expect(saturation).not.toHaveAttribute('aria-hidden', 'true');
+      expect(brightness).not.toHaveAttribute('aria-hidden', 'true');
+
+      vi.mocked(useMobile).mockReturnValue(false);
+    });
+
+    it('Should not hide or untab a 1-D slider', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      // A single-axis slider stays tabbable and exposed.
+      const hue = screen.getByLabelText('Hue');
+      expect(hue).toHaveAttribute('tabindex', '0');
+      expect(hue).not.toHaveAttribute('aria-hidden', 'true');
+
+      fireEvent.keyDown(hue, { key: 'ArrowRight' });
+      expect(hue).toHaveAttribute('tabindex', '0');
+      expect(hue).not.toHaveAttribute('aria-hidden', 'true');
+    });
+
+    it('Should expose default aria-labels on the handles', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      // aria-valuetext distinguishes axes with the same accessible name.
+      expect(screen.getAllByLabelText('Color picker')).toHaveLength(2);
+      expect(screen.getByLabelText('Hue')).toBeTruthy();
+      expect(screen.getByLabelText('Alpha')).toBeTruthy();
+    });
+
+    it('Should expose saturation and brightness as separate range inputs', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      // Each range exposes its axis value independently.
+      const [saturation, brightness] = screen.getAllByLabelText('Color picker');
+      expect(saturation).toHaveAttribute('aria-valuetext', 'Saturation: 91%');
+      expect(saturation).toHaveAttribute('aria-roledescription', '2D slider');
+      expect(saturation).toHaveAttribute('aria-orientation', 'horizontal');
+      expect(brightness).toHaveAttribute('aria-valuetext', 'Brightness: 100%');
+      expect(brightness).toHaveAttribute('aria-roledescription', '2D slider');
+      expect(brightness).toHaveAttribute('aria-orientation', 'vertical');
+    });
+
+    it('Should adjust brightness with Up/Down while on the saturation axis', () => {
+      render(<Controlled />);
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+      saturation.focus();
+
+      // Vertical keys adjust brightness even when saturation has focus.
+      fireEvent.keyDown(saturation, { key: 'ArrowDown' });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 99%)',
+      );
+      // Focus follows the axis that changed.
+      expect(brightness).toHaveFocus();
+    });
+
+    it('Should keep the 2-D picker a single tab stop (roving tabindex)', () => {
+      render(<Controlled />);
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+
+      // Only the active axis is tabbable.
+      expect(saturation).toHaveAttribute('tabindex', '0');
+      expect(brightness).toHaveAttribute('tabindex', '-1');
+
+      // Switching direction moves the tab stop onto the adjusted axis.
+      fireEvent.keyDown(saturation, { key: 'ArrowDown' });
+      expect(brightness).toHaveAttribute('tabindex', '0');
+      expect(saturation).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('Should describe saturation & brightness via aria-valuetext by default', () => {
+      render(<ColorPicker defaultValue={defaultColor} />);
+
+      expect(getSaturation()).toHaveAttribute(
+        'aria-valuetext',
+        'Saturation: 91%',
+      );
+      expect(getBrightness()).toHaveAttribute(
+        'aria-valuetext',
+        'Brightness: 100%',
+      );
+    });
+
+    it('Should override the aria-labels through the locale prop', () => {
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          locale={{
+            picker: 'Sélecteur',
+            hue: 'Teinte',
+            alpha: 'Transparence',
+            saturation: 'Sat',
+            brightness: 'Lum',
+          }}
+        />,
+      );
+
+      const [saturation, brightness] = screen.getAllByLabelText('Sélecteur');
+      expect(screen.getAllByLabelText('Sélecteur')).toHaveLength(2);
+      expect(screen.getByLabelText('Teinte')).toBeTruthy();
+      expect(screen.getByLabelText('Transparence')).toBeTruthy();
+      expect(saturation).toHaveAttribute('aria-valuetext', 'Sat: 91%');
+      expect(brightness).toHaveAttribute('aria-valuetext', 'Lum: 100%');
+    });
+
+    it('Should expose default aria-labels if locale values are undefined', () => {
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          locale={{
+            picker: undefined,
+            hue: undefined,
+            alpha: undefined,
+            saturation: undefined,
+            brightness: undefined,
+          }}
+        />,
+      );
+
+      const [saturation, brightness] = screen.getAllByLabelText('Color picker');
+      expect(screen.getAllByLabelText('Color picker')).toHaveLength(2);
+      expect(screen.getByLabelText('Hue')).toBeTruthy();
+      expect(screen.getByLabelText('Alpha')).toBeTruthy();
+      expect(saturation).toHaveAttribute('aria-valuetext', 'Saturation: 91%');
+      expect(brightness).toHaveAttribute('aria-valuetext', 'Brightness: 100%');
+    });
+
+    it('Should change brightness with the Down arrow on the brightness axis', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const brightness = getBrightness();
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      fireEvent.keyUp(brightness, { key: 'ArrowDown' });
+
+      // brightness starts at 100% and steps down to 99%
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 99%)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should operate brightness through its native range control', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const brightness = getBrightness();
+      // Simulate an AT value change without keydown.
+      fireEvent.change(brightness, { target: { value: '80' } });
+      fireEvent.keyUp(brightness, { key: 'ArrowDown' });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 80%)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should not emit changes when the arrow key clamps at a bound', () => {
+      const onChange = vi.fn();
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const brightness = getBrightness();
+      // brightness is already at 100%, so Up cannot step further.
+      fireEvent.keyDown(brightness, { key: 'ArrowUp' });
+      fireEvent.keyUp(brightness, { key: 'ArrowUp' });
+
+      // A clamped press emits neither change nor completion.
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onChangeComplete).not.toHaveBeenCalled();
+    });
+
+    it('Should restart a new press from the value a rejecting parent committed', () => {
+      const onChange = vi.fn();
+      render(<ColorPicker value={defaultColor} onChange={onChange} />);
+
+      const saturation = getSaturation();
+      // A rejecting parent makes each new press restart from 91%.
+      for (let i = 0; i < 3; i += 1) {
+        fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+        fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+      }
+
+      expect(
+        onChange.mock.calls.map(([color]) => Math.round(color.toHsb().s * 100)),
+      ).toEqual([92, 92, 92]);
+    });
+
+    it('Should advance across separate presses when the parent accepts them', () => {
+      render(<Controlled />);
+
+      const saturation = getSaturation();
+      // An accepting parent advances across separate presses.
+      for (let i = 0; i < 3; i += 1) {
+        fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+        fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+      }
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 94%, 100%)',
+      );
+    });
+
+    it('Should complete an AT set-value action and leave nothing in flight', () => {
+      const onChange = vi.fn();
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const alpha = screen.getByLabelText('Alpha');
+      // AT changes complete immediately because no keyup follows.
+      fireEvent.change(alpha, { target: { value: '0' } });
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].a).toBe(0);
+
+      onChange.mockClear();
+      onChangeComplete.mockClear();
+      // A later clamped press must not complete the previous AT change again.
+      fireEvent.keyDown(alpha, { key: 'ArrowLeft' });
+      fireEvent.keyUp(alpha, { key: 'ArrowLeft' });
+
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onChangeComplete).not.toHaveBeenCalled();
+    });
+
+    it('Should complete a native Home key change once, on key up', () => {
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const alpha = screen.getByLabelText('Alpha');
+      // Simulate the native Home change before keyup.
+      fireEvent.keyDown(alpha, { key: 'Home' });
+      fireEvent.change(alpha, { target: { value: '0' } });
+      fireEvent.keyUp(alpha, { key: 'Home' });
+
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].a).toBe(0);
+    });
+
+    it('Should complete and reset the interaction when focus leaves mid-press', () => {
+      const onChange = vi.fn();
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const saturation = getSaturation();
+      // Blur must complete an interrupted key press.
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+      fireEvent.focusOut(saturation, { relatedTarget: document.body });
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+
+      // The next press must restart from the controlled 91%.
+      fireEvent.focus(saturation);
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+      fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+
+      expect(
+        onChange.mock.calls.map(([color]) => Math.round(color.toHsb().s * 100)),
+      ).toEqual([92, 92]);
+      expect(
+        onChangeComplete.mock.calls.map(([color]) =>
+          Math.round(color.toHsb().s * 100),
+        ),
+      ).toEqual([92, 92]);
+    });
+
+    it('Should not complete on blur when nothing is in flight', () => {
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const brightness = getBrightness();
+      // A clamped press followed by blur must not complete.
+      fireEvent.keyDown(brightness, { key: 'ArrowUp' });
+      fireEvent.focusOut(brightness, { relatedTarget: document.body });
+
+      // Nor should a plain focus/blur with no press at all.
+      fireEvent.focus(brightness);
+      fireEvent.focusOut(brightness, { relatedTarget: document.body });
+
+      expect(onChangeComplete).not.toHaveBeenCalled();
+    });
+
+    it('Should complete once on blur when both axes are in flight', () => {
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+      // Both axes form one color and must complete only once.
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      fireEvent.keyDown(saturation, { key: 'ArrowLeft' });
+      fireEvent.focusOut(saturation, { relatedTarget: document.body });
+
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].toHsbString()).toBe(
+        'hsb(215, 90%, 99%)',
+      );
+    });
+
+    it('Should complete both axes once when key up ends a 2-D interaction', () => {
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          value={defaultColor}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+      // Keyup completes both axes together.
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      fireEvent.keyDown(saturation, { key: 'ArrowLeft' });
+      fireEvent.keyUp(saturation, { key: 'ArrowLeft' });
+
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].toHsbString()).toBe(
+        'hsb(215, 90%, 99%)',
+      );
+
+      // A subsequent blur must not complete again.
+      fireEvent.focusOut(saturation, { relatedTarget: document.body });
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should complete a pending axis when the key up axis was clamped', () => {
+      const onChangeComplete = vi.fn();
+      // Saturation pinned at 0%, so Left cannot step.
+      const pinned = new Color({ h: 215, s: 0, b: 1, a: 1 });
+      render(
+        <ColorPicker value={pinned} onChangeComplete={onChangeComplete} />,
+      );
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+      // Complete the pending brightness change even when the focused axis is clamped.
+      fireEvent.keyDown(brightness, { key: 'ArrowDown' });
+      fireEvent.keyDown(saturation, { key: 'ArrowLeft' });
+      fireEvent.keyUp(saturation, { key: 'ArrowLeft' });
+
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+      expect(onChangeComplete.mock.calls.at(-1)[0].toHsbString()).toBe(
+        'hsb(215, 0%, 99%)',
+      );
+
+      fireEvent.focusOut(saturation, { relatedTarget: document.body });
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should round fractional alpha before stepping', () => {
+      const onChange = vi.fn();
+      const unaligned = new Color({ h: 215, s: 0.91, b: 1, a: 0.505 });
+      render(<ColorPicker value={unaligned} onChange={onChange} />);
+
+      const alpha = screen.getByLabelText('Alpha');
+      fireEvent.keyDown(alpha, { key: 'ArrowRight' });
+      fireEvent.keyUp(alpha, { key: 'ArrowRight' });
+      expect(onChange.mock.calls.at(-1)[1]).toEqual({
+        type: 'alpha',
+        value: 52,
+      });
+
+      fireEvent.keyDown(alpha, { key: 'ArrowLeft' });
+      expect(onChange.mock.calls.at(-1)[1]).toEqual({
+        type: 'alpha',
+        value: 50,
+      });
+    });
+
+    it('Should increase saturation on the picker (Arrow Right)', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const saturation = getSaturation();
+      fireEvent.change(saturation, { target: { value: '92' } });
+      fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+
+      // saturation starts at 91% and steps up to 92%
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 92%, 100%)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should decrease saturation on the picker (Arrow Left)', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const saturation = getSaturation();
+      fireEvent.change(saturation, { target: { value: '90' } });
+      fireEvent.keyUp(saturation, { key: 'ArrowLeft' });
+
+      // saturation starts at 91% and steps down to 90%
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 90%, 100%)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    // Re-render with a stale controlled value during an interaction.
+    const StalePinned = ({ onChangeComplete }: Record<string, unknown>) => {
+      const [, force] = useState(0);
+      return (
+        <ColorPicker
+          value={defaultColor}
+          onChange={() => force(n => n + 1)}
+          onChangeComplete={onChangeComplete as (color: Color) => void}
+        />
+      );
+    };
+
+    it('Should complete the picker with the latest value despite a stale re-render', () => {
+      const onChangeComplete = vi.fn();
+      render(<StalePinned onChangeComplete={onChangeComplete} />);
+
+      const saturation = getSaturation();
+      // Completion must retain 92% after a stale 91% re-render.
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+      fireEvent.keyUp(saturation, { key: 'ArrowRight' });
+
+      const [completedColor] = onChangeComplete.mock.calls.at(-1);
+      expect(completedColor.toHsbString()).toBe('hsb(215, 92%, 100%)');
+    });
+
+    it('Should complete a slider with the latest value despite a stale re-render', () => {
+      const onChangeComplete = vi.fn();
+      render(<StalePinned onChangeComplete={onChangeComplete} />);
+
+      const hue = screen.getByLabelText('Hue');
+      // ArrowRight steps hue 215 -> 216 while the prop is pinned at 215.
+      fireEvent.keyDown(hue, { key: 'ArrowRight' });
+      fireEvent.keyUp(hue, { key: 'ArrowRight' });
+
+      const [completedColor] = onChangeComplete.mock.calls.at(-1);
+      expect(completedColor.getHue()).toBe(216);
+    });
+
+    it('Should step from the latest value on rapid saturation presses', () => {
+      render(<Controlled />);
+
+      const saturation = getSaturation();
+
+      // Batched presses must accumulate: 91% -> 89%.
+      act(() => {
+        saturation.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
+        );
+        saturation.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
+        );
+      });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 89%, 100%)',
+      );
+    });
+
+    it('Should step from the latest value on rapid brightness presses', () => {
+      render(<Controlled />);
+
+      const brightness = getBrightness();
+
+      // Batched presses must accumulate: 100% -> 98%.
+      act(() => {
+        brightness.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
+        );
+        brightness.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
+        );
+      });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 98%)',
+      );
+    });
+
+    it('Should step from the latest value on rapid saturation and brightness presses', () => {
+      render(<Controlled />);
+
+      const saturation = getSaturation();
+      const brightness = getBrightness();
+
+      // Batched changes must preserve both axes.
+      act(() => {
+        brightness.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
+        );
+        saturation.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
+        );
+      });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 90%, 99%)',
+      );
+    });
+
+    it('Should change hue when the hue slider value changes via keyboard', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const hue = screen.getByLabelText('Hue');
+      fireEvent.change(hue, { target: { value: '100' } });
+      fireEvent.keyUp(hue, { key: 'ArrowRight' });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(100, 91%, 100%)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should change alpha when the alpha slider value changes via keyboard', () => {
+      const onChangeComplete = vi.fn();
+      render(<Controlled onChangeComplete={onChangeComplete} />);
+
+      const alpha = screen.getByLabelText('Alpha');
+      fireEvent.change(alpha, { target: { value: '50' } });
+      fireEvent.keyUp(alpha, { key: 'ArrowRight' });
+
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsba(215, 91%, 100%, 0.50)',
+      );
+      expect(onChangeComplete).toHaveBeenCalled();
+    });
+
+    it('Should ignore keys that do not change the value', () => {
+      const onChange = vi.fn();
+      const onChangeComplete = vi.fn();
+      render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      const saturation = getSaturation();
+      // A non-value key (e.g. Tab) must neither step (keydown) nor commit (keyup).
+      fireEvent.keyDown(saturation, { key: 'Tab' });
+      fireEvent.keyUp(saturation, { key: 'Tab' });
+
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onChangeComplete).not.toHaveBeenCalled();
+    });
+
+    it('Should increase saturation with the Right arrow on the picker', () => {
+      render(<Controlled />);
+
+      const saturation = getSaturation();
+      fireEvent.keyDown(saturation, { key: 'ArrowRight' });
+
+      // saturation steps 91% -> 92%
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 92%, 100%)',
+      );
+    });
+
+    it('Should step a 1-D slider with the Up/Down arrows', () => {
+      render(<Controlled />);
+
+      const hue = screen.getByLabelText('Hue');
+      // No vertical axis on a slider, so Up/Down drive its single (hue) axis.
+      fireEvent.keyDown(hue, { key: 'ArrowUp' });
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(216, 91%, 100%)',
+      );
+
+      fireEvent.keyDown(hue, { key: 'ArrowDown' });
+      expect(document.querySelector('.pick-color').innerHTML).toBe(
+        'hsb(215, 91%, 100%)',
+      );
+    });
   });
 });

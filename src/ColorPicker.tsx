@@ -10,6 +10,15 @@ import useColorState from './hooks/useColorState';
 import useComponent, { type Components } from './hooks/useComponent';
 import type { BaseColorPickerProps, ColorGenInput } from './interface';
 
+const defaultLocale: Required<BaseColorPickerProps>['locale'] = {
+  picker: 'Color picker',
+  pickerDescription: '2D slider',
+  hue: 'Hue',
+  alpha: 'Alpha',
+  saturation: 'Saturation',
+  brightness: 'Brightness',
+};
+
 const HUE_COLORS = [
   {
     color: 'rgb(255, 0, 0)',
@@ -67,7 +76,19 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
       disabledAlpha = false,
       disabled = false,
       components,
+      locale,
     } = props;
+
+    const mergedLocale = useMemo(
+      () =>
+        Object.fromEntries(
+          Object.entries(defaultLocale).map(([key, value]) => [
+            key,
+            locale?.[key as keyof typeof defaultLocale] ?? value,
+          ]),
+        ) as typeof defaultLocale,
+      [locale],
+    );
 
     // ========================== Components ==========================
     const [Slider] = useComponent(components);
@@ -134,6 +155,7 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
         <Picker
           onChange={handleChange}
           {...sharedSliderProps}
+          locale={mergedLocale}
           onChangeComplete={onChangeComplete}
         />
         <div className={`${prefixCls}-slider-container`}>
@@ -146,11 +168,11 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
               {...sharedSliderProps}
               type="hue"
               colors={HUE_COLORS}
-              min={0}
               max={359}
               value={colorValue.getHue()}
               onChange={onHueChange}
               onChangeComplete={onHueChangeComplete}
+              aria-label={mergedLocale.hue}
             />
             {!disabledAlpha && (
               <Slider
@@ -160,11 +182,10 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
                   { percent: 0, color: 'rgba(255, 0, 4, 0)' },
                   { percent: 100, color: alphaColor },
                 ]}
-                min={0}
-                max={100}
                 value={colorValue.a * 100}
                 onChange={onAlphaChange}
                 onChangeComplete={onAlphaChangeComplete}
+                aria-label={mergedLocale.alpha}
               />
             )}
           </div>

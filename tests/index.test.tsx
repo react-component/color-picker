@@ -370,7 +370,7 @@ describe('ColorPicker', () => {
       spyDom.mockRestore();
     });
 
-    it('Should stop listening to touch events once all fingers are lifted', () => {
+    it('Should stop listening to touch events after touchend', () => {
       const onChange = vi.fn();
       const onChangeComplete = vi.fn();
       const { container } = render(
@@ -382,7 +382,13 @@ describe('ColorPicker', () => {
       );
 
       startTwoTouchDrag(container);
-      expect(onChange).toHaveBeenCalled();
+
+      // Only the new drag should respond; the previous drag's listener
+      // must have been removed by the second touchstart.
+      onChange.mockClear();
+      fireEvent(document, createEvent.touchMove(document, touch(40)));
+      expect(onChange).toHaveBeenCalledTimes(1);
+
       fireEvent.touchEnd(document);
       expect(onChangeComplete).toHaveBeenCalledTimes(1);
 

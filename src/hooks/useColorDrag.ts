@@ -57,18 +57,19 @@ function useColorDrag(
     setOffsetValue(calculate());
   }, [color]);
 
-  useEffect(
-    () => () => {
-      document.removeEventListener('mousemove', mouseMoveRef.current);
-      document.removeEventListener('mouseup', mouseUpRef.current);
-      document.removeEventListener('touchmove', mouseMoveRef.current);
-      document.removeEventListener('touchend', mouseUpRef.current);
-      document.removeEventListener('touchcancel', mouseUpRef.current);
-      mouseMoveRef.current = null;
-      mouseUpRef.current = null;
-    },
-    [],
-  );
+  // Handlers are recreated on every render, so always remove through the refs
+  // to detach exactly the set registered by the current drag.
+  const removeListeners = () => {
+    document.removeEventListener('mousemove', mouseMoveRef.current);
+    document.removeEventListener('mouseup', mouseUpRef.current);
+    document.removeEventListener('touchmove', mouseMoveRef.current);
+    document.removeEventListener('touchend', mouseUpRef.current);
+    document.removeEventListener('touchcancel', mouseUpRef.current);
+    mouseMoveRef.current = null;
+    mouseUpRef.current = null;
+  };
+
+  useEffect(() => removeListeners, []);
 
   const updateOffset: EventHandle = e => {
     const { pageX, pageY } = getPosition(e);
@@ -114,13 +115,7 @@ function useColorDrag(
     if (!canceled) {
       e.preventDefault();
     }
-    document.removeEventListener('mousemove', mouseMoveRef.current);
-    document.removeEventListener('mouseup', mouseUpRef.current);
-    document.removeEventListener('touchmove', mouseMoveRef.current);
-    document.removeEventListener('touchend', mouseUpRef.current);
-    document.removeEventListener('touchcancel', mouseUpRef.current);
-    mouseMoveRef.current = null;
-    mouseUpRef.current = null;
+    removeListeners();
     if (!canceled) {
       onDragChangeComplete?.();
     }
@@ -128,8 +123,7 @@ function useColorDrag(
 
   const onDragStart: EventHandle = e => {
     // https://github.com/ant-design/ant-design/issues/43529
-    document.removeEventListener('mousemove', mouseMoveRef.current);
-    document.removeEventListener('mouseup', mouseUpRef.current);
+    removeListeners();
 
     if (disabledDrag) {
       return;

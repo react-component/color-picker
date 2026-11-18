@@ -343,6 +343,94 @@ describe('ColorPicker', () => {
     }
   });
 
+  describe('multi-touch drag', () => {
+    const touch = (pageX: number) => ({ touches: [{ pageX, pageY: 150 }] });
+
+    // A second finger lands on the palette while the first drag is still
+    // active. The move in between re-renders, so the drag handlers change.
+    function startTwoTouchDrag(container: HTMLElement) {
+      const handler = container.querySelector('.rc-color-picker-handler');
+      fireEvent(handler, createEvent.touchStart(handler, touch(10)));
+      fireEvent(document, createEvent.touchMove(document, touch(20)));
+      fireEvent(handler, createEvent.touchStart(handler, touch(30)));
+    }
+
+    let spyDom: ReturnType<typeof spyElementPrototypes>;
+    beforeEach(() => {
+      spyDom = spyElementPrototypes(HTMLElement, {
+        getBoundingClientRect: () => ({
+          x: 0,
+          y: 100,
+          width: 100,
+          height: 100,
+        }),
+      });
+    });
+    afterEach(() => {
+      spyDom.mockRestore();
+    });
+
+    it('Should stop listening to touch events after touchend', () => {
+      const onChange = vi.fn();
+      const onChangeComplete = vi.fn();
+      const { container } = render(
+        <ColorPicker
+          defaultValue={defaultColor}
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+        />,
+      );
+
+      startTwoTouchDrag(container);
+
+      // Only the new drag should respond; the previous drag's listener
+      // must have been removed by the second touchstart.
+      onChange.mockClear();
+      fireEvent(document, createEvent.touchMove(document, touch(40)));
+      expect(onChange).toHaveBeenCalledTimes(1);
+
+      fireEvent.touchEnd(document);
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+
+      onChange.mockClear();
+      const strayMove = createEvent.touchMove(document.body, touch(60));
+      fireEvent(document.body, strayMove);
+      const strayEnd = createEvent.touchEnd(document.body);
+      fireEvent(document.body, strayEnd);
+
+      expect(strayMove.defaultPrevented).toBe(false);
+      expect(strayEnd.defaultPrevented).toBe(false);
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onChangeComplete).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should not throw on touch move after unmounting mid-drag', () => {
+      const errors: unknown[] = [];
+      const onError = (e: ErrorEvent) => {
+        errors.push(e.error);
+        e.preventDefault();
+      };
+      window.addEventListener('error', onError);
+
+      try {
+        const { container, unmount } = render(
+          <ColorPicker defaultValue={defaultColor} />,
+        );
+
+        startTwoTouchDrag(container);
+        unmount();
+
+        const strayMove = createEvent.touchMove(document.body, touch(60));
+        fireEvent(document.body, strayMove);
+
+        expect(strayMove.defaultPrevented).toBe(false);
+        expect(errors).toEqual([]);
+      } finally {
+        window.removeEventListener('error', onError);
+      }
+    });
+  });
+
   it('Should custom panel work', () => {
     const { container } = render(
       <ColorPicker
